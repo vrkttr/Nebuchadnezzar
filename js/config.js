@@ -8,6 +8,6 @@
 // Dadurch ist keine manuelle Anpassung nötig, egal ob per VPS-IP ohne
 // Domain oder später per Domain mit TLS aufgerufen wird.
 const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-const SERVER_PORT = 8081;
+const SERVER_PORT = 8083;
 
 export const SERVER_URL = `${protocol}://${window.location.hostname}:${SERVER_PORT}`;
