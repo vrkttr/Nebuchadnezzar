@@ -9,11 +9,11 @@ import * as THREE from 'three';
  * spätere Schritte (Bewegung, Kamera-Anbindung) darauf aufbauen
  * können, ohne dieses Modul erneut anfassen zu müssen.
  */
-export function createPlayer() {
+export function createPlayer(color = 0x3d6ea5) {
   const player = new THREE.Group();
   player.name = 'Player';
 
-  const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0x3d6ea5 });
+  const bodyMaterial = new THREE.MeshStandardMaterial({ color });
 
   const bodyGeometry = new THREE.CapsuleGeometry(0.35, 0.9, 4, 8);
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
