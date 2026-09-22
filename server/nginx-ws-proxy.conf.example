@@ -1,0 +1,12 @@
+# Beispiel-Snippet für die bestehende Nginx-Konfiguration von vrkttr.de.
+# In den vorhandenen "server { ... }"-Block (den mit ssl_certificate für
+# vrkttr.de) einfügen. Passt den Pfad bei Bedarf an.
+
+location /ws-game/ {
+    proxy_pass http://127.0.0.1:8081/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_read_timeout 3600s;
+}

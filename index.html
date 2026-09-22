@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Projekt Nebuchadnezzar</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+
+  <!--
+    Import Map: erlaubt "import * as THREE from 'three'" im Code,
+    ohne dass ein Bundler (Vite/Webpack/etc.) nötig ist.
+    Three.js liegt lokal (js/vendor/), damit die CSP des Servers
+    (nur 'self' erlaubt) nicht angepasst werden muss.
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./js/vendor/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Versionsnummer bei jeder Änderung an JS-Dateien hochzählen,
+       damit Browser/Proxy-Caches nicht auf alten Dateien hängen bleiben. -->
+  <script type="module" src="js/main.js?v=4"></script>
+</body>
+</html>
