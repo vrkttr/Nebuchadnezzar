@@ -1,26 +1,45 @@
 /**
  * Baut die WebSocket-Verbindung zum Game-Server auf.
- * Aktuell nur Verbindungsaufbau und Logging — Nachrichtenformat und
- * Positions-Synchronisation folgen als nächster Entwicklungsschritt.
+ *
+ * Nimmt optionale Handler entgegen (onOpen, onMessage, onClose, onError)
+ * und liefert ein kleines Wrapper-Objekt mit send(), damit der Rest des
+ * Clients nicht direkt mit dem rohen WebSocket-Objekt arbeiten muss.
+ * Eingehende Nachrichten werden automatisch als JSON geparst.
  */
-export function createServerConnection(url) {
+export function createServerConnection(url, handlers = {}) {
   const socket = new WebSocket(url);
 
   socket.addEventListener('open', () => {
     console.log('[ServerConnection] Verbindung zum Server hergestellt');
+    handlers.onOpen?.();
   });
 
   socket.addEventListener('message', (event) => {
-    console.log('[ServerConnection] Nachricht vom Server:', event.data);
+    let message;
+    try {
+      message = JSON.parse(event.data);
+    } catch {
+      console.warn('[ServerConnection] Ungültige Nachricht ignoriert:', event.data);
+      return;
+    }
+    handlers.onMessage?.(message);
   });
 
   socket.addEventListener('close', () => {
     console.log('[ServerConnection] Verbindung zum Server getrennt');
+    handlers.onClose?.();
   });
 
   socket.addEventListener('error', (error) => {
     console.error('[ServerConnection] Verbindungsfehler:', error);
+    handlers.onError?.(error);
   });
 
-  return socket;
+  return {
+    send(message) {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(message));
+      }
+    },
+  };
 }
