@@ -14,6 +14,7 @@ const [
   { createPlayerController },
   { createServerConnection },
   { createRemotePlayers },
+  { dampFactor, lerpAngle },
   { SERVER_URL },
 ] = await Promise.all([
   import('three'),
@@ -25,6 +26,7 @@ const [
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
   import(v('./entities/RemotePlayers.js')),
+  import(v('./utils/Interpolation.js')),
   import(v('./config.js')),
 ]);
 
@@ -36,6 +38,13 @@ const { spawnPoint } = createTestZone(scene);
 const player = createPlayer();
 player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
 scene.add(player.object);
+
+// Zielwerte für die eigene Figur, wie vom Server zuletzt gemeldet.
+// Die tatsächliche Position läuft pro Frame sanft darauf ein
+// (siehe animate()), statt bei jedem Server-Update zu springen.
+const ownTargetPosition = new THREE.Vector3(spawnPoint.x, spawnPoint.y, spawnPoint.z);
+let ownTargetRotationY = 0;
+const SMOOTHING = 12;
 
 const camera = new THREE.PerspectiveCamera(
   60,
@@ -58,13 +67,11 @@ const connection = createServerConnection(SERVER_URL, {
     } else if (message.type === 'state') {
       // Die eigene Position/Rotation kommt jetzt ausschließlich vom
       // Server zurück (serverautoritative Bewegung) — der Client setzt
-      // sie nicht mehr selbst.
+      // nur das Interpolationsziel, nicht direkt die Position.
       const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
-      console.log('[Debug] ownPlayerId:', ownPlayerId, 'ownState:', ownState);
       if (ownState) {
-        player.setPosition(ownState.x, ownState.y, ownState.z);
-        player.object.rotation.y = ownState.rotationY ?? player.object.rotation.y;
-        console.log('[Debug] player.object.position nach setPosition:', player.object.position);
+        ownTargetPosition.set(ownState.x, ownState.y, ownState.z);
+        ownTargetRotationY = ownState.rotationY ?? ownTargetRotationY;
       }
       remotePlayers.sync(message.players, ownPlayerId);
     } else if (message.type === 'leave') {
@@ -87,6 +94,11 @@ let inputSendTimer = 0;
 function animate() {
   requestAnimationFrame(animate);
   const delta = clock.getDelta();
+
+  const factor = dampFactor(SMOOTHING, delta);
+  player.object.position.lerp(ownTargetPosition, factor);
+  player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
+  remotePlayers.update(delta);
 
   thirdPersonCamera.update(player.object.position);
 

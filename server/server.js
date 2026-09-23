@@ -63,8 +63,6 @@ wss.on('connection', (socket) => {
         moveZ /= length;
       }
 
-      console.log(`[Debug] input von ${id}: moveX=${moveX} moveZ=${moveZ}`);
-
       state.input.moveX = moveX;
       state.input.moveZ = moveZ;
       state.input.jump = Boolean(message.jump);
