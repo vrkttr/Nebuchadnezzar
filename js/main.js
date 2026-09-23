@@ -45,7 +45,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
-const playerController = createPlayerController(player, camera);
+const playerController = createPlayerController(camera);
 const remotePlayers = createRemotePlayers(scene);
 
 // --- Server-Verbindung ---
@@ -56,6 +56,14 @@ const connection = createServerConnection(SERVER_URL, {
     if (message.type === 'init') {
       ownPlayerId = message.id;
     } else if (message.type === 'state') {
+      // Die eigene Position/Rotation kommt jetzt ausschließlich vom
+      // Server zurück (serverautoritative Bewegung) — der Client setzt
+      // sie nicht mehr selbst.
+      const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
+      if (ownState) {
+        player.setPosition(ownState.x, ownState.y, ownState.z);
+        player.object.rotation.y = ownState.rotationY ?? player.object.rotation.y;
+      }
       remotePlayers.sync(message.players, ownPlayerId);
     } else if (message.type === 'leave') {
       remotePlayers.remove(message.id);
@@ -71,26 +79,19 @@ window.addEventListener('resize', () => {
 // --- Render-Loop ---
 const clock = new THREE.Clock();
 
-const POSITION_SEND_INTERVAL = 0.1; // Sekunden zwischen Positions-Updates an den Server
-let sendTimer = 0;
+const INPUT_SEND_INTERVAL = 0.05; // Sekunden zwischen Eingabe-Updates an den Server
+let inputSendTimer = 0;
 
 function animate() {
   requestAnimationFrame(animate);
   const delta = clock.getDelta();
 
-  playerController.update(delta);
   thirdPersonCamera.update(player.object.position);
 
-  sendTimer += delta;
-  if (sendTimer >= POSITION_SEND_INTERVAL) {
-    sendTimer = 0;
-    connection.send({
-      type: 'position',
-      x: player.object.position.x,
-      y: player.object.position.y,
-      z: player.object.position.z,
-      rotationY: player.object.rotation.y,
-    });
+  inputSendTimer += delta;
+  if (inputSendTimer >= INPUT_SEND_INTERVAL) {
+    inputSendTimer = 0;
+    connection.send({ type: 'input', ...playerController.getInputState() });
   }
 
   renderer.render(scene, camera);
