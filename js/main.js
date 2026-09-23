@@ -60,9 +60,11 @@ const connection = createServerConnection(SERVER_URL, {
       // Server zurück (serverautoritative Bewegung) — der Client setzt
       // sie nicht mehr selbst.
       const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
+      console.log('[Debug] ownPlayerId:', ownPlayerId, 'ownState:', ownState);
       if (ownState) {
         player.setPosition(ownState.x, ownState.y, ownState.z);
         player.object.rotation.y = ownState.rotationY ?? player.object.rotation.y;
+        console.log('[Debug] player.object.position nach setPosition:', player.object.position);
       }
       remotePlayers.sync(message.players, ownPlayerId);
     } else if (message.type === 'leave') {
