@@ -6,19 +6,38 @@ const wss = new WebSocketServer({ port: PORT });
 
 console.log(`Nebuchadnezzar Game-Server läuft auf Port ${PORT}`);
 
-// Aktuell bekannte Spieler: id -> { x, y, z, rotationY }.
-// Der Server übernimmt vorerst die vom Client gemeldete Position ungeprüft
-// (noch keine Bewegungsvalidierung) — das folgt als späterer Ausbauschritt.
+// Bewegungsparameter — bewusst identisch zu den früheren Client-Werten,
+// damit sich das Spielgefühl durch die Umstellung nicht ändert.
+const MOVE_SPEED = 4;
+const JUMP_SPEED = 5.5;
+const GRAVITY = 14;
+const GROUND_Y = 0;
+const TICK_INTERVAL_MS = 50;
+const TICK_DELTA = TICK_INTERVAL_MS / 1000;
+
+// Autoritativer Zustand aller Spieler. Der Server berechnet die Bewegung
+// selbst anhand der vom Client gemeldeten Eingabeabsicht (Zero-Trust,
+// Punkt 6 der Spec) — der Client meldet nur Richtung/Sprungwunsch,
+// niemals die Position selbst.
 const players = new Map();
 
-const BROADCAST_INTERVAL_MS = 50;
+function createInitialState() {
+  return {
+    x: 0,
+    y: 0,
+    z: 0,
+    rotationY: 0,
+    velocityY: 0,
+    isGrounded: true,
+    input: { moveX: 0, moveZ: 0, jump: false },
+  };
+}
 
 wss.on('connection', (socket) => {
   const id = randomUUID();
-  players.set(id, { x: 0, y: 0, z: 0, rotationY: 0 });
+  players.set(id, createInitialState());
 
   console.log(`Neuer Client verbunden (${id})`);
-
   socket.send(JSON.stringify({ type: 'init', id }));
 
   socket.on('message', (data) => {
@@ -29,13 +48,26 @@ wss.on('connection', (socket) => {
       return;
     }
 
-    if (message.type === 'position') {
+    if (message.type === 'input') {
       const state = players.get(id);
       if (!state) return;
-      state.x = message.x;
-      state.y = message.y;
-      state.z = message.z;
-      state.rotationY = message.rotationY;
+
+      // Eingabevektor serverseitig auf Länge 1 begrenzen — verhindert,
+      // dass ein manipulierter Client durch überhöhte Werte schneller
+      // laufen kann als vorgesehen.
+      let moveX = Number(message.moveX) || 0;
+      let moveZ = Number(message.moveZ) || 0;
+      const length = Math.hypot(moveX, moveZ);
+      if (length > 1) {
+        moveX /= length;
+        moveZ /= length;
+      }
+
+      console.log(`[Debug] input von ${id}: moveX=${moveX} moveZ=${moveZ}`);
+
+      state.input.moveX = moveX;
+      state.input.moveZ = moveZ;
+      state.input.jump = Boolean(message.jump);
     }
   });
 
@@ -59,7 +91,40 @@ function broadcast(message) {
   }
 }
 
+function simulate() {
+  for (const state of players.values()) {
+    const { input } = state;
+
+    state.x += input.moveX * MOVE_SPEED * TICK_DELTA;
+    state.z += input.moveZ * MOVE_SPEED * TICK_DELTA;
+
+    if (input.moveX !== 0 || input.moveZ !== 0) {
+      state.rotationY = Math.atan2(input.moveX, input.moveZ);
+    }
+
+    if (input.jump && state.isGrounded) {
+      state.velocityY = JUMP_SPEED;
+      state.isGrounded = false;
+    }
+
+    state.velocityY -= GRAVITY * TICK_DELTA;
+    state.y += state.velocityY * TICK_DELTA;
+
+    if (state.y <= GROUND_Y) {
+      state.y = GROUND_Y;
+      state.velocityY = 0;
+      state.isGrounded = true;
+    }
+  }
+}
+
 setInterval(() => {
+  simulate();
   if (players.size === 0) return;
-  broadcast({ type: 'state', players: Object.fromEntries(players) });
-}, BROADCAST_INTERVAL_MS);
+
+  const snapshot = {};
+  for (const [id, state] of players) {
+    snapshot[id] = { x: state.x, y: state.y, z: state.z, rotationY: state.rotationY };
+  }
+  broadcast({ type: 'state', players: snapshot });
+}, TICK_INTERVAL_MS);
