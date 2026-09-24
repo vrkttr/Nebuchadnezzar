@@ -41,6 +41,7 @@ services:
       - MARIADB_ROOT_PASSWORD=changeme_root
     volumes:
       - db_data:/var/lib/mysql
+      - ./portal/db:/docker-entrypoint-initdb.d
     restart: unless-stopped
 
 volumes:
