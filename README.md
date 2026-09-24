@@ -8,8 +8,9 @@ Browserbasiertes, serverautoritatives 3D-MMORPG (Aufbau von Grund auf).
 docker compose up -d --build
 ```
 
+- Portal (Webseite/Account): `http://<Host>:8081`
 - Client: `http://<Host>:8082`
-- Game-Server (WebSocket): Port `8083`
+- Game-Server (WebSocket): Port `8088`
 
 Der Client ermittelt Host/Protokoll für die Server-Verbindung automatisch
 aus der aufgerufenen URL (siehe `js/config.js`) — keine manuelle

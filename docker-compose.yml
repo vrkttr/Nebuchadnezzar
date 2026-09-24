@@ -1,4 +1,19 @@
 services:
+  portal:
+    build:
+      context: ./portal
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    environment:
+      - DB_HOST=database
+      - DB_NAME=nebuchadnezzar
+      - DB_USER=nebuchadnezzar
+      - DB_PASSWORD=changeme
+    depends_on:
+      - database
+    restart: unless-stopped
+
   game:
     build:
       context: .
@@ -12,7 +27,21 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "8083:8081"
+      - "8088:8081"
     environment:
       - PORT=8081
     restart: unless-stopped
+
+  database:
+    image: mariadb:11
+    environment:
+      - MARIADB_DATABASE=nebuchadnezzar
+      - MARIADB_USER=nebuchadnezzar
+      - MARIADB_PASSWORD=changeme
+      - MARIADB_ROOT_PASSWORD=changeme_root
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  db_data:
