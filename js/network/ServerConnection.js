@@ -1,11 +1,3 @@
-/**
- * Baut die WebSocket-Verbindung zum Game-Server auf.
- *
- * Nimmt optionale Handler entgegen (onOpen, onMessage, onClose, onError)
- * und liefert ein kleines Wrapper-Objekt mit send(), damit der Rest des
- * Clients nicht direkt mit dem rohen WebSocket-Objekt arbeiten muss.
- * Eingehende Nachrichten werden automatisch als JSON geparst.
- */
 export function createServerConnection(url, handlers = {}) {
   const socket = new WebSocket(url);
 

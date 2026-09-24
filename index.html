@@ -15,12 +15,6 @@
     }
   </style>
 
-  <!--
-    Import Map: erlaubt "import * as THREE from 'three'" im Code,
-    ohne dass ein Bundler (Vite/Webpack/etc.) nötig ist.
-    Three.js liegt lokal (js/vendor/), damit die CSP des Servers
-    (nur 'self' erlaubt) nicht angepasst werden muss.
-  -->
   <script type="importmap">
   {
     "imports": {
@@ -30,8 +24,6 @@
   </script>
 </head>
 <body>
-  <!-- Versionsnummer bei jeder Änderung an JS-Dateien hochzählen,
-       damit Browser/Proxy-Caches nicht auf alten Dateien hängen bleiben. -->
   <script type="module" src="js/main.js?v=10"></script>
 </body>
 </html>

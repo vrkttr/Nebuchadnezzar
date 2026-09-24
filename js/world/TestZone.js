@@ -1,15 +1,5 @@
 import * as THREE from 'three';
 
-/**
- * Erste, bewusst einfache Testzone.
- *
- * Enthält laut Projektvorgabe (Punkt 16): Gelände, einfache Vegetation,
- * Felsen, ein Gebäude und einen Spawnpunkt. NPCs und Gegner folgen erst
- * in einem späteren Entwicklungsschritt.
- *
- * Alle Objekte sind bewusst einfache Platzhalter-Geometrien und werden
- * später durch echte Assets ersetzt.
- */
 export function createTestZone(scene) {
   const zoneGroup = new THREE.Group();
   zoneGroup.name = 'TestZone';

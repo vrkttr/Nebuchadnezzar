@@ -1,14 +1,5 @@
 import * as THREE from 'three';
 
-/**
- * Erstellt die Spielerfigur als einfachen Low-Poly-Platzhalter
- * (Kapsel-Körper + Kopf). Wird später durch ein echtes,
- * animiertes Modell ersetzt.
- *
- * Gibt ein Objekt mit dem Mesh sowie Hilfsmethoden zurück, damit
- * spätere Schritte (Bewegung, Kamera-Anbindung) darauf aufbauen
- * können, ohne dieses Modul erneut anfassen zu müssen.
- */
 export function createPlayer(color = 0x3d6ea5) {
   const player = new THREE.Group();
   player.name = 'Player';

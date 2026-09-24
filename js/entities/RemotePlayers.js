@@ -2,20 +2,9 @@ import * as THREE from 'three';
 import { createPlayer } from './Player.js';
 import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
 
-// Andere Farbe als die eigene Spielerfigur, zur visuellen Unterscheidung.
 const REMOTE_PLAYER_COLOR = 0xd9534f;
-
-// Höherer Wert = schnelleres Einlaufen auf die vom Server gemeldete
-// Position, glättet aber die durch die 50ms-Update-Rate entstehenden
-// Sprünge merklich.
 const SMOOTHING = 12;
 
-/**
- * Hält eine Map von Spieler-ID -> Platzhalterfigur für alle anderen,
- * aktuell mit dem Server verbundenen Spieler. Die tatsächliche Position
- * läuft pro Frame sanft auf den zuletzt vom Server empfangenen Zielwert
- * ein (Interpolation), statt bei jedem Server-Update hart zu springen.
- */
 export function createRemotePlayers(scene) {
   const remotePlayers = new Map();
 
@@ -33,8 +22,6 @@ export function createRemotePlayers(scene) {
         targetRotationY: state.rotationY ?? 0,
       };
 
-      // Beim ersten Erscheinen direkt an die richtige Stelle setzen,
-      // damit die Figur nicht sichtbar von (0,0,0) aus "einläuft".
       remote.setPosition(state.x, state.y, state.z);
       remote.object.rotation.y = remote.targetRotationY;
 
@@ -53,11 +40,6 @@ export function createRemotePlayers(scene) {
     remotePlayers.delete(id);
   }
 
-  /**
-   * Gleicht die aktuell angezeigten Platzhalterfiguren mit dem vom
-   * Server empfangenen Gesamtzustand ab. ownId wird übersprungen,
-   * damit die eigene Spielerfigur nicht doppelt dargestellt wird.
-   */
   function sync(playersState, ownId) {
     const seenIds = new Set();
 
@@ -72,7 +54,6 @@ export function createRemotePlayers(scene) {
     }
   }
 
-  /** Läuft die Positionen/Rotationen aller entfernten Spieler sanft an ihr Ziel heran. Pro Frame aufrufen. */
   function update(delta) {
     const factor = dampFactor(SMOOTHING, delta);
     for (const remote of remotePlayers.values()) {

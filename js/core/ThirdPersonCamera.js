@@ -2,19 +2,9 @@ import * as THREE from 'three';
 
 const RIGHT_MOUSE_BUTTON = 2;
 
-/**
- * Third-Person-Kamera nach WoW-Vorbild:
- * - rechte Maustaste halten + Maus bewegen -> Kamera um das Ziel drehen
- * - loslassen -> normaler Mauszeiger bleibt für UI nutzbar
- * - Mausrad -> Zoom (Abstand zum Ziel)
- *
- * Kennt nichts von Tastatursteuerung/Bewegung — bekommt in update()
- * einfach eine Zielposition übergeben, der sie folgt. Dadurch bleibt
- * der Controller unabhängig vom späteren Bewegungssystem.
- */
 export function createThirdPersonCamera(camera, domElement) {
-  let yaw = Math.PI; // Blickrichtung horizontal
-  let pitch = 0.35; // Blickrichtung vertikal (leicht von oben)
+  let yaw = Math.PI;
+  let pitch = 0.35;
   let distance = 6;
 
   const MIN_DISTANCE = 2;
@@ -68,10 +58,6 @@ export function createThirdPersonCamera(camera, domElement) {
 
   const offset = new THREE.Vector3();
 
-  /**
-   * Aktualisiert die Kameraposition anhand eines Zielpunkts
-   * (z.B. die Position der Spielerfigur). Wird pro Frame aufgerufen.
-   */
   function update(target) {
     offset.set(
       Math.sin(yaw) * Math.cos(pitch),

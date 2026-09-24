@@ -1,12 +1,5 @@
 import * as THREE from 'three';
 
-/**
- * Baut die reine Szenen-Infrastruktur auf: Hintergrund und Licht.
- *
- * Enthält bewusst keinen Zoneninhalt (Boden, Objekte, Vegetation etc.) —
- * dieser wird von den jeweiligen Zonen-Modulen unter js/world/ befüllt.
- * Dadurch bleibt Scene.js unabhängig davon, welche Zone gerade geladen ist.
- */
 export function createScene() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x1a1a2e);

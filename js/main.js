@@ -1,6 +1,3 @@
-// Versionsnummer aus der eigenen Script-URL lesen (siehe index.html: js/main.js?v=X)
-// und an alle eigenen Modul-Importe weiterreichen, damit Änderungen sofort
-// wirksam werden und nicht durch Browser-/Proxy-Caching verzögert werden.
 const VERSION = new URL(import.meta.url).searchParams.get('v') ?? '';
 const v = (path) => (VERSION ? `${path}?v=${VERSION}` : path);
 
@@ -30,7 +27,6 @@ const [
   import(v('./config.js')),
 ]);
 
-// --- Grundaufbau ---
 const renderer = createRenderer();
 const scene = createScene();
 const { spawnPoint } = createTestZone(scene);
@@ -39,9 +35,6 @@ const player = createPlayer();
 player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
 scene.add(player.object);
 
-// Zielwerte für die eigene Figur, wie vom Server zuletzt gemeldet.
-// Die tatsächliche Position läuft pro Frame sanft darauf ein
-// (siehe animate()), statt bei jedem Server-Update zu springen.
 const ownTargetPosition = new THREE.Vector3(spawnPoint.x, spawnPoint.y, spawnPoint.z);
 let ownTargetRotationY = 0;
 const SMOOTHING = 12;
@@ -57,7 +50,6 @@ const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
 const playerController = createPlayerController(camera);
 const remotePlayers = createRemotePlayers(scene);
 
-// --- Server-Verbindung ---
 let ownPlayerId = null;
 
 const connection = createServerConnection(SERVER_URL, {
@@ -65,9 +57,6 @@ const connection = createServerConnection(SERVER_URL, {
     if (message.type === 'init') {
       ownPlayerId = message.id;
     } else if (message.type === 'state') {
-      // Die eigene Position/Rotation kommt jetzt ausschließlich vom
-      // Server zurück (serverautoritative Bewegung) — der Client setzt
-      // nur das Interpolationsziel, nicht direkt die Position.
       const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
       if (ownState) {
         ownTargetPosition.set(ownState.x, ownState.y, ownState.z);
@@ -85,10 +74,9 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 });
 
-// --- Render-Loop ---
 const clock = new THREE.Clock();
 
-const INPUT_SEND_INTERVAL = 0.05; // Sekunden zwischen Eingabe-Updates an den Server
+const INPUT_SEND_INTERVAL = 0.05;
 let inputSendTimer = 0;
 
 function animate() {

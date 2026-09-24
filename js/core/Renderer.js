@@ -1,9 +1,5 @@
 import * as THREE from 'three';
 
-/**
- * Erstellt und konfiguriert den WebGL-Renderer.
- * Kümmert sich außerdem um die Anpassung bei Fenstergrößenänderung.
- */
 export function createRenderer() {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);

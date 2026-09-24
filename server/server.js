@@ -6,8 +6,6 @@ const wss = new WebSocketServer({ port: PORT });
 
 console.log(`Nebuchadnezzar Game-Server läuft auf Port ${PORT}`);
 
-// Bewegungsparameter — bewusst identisch zu den früheren Client-Werten,
-// damit sich das Spielgefühl durch die Umstellung nicht ändert.
 const MOVE_SPEED = 4;
 const JUMP_SPEED = 5.5;
 const GRAVITY = 14;
@@ -15,10 +13,6 @@ const GROUND_Y = 0;
 const TICK_INTERVAL_MS = 50;
 const TICK_DELTA = TICK_INTERVAL_MS / 1000;
 
-// Autoritativer Zustand aller Spieler. Der Server berechnet die Bewegung
-// selbst anhand der vom Client gemeldeten Eingabeabsicht (Zero-Trust,
-// Punkt 6 der Spec) — der Client meldet nur Richtung/Sprungwunsch,
-// niemals die Position selbst.
 const players = new Map();
 
 function createInitialState() {
@@ -52,9 +46,6 @@ wss.on('connection', (socket) => {
       const state = players.get(id);
       if (!state) return;
 
-      // Eingabevektor serverseitig auf Länge 1 begrenzen — verhindert,
-      // dass ein manipulierter Client durch überhöhte Werte schneller
-      // laufen kann als vorgesehen.
       let moveX = Number(message.moveX) || 0;
       let moveZ = Number(message.moveZ) || 0;
       const length = Math.hypot(moveX, moveZ);
