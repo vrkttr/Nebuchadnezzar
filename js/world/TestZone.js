@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { createNpc } from '../entities/Npc.js';
 
 export function createTestZone(scene) {
   const zoneGroup = new THREE.Group();
@@ -9,11 +10,18 @@ export function createTestZone(scene) {
   zoneGroup.add(...createTrees());
   zoneGroup.add(createBuilding());
 
+  const npc = createNpc(
+    'Waechter',
+    'Willkommen in Nebuchadnezzar, Reisender. Halte die Augen offen, es ist gefaehrlich hier draussen.'
+  );
+  npc.position.set(-1.5, 0, -2.5);
+  zoneGroup.add(npc);
+
   scene.add(zoneGroup);
 
   const spawnPoint = new THREE.Vector3(0, 0, 0);
 
-  return { zoneGroup, spawnPoint };
+  return { zoneGroup, spawnPoint, npcs: [npc] };
 }
 
 function createGround() {

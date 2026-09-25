@@ -12,6 +12,7 @@ const [
   { createServerConnection },
   { createRemotePlayers },
   { dampFactor, lerpAngle },
+  { createDialogue },
   { buildServerUrl, getPortalUrl },
 ] = await Promise.all([
   import('three'),
@@ -24,13 +25,16 @@ const [
   import(v('./network/ServerConnection.js')),
   import(v('./entities/RemotePlayers.js')),
   import(v('./utils/Interpolation.js')),
+  import(v('./ui/Dialogue.js')),
   import(v('./config.js')),
 ]);
 
 function start(token) {
   const renderer = createRenderer();
   const scene = createScene();
-  const { spawnPoint } = createTestZone(scene);
+  const { spawnPoint, npcs } = createTestZone(scene);
+
+  const dialogue = createDialogue();
 
   const player = createPlayer();
   player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
@@ -79,6 +83,28 @@ function start(token) {
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+  });
+
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+
+  renderer.domElement.addEventListener('click', (event) => {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(pointer, camera);
+    const intersections = raycaster.intersectObjects(npcs, true);
+
+    if (intersections.length === 0) return;
+
+    let target = intersections[0].object;
+    while (target && !target.userData.isNpc) {
+      target = target.parent;
+    }
+
+    if (target) {
+      dialogue.show(target.userData.dialogue);
+    }
   });
 
   const clock = new THREE.Clock();

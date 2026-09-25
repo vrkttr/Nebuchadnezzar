@@ -29,6 +29,29 @@
       text-shadow: 0 0 4px #000000, 0 0 4px #000000;
       white-space: nowrap;
     }
+    #dialogue-box {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.85);
+      color: #ffffff;
+      padding: 16px 24px;
+      border-radius: 8px;
+      max-width: 480px;
+      font-family: sans-serif;
+      font-size: 15px;
+      text-align: center;
+    }
+    #dialogue-box.hidden {
+      display: none;
+    }
+    #dialogue-box button {
+      display: block;
+      margin: 12px auto 0;
+      padding: 6px 16px;
+      cursor: pointer;
+    }
   </style>
 
   <script type="importmap">
@@ -41,6 +64,10 @@
 </head>
 <body>
   <div id="nameplates"></div>
-  <script type="module" src="js/main.js?v=13"></script>
+  <div id="dialogue-box" class="hidden">
+    <p id="dialogue-text"></p>
+    <button id="dialogue-close">Schließen</button>
+  </div>
+  <script type="module" src="js/main.js?v=14"></script>
 </body>
 </html>
