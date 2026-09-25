@@ -12,7 +12,7 @@ const [
   { createServerConnection },
   { createRemotePlayers },
   { dampFactor, lerpAngle },
-  { SERVER_URL },
+  { buildServerUrl, getPortalUrl },
 ] = await Promise.all([
   import('three'),
   import(v('./core/Renderer.js')),
@@ -27,76 +27,91 @@ const [
   import(v('./config.js')),
 ]);
 
-const renderer = createRenderer();
-const scene = createScene();
-const { spawnPoint } = createTestZone(scene);
+function start(token) {
+  const renderer = createRenderer();
+  const scene = createScene();
+  const { spawnPoint } = createTestZone(scene);
 
-const player = createPlayer();
-player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
-scene.add(player.object);
+  const player = createPlayer();
+  player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
+  scene.add(player.object);
 
-const ownTargetPosition = new THREE.Vector3(spawnPoint.x, spawnPoint.y, spawnPoint.z);
-let ownTargetRotationY = 0;
-const SMOOTHING = 12;
+  const ownTargetPosition = new THREE.Vector3(spawnPoint.x, spawnPoint.y, spawnPoint.z);
+  let ownTargetRotationY = 0;
+  const SMOOTHING = 12;
 
-const camera = new THREE.PerspectiveCamera(
-  60,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
 
-const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
-const playerController = createPlayerController(camera);
-const remotePlayers = createRemotePlayers(scene);
+  const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
+  const playerController = createPlayerController(camera);
+  const remotePlayers = createRemotePlayers(scene);
 
-let ownPlayerId = null;
+  let ownPlayerId = null;
 
-const connection = createServerConnection(SERVER_URL, {
-  onMessage(message) {
-    if (message.type === 'init') {
-      ownPlayerId = message.id;
-    } else if (message.type === 'state') {
-      const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
-      if (ownState) {
-        ownTargetPosition.set(ownState.x, ownState.y, ownState.z);
-        ownTargetRotationY = ownState.rotationY ?? ownTargetRotationY;
+  const connection = createServerConnection(buildServerUrl(token), {
+    onMessage(message) {
+      if (message.type === 'init') {
+        ownPlayerId = message.id;
+      } else if (message.type === 'state') {
+        const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
+        if (ownState) {
+          ownTargetPosition.set(ownState.x, ownState.y, ownState.z);
+          ownTargetRotationY = ownState.rotationY ?? ownTargetRotationY;
+        }
+        remotePlayers.sync(message.players, ownPlayerId);
+      } else if (message.type === 'leave') {
+        remotePlayers.remove(message.id);
       }
-      remotePlayers.sync(message.players, ownPlayerId);
-    } else if (message.type === 'leave') {
-      remotePlayers.remove(message.id);
+    },
+    onClose() {
+      if (!ownPlayerId) {
+        window.location.replace(getPortalUrl());
+      }
+    },
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
+  const clock = new THREE.Clock();
+
+  const INPUT_SEND_INTERVAL = 0.05;
+  let inputSendTimer = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+
+    const factor = dampFactor(SMOOTHING, delta);
+    player.object.position.lerp(ownTargetPosition, factor);
+    player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
+    remotePlayers.update(delta);
+
+    thirdPersonCamera.update(player.object.position);
+
+    inputSendTimer += delta;
+    if (inputSendTimer >= INPUT_SEND_INTERVAL) {
+      inputSendTimer = 0;
+      connection.send({ type: 'input', ...playerController.getInputState() });
     }
-  },
-});
 
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-});
-
-const clock = new THREE.Clock();
-
-const INPUT_SEND_INTERVAL = 0.05;
-let inputSendTimer = 0;
-
-function animate() {
-  requestAnimationFrame(animate);
-  const delta = clock.getDelta();
-
-  const factor = dampFactor(SMOOTHING, delta);
-  player.object.position.lerp(ownTargetPosition, factor);
-  player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
-  remotePlayers.update(delta);
-
-  thirdPersonCamera.update(player.object.position);
-
-  inputSendTimer += delta;
-  if (inputSendTimer >= INPUT_SEND_INTERVAL) {
-    inputSendTimer = 0;
-    connection.send({ type: 'input', ...playerController.getInputState() });
+    renderer.render(scene, camera);
   }
 
-  renderer.render(scene, camera);
+  animate();
 }
 
-animate();
+const token = new URLSearchParams(window.location.search).get('token');
+
+if (token) {
+  start(token);
+} else {
+  window.location.replace(getPortalUrl());
+}

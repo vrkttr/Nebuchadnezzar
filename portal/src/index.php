@@ -31,6 +31,7 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
 <p>Eingeloggt als <?= htmlspecialchars($_SESSION['username']) ?></p>
 <?php if ($character): ?>
 <p>Charakter: <?= htmlspecialchars($character['name']) ?></p>
+<p><a href="play.php">Spiel starten</a></p>
 <?php else: ?>
 <p><a href="character.php">Charakter erstellen</a></p>
 <?php endif; ?>

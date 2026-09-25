@@ -13,3 +13,11 @@ CREATE TABLE IF NOT EXISTS characters (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE KEY unique_user_character (user_id)
 );
+
+CREATE TABLE IF NOT EXISTS login_tokens (
+    token VARCHAR(64) PRIMARY KEY,
+    character_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
+);

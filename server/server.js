@@ -1,8 +1,16 @@
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
+import mysql from 'mysql2/promise';
 
 const PORT = process.env.PORT || 8081;
 const wss = new WebSocketServer({ port: PORT });
+
+const dbPool = mysql.createPool({
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
 
 console.log(`Nebuchadnezzar Game-Server läuft auf Port ${PORT}`);
 
@@ -15,8 +23,10 @@ const TICK_DELTA = TICK_INTERVAL_MS / 1000;
 
 const players = new Map();
 
-function createInitialState() {
+function createInitialState(characterId, characterName) {
   return {
+    characterId,
+    characterName,
     x: 0,
     y: 0,
     z: 0,
@@ -27,11 +37,45 @@ function createInitialState() {
   };
 }
 
-wss.on('connection', (socket) => {
-  const id = randomUUID();
-  players.set(id, createInitialState());
+async function resolveCharacterFromToken(token) {
+  if (!token) return null;
 
-  console.log(`Neuer Client verbunden (${id})`);
+  const [tokenRows] = await dbPool.query(
+    'SELECT character_id FROM login_tokens WHERE token = ? AND expires_at > NOW()',
+    [token]
+  );
+
+  if (tokenRows.length === 0) return null;
+
+  await dbPool.query('DELETE FROM login_tokens WHERE token = ?', [token]);
+
+  const characterId = tokenRows[0].character_id;
+
+  const [characterRows] = await dbPool.query(
+    'SELECT id, name FROM characters WHERE id = ?',
+    [characterId]
+  );
+
+  if (characterRows.length === 0) return null;
+
+  return { id: characterRows[0].id, name: characterRows[0].name };
+}
+
+wss.on('connection', async (socket, request) => {
+  const url = new URL(request.url, 'http://localhost');
+  const token = url.searchParams.get('token');
+
+  const character = await resolveCharacterFromToken(token);
+
+  if (!character) {
+    socket.close(4001, 'invalid-token');
+    return;
+  }
+
+  const id = randomUUID();
+  players.set(id, createInitialState(character.id, character.name));
+
+  console.log(`Neuer Client verbunden (${id}, Charakter: ${character.name})`);
   socket.send(JSON.stringify({ type: 'init', id }));
 
   socket.on('message', (data) => {
@@ -113,7 +157,13 @@ setInterval(() => {
 
   const snapshot = {};
   for (const [id, state] of players) {
-    snapshot[id] = { x: state.x, y: state.y, z: state.z, rotationY: state.rotationY };
+    snapshot[id] = {
+      x: state.x,
+      y: state.y,
+      z: state.z,
+      rotationY: state.rotationY,
+      characterName: state.characterName,
+    };
   }
   broadcast({ type: 'state', players: snapshot });
 }, TICK_INTERVAL_MS);
