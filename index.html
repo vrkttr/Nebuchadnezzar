@@ -13,6 +13,22 @@
     canvas {
       display: block;
     }
+    #nameplates {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .nameplate {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      color: #ffffff;
+      font-family: sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      text-shadow: 0 0 4px #000000, 0 0 4px #000000;
+      white-space: nowrap;
+    }
   </style>
 
   <script type="importmap">
@@ -24,6 +40,7 @@
   </script>
 </head>
 <body>
-  <script type="module" src="js/main.js?v=12"></script>
+  <div id="nameplates"></div>
+  <script type="module" src="js/main.js?v=13"></script>
 </body>
 </html>

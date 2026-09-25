@@ -49,7 +49,8 @@ function start(token) {
 
   const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
   const playerController = createPlayerController(camera);
-  const remotePlayers = createRemotePlayers(scene);
+  const nameplateContainer = document.getElementById('nameplates');
+  const remotePlayers = createRemotePlayers(scene, camera, nameplateContainer);
 
   let ownPlayerId = null;
 

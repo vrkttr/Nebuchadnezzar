@@ -20,17 +20,18 @@ const GRAVITY = 14;
 const GROUND_Y = 0;
 const TICK_INTERVAL_MS = 50;
 const TICK_DELTA = TICK_INTERVAL_MS / 1000;
+const SAVE_INTERVAL_MS = 2000;
 
 const players = new Map();
 
-function createInitialState(characterId, characterName) {
+function createInitialState(character) {
   return {
-    characterId,
-    characterName,
-    x: 0,
-    y: 0,
-    z: 0,
-    rotationY: 0,
+    characterId: character.id,
+    characterName: character.name,
+    x: character.x,
+    y: character.y,
+    z: character.z,
+    rotationY: character.rotationY,
     velocityY: 0,
     isGrounded: true,
     input: { moveX: 0, moveZ: 0, jump: false },
@@ -52,13 +53,29 @@ async function resolveCharacterFromToken(token) {
   const characterId = tokenRows[0].character_id;
 
   const [characterRows] = await dbPool.query(
-    'SELECT id, name FROM characters WHERE id = ?',
+    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y FROM characters WHERE id = ?',
     [characterId]
   );
 
   if (characterRows.length === 0) return null;
 
-  return { id: characterRows[0].id, name: characterRows[0].name };
+  const row = characterRows[0];
+
+  return {
+    id: row.id,
+    name: row.name,
+    x: row.pos_x,
+    y: row.pos_y,
+    z: row.pos_z,
+    rotationY: row.rotation_y,
+  };
+}
+
+async function persistState(state) {
+  await dbPool.query(
+    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ? WHERE id = ?',
+    [state.x, state.y, state.z, state.rotationY, state.characterId]
+  );
 }
 
 wss.on('connection', async (socket, request) => {
@@ -73,7 +90,7 @@ wss.on('connection', async (socket, request) => {
   }
 
   const id = randomUUID();
-  players.set(id, createInitialState(character.id, character.name));
+  players.set(id, createInitialState(character));
 
   console.log(`Neuer Client verbunden (${id}, Charakter: ${character.name})`);
   socket.send(JSON.stringify({ type: 'init', id }));
@@ -105,6 +122,10 @@ wss.on('connection', async (socket, request) => {
   });
 
   socket.on('close', () => {
+    const state = players.get(id);
+    if (state) {
+      persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
+    }
     players.delete(id);
     broadcast({ type: 'leave', id });
     console.log(`Client getrennt (${id})`);
@@ -167,3 +188,9 @@ setInterval(() => {
   }
   broadcast({ type: 'state', players: snapshot });
 }, TICK_INTERVAL_MS);
+
+setInterval(() => {
+  for (const state of players.values()) {
+    persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
+  }
+}, SAVE_INTERVAL_MS);
