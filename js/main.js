@@ -107,6 +107,16 @@ function start(token) {
     }
   });
 
+  renderer.domElement.addEventListener('mousemove', (event) => {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(pointer, camera);
+    const intersections = raycaster.intersectObjects(npcs, true);
+
+    renderer.domElement.style.cursor = intersections.length > 0 ? 'pointer' : 'default';
+  });
+
   const clock = new THREE.Clock();
 
   const INPUT_SEND_INTERVAL = 0.05;
