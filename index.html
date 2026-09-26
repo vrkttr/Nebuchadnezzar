@@ -4,53 +4,441 @@
   <meta charset="UTF-8">
   <title>Projekt Nebuchadnezzar</title>
   <style>
+    :root {
+      --c-bg-panel: rgba(23, 17, 11, 0.88);
+      --c-bg-panel-solid: #17110b;
+      --c-border: #8a6a2a;
+      --c-border-bright: #d4af37;
+      --c-text: #ecdfc0;
+      --c-text-dim: #a08b64;
+      --c-health-a: #c23b2a;
+      --c-health-b: #6e1810;
+      --c-resource-a: #2f7cc9;
+      --c-resource-b: #123a5c;
+      --c-xp-a: #7a4fc9;
+      --c-xp-b: #2c1a4d;
+      --c-slot-bg: #100c08;
+      --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+      --font-ui: 'Segoe UI', system-ui, sans-serif;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
       background: #000;
     }
+
     canvas {
       display: block;
     }
+
     #nameplates {
       position: fixed;
       inset: 0;
       pointer-events: none;
       overflow: hidden;
     }
+
     .nameplate {
       position: absolute;
       transform: translate(-50%, -100%);
       color: #ffffff;
-      font-family: sans-serif;
+      font-family: var(--font-ui);
       font-size: 14px;
       font-weight: bold;
       text-shadow: 0 0 4px #000000, 0 0 4px #000000;
       white-space: nowrap;
     }
+
     #dialogue-box {
       position: fixed;
-      bottom: 40px;
+      bottom: 96px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.85);
-      color: #ffffff;
+      background: var(--c-bg-panel);
+      border: 2px solid var(--c-border-bright);
+      border-radius: 6px;
+      color: var(--c-text);
       padding: 16px 24px;
-      border-radius: 8px;
       max-width: 480px;
-      font-family: sans-serif;
+      font-family: var(--font-ui);
       font-size: 15px;
       text-align: center;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
     }
+
     #dialogue-box.hidden {
       display: none;
     }
+
     #dialogue-box button {
       display: block;
       margin: 12px auto 0;
-      padding: 6px 16px;
+      padding: 6px 18px;
+      background: var(--c-bg-panel-solid);
+      color: var(--c-text);
+      border: 1px solid var(--c-border);
+      border-radius: 4px;
+      font-family: var(--font-ui);
       cursor: pointer;
+    }
+
+    #dialogue-box button:hover {
+      border-color: var(--c-border-bright);
+    }
+
+    #hud {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .frame {
+      position: fixed;
+      display: flex;
+      gap: 10px;
+      width: 230px;
+      padding: 8px;
+      background: var(--c-bg-panel);
+      border: 2px solid var(--c-border);
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .frame.hidden {
+      display: none;
+    }
+
+    #player-frame {
+      top: 16px;
+      left: 16px;
+    }
+
+    #target-frame {
+      top: 16px;
+      left: 264px;
+    }
+
+    .portrait {
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--c-border-bright);
+      background: radial-gradient(circle at 35% 30%, #55483a, #1c150f);
+    }
+
+    .frame-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .name-level {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-display);
+      color: var(--c-text);
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .level-badge {
+      flex: 0 0 auto;
+      background: var(--c-border-bright);
+      color: #241a08;
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 6px;
+    }
+
+    .bar {
+      position: relative;
+      height: 14px;
+      background: var(--c-slot-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      transition: width 0.25s ease;
+    }
+
+    .health-bar .bar-fill {
+      background: linear-gradient(var(--c-health-a), var(--c-health-b));
+    }
+
+    .resource-bar .bar-fill {
+      background: linear-gradient(var(--c-resource-a), var(--c-resource-b));
+    }
+
+    .bar-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      color: var(--c-text);
+      text-shadow: 0 1px 2px #000000;
+    }
+
+    #cast-bar {
+      position: fixed;
+      top: 96px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      height: 18px;
+      background: var(--c-slot-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    #cast-bar.hidden {
+      display: none;
+    }
+
+    #cast-bar-fill {
+      background: linear-gradient(90deg, var(--c-resource-b), var(--c-resource-a));
+    }
+
+    #minimap {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 180px;
+    }
+
+    #minimap-circle {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 3px solid var(--c-border-bright);
+      background: radial-gradient(circle at 42% 35%, #46563a, #1b2317 75%);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    #minimap-circle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 12px solid var(--c-border-bright);
+      transform: translate(-50%, -70%);
+    }
+
+    #zone-name {
+      margin-top: 6px;
+      font-family: var(--font-display);
+      color: var(--c-text);
+      font-size: 13px;
+      text-shadow: 0 1px 2px #000000;
+    }
+
+    #minimap-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    #minimap-buttons button {
+      pointer-events: auto;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--c-bg-panel-solid);
+      border: 1px solid var(--c-border);
+      color: var(--c-text-dim);
+      font-family: var(--font-ui);
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    #minimap-buttons button:hover {
+      border-color: var(--c-border-bright);
+      color: var(--c-text);
+    }
+
+    #buff-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+      min-height: 28px;
+    }
+
+    #quest-tracker {
+      position: fixed;
+      top: 236px;
+      right: 16px;
+      width: 210px;
+      padding: 10px 12px;
+      background: var(--c-bg-panel);
+      border-left: 3px solid var(--c-border-bright);
+      border-radius: 4px;
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      color: var(--c-border-bright);
+      font-size: 14px;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--c-border);
+    }
+
+    .empty-state {
+      color: var(--c-text-dim);
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    #action-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      background: var(--c-bg-panel);
+      border: 2px solid var(--c-border);
+      border-radius: 6px;
+    }
+
+    .action-slot {
+      pointer-events: auto;
+      position: relative;
+      width: 42px;
+      height: 42px;
+      background: var(--c-slot-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .action-slot:hover {
+      border-color: var(--c-border-bright);
+    }
+
+    .slot-key {
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      color: var(--c-text-dim);
+    }
+
+    #chat-window {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      width: 320px;
+      max-height: 160px;
+      display: flex;
+      flex-direction: column;
+      background: var(--c-bg-panel);
+      border: 1px solid var(--c-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 8px;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: var(--c-text);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-height: 60px;
+    }
+
+    #chat-input {
+      pointer-events: auto;
+      border: none;
+      border-top: 1px solid var(--c-border);
+      background: var(--c-bg-panel-solid);
+      color: var(--c-text-dim);
+      font-family: var(--font-ui);
+      font-size: 12px;
+      padding: 6px 8px;
+    }
+
+    #chat-input::placeholder {
+      color: var(--c-text-dim);
+    }
+
+    #chat-input:disabled {
+      cursor: not-allowed;
+    }
+
+    #bag-bar {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .bag-slot {
+      pointer-events: auto;
+      width: 36px;
+      height: 36px;
+      background: var(--c-slot-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .bag-slot:hover {
+      border-color: var(--c-border-bright);
+    }
+
+    #xp-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: var(--c-slot-bg);
+      border-top: 1px solid var(--c-border);
+    }
+
+    #xp-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--c-xp-b), var(--c-xp-a));
+      transition: width 0.3s ease;
     }
   </style>
 
@@ -64,10 +452,101 @@
 </head>
 <body>
   <div id="nameplates"></div>
+
+  <div id="hud">
+    <div id="player-frame" class="frame">
+      <div class="portrait"></div>
+      <div class="frame-info">
+        <div class="name-level">
+          <span id="player-name">—</span>
+          <span id="player-level" class="level-badge">1</span>
+        </div>
+        <div class="bar health-bar">
+          <div id="player-health-fill" class="bar-fill"></div>
+          <span id="player-health-text" class="bar-text">100 / 100</span>
+        </div>
+        <div class="bar resource-bar">
+          <div id="player-resource-fill" class="bar-fill"></div>
+          <span id="player-resource-text" class="bar-text">100 / 100</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="target-frame" class="frame hidden">
+      <div class="portrait"></div>
+      <div class="frame-info">
+        <div class="name-level">
+          <span id="target-name">—</span>
+          <span id="target-level" class="level-badge">?</span>
+        </div>
+        <div class="bar health-bar">
+          <div id="target-health-fill" class="bar-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cast-bar" class="hidden">
+      <div id="cast-bar-fill" class="bar-fill"></div>
+      <span id="cast-bar-label" class="bar-text"></span>
+    </div>
+
+    <div id="minimap">
+      <div id="minimap-circle"></div>
+      <div id="zone-name">Testzone</div>
+      <div id="minimap-buttons">
+        <button title="Charakter">C</button>
+        <button title="Zauberbuch">Z</button>
+        <button title="Talente">T</button>
+        <button title="Questlog">Q</button>
+        <button title="Erfolge">E</button>
+        <button title="Gruppensuche">G</button>
+        <button title="Menü">M</button>
+      </div>
+      <div id="buff-bar"></div>
+    </div>
+
+    <div id="quest-tracker">
+      <div class="panel-title">Quests</div>
+      <div id="quest-list" class="empty-state">Keine aktiven Quests</div>
+    </div>
+
+    <div id="action-bar">
+      <div class="action-slot"><span class="slot-key">1</span></div>
+      <div class="action-slot"><span class="slot-key">2</span></div>
+      <div class="action-slot"><span class="slot-key">3</span></div>
+      <div class="action-slot"><span class="slot-key">4</span></div>
+      <div class="action-slot"><span class="slot-key">5</span></div>
+      <div class="action-slot"><span class="slot-key">6</span></div>
+      <div class="action-slot"><span class="slot-key">7</span></div>
+      <div class="action-slot"><span class="slot-key">8</span></div>
+      <div class="action-slot"><span class="slot-key">9</span></div>
+      <div class="action-slot"><span class="slot-key">0</span></div>
+      <div class="action-slot"><span class="slot-key">-</span></div>
+      <div class="action-slot"><span class="slot-key">=</span></div>
+    </div>
+
+    <div id="chat-window">
+      <div id="chat-messages"></div>
+      <input id="chat-input" type="text" placeholder="Chat noch nicht verfügbar" disabled>
+    </div>
+
+    <div id="bag-bar">
+      <button class="bag-slot" title="Rucksack"></button>
+      <button class="bag-slot" title="Tasche"></button>
+      <button class="bag-slot" title="Tasche"></button>
+      <button class="bag-slot" title="Tasche"></button>
+    </div>
+
+    <div id="xp-bar">
+      <div id="xp-fill"></div>
+    </div>
+  </div>
+
   <div id="dialogue-box" class="hidden">
     <p id="dialogue-text"></p>
     <button id="dialogue-close">Schließen</button>
   </div>
-  <script type="module" src="js/main.js?v=14"></script>
+
+  <script type="module" src="js/main.js?v=15"></script>
 </body>
 </html>

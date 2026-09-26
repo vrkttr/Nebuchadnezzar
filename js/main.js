@@ -13,6 +13,8 @@ const [
   { createRemotePlayers },
   { dampFactor, lerpAngle },
   { createDialogue },
+  { createHud },
+  { gameState },
   { buildServerUrl, getPortalUrl },
 ] = await Promise.all([
   import('three'),
@@ -26,6 +28,8 @@ const [
   import(v('./entities/RemotePlayers.js')),
   import(v('./utils/Interpolation.js')),
   import(v('./ui/Dialogue.js')),
+  import(v('./hud/Hud.js')),
+  import(v('./state/GameState.js')),
   import(v('./config.js')),
 ]);
 
@@ -35,6 +39,7 @@ function start(token) {
   const { spawnPoint, npcs } = createTestZone(scene);
 
   const dialogue = createDialogue();
+  const hud = createHud(gameState);
 
   const player = createPlayer();
   player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
@@ -67,6 +72,9 @@ function start(token) {
         if (ownState) {
           ownTargetPosition.set(ownState.x, ownState.y, ownState.z);
           ownTargetRotationY = ownState.rotationY ?? ownTargetRotationY;
+          if (ownState.characterName) {
+            gameState.player.name = ownState.characterName;
+          }
         }
         remotePlayers.sync(message.players, ownPlayerId);
       } else if (message.type === 'leave') {
@@ -132,6 +140,7 @@ function start(token) {
     remotePlayers.update(delta);
 
     thirdPersonCamera.update(player.object.position);
+    hud.update();
 
     inputSendTimer += delta;
     if (inputSendTimer >= INPUT_SEND_INTERVAL) {
