@@ -10,6 +10,6 @@ export const gameState = {
     xpToNextLevel: 1000,
   },
   target: null,
-  zoneName: 'Testzone',
+  zoneName: 'Ödland – Sektor 7',
   quests: [],
 };
