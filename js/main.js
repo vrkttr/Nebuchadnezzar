@@ -81,6 +81,9 @@ function start(token) {
           }
         }
         remotePlayers.sync(message.players, ownPlayerId);
+        if (message.enemies) {
+          enemies.applyStates(message.enemies);
+        }
       } else if (message.type === 'leave') {
         remotePlayers.remove(message.id);
       }
@@ -166,7 +169,7 @@ function start(token) {
     player.object.position.lerp(ownTargetPosition, factor);
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     remotePlayers.update(delta);
-    enemies.update();
+    enemies.update(delta);
 
     thirdPersonCamera.update(player.object.position);
     hud.update();

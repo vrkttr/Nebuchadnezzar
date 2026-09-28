@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { createEnemy } from './Enemy.js';
+import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
 
 const NAMEPLATE_HEIGHT = 2.2;
+const SMOOTHING = 12;
 
 export function createEnemies(scene, camera, nameplateContainer) {
   const enemies = new Map();
@@ -32,7 +34,13 @@ export function createEnemies(scene, camera, nameplateContainer) {
     nameplateEl.textContent = labelFor(data);
     nameplateContainer.appendChild(nameplateEl);
 
-    enemies.set(data.id, { data, object, nameplateEl });
+    enemies.set(data.id, {
+      data,
+      object,
+      nameplateEl,
+      target: new THREE.Vector3(data.x, data.y, data.z),
+      targetRotationY: data.rotationY ?? 0,
+    });
   }
 
   function remove(id) {
@@ -53,8 +61,8 @@ export function createEnemies(scene, camera, nameplateContainer) {
 
       if (existing) {
         Object.assign(existing.data, data);
-        existing.object.position.set(data.x, data.y, data.z);
-        existing.object.rotation.y = data.rotationY ?? existing.object.rotation.y;
+        existing.target.set(data.x, data.y, data.z);
+        existing.targetRotationY = data.rotationY ?? existing.targetRotationY;
         existing.nameplateEl.textContent = labelFor(existing.data);
       } else {
         add(data);
@@ -63,6 +71,17 @@ export function createEnemies(scene, camera, nameplateContainer) {
 
     for (const id of Array.from(enemies.keys())) {
       if (!seenIds.has(id)) remove(id);
+    }
+  }
+
+  function applyStates(list) {
+    for (const data of list) {
+      const existing = enemies.get(data.id);
+      if (!existing) continue;
+
+      Object.assign(existing.data, data);
+      existing.target.set(data.x, data.y, data.z);
+      existing.targetRotationY = data.rotationY ?? existing.targetRotationY;
     }
   }
 
@@ -108,8 +127,12 @@ export function createEnemies(scene, camera, nameplateContainer) {
     enemy.nameplateEl.style.top = `${(-projected.y * 0.5 + 0.5) * window.innerHeight}px`;
   }
 
-  function update() {
+  function update(delta) {
+    const factor = dampFactor(SMOOTHING, delta);
+
     for (const enemy of enemies.values()) {
+      enemy.object.position.lerp(enemy.target, factor);
+      enemy.object.rotation.y = lerpAngle(enemy.object.rotation.y, enemy.targetRotationY, factor);
       updateNameplate(enemy);
     }
 
@@ -123,5 +146,5 @@ export function createEnemies(scene, camera, nameplateContainer) {
     }
   }
 
-  return { sync, getObjects, findDataByObject, select, clearSelection, update };
+  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, update };
 }

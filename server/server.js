@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
-import { createEnemies, serializeEnemies } from './enemies.js';
+import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } from './enemies.js';
 
 const PORT = process.env.PORT || 8081;
 const wss = new WebSocketServer({ port: PORT });
@@ -176,6 +176,7 @@ function simulate() {
 
 setInterval(() => {
   simulate();
+  updateEnemies(enemies, players, TICK_DELTA);
   if (players.size === 0) return;
 
   const snapshot = {};
@@ -188,7 +189,7 @@ setInterval(() => {
       characterName: state.characterName,
     };
   }
-  broadcast({ type: 'state', players: snapshot });
+  broadcast({ type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
 }, TICK_INTERVAL_MS);
 
 setInterval(() => {
