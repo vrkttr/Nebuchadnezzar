@@ -11,6 +11,7 @@ const [
   { createPlayerController },
   { createServerConnection },
   { createRemotePlayers },
+  { createEnemies },
   { dampFactor, lerpAngle },
   { createDialogue },
   { createHud },
@@ -26,6 +27,7 @@ const [
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
   import(v('./entities/RemotePlayers.js')),
+  import(v('./entities/Enemies.js')),
   import(v('./utils/Interpolation.js')),
   import(v('./ui/Dialogue.js')),
   import(v('./hud/Hud.js')),
@@ -60,6 +62,7 @@ function start(token) {
   const playerController = createPlayerController(camera);
   const nameplateContainer = document.getElementById('nameplates');
   const remotePlayers = createRemotePlayers(scene, camera, nameplateContainer);
+  const enemies = createEnemies(scene, camera, nameplateContainer);
 
   let ownPlayerId = null;
 
@@ -67,6 +70,7 @@ function start(token) {
     onMessage(message) {
       if (message.type === 'init') {
         ownPlayerId = message.id;
+        enemies.sync(message.enemies ?? []);
       } else if (message.type === 'state') {
         const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
         if (ownState) {
@@ -96,33 +100,57 @@ function start(token) {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
 
-  renderer.domElement.addEventListener('click', (event) => {
+  function resolveInteractable(hitObject) {
+    let current = hitObject;
+    while (current && !current.userData.isNpc && !current.userData.isEnemy) {
+      current = current.parent;
+    }
+    return current;
+  }
+
+  function pickInteractable(event) {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(pointer, camera);
-    const intersections = raycaster.intersectObjects(npcs, true);
+    const intersections = raycaster.intersectObjects([...npcs, ...enemies.getObjects()], true);
 
-    if (intersections.length === 0) return;
+    if (intersections.length === 0) return null;
+    return resolveInteractable(intersections[0].object);
+  }
 
-    let target = intersections[0].object;
-    while (target && !target.userData.isNpc) {
-      target = target.parent;
-    }
+  renderer.domElement.addEventListener('click', (event) => {
+    const target = pickInteractable(event);
+    if (!target) return;
 
-    if (target) {
+    if (target.userData.isNpc) {
       dialogue.show(target.userData.dialogue);
+    } else if (target.userData.isEnemy) {
+      const data = enemies.findDataByObject(target);
+      if (data) {
+        gameState.target = data;
+        enemies.select(data.id);
+      }
     }
   });
 
   renderer.domElement.addEventListener('mousemove', (event) => {
-    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    const target = pickInteractable(event);
 
-    raycaster.setFromCamera(pointer, camera);
-    const intersections = raycaster.intersectObjects(npcs, true);
+    if (!target) {
+      renderer.domElement.style.cursor = 'default';
+    } else if (target.userData.isEnemy) {
+      renderer.domElement.style.cursor = 'crosshair';
+    } else {
+      renderer.domElement.style.cursor = 'pointer';
+    }
+  });
 
-    renderer.domElement.style.cursor = intersections.length > 0 ? 'pointer' : 'default';
+  window.addEventListener('keydown', (event) => {
+    if (event.code === 'Escape') {
+      gameState.target = null;
+      enemies.clearSelection();
+    }
   });
 
   const clock = new THREE.Clock();
@@ -138,6 +166,7 @@ function start(token) {
     player.object.position.lerp(ownTargetPosition, factor);
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     remotePlayers.update(delta);
+    enemies.update();
 
     thirdPersonCamera.update(player.object.position);
     hud.update();

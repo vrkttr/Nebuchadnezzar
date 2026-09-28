@@ -1,6 +1,7 @@
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
+import { createEnemies, serializeEnemies } from './enemies.js';
 
 const PORT = process.env.PORT || 8081;
 const wss = new WebSocketServer({ port: PORT });
@@ -23,6 +24,7 @@ const TICK_DELTA = TICK_INTERVAL_MS / 1000;
 const SAVE_INTERVAL_MS = 2000;
 
 const players = new Map();
+const enemies = createEnemies();
 
 function createInitialState(character) {
   return {
@@ -93,7 +95,7 @@ wss.on('connection', async (socket, request) => {
   players.set(id, createInitialState(character));
 
   console.log(`Neuer Client verbunden (${id}, Charakter: ${character.name})`);
-  socket.send(JSON.stringify({ type: 'init', id }));
+  socket.send(JSON.stringify({ type: 'init', id, enemies: serializeEnemies(enemies) }));
 
   socket.on('message', (data) => {
     let message;
