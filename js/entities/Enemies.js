@@ -23,6 +23,12 @@ export function createEnemies(scene, camera, nameplateContainer) {
     return `${data.name} (Lv ${data.level})`;
   }
 
+  function applyVisibility(enemy) {
+    const alive = !enemy.data.dead;
+    enemy.object.visible = alive;
+    enemy.nameplateEl.style.display = alive ? 'block' : 'none';
+  }
+
   function add(data) {
     const object = createEnemy(data.id);
     object.position.set(data.x, data.y, data.z);
@@ -34,13 +40,16 @@ export function createEnemies(scene, camera, nameplateContainer) {
     nameplateEl.textContent = labelFor(data);
     nameplateContainer.appendChild(nameplateEl);
 
-    enemies.set(data.id, {
+    const enemy = {
       data,
       object,
       nameplateEl,
       target: new THREE.Vector3(data.x, data.y, data.z),
       targetRotationY: data.rotationY ?? 0,
-    });
+    };
+
+    enemies.set(data.id, enemy);
+    applyVisibility(enemy);
   }
 
   function remove(id) {
@@ -64,6 +73,7 @@ export function createEnemies(scene, camera, nameplateContainer) {
         existing.target.set(data.x, data.y, data.z);
         existing.targetRotationY = data.rotationY ?? existing.targetRotationY;
         existing.nameplateEl.textContent = labelFor(existing.data);
+        applyVisibility(existing);
       } else {
         add(data);
       }
@@ -82,11 +92,14 @@ export function createEnemies(scene, camera, nameplateContainer) {
       Object.assign(existing.data, data);
       existing.target.set(data.x, data.y, data.z);
       existing.targetRotationY = data.rotationY ?? existing.targetRotationY;
+      applyVisibility(existing);
     }
   }
 
   function getObjects() {
-    return Array.from(enemies.values()).map((enemy) => enemy.object);
+    return Array.from(enemies.values())
+      .filter((enemy) => !enemy.data.dead)
+      .map((enemy) => enemy.object);
   }
 
   function findDataByObject(object) {
@@ -101,7 +114,6 @@ export function createEnemies(scene, camera, nameplateContainer) {
   function select(id) {
     if (!enemies.has(id)) return;
     selectedId = id;
-    selectionRing.visible = true;
   }
 
   function clearSelection() {
@@ -110,6 +122,8 @@ export function createEnemies(scene, camera, nameplateContainer) {
   }
 
   function updateNameplate(enemy) {
+    if (enemy.data.dead) return;
+
     projected.set(
       enemy.object.position.x,
       enemy.object.position.y + NAMEPLATE_HEIGHT,
@@ -136,13 +150,17 @@ export function createEnemies(scene, camera, nameplateContainer) {
       updateNameplate(enemy);
     }
 
-    if (selectedId) {
-      const selected = enemies.get(selectedId);
+    const selected = selectedId ? enemies.get(selectedId) : null;
+
+    if (selected && !selected.data.dead) {
+      selectionRing.visible = true;
       selectionRing.position.set(
         selected.object.position.x,
         selected.object.position.y + 0.03,
         selected.object.position.z
       );
+    } else {
+      selectionRing.visible = false;
     }
   }
 

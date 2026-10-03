@@ -8,6 +8,7 @@ export const gameState = {
     resourceMax: 100,
     xp: 0,
     xpToNextLevel: 1000,
+    dead: false,
   },
   target: null,
   zoneName: 'Ödland – Sektor 7',

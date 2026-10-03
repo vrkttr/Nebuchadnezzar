@@ -2,6 +2,7 @@ import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } from './enemies.js';
+import { createCombatState, updateCombat } from './combat.js';
 
 const PORT = process.env.PORT || 8081;
 const wss = new WebSocketServer({ port: PORT });
@@ -37,6 +38,7 @@ function createInitialState(character) {
     velocityY: 0,
     isGrounded: true,
     input: { moveX: 0, moveZ: 0, jump: false },
+    ...createCombatState(),
   };
 }
 
@@ -120,6 +122,23 @@ wss.on('connection', async (socket, request) => {
       state.input.moveX = moveX;
       state.input.moveZ = moveZ;
       state.input.jump = Boolean(message.jump);
+    } else if (message.type === 'target') {
+      const state = players.get(id);
+      if (!state || state.dead) return;
+
+      const enemy = typeof message.enemyId === 'string' ? enemies.get(message.enemyId) : null;
+
+      if (enemy && !enemy.dead) {
+        state.targetEnemyId = enemy.id;
+      } else {
+        state.targetEnemyId = null;
+        state.autoAttack = false;
+      }
+    } else if (message.type === 'autoattack') {
+      const state = players.get(id);
+      if (!state || state.dead) return;
+
+      state.autoAttack = Boolean(message.active) && state.targetEnemyId !== null;
     }
   });
 
@@ -149,6 +168,8 @@ function broadcast(message) {
 
 function simulate() {
   for (const state of players.values()) {
+    if (state.dead) continue;
+
     const { input } = state;
 
     state.x += input.moveX * MOVE_SPEED * TICK_DELTA;
@@ -177,6 +198,7 @@ function simulate() {
 setInterval(() => {
   simulate();
   updateEnemies(enemies, players, TICK_DELTA);
+  updateCombat(players, enemies, TICK_DELTA, broadcast);
   if (players.size === 0) return;
 
   const snapshot = {};
@@ -187,6 +209,10 @@ setInterval(() => {
       z: state.z,
       rotationY: state.rotationY,
       characterName: state.characterName,
+      health: state.health,
+      healthMax: state.healthMax,
+      dead: state.dead,
+      autoAttack: state.autoAttack,
     };
   }
   broadcast({ type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });

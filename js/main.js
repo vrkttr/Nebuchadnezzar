@@ -74,7 +74,13 @@ function start(token) {
       } else if (message.type === 'state') {
         const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
         if (ownState) {
+          const jumpDistance = ownTargetPosition.distanceTo(
+            new THREE.Vector3(ownState.x, ownState.y, ownState.z)
+          );
           ownTargetPosition.set(ownState.x, ownState.y, ownState.z);
+          if (jumpDistance > 5) {
+            player.object.position.copy(ownTargetPosition);
+          }
           ownTargetRotationY = ownState.rotationY ?? ownTargetRotationY;
           if (ownState.characterName) {
             gameState.player.name = ownState.characterName;
@@ -83,6 +89,15 @@ function start(token) {
         remotePlayers.sync(message.players, ownPlayerId);
         if (message.enemies) {
           enemies.applyStates(message.enemies);
+        }
+        if (ownState) {
+          const wasAlive = !gameState.player.dead;
+          gameState.player.health = ownState.health;
+          gameState.player.healthMax = ownState.healthMax;
+          gameState.player.dead = Boolean(ownState.dead);
+          if (wasAlive && gameState.player.dead) {
+            dialogue.show('Du bist gefallen und wurdest an deinem Spawnpunkt wiederbelebt.');
+          }
         }
       } else if (message.type === 'leave') {
         remotePlayers.remove(message.id);
@@ -133,6 +148,8 @@ function start(token) {
       if (data) {
         gameState.target = data;
         enemies.select(data.id);
+        connection.send({ type: 'target', enemyId: data.id });
+        connection.send({ type: 'autoattack', active: true });
       }
     }
   });
@@ -153,6 +170,7 @@ function start(token) {
     if (event.code === 'Escape') {
       gameState.target = null;
       enemies.clearSelection();
+      connection.send({ type: 'target', enemyId: null });
     }
   });
 

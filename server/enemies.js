@@ -1,3 +1,5 @@
+import { ENEMY_MELEE_RANGE } from './combat.js';
+
 const SPAWNS = [
   { name: 'Plünderer', level: 1, x: 10, y: 0, z: -9, healthMax: 60 },
   { name: 'Plünderer', level: 1, x: 12, y: 0, z: -7, healthMax: 60 },
@@ -6,7 +8,6 @@ const SPAWNS = [
 
 const AGGRO_RANGE = 8;
 const LEASH_RANGE = 20;
-const ATTACK_RANGE = 1.6;
 const MOVE_SPEED = 3;
 const HOME_TOLERANCE = 0.15;
 
@@ -29,6 +30,9 @@ export function createEnemies() {
       healthMax: spawn.healthMax,
       state: 'idle',
       targetPlayerId: null,
+      dead: false,
+      respawnTimer: 0,
+      attackTimer: 0,
     });
   });
 
@@ -46,6 +50,7 @@ export function serializeEnemies(enemies) {
     rotationY: enemy.rotationY,
     health: enemy.health,
     healthMax: enemy.healthMax,
+    dead: enemy.dead,
   }));
 }
 
@@ -58,6 +63,7 @@ export function serializeEnemyStates(enemies) {
     rotationY: enemy.rotationY,
     health: enemy.health,
     healthMax: enemy.healthMax,
+    dead: enemy.dead,
   }));
 }
 
@@ -70,6 +76,8 @@ function findNearestPlayerInRange(enemy, players, range) {
   let nearestDistance = range;
 
   for (const [id, player] of players) {
+    if (player.dead) continue;
+
     const distance = horizontalDistance(enemy.x, enemy.z, player.x, player.z);
     if (distance <= nearestDistance) {
       nearestDistance = distance;
@@ -97,6 +105,8 @@ function moveToward(enemy, targetX, targetZ, delta) {
 
 export function updateEnemies(enemies, players, delta) {
   for (const enemy of enemies.values()) {
+    if (enemy.dead) continue;
+
     if (enemy.state === 'idle') {
       const targetId = findNearestPlayerInRange(enemy, players, AGGRO_RANGE);
       if (targetId) {
@@ -107,7 +117,7 @@ export function updateEnemies(enemies, players, delta) {
       const target = players.get(enemy.targetPlayerId);
       const distanceFromSpawn = horizontalDistance(enemy.x, enemy.z, enemy.spawnX, enemy.spawnZ);
 
-      if (!target || distanceFromSpawn > LEASH_RANGE) {
+      if (!target || target.dead || distanceFromSpawn > LEASH_RANGE) {
         enemy.state = 'return';
         enemy.targetPlayerId = null;
         continue;
@@ -115,7 +125,7 @@ export function updateEnemies(enemies, players, delta) {
 
       const distanceToTarget = horizontalDistance(enemy.x, enemy.z, target.x, target.z);
 
-      if (distanceToTarget > ATTACK_RANGE) {
+      if (distanceToTarget > ENEMY_MELEE_RANGE) {
         moveToward(enemy, target.x, target.z, delta);
       } else {
         enemy.rotationY = Math.atan2(target.x - enemy.x, target.z - enemy.z);
