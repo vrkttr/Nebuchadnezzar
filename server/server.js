@@ -2,7 +2,9 @@ import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } from './enemies.js';
-import { createCombatState, updateCombat } from './combat.js';
+import { createCombatState, updateCombat, useAbility } from './combat.js';
+import { serializeAbilities } from './abilities.js';
+import { xpToNextLevel } from './progression.js';
 
 const PORT = process.env.PORT || 8081;
 const wss = new WebSocketServer({ port: PORT });
@@ -25,7 +27,15 @@ const TICK_DELTA = TICK_INTERVAL_MS / 1000;
 const SAVE_INTERVAL_MS = 2000;
 
 const players = new Map();
+const sockets = new Map();
 const enemies = createEnemies();
+
+function notify(playerId, message) {
+  const socket = sockets.get(playerId);
+  if (socket && socket.readyState === socket.OPEN) {
+    socket.send(JSON.stringify(message));
+  }
+}
 
 function createInitialState(character) {
   return {
@@ -38,7 +48,7 @@ function createInitialState(character) {
     velocityY: 0,
     isGrounded: true,
     input: { moveX: 0, moveZ: 0, jump: false },
-    ...createCombatState(),
+    ...createCombatState(character),
   };
 }
 
@@ -57,7 +67,7 @@ async function resolveCharacterFromToken(token) {
   const characterId = tokenRows[0].character_id;
 
   const [characterRows] = await dbPool.query(
-    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y FROM characters WHERE id = ?',
+    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y, level, xp FROM characters WHERE id = ?',
     [characterId]
   );
 
@@ -72,13 +82,15 @@ async function resolveCharacterFromToken(token) {
     y: row.pos_y,
     z: row.pos_z,
     rotationY: row.rotation_y,
+    level: row.level,
+    xp: row.xp,
   };
 }
 
 async function persistState(state) {
   await dbPool.query(
-    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ? WHERE id = ?',
-    [state.x, state.y, state.z, state.rotationY, state.characterId]
+    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ? WHERE id = ?',
+    [state.x, state.y, state.z, state.rotationY, state.level, Math.floor(state.xp), state.characterId]
   );
 }
 
@@ -94,10 +106,19 @@ wss.on('connection', async (socket, request) => {
   }
 
   const id = randomUUID();
-  players.set(id, createInitialState(character));
+  const initialState = createInitialState(character);
+  players.set(id, initialState);
+  sockets.set(id, socket);
 
   console.log(`Neuer Client verbunden (${id}, Charakter: ${character.name})`);
-  socket.send(JSON.stringify({ type: 'init', id, enemies: serializeEnemies(enemies) }));
+  socket.send(
+    JSON.stringify({
+      type: 'init',
+      id,
+      enemies: serializeEnemies(enemies),
+      abilities: serializeAbilities(initialState.actionBar),
+    })
+  );
 
   socket.on('message', (data) => {
     let message;
@@ -139,6 +160,14 @@ wss.on('connection', async (socket, request) => {
       if (!state || state.dead) return;
 
       state.autoAttack = Boolean(message.active) && state.targetEnemyId !== null;
+    } else if (message.type === 'ability') {
+      const state = players.get(id);
+      if (!state) return;
+
+      const slot = Number.parseInt(message.slot, 10);
+      if (!Number.isInteger(slot)) return;
+
+      useAbility(id, state, enemies, slot, broadcast, notify);
     }
   });
 
@@ -148,6 +177,7 @@ wss.on('connection', async (socket, request) => {
       persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
     }
     players.delete(id);
+    sockets.delete(id);
     broadcast({ type: 'leave', id });
     console.log(`Client getrennt (${id})`);
   });
@@ -198,7 +228,7 @@ function simulate() {
 setInterval(() => {
   simulate();
   updateEnemies(enemies, players, TICK_DELTA);
-  updateCombat(players, enemies, TICK_DELTA, broadcast);
+  updateCombat(players, enemies, TICK_DELTA, broadcast, notify);
   if (players.size === 0) return;
 
   const snapshot = {};
@@ -209,6 +239,7 @@ setInterval(() => {
       z: state.z,
       rotationY: state.rotationY,
       characterName: state.characterName,
+      level: state.level,
       health: state.health,
       healthMax: state.healthMax,
       dead: state.dead,
@@ -216,6 +247,18 @@ setInterval(() => {
     };
   }
   broadcast({ type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
+
+  for (const [id, state] of players) {
+    notify(id, {
+      type: 'self',
+      level: state.level,
+      xp: state.xp,
+      xpToNextLevel: xpToNextLevel(state.level),
+      resource: state.resource,
+      resourceMax: state.resourceMax,
+      cooldowns: state.cooldowns,
+    });
+  }
 }, TICK_INTERVAL_MS);
 
 setInterval(() => {

@@ -1,11 +1,12 @@
+import { ABILITIES, DEFAULT_ACTION_BAR, createCooldownState } from './abilities.js';
+import { applyLevelStats, grantXp, xpForKill } from './progression.js';
+
 const PLAYER_ATTACK_RANGE = 3;
 const PLAYER_ATTACK_INTERVAL = 1.5;
-const PLAYER_DAMAGE_MIN = 8;
-const PLAYER_DAMAGE_MAX = 12;
 const PLAYER_RESPAWN_TIME = 4;
-const PLAYER_HEALTH_MAX = 100;
 const REGEN_DELAY = 6;
 const REGEN_PER_SECOND = 3;
+const RESOURCE_REGEN_PER_SECOND = 2;
 
 export const ENEMY_MELEE_RANGE = 2;
 const ENEMY_ATTACK_INTERVAL = 2;
@@ -21,17 +22,31 @@ function horizontalDistance(a, b) {
   return Math.hypot(a.x - b.x, a.z - b.z);
 }
 
-export function createCombatState() {
-  return {
-    health: PLAYER_HEALTH_MAX,
-    healthMax: PLAYER_HEALTH_MAX,
+export function createCombatState(character) {
+  const state = {
+    level: character.level,
+    xp: character.xp,
+    health: 0,
+    healthMax: 0,
+    resource: 0,
+    resourceMax: 0,
+    damageMin: 0,
+    damageMax: 0,
     dead: false,
     respawnTimer: 0,
     targetEnemyId: null,
     autoAttack: false,
     attackTimer: PLAYER_ATTACK_INTERVAL,
     combatTimer: REGEN_DELAY,
+    cooldowns: createCooldownState(),
+    actionBar: { ...DEFAULT_ACTION_BAR },
   };
+
+  applyLevelStats(state);
+  state.health = state.healthMax;
+  state.resource = state.resourceMax;
+
+  return state;
 }
 
 function killEnemy(enemy) {
@@ -57,6 +72,7 @@ function killPlayer(player) {
   player.respawnTimer = PLAYER_RESPAWN_TIME;
   player.targetEnemyId = null;
   player.autoAttack = false;
+  player.xp = 0;
   player.input.moveX = 0;
   player.input.moveZ = 0;
   player.input.jump = false;
@@ -70,18 +86,33 @@ function respawnPlayer(player) {
   player.velocityY = 0;
   player.isGrounded = true;
   player.health = player.healthMax;
+  player.resource = player.resourceMax;
+  player.cooldowns = createCooldownState();
   player.dead = false;
   player.attackTimer = PLAYER_ATTACK_INTERVAL;
   player.combatTimer = REGEN_DELAY;
 }
 
-function damageEnemy(enemy, amount, attackerId, attacker, emit) {
+function awardKill(player, playerId, enemy, notify) {
+  const amount = xpForKill(player.level, enemy.level);
+  if (amount <= 0) return;
+
+  const levelsGained = grantXp(player, amount);
+  notify(playerId, { type: 'event', kind: 'xp', amount, enemyName: enemy.name });
+
+  if (levelsGained > 0) {
+    notify(playerId, { type: 'event', kind: 'levelup', level: player.level });
+  }
+}
+
+function damageEnemy(enemy, amount, attackerId, attacker, emit, notify) {
   enemy.health = Math.max(0, enemy.health - amount);
   attacker.combatTimer = 0;
   emit({ type: 'damage', targetType: 'enemy', targetId: enemy.id, amount });
 
   if (enemy.health === 0) {
     killEnemy(enemy);
+    awardKill(attacker, attackerId, enemy, notify);
   } else if (enemy.state !== 'chase') {
     enemy.state = 'chase';
     enemy.targetPlayerId = attackerId;
@@ -99,7 +130,7 @@ function damagePlayer(player, playerId, enemy, emit) {
   }
 }
 
-function updatePlayers(players, enemies, delta, emit) {
+function updatePlayers(players, enemies, delta, emit, notify) {
   for (const [playerId, player] of players) {
     if (player.dead) {
       player.respawnTimer -= delta;
@@ -109,6 +140,17 @@ function updatePlayers(players, enemies, delta, emit) {
 
     player.combatTimer += delta;
     player.attackTimer = Math.min(player.attackTimer + delta, PLAYER_ATTACK_INTERVAL);
+
+    for (const abilityId of Object.keys(player.cooldowns)) {
+      player.cooldowns[abilityId] = Math.max(0, player.cooldowns[abilityId] - delta);
+    }
+
+    if (player.resource < player.resourceMax) {
+      player.resource = Math.min(
+        player.resourceMax,
+        player.resource + RESOURCE_REGEN_PER_SECOND * delta
+      );
+    }
 
     const enemy = player.targetEnemyId ? enemies.get(player.targetEnemyId) : null;
 
@@ -121,7 +163,7 @@ function updatePlayers(players, enemies, delta, emit) {
       horizontalDistance(player, enemy) <= PLAYER_ATTACK_RANGE
     ) {
       player.attackTimer = 0;
-      damageEnemy(enemy, randomInt(PLAYER_DAMAGE_MIN, PLAYER_DAMAGE_MAX), playerId, player, emit);
+      damageEnemy(enemy, randomInt(player.damageMin, player.damageMax), playerId, player, emit, notify);
     }
 
     if (player.combatTimer >= REGEN_DELAY && player.health < player.healthMax) {
@@ -159,7 +201,29 @@ function updateEnemyAttacks(players, enemies, delta, emit) {
   }
 }
 
-export function updateCombat(players, enemies, delta, emit) {
-  updatePlayers(players, enemies, delta, emit);
+export function useAbility(playerId, player, enemies, slot, emit, notify) {
+  if (player.dead) return;
+
+  const ability = ABILITIES[player.actionBar[slot]];
+  if (!ability) return;
+
+  const fail = (reason) => notify(playerId, { type: 'event', kind: 'ability-failed', reason });
+
+  const enemy = player.targetEnemyId ? enemies.get(player.targetEnemyId) : null;
+
+  if (!enemy || enemy.dead) return fail('no-target');
+  if (player.cooldowns[ability.id] > 0) return fail('cooldown');
+  if (player.resource < ability.cost) return fail('no-resource');
+  if (horizontalDistance(player, enemy) > ability.range) return fail('out-of-range');
+
+  player.resource -= ability.cost;
+  player.cooldowns[ability.id] = ability.cooldown;
+
+  const amount = Math.round(randomInt(player.damageMin, player.damageMax) * ability.damageMultiplier);
+  damageEnemy(enemy, amount, playerId, player, emit, notify);
+}
+
+export function updateCombat(players, enemies, delta, emit, notify) {
+  updatePlayers(players, enemies, delta, emit, notify);
   updateEnemyAttacks(players, enemies, delta, emit);
 }

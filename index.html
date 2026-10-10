@@ -370,6 +370,45 @@
       color: var(--c-text-dim);
     }
 
+    .slot-name {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--c-border-bright);
+      pointer-events: none;
+    }
+
+    .slot-cooldown {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.7);
+      pointer-events: none;
+    }
+
+    .slot-cooldown-text {
+      position: absolute;
+      bottom: 12px;
+      font-family: var(--font-display);
+      font-size: 16px;
+      color: var(--c-text);
+      text-shadow: 0 1px 2px #000000;
+    }
+
+    .action-slot.slot-unaffordable .slot-name {
+      color: var(--c-text-dim);
+    }
+
     #chat-window {
       position: fixed;
       bottom: 16px;
@@ -395,6 +434,10 @@
       flex-direction: column;
       gap: 2px;
       min-height: 60px;
+    }
+
+    .chat-line-system {
+      color: var(--c-border-bright);
     }
 
     #chat-input {
@@ -561,6 +604,6 @@
     <button id="dialogue-close">Schließen</button>
   </div>
 
-  <script type="module" src="js/main.js?v=19"></script>
+  <script type="module" src="js/main.js?v=20"></script>
 </body>
 </html>

@@ -41,7 +41,9 @@ function start(token) {
   const { spawnPoint, npcs } = createTestZone(scene);
 
   const dialogue = createDialogue();
-  const hud = createHud(gameState);
+  const hud = createHud(gameState, {
+    onAbility: (slot) => connection.send({ type: 'ability', slot }),
+  });
 
   const player = createPlayer();
   player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
@@ -71,6 +73,16 @@ function start(token) {
       if (message.type === 'init') {
         ownPlayerId = message.id;
         enemies.sync(message.enemies ?? []);
+        hud.setAbilities(message.abilities ?? []);
+      } else if (message.type === 'self') {
+        gameState.player.level = message.level;
+        gameState.player.xp = message.xp;
+        gameState.player.xpToNextLevel = message.xpToNextLevel;
+        gameState.player.resource = message.resource;
+        gameState.player.resourceMax = message.resourceMax;
+        gameState.player.cooldowns = message.cooldowns ?? {};
+      } else if (message.type === 'event') {
+        hud.addEvent(message);
       } else if (message.type === 'state') {
         const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
         if (ownState) {
@@ -96,7 +108,9 @@ function start(token) {
           gameState.player.healthMax = ownState.healthMax;
           gameState.player.dead = Boolean(ownState.dead);
           if (wasAlive && gameState.player.dead) {
-            dialogue.show('Du bist gefallen und wurdest an deinem Spawnpunkt wiederbelebt.');
+            dialogue.show(
+              'Du bist gefallen, hast die Erfahrung dieses Levels verloren und wurdest an deinem Spawnpunkt wiederbelebt.'
+            );
           }
         }
       } else if (message.type === 'leave') {
@@ -166,11 +180,32 @@ function start(token) {
     }
   });
 
+  const ABILITY_SLOT_BY_KEY = {
+    Digit1: 1,
+    Digit2: 2,
+    Digit3: 3,
+    Digit4: 4,
+    Digit5: 5,
+    Digit6: 6,
+    Digit7: 7,
+    Digit8: 8,
+    Digit9: 9,
+    Digit0: 10,
+    Minus: 11,
+    Equal: 12,
+  };
+
   window.addEventListener('keydown', (event) => {
     if (event.code === 'Escape') {
       gameState.target = null;
       enemies.clearSelection();
       connection.send({ type: 'target', enemyId: null });
+      return;
+    }
+
+    const slot = ABILITY_SLOT_BY_KEY[event.code];
+    if (slot && !event.repeat) {
+      connection.send({ type: 'ability', slot });
     }
   });
 
