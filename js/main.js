@@ -15,6 +15,7 @@ const [
   { dampFactor, lerpAngle },
   { createDialogue },
   { createHud },
+  { createAudio },
   { gameState },
   { buildServerUrl, getPortalUrl },
 ] = await Promise.all([
@@ -31,6 +32,7 @@ const [
   import(v('./utils/Interpolation.js')),
   import(v('./ui/Dialogue.js')),
   import(v('./hud/Hud.js')),
+  import(v('./audio/Audio.js')),
   import(v('./state/GameState.js')),
   import(v('./config.js')),
 ]);
@@ -41,6 +43,9 @@ function start(token) {
   const { spawnPoint, npcs } = createTestZone(scene);
 
   const dialogue = createDialogue();
+  const audio = createAudio();
+  audio.startAmbient();
+
   const hud = createHud(gameState, {
     onAbility: (slot) => connection.send({ type: 'ability', slot }),
   });
@@ -78,11 +83,15 @@ function start(token) {
         gameState.player.level = message.level;
         gameState.player.xp = message.xp;
         gameState.player.xpToNextLevel = message.xpToNextLevel;
+        gameState.player.gold = message.gold;
         gameState.player.resource = message.resource;
         gameState.player.resourceMax = message.resourceMax;
         gameState.player.cooldowns = message.cooldowns ?? {};
       } else if (message.type === 'event') {
         hud.addEvent(message);
+        audio.playEvent(message);
+      } else if (message.type === 'damage') {
+        audio.playDamage(message, ownPlayerId);
       } else if (message.type === 'state') {
         const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
         if (ownState) {
@@ -108,6 +117,7 @@ function start(token) {
           gameState.player.healthMax = ownState.healthMax;
           gameState.player.dead = Boolean(ownState.dead);
           if (wasAlive && gameState.player.dead) {
+            audio.play('player_death');
             dialogue.show(
               'Du bist gefallen, hast die Erfahrung dieses Levels verloren und wurdest an deinem Spawnpunkt wiederbelebt.'
             );
@@ -161,6 +171,7 @@ function start(token) {
       const data = enemies.findDataByObject(target);
       if (data) {
         gameState.target = data;
+        audio.play('target_select');
         enemies.select(data.id);
         connection.send({ type: 'target', enemyId: data.id });
         connection.send({ type: 'autoattack', active: true });

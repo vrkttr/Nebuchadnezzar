@@ -481,6 +481,16 @@
       border-color: var(--c-border-bright);
     }
 
+    #gold-display {
+      position: fixed;
+      bottom: 60px;
+      right: 16px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      color: var(--c-border-bright);
+      text-shadow: 0 1px 2px #000000;
+    }
+
     #xp-bar {
       position: fixed;
       bottom: 0;
@@ -594,6 +604,8 @@
       <button class="bag-slot" title="Tasche"></button>
     </div>
 
+    <div id="gold-display"><span id="gold-amount">0</span> Gold</div>
+
     <div id="xp-bar">
       <div id="xp-fill"></div>
     </div>
@@ -604,6 +616,7 @@
     <button id="dialogue-close">Schließen</button>
   </div>
 
-  <script type="module" src="js/main.js?v=20"></script>
+  <script src="js/vendor/howler.min.js"></script>
+  <script type="module" src="js/main.js?v=21"></script>
 </body>
 </html>

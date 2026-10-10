@@ -7,6 +7,7 @@ export const gameState = {
     resource: 100,
     resourceMax: 100,
     xp: 0,
+    gold: 0,
     xpToNextLevel: 100,
     dead: false,
     cooldowns: {},

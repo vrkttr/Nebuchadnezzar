@@ -67,7 +67,7 @@ async function resolveCharacterFromToken(token) {
   const characterId = tokenRows[0].character_id;
 
   const [characterRows] = await dbPool.query(
-    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y, level, xp FROM characters WHERE id = ?',
+    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y, level, xp, gold FROM characters WHERE id = ?',
     [characterId]
   );
 
@@ -84,13 +84,23 @@ async function resolveCharacterFromToken(token) {
     rotationY: row.rotation_y,
     level: row.level,
     xp: row.xp,
+    gold: row.gold,
   };
 }
 
 async function persistState(state) {
   await dbPool.query(
-    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ? WHERE id = ?',
-    [state.x, state.y, state.z, state.rotationY, state.level, Math.floor(state.xp), state.characterId]
+    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ? WHERE id = ?',
+    [
+      state.x,
+      state.y,
+      state.z,
+      state.rotationY,
+      state.level,
+      Math.floor(state.xp),
+      state.gold,
+      state.characterId,
+    ]
   );
 }
 
@@ -254,6 +264,7 @@ setInterval(() => {
       level: state.level,
       xp: state.xp,
       xpToNextLevel: xpToNextLevel(state.level),
+      gold: state.gold,
       resource: state.resource,
       resourceMax: state.resourceMax,
       cooldowns: state.cooldowns,

@@ -20,6 +20,7 @@ export function createHud(state, handlers = {}) {
   const playerResourceFill = document.getElementById('player-resource-fill');
   const playerResourceText = document.getElementById('player-resource-text');
   const xpFill = document.getElementById('xp-fill');
+  const goldAmount = document.getElementById('gold-amount');
   const zoneName = document.getElementById('zone-name');
   const chatMessages = document.getElementById('chat-messages');
   const slotElements = Array.from(document.querySelectorAll('#action-bar .action-slot'));
@@ -73,6 +74,8 @@ export function createHud(state, handlers = {}) {
   function addEvent(event) {
     if (event.kind === 'xp') {
       addMessage(`+${event.amount} Erfahrung (${event.enemyName})`);
+    } else if (event.kind === 'gold') {
+      addMessage(`+${event.amount} Gold`);
     } else if (event.kind === 'levelup') {
       addMessage(`Level-Aufstieg! Du bist jetzt Level ${event.level}.`);
     } else if (event.kind === 'ability-failed') {
@@ -102,6 +105,8 @@ export function createHud(state, handlers = {}) {
     playerResourceText.textContent = `${Math.round(state.player.resource)} / ${state.player.resourceMax}`;
 
     xpFill.style.width = `${toPercent(state.player.xp, state.player.xpToNextLevel)}%`;
+
+    goldAmount.textContent = state.player.gold.toLocaleString('de-DE');
 
     zoneName.textContent = state.zoneName;
 

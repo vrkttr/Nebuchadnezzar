@@ -1,4 +1,5 @@
 import { ABILITIES, DEFAULT_ACTION_BAR, createCooldownState } from './abilities.js';
+import { goldForKill } from './loot.js';
 import { applyLevelStats, grantXp, xpForKill } from './progression.js';
 
 const PLAYER_ATTACK_RANGE = 3;
@@ -26,6 +27,7 @@ export function createCombatState(character) {
   const state = {
     level: character.level,
     xp: character.xp,
+    gold: character.gold,
     health: 0,
     healthMax: 0,
     resource: 0,
@@ -94,21 +96,28 @@ function respawnPlayer(player) {
 }
 
 function awardKill(player, playerId, enemy, notify) {
-  const amount = xpForKill(player.level, enemy.level);
-  if (amount <= 0) return;
+  const xpAmount = xpForKill(player.level, enemy.level);
+  const goldAmount = goldForKill(player.level, enemy.level);
 
-  const levelsGained = grantXp(player, amount);
-  notify(playerId, { type: 'event', kind: 'xp', amount, enemyName: enemy.name });
+  notify(playerId, { type: 'event', kind: 'kill', enemyName: enemy.name });
+
+  const levelsGained = grantXp(player, xpAmount);
+  if (xpAmount > 0) {
+    notify(playerId, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: enemy.name });
+  }
+
+  player.gold += goldAmount;
+  notify(playerId, { type: 'event', kind: 'gold', amount: goldAmount });
 
   if (levelsGained > 0) {
     notify(playerId, { type: 'event', kind: 'levelup', level: player.level });
   }
 }
 
-function damageEnemy(enemy, amount, attackerId, attacker, emit, notify) {
+function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, abilityId = null) {
   enemy.health = Math.max(0, enemy.health - amount);
   attacker.combatTimer = 0;
-  emit({ type: 'damage', targetType: 'enemy', targetId: enemy.id, amount });
+  emit({ type: 'damage', targetType: 'enemy', targetId: enemy.id, amount, attackerId, abilityId });
 
   if (enemy.health === 0) {
     killEnemy(enemy);
@@ -220,7 +229,7 @@ export function useAbility(playerId, player, enemies, slot, emit, notify) {
   player.cooldowns[ability.id] = ability.cooldown;
 
   const amount = Math.round(randomInt(player.damageMin, player.damageMax) * ability.damageMultiplier);
-  damageEnemy(enemy, amount, playerId, player, emit, notify);
+  damageEnemy(enemy, amount, playerId, player, emit, notify, ability.id);
 }
 
 export function updateCombat(players, enemies, delta, emit, notify) {
