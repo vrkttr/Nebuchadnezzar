@@ -14,6 +14,11 @@ const [
   { createEnemies },
   { dampFactor, lerpAngle },
   { createDialogue },
+  { createIcon },
+  { createTooltip, SLOT_LABELS },
+  { createItemMenu },
+  { createConfirmDialog },
+  { createCharacterWindow },
   { createInventory },
   { createLootWindow },
   { createLootMarkers },
@@ -34,6 +39,11 @@ const [
   import(v('./entities/Enemies.js')),
   import(v('./utils/Interpolation.js')),
   import(v('./ui/Dialogue.js')),
+  import(v('./ui/Icons.js')),
+  import(v('./ui/Tooltip.js')),
+  import(v('./ui/ItemMenu.js')),
+  import(v('./ui/ConfirmDialog.js')),
+  import(v('./ui/CharacterWindow.js')),
   import(v('./ui/Inventory.js')),
   import(v('./ui/LootWindow.js')),
   import(v('./entities/LootMarkers.js')),
@@ -52,13 +62,28 @@ function start(token) {
   const audio = createAudio();
   audio.startAmbient();
 
+  const ui = {
+    createIcon,
+    tooltip: createTooltip(gameState),
+    itemMenu: createItemMenu(),
+    confirmDialog: createConfirmDialog(),
+    slotLabels: SLOT_LABELS,
+  };
+
   const hud = createHud(gameState, {
     onAbility: (slot) => connection.send({ type: 'ability', slot }),
+    ui,
   });
 
-  const inventory = createInventory(gameState);
+  const inventory = createInventory(gameState, ui, {
+    onUse: (slot) => connection.send({ type: 'item-use', slot }),
+    onDestroy: (slot, itemId) => connection.send({ type: 'item-destroy', slot, itemId }),
+  });
+  const characterWindow = createCharacterWindow(gameState, ui, {
+    onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
+  });
   const lootMarkers = createLootMarkers(scene);
-  const lootWindow = createLootWindow(gameState, {
+  const lootWindow = createLootWindow(gameState, ui, {
     onTake: (lootId, entryId) => connection.send({ type: 'loot-take', lootId, entryId }),
     onTakeAll: (lootId) => connection.send({ type: 'loot-take-all', lootId }),
   });
@@ -95,6 +120,9 @@ function start(token) {
         hud.setAbilities(message.abilities ?? []);
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
+        characterWindow.render(message.equipment ?? {});
+      } else if (message.type === 'equipment') {
+        characterWindow.render(message.slots ?? {});
       } else if (message.type === 'inventory') {
         inventory.render(message.slots ?? []);
       } else if (message.type === 'loot-spawn') {
@@ -110,6 +138,9 @@ function start(token) {
         gameState.player.xp = message.xp;
         gameState.player.xpToNextLevel = message.xpToNextLevel;
         gameState.player.gold = message.gold;
+        gameState.player.armor = message.armor;
+        gameState.player.damageMin = message.damageMin;
+        gameState.player.damageMax = message.damageMax;
         gameState.player.resource = message.resource;
         gameState.player.resourceMax = message.resourceMax;
         gameState.player.cooldowns = message.cooldowns ?? {};
@@ -244,9 +275,20 @@ function start(token) {
 
   window.addEventListener('keydown', (event) => {
     if (event.code === 'Escape') {
-      if (lootWindow.isOpen() || inventory.isOpen()) {
+      if (ui.confirmDialog.isOpen()) {
+        ui.confirmDialog.close();
+        return;
+      }
+
+      if (ui.itemMenu.isOpen()) {
+        ui.itemMenu.close();
+        return;
+      }
+
+      if (lootWindow.isOpen() || inventory.isOpen() || characterWindow.isOpen()) {
         lootWindow.hide();
         inventory.hide();
+        characterWindow.hide();
         return;
       }
 
@@ -258,6 +300,11 @@ function start(token) {
 
     if (event.code === 'KeyB' && !event.repeat) {
       inventory.toggle();
+      return;
+    }
+
+    if (event.code === 'KeyC' && !event.repeat) {
+      characterWindow.toggle();
       return;
     }
 
@@ -282,6 +329,8 @@ function start(token) {
     remotePlayers.update(delta);
     enemies.update(delta);
     lootMarkers.update(delta);
+
+    if (characterWindow.isOpen()) characterWindow.update();
 
     if (lootWindow.isOpen()) {
       const lootPosition = lootMarkers.getPosition(lootWindow.currentId());

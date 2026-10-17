@@ -7,6 +7,8 @@ import { serializeAbilities } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
+import { equipmentRows, loadEquipment, serializeEquipment } from './equipment.js';
+import { destroyInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
 import {
   createLootContainers,
   openLoot,
@@ -65,6 +67,7 @@ function createInitialState(character) {
     isGrounded: true,
     input: { moveX: 0, moveZ: 0, jump: false },
     inventory: character.inventory,
+    consumableReadyAt: 0,
     inventoryVersion: 0,
     savedInventoryVersion: 0,
     saveQueue: Promise.resolve(),
@@ -100,6 +103,11 @@ async function resolveCharacterFromToken(token) {
     [characterId]
   );
 
+  const [savedEquipmentRows] = await dbPool.query(
+    'SELECT slot, item_id FROM equipment_items WHERE character_id = ?',
+    [characterId]
+  );
+
   return {
     id: row.id,
     name: row.name,
@@ -111,11 +119,13 @@ async function resolveCharacterFromToken(token) {
     xp: row.xp,
     gold: row.gold,
     inventory: loadInventory(savedItemRows),
+    equipment: loadEquipment(savedEquipmentRows),
   };
 }
 
 async function writeState(state) {
   const items = inventoryRows(state.inventory);
+  const equipped = equipmentRows(state.equipment);
   const inventoryVersion = state.inventoryVersion;
 
   await dbPool.query(
@@ -145,6 +155,14 @@ async function writeState(state) {
         'INSERT INTO inventory_items (character_id, slot, item_id, quantity) VALUES ?',
         [items.map(([slot, itemId, quantity]) => [state.characterId, slot, itemId, quantity])]
       );
+    }
+
+    await connection.query('DELETE FROM equipment_items WHERE character_id = ?', [state.characterId]);
+
+    if (equipped.length > 0) {
+      await connection.query('INSERT INTO equipment_items (character_id, slot, item_id) VALUES ?', [
+        equipped.map(([slot, itemId]) => [state.characterId, slot, itemId]),
+      ]);
     }
 
     await connection.commit();
@@ -188,6 +206,7 @@ wss.on('connection', async (socket, request) => {
       abilities: serializeAbilities(initialState.actionBar),
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
+      equipment: serializeEquipment(initialState.equipment),
     })
   );
 
@@ -257,6 +276,27 @@ wss.on('connection', async (socket, request) => {
       if (!state || typeof message.lootId !== 'string') return;
 
       takeAllLoot(lootContainers, id, state, message.lootId, notify);
+    } else if (message.type === 'item-use') {
+      const state = players.get(id);
+      if (!state) return;
+
+      const slot = Number.parseInt(message.slot, 10);
+      if (!Number.isInteger(slot)) return;
+
+      useInventoryItem(id, state, slot, notify);
+    } else if (message.type === 'item-destroy') {
+      const state = players.get(id);
+      if (!state || typeof message.itemId !== 'string') return;
+
+      const slot = Number.parseInt(message.slot, 10);
+      if (!Number.isInteger(slot)) return;
+
+      destroyInventoryItem(id, state, slot, message.itemId, notify);
+    } else if (message.type === 'item-unequip') {
+      const state = players.get(id);
+      if (!state || typeof message.slot !== 'string') return;
+
+      unequipItem(id, state, message.slot, notify);
     }
   });
 
@@ -346,6 +386,9 @@ setInterval(() => {
       xp: state.xp,
       xpToNextLevel: xpToNextLevel(state.level),
       gold: state.gold,
+      armor: state.armor,
+      damageMin: state.damageMin + state.equipDamageMin,
+      damageMax: state.damageMax + state.equipDamageMax,
       resource: state.resource,
       resourceMax: state.resourceMax,
       cooldowns: state.cooldowns,

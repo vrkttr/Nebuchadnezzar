@@ -1,4 +1,5 @@
 import { ABILITIES, DEFAULT_ACTION_BAR, createCooldownState } from './abilities.js';
+import { applyEquipmentStats } from './equipment.js';
 import { goldForKill } from './loot.js';
 import { applyLevelStats, grantXp, xpForKill } from './progression.js';
 
@@ -8,6 +9,7 @@ const PLAYER_RESPAWN_TIME = 4;
 const REGEN_DELAY = 6;
 const REGEN_PER_SECOND = 3;
 const RESOURCE_REGEN_PER_SECOND = 2;
+const ARMOR_CONSTANT = 50;
 
 export const ENEMY_MELEE_RANGE = 2;
 const ENEMY_ATTACK_INTERVAL = 2;
@@ -23,6 +25,10 @@ function horizontalDistance(a, b) {
   return Math.hypot(a.x - b.x, a.z - b.z);
 }
 
+function rollPlayerDamage(player) {
+  return randomInt(player.damageMin + player.equipDamageMin, player.damageMax + player.equipDamageMax);
+}
+
 export function createCombatState(character) {
   const state = {
     level: character.level,
@@ -34,6 +40,10 @@ export function createCombatState(character) {
     resourceMax: 0,
     damageMin: 0,
     damageMax: 0,
+    equipment: character.equipment,
+    armor: 0,
+    equipDamageMin: 0,
+    equipDamageMax: 0,
     dead: false,
     respawnTimer: 0,
     targetEnemyId: null,
@@ -45,6 +55,7 @@ export function createCombatState(character) {
   };
 
   applyLevelStats(state);
+  applyEquipmentStats(state);
   state.health = state.healthMax;
   state.resource = state.resourceMax;
 
@@ -131,7 +142,8 @@ function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, 
 }
 
 function damagePlayer(player, playerId, enemy, emit) {
-  const amount = randomInt(3 + enemy.level * 2, 6 + enemy.level * 3);
+  const rawAmount = randomInt(3 + enemy.level * 2, 6 + enemy.level * 3);
+  const amount = Math.max(1, Math.round((rawAmount * ARMOR_CONSTANT) / (ARMOR_CONSTANT + player.armor)));
   player.health = Math.max(0, player.health - amount);
   player.combatTimer = 0;
   emit({ type: 'damage', targetType: 'player', targetId: playerId, amount });
@@ -174,15 +186,7 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
       horizontalDistance(player, enemy) <= PLAYER_ATTACK_RANGE
     ) {
       player.attackTimer = 0;
-      damageEnemy(
-        enemy,
-        randomInt(player.damageMin, player.damageMax),
-        playerId,
-        player,
-        emit,
-        notify,
-        onKill
-      );
+      damageEnemy(enemy, rollPlayerDamage(player), playerId, player, emit, notify, onKill);
     }
 
     if (player.combatTimer >= REGEN_DELAY && player.health < player.healthMax) {
@@ -238,7 +242,7 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
   player.resource -= ability.cost;
   player.cooldowns[ability.id] = ability.cooldown;
 
-  const amount = Math.round(randomInt(player.damageMin, player.damageMax) * ability.damageMultiplier);
+  const amount = Math.round(rollPlayerDamage(player) * ability.damageMultiplier);
   damageEnemy(enemy, amount, playerId, player, emit, notify, onKill, ability.id);
 }
 

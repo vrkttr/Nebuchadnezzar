@@ -7,6 +7,9 @@ const LOOT_TABLES = {
     { itemId: 'rag_bundle', chance: 0.5, min: 1, max: 2 },
     { itemId: 'canned_food', chance: 0.25, min: 1, max: 1 },
     { itemId: 'rusty_pipe', chance: 0.08, min: 1, max: 1 },
+    { itemId: 'scrap_helmet', chance: 0.06, min: 1, max: 1 },
+    { itemId: 'padded_vest', chance: 0.05, min: 1, max: 1 },
+    { itemId: 'patched_trousers', chance: 0.05, min: 1, max: 1 },
   ],
 };
 

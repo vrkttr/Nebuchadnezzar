@@ -1,0 +1,17 @@
+Icons: game-icons.net
+Lizenz: Creative Commons Attribution 3.0 (CC BY 3.0) - https://creativecommons.org/licenses/by/3.0/
+Quelle: https://game-icons.net
+
+Änderungen: schwarzer Hintergrund entfernt, Füllfarbe angepasst.
+
+Datei                 Original-Icon          Urheber
+--------------------  ---------------------  ----------
+scrap_metal.svg       gears                  Lorc - https://game-icons.net/1x1/lorc/gears.html
+rag_bundle.svg        rolled-cloth           Delapouite - https://game-icons.net/1x1/delapouite/rolled-cloth.html
+canned_food.svg       opened-food-can        Delapouite - https://game-icons.net/1x1/delapouite/opened-food-can.html
+rusty_pipe.svg        crowbar                Delapouite - https://game-icons.net/1x1/delapouite/crowbar.html
+scrap_helmet.svg      mining-helmet          Delapouite - https://game-icons.net/1x1/delapouite/mining-helmet.html
+padded_vest.svg       kevlar-vest            Skoll - https://game-icons.net/1x1/skoll/kevlar-vest.html
+patched_trousers.svg  trousers               Lorc - https://game-icons.net/1x1/lorc/trousers.html
+backpack.svg          backpack               Delapouite - https://game-icons.net/1x1/delapouite/backpack.html
+power_strike.svg      punch-blast            Lorc - https://game-icons.net/1x1/lorc/punch-blast.html

@@ -1,4 +1,4 @@
-export function createLootWindow(state, handlers = {}) {
+export function createLootWindow(state, ui, handlers = {}) {
   const windowEl = document.getElementById('loot-window');
   const title = document.getElementById('loot-title');
   const entriesEl = document.getElementById('loot-entries');
@@ -13,6 +13,7 @@ export function createLootWindow(state, handlers = {}) {
 
   function hide() {
     windowEl.classList.add('hidden');
+    ui.tooltip.hide();
     currentId = null;
   }
 
@@ -21,11 +22,15 @@ export function createLootWindow(state, handlers = {}) {
 
     const button = document.createElement('button');
     button.className = 'loot-entry';
-    button.title = item?.description ?? '';
 
     const icon = document.createElement('span');
     icon.className = `loot-entry-icon quality-${item?.quality ?? 'common'}`;
-    icon.textContent = item?.shortName ?? '?';
+
+    if (item?.icon) {
+      icon.appendChild(ui.createIcon(item.icon));
+    } else {
+      icon.textContent = item?.shortName ?? '?';
+    }
 
     const name = document.createElement('span');
     name.className = 'loot-entry-name';
@@ -41,7 +46,13 @@ export function createLootWindow(state, handlers = {}) {
       button.appendChild(count);
     }
 
-    button.addEventListener('click', () => handlers.onTake?.(container.id, entry.id));
+    button.addEventListener('mouseenter', (event) => ui.tooltip.showItem(entry.itemId, entry.quantity, event));
+    button.addEventListener('mousemove', (event) => ui.tooltip.move(event));
+    button.addEventListener('mouseleave', () => ui.tooltip.hide());
+    button.addEventListener('click', () => {
+      ui.tooltip.hide();
+      handlers.onTake?.(container.id, entry.id);
+    });
 
     return button;
   }
@@ -49,6 +60,7 @@ export function createLootWindow(state, handlers = {}) {
   function show(container) {
     currentId = container.id;
     title.textContent = container.name;
+    ui.tooltip.hide();
     entriesEl.replaceChildren(...container.entries.map((entry) => buildEntry(container, entry)));
     windowEl.classList.remove('hidden');
   }

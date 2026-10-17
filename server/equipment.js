@@ -1,0 +1,47 @@
+import { getItem } from './items.js';
+
+export const EQUIPMENT_SLOTS = ['weapon', 'head', 'chest', 'legs'];
+
+export function createEquipment() {
+  return Object.fromEntries(EQUIPMENT_SLOTS.map((slot) => [slot, null]));
+}
+
+export function loadEquipment(rows) {
+  const equipment = createEquipment();
+
+  for (const row of rows) {
+    const item = getItem(row.item_id);
+    if (item && item.slot === row.slot && EQUIPMENT_SLOTS.includes(row.slot)) {
+      equipment[row.slot] = row.item_id;
+    }
+  }
+
+  return equipment;
+}
+
+export function serializeEquipment(equipment) {
+  return { ...equipment };
+}
+
+export function equipmentRows(equipment) {
+  return EQUIPMENT_SLOTS.filter((slot) => equipment[slot]).map((slot) => [slot, equipment[slot]]);
+}
+
+export function computeEquipmentStats(equipment) {
+  const stats = { armor: 0, equipDamageMin: 0, equipDamageMax: 0 };
+
+  for (const slot of EQUIPMENT_SLOTS) {
+    const item = equipment[slot] ? getItem(equipment[slot]) : null;
+    if (!item?.stats) continue;
+
+    stats.armor += item.stats.armor ?? 0;
+    stats.equipDamageMin += item.stats.damageMin ?? 0;
+    stats.equipDamageMax += item.stats.damageMax ?? 0;
+  }
+
+  return stats;
+}
+
+export function applyEquipmentStats(player) {
+  Object.assign(player, computeEquipmentStats(player.equipment));
+}

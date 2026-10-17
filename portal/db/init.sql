@@ -39,6 +39,14 @@ CREATE TABLE IF NOT EXISTS inventory_items (
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS equipment_items (
+    character_id INT NOT NULL,
+    slot VARCHAR(16) NOT NULL,
+    item_id VARCHAR(64) NOT NULL,
+    PRIMARY KEY (character_id, slot),
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS login_tokens (
     token VARCHAR(64) PRIMARY KEY,
     character_id INT NOT NULL,

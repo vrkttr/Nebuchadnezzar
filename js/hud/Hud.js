@@ -12,6 +12,13 @@ const FAILURE_TEXT = {
   'no-resource': 'Nicht genug Energie.',
 };
 
+const ITEM_FAILURE_TEXT = {
+  level: 'Dein Level ist zu niedrig.',
+  'full-health': 'Du hast bereits volle Gesundheit.',
+  cooldown: 'Noch nicht bereit.',
+  'not-usable': 'Dieser Gegenstand kann nicht benutzt werden.',
+};
+
 const LOOT_FAILURE_TEXT = {
   gone: 'Diese Beute ist nicht mehr verfügbar.',
   'not-yours': 'Diese Beute gehört dir nicht.',
@@ -46,7 +53,12 @@ export function createHud(state, handlers = {}) {
 
       const nameEl = document.createElement('span');
       nameEl.className = 'slot-name';
-      nameEl.textContent = ability.shortName;
+
+      if (ability.icon && handlers.ui) {
+        nameEl.appendChild(handlers.ui.createIcon(ability.icon, 'slot-icon'));
+      } else {
+        nameEl.textContent = ability.shortName;
+      }
 
       const cooldownEl = document.createElement('div');
       cooldownEl.className = 'slot-cooldown';
@@ -55,10 +67,15 @@ export function createHud(state, handlers = {}) {
       cooldownTextEl.className = 'slot-cooldown-text';
       cooldownEl.appendChild(cooldownTextEl);
 
-      element.title = `${ability.name} – ${ability.cost} Energie, ${ability.cooldown} s Abklingzeit`;
       element.appendChild(nameEl);
       element.appendChild(cooldownEl);
       element.addEventListener('click', () => handlers.onAbility?.(ability.slot));
+
+      if (handlers.ui) {
+        element.addEventListener('mouseenter', (event) => handlers.ui.tooltip.showAbility(ability, event));
+        element.addEventListener('mousemove', (event) => handlers.ui.tooltip.move(event));
+        element.addEventListener('mouseleave', () => handlers.ui.tooltip.hide());
+      }
 
       abilitySlots.push({ ability, element, cooldownEl, cooldownTextEl });
     }
@@ -86,6 +103,17 @@ export function createHud(state, handlers = {}) {
       const item = state.items[event.itemId];
       const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
       addMessage(`Erhalten: ${item?.name ?? event.itemId}${suffix}`);
+    } else if (event.kind === 'equipped') {
+      addMessage(`${state.items[event.itemId]?.name ?? event.itemId} angelegt`);
+    } else if (event.kind === 'unequipped') {
+      addMessage(`${state.items[event.itemId]?.name ?? event.itemId} abgelegt`);
+    } else if (event.kind === 'item-used') {
+      addMessage(`${state.items[event.itemId]?.name ?? event.itemId} benutzt: +${event.heal} Gesundheit`);
+    } else if (event.kind === 'item-destroyed') {
+      const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
+      addMessage(`Zerstört: ${state.items[event.itemId]?.name ?? event.itemId}${suffix}`);
+    } else if (event.kind === 'item-failed') {
+      addMessage(ITEM_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
     } else if (event.kind === 'inventory-full') {
       addMessage('Dein Inventar ist voll.');
     } else if (event.kind === 'loot-failed') {
