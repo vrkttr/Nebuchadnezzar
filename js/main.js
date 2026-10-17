@@ -14,6 +14,9 @@ const [
   { createEnemies },
   { dampFactor, lerpAngle },
   { createDialogue },
+  { createInventory },
+  { createLootWindow },
+  { createLootMarkers },
   { createHud },
   { createAudio },
   { gameState },
@@ -31,6 +34,9 @@ const [
   import(v('./entities/Enemies.js')),
   import(v('./utils/Interpolation.js')),
   import(v('./ui/Dialogue.js')),
+  import(v('./ui/Inventory.js')),
+  import(v('./ui/LootWindow.js')),
+  import(v('./entities/LootMarkers.js')),
   import(v('./hud/Hud.js')),
   import(v('./audio/Audio.js')),
   import(v('./state/GameState.js')),
@@ -50,6 +56,13 @@ function start(token) {
     onAbility: (slot) => connection.send({ type: 'ability', slot }),
   });
 
+  const inventory = createInventory(gameState);
+  const lootMarkers = createLootMarkers(scene);
+  const lootWindow = createLootWindow(gameState, {
+    onTake: (lootId, entryId) => connection.send({ type: 'loot-take', lootId, entryId }),
+    onTakeAll: (lootId) => connection.send({ type: 'loot-take-all', lootId }),
+  });
+
   const player = createPlayer();
   player.setPosition(spawnPoint.x, spawnPoint.y, spawnPoint.z);
   scene.add(player.object);
@@ -57,6 +70,7 @@ function start(token) {
   const ownTargetPosition = new THREE.Vector3(spawnPoint.x, spawnPoint.y, spawnPoint.z);
   let ownTargetRotationY = 0;
   const SMOOTHING = 12;
+  const LOOT_CLOSE_RANGE = 6;
 
   const camera = new THREE.PerspectiveCamera(
     60,
@@ -79,6 +93,18 @@ function start(token) {
         ownPlayerId = message.id;
         enemies.sync(message.enemies ?? []);
         hud.setAbilities(message.abilities ?? []);
+        gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
+        inventory.render(message.inventory ?? []);
+      } else if (message.type === 'inventory') {
+        inventory.render(message.slots ?? []);
+      } else if (message.type === 'loot-spawn') {
+        lootMarkers.add(message);
+      } else if (message.type === 'loot-window') {
+        if (!lootWindow.isOpen()) audio.play('loot_open');
+        lootWindow.show(message);
+      } else if (message.type === 'loot-remove') {
+        lootMarkers.remove(message.id);
+        if (lootWindow.currentId() === message.id) lootWindow.hide();
       } else if (message.type === 'self') {
         gameState.player.level = message.level;
         gameState.player.xp = message.xp;
@@ -144,7 +170,12 @@ function start(token) {
 
   function resolveInteractable(hitObject) {
     let current = hitObject;
-    while (current && !current.userData.isNpc && !current.userData.isEnemy) {
+    while (
+      current &&
+      !current.userData.isNpc &&
+      !current.userData.isEnemy &&
+      !current.userData.isLoot
+    ) {
       current = current.parent;
     }
     return current;
@@ -155,7 +186,10 @@ function start(token) {
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(pointer, camera);
-    const intersections = raycaster.intersectObjects([...npcs, ...enemies.getObjects()], true);
+    const intersections = raycaster.intersectObjects(
+      [...npcs, ...enemies.getObjects(), ...lootMarkers.getObjects()],
+      true
+    );
 
     if (intersections.length === 0) return null;
     return resolveInteractable(intersections[0].object);
@@ -167,6 +201,8 @@ function start(token) {
 
     if (target.userData.isNpc) {
       dialogue.show(target.userData.dialogue);
+    } else if (target.userData.isLoot) {
+      connection.send({ type: 'loot-open', lootId: target.userData.lootId });
     } else if (target.userData.isEnemy) {
       const data = enemies.findDataByObject(target);
       if (data) {
@@ -208,9 +244,20 @@ function start(token) {
 
   window.addEventListener('keydown', (event) => {
     if (event.code === 'Escape') {
+      if (lootWindow.isOpen() || inventory.isOpen()) {
+        lootWindow.hide();
+        inventory.hide();
+        return;
+      }
+
       gameState.target = null;
       enemies.clearSelection();
       connection.send({ type: 'target', enemyId: null });
+      return;
+    }
+
+    if (event.code === 'KeyB' && !event.repeat) {
+      inventory.toggle();
       return;
     }
 
@@ -234,6 +281,14 @@ function start(token) {
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     remotePlayers.update(delta);
     enemies.update(delta);
+    lootMarkers.update(delta);
+
+    if (lootWindow.isOpen()) {
+      const lootPosition = lootMarkers.getPosition(lootWindow.currentId());
+      if (!lootPosition || player.object.position.distanceTo(lootPosition) > LOOT_CLOSE_RANGE) {
+        lootWindow.hide();
+      }
+    }
 
     thirdPersonCamera.update(player.object.position);
     hud.update();

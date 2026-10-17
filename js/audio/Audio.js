@@ -10,6 +10,8 @@ const SOUND_DEFINITIONS = {
   player_death: { volume: 0.8 },
   level_up: { volume: 0.7 },
   gold: { volume: 0.5, variation: 0.05 },
+  loot_open: { volume: 0.5, variation: 0.05 },
+  item_pickup: { volume: 0.5, variation: 0.06 },
   error: { volume: 0.4 },
   target_select: { volume: 0.4 },
   ambient_wind: { volume: 0.25, loop: true },
@@ -19,7 +21,10 @@ const EVENT_SOUNDS = {
   kill: 'enemy_death',
   gold: 'gold',
   levelup: 'level_up',
+  item: 'item_pickup',
   'ability-failed': 'error',
+  'inventory-full': 'error',
+  'loot-failed': 'error',
 };
 
 function createSilentAudio() {

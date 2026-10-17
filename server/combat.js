@@ -95,9 +95,11 @@ function respawnPlayer(player) {
   player.combatTimer = REGEN_DELAY;
 }
 
-function awardKill(player, playerId, enemy, notify) {
+function awardKill(player, playerId, enemy, notify, onKill) {
   const xpAmount = xpForKill(player.level, enemy.level);
   const goldAmount = goldForKill(player.level, enemy.level);
+
+  onKill(playerId, player, enemy);
 
   notify(playerId, { type: 'event', kind: 'kill', enemyName: enemy.name });
 
@@ -114,14 +116,14 @@ function awardKill(player, playerId, enemy, notify) {
   }
 }
 
-function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, abilityId = null) {
+function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, abilityId = null) {
   enemy.health = Math.max(0, enemy.health - amount);
   attacker.combatTimer = 0;
   emit({ type: 'damage', targetType: 'enemy', targetId: enemy.id, amount, attackerId, abilityId });
 
   if (enemy.health === 0) {
     killEnemy(enemy);
-    awardKill(attacker, attackerId, enemy, notify);
+    awardKill(attacker, attackerId, enemy, notify, onKill);
   } else if (enemy.state !== 'chase') {
     enemy.state = 'chase';
     enemy.targetPlayerId = attackerId;
@@ -139,7 +141,7 @@ function damagePlayer(player, playerId, enemy, emit) {
   }
 }
 
-function updatePlayers(players, enemies, delta, emit, notify) {
+function updatePlayers(players, enemies, delta, emit, notify, onKill) {
   for (const [playerId, player] of players) {
     if (player.dead) {
       player.respawnTimer -= delta;
@@ -172,7 +174,15 @@ function updatePlayers(players, enemies, delta, emit, notify) {
       horizontalDistance(player, enemy) <= PLAYER_ATTACK_RANGE
     ) {
       player.attackTimer = 0;
-      damageEnemy(enemy, randomInt(player.damageMin, player.damageMax), playerId, player, emit, notify);
+      damageEnemy(
+        enemy,
+        randomInt(player.damageMin, player.damageMax),
+        playerId,
+        player,
+        emit,
+        notify,
+        onKill
+      );
     }
 
     if (player.combatTimer >= REGEN_DELAY && player.health < player.healthMax) {
@@ -210,7 +220,7 @@ function updateEnemyAttacks(players, enemies, delta, emit) {
   }
 }
 
-export function useAbility(playerId, player, enemies, slot, emit, notify) {
+export function useAbility(playerId, player, enemies, slot, emit, notify, onKill) {
   if (player.dead) return;
 
   const ability = ABILITIES[player.actionBar[slot]];
@@ -229,10 +239,10 @@ export function useAbility(playerId, player, enemies, slot, emit, notify) {
   player.cooldowns[ability.id] = ability.cooldown;
 
   const amount = Math.round(randomInt(player.damageMin, player.damageMax) * ability.damageMultiplier);
-  damageEnemy(enemy, amount, playerId, player, emit, notify, ability.id);
+  damageEnemy(enemy, amount, playerId, player, emit, notify, onKill, ability.id);
 }
 
-export function updateCombat(players, enemies, delta, emit, notify) {
-  updatePlayers(players, enemies, delta, emit, notify);
+export function updateCombat(players, enemies, delta, emit, notify, onKill) {
+  updatePlayers(players, enemies, delta, emit, notify, onKill);
   updateEnemyAttacks(players, enemies, delta, emit);
 }

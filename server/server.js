@@ -5,6 +5,17 @@ import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } 
 import { createCombatState, updateCombat, useAbility } from './combat.js';
 import { serializeAbilities } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
+import { serializeItems } from './items.js';
+import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
+import {
+  createLootContainers,
+  openLoot,
+  removeLootOfPlayer,
+  spawnLootForKill,
+  takeAllLoot,
+  takeLootEntry,
+  updateLootContainers,
+} from './lootContainers.js';
 
 const PORT = process.env.PORT || 8081;
 const wss = new WebSocketServer({ port: PORT });
@@ -29,12 +40,17 @@ const SAVE_INTERVAL_MS = 2000;
 const players = new Map();
 const sockets = new Map();
 const enemies = createEnemies();
+const lootContainers = createLootContainers();
 
 function notify(playerId, message) {
   const socket = sockets.get(playerId);
   if (socket && socket.readyState === socket.OPEN) {
     socket.send(JSON.stringify(message));
   }
+}
+
+function onKill(playerId, player, enemy) {
+  spawnLootForKill(lootContainers, playerId, player, enemy, notify);
 }
 
 function createInitialState(character) {
@@ -48,6 +64,10 @@ function createInitialState(character) {
     velocityY: 0,
     isGrounded: true,
     input: { moveX: 0, moveZ: 0, jump: false },
+    inventory: character.inventory,
+    inventoryVersion: 0,
+    savedInventoryVersion: 0,
+    saveQueue: Promise.resolve(),
     ...createCombatState(character),
   };
 }
@@ -75,6 +95,11 @@ async function resolveCharacterFromToken(token) {
 
   const row = characterRows[0];
 
+  const [savedItemRows] = await dbPool.query(
+    'SELECT slot, item_id, quantity FROM inventory_items WHERE character_id = ?',
+    [characterId]
+  );
+
   return {
     id: row.id,
     name: row.name,
@@ -85,10 +110,14 @@ async function resolveCharacterFromToken(token) {
     level: row.level,
     xp: row.xp,
     gold: row.gold,
+    inventory: loadInventory(savedItemRows),
   };
 }
 
-async function persistState(state) {
+async function writeState(state) {
+  const items = inventoryRows(state.inventory);
+  const inventoryVersion = state.inventoryVersion;
+
   await dbPool.query(
     'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ? WHERE id = ?',
     [
@@ -102,6 +131,36 @@ async function persistState(state) {
       state.characterId,
     ]
   );
+
+  if (inventoryVersion === state.savedInventoryVersion) return;
+
+  const connection = await dbPool.getConnection();
+
+  try {
+    await connection.beginTransaction();
+    await connection.query('DELETE FROM inventory_items WHERE character_id = ?', [state.characterId]);
+
+    if (items.length > 0) {
+      await connection.query(
+        'INSERT INTO inventory_items (character_id, slot, item_id, quantity) VALUES ?',
+        [items.map(([slot, itemId, quantity]) => [state.characterId, slot, itemId, quantity])]
+      );
+    }
+
+    await connection.commit();
+    state.savedInventoryVersion = inventoryVersion;
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
+function persistState(state) {
+  const run = state.saveQueue.then(() => writeState(state));
+  state.saveQueue = run.catch(() => {});
+  return run;
 }
 
 wss.on('connection', async (socket, request) => {
@@ -127,6 +186,8 @@ wss.on('connection', async (socket, request) => {
       id,
       enemies: serializeEnemies(enemies),
       abilities: serializeAbilities(initialState.actionBar),
+      items: serializeItems(),
+      inventory: serializeInventory(initialState.inventory),
     })
   );
 
@@ -177,7 +238,25 @@ wss.on('connection', async (socket, request) => {
       const slot = Number.parseInt(message.slot, 10);
       if (!Number.isInteger(slot)) return;
 
-      useAbility(id, state, enemies, slot, broadcast, notify);
+      useAbility(id, state, enemies, slot, broadcast, notify, onKill);
+    } else if (message.type === 'loot-open') {
+      const state = players.get(id);
+      if (!state || typeof message.lootId !== 'string') return;
+
+      openLoot(lootContainers, id, state, message.lootId, notify);
+    } else if (message.type === 'loot-take') {
+      const state = players.get(id);
+      if (!state || typeof message.lootId !== 'string') return;
+
+      const entryId = Number.parseInt(message.entryId, 10);
+      if (!Number.isInteger(entryId)) return;
+
+      takeLootEntry(lootContainers, id, state, message.lootId, entryId, notify);
+    } else if (message.type === 'loot-take-all') {
+      const state = players.get(id);
+      if (!state || typeof message.lootId !== 'string') return;
+
+      takeAllLoot(lootContainers, id, state, message.lootId, notify);
     }
   });
 
@@ -186,6 +265,7 @@ wss.on('connection', async (socket, request) => {
     if (state) {
       persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
     }
+    removeLootOfPlayer(lootContainers, id);
     players.delete(id);
     sockets.delete(id);
     broadcast({ type: 'leave', id });
@@ -238,7 +318,8 @@ function simulate() {
 setInterval(() => {
   simulate();
   updateEnemies(enemies, players, TICK_DELTA);
-  updateCombat(players, enemies, TICK_DELTA, broadcast, notify);
+  updateCombat(players, enemies, TICK_DELTA, broadcast, notify, onKill);
+  updateLootContainers(lootContainers, TICK_DELTA, notify);
   if (players.size === 0) return;
 
   const snapshot = {};

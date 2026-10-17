@@ -29,6 +29,16 @@ ALTER TABLE characters ADD COLUMN IF NOT EXISTS level INT NOT NULL DEFAULT 1;
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS xp INT NOT NULL DEFAULT 0;
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS gold INT NOT NULL DEFAULT 0;
 
+CREATE TABLE IF NOT EXISTS inventory_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    character_id INT NOT NULL,
+    slot INT NOT NULL,
+    item_id VARCHAR(64) NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    UNIQUE KEY unique_character_slot (character_id, slot),
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS login_tokens (
     token VARCHAR(64) PRIMARY KEY,
     character_id INT NOT NULL,

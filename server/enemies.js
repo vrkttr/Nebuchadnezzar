@@ -1,9 +1,9 @@
 import { ENEMY_MELEE_RANGE } from './combat.js';
 
 const SPAWNS = [
-  { name: 'Plünderer', level: 1, x: 10, y: 0, z: -9, healthMax: 60 },
-  { name: 'Plünderer', level: 1, x: 12, y: 0, z: -7, healthMax: 60 },
-  { name: 'Plünderer', level: 2, x: 8, y: 0, z: -11, healthMax: 80 },
+  { name: 'Plünderer', level: 1, x: 10, y: 0, z: -9, healthMax: 60, lootTable: 'raider' },
+  { name: 'Plünderer', level: 1, x: 12, y: 0, z: -7, healthMax: 60, lootTable: 'raider' },
+  { name: 'Plünderer', level: 2, x: 8, y: 0, z: -11, healthMax: 80, lootTable: 'raider' },
 ];
 
 const AGGRO_RANGE = 8;
@@ -20,6 +20,7 @@ export function createEnemies() {
       id,
       name: spawn.name,
       level: spawn.level,
+      lootTable: spawn.lootTable,
       x: spawn.x,
       y: spawn.y,
       z: spawn.z,

@@ -12,6 +12,8 @@ export const gameState = {
     dead: false,
     cooldowns: {},
   },
+  items: {},
+  inventory: [],
   target: null,
   zoneName: 'Ödland – Sektor 7',
   quests: [],

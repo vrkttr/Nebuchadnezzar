@@ -12,6 +12,12 @@ const FAILURE_TEXT = {
   'no-resource': 'Nicht genug Energie.',
 };
 
+const LOOT_FAILURE_TEXT = {
+  gone: 'Diese Beute ist nicht mehr verfügbar.',
+  'not-yours': 'Diese Beute gehört dir nicht.',
+  'too-far': 'Du bist zu weit entfernt.',
+};
+
 export function createHud(state, handlers = {}) {
   const playerName = document.getElementById('player-name');
   const playerLevel = document.getElementById('player-level');
@@ -76,6 +82,14 @@ export function createHud(state, handlers = {}) {
       addMessage(`+${event.amount} Erfahrung (${event.enemyName})`);
     } else if (event.kind === 'gold') {
       addMessage(`+${event.amount} Gold`);
+    } else if (event.kind === 'item') {
+      const item = state.items[event.itemId];
+      const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
+      addMessage(`Erhalten: ${item?.name ?? event.itemId}${suffix}`);
+    } else if (event.kind === 'inventory-full') {
+      addMessage('Dein Inventar ist voll.');
+    } else if (event.kind === 'loot-failed') {
+      addMessage(LOOT_FAILURE_TEXT[event.reason] ?? 'Beute konnte nicht aufgenommen werden.');
     } else if (event.kind === 'levelup') {
       addMessage(`Level-Aufstieg! Du bist jetzt Level ${event.level}.`);
     } else if (event.kind === 'ability-failed') {
