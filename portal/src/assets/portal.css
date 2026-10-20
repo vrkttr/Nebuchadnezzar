@@ -40,9 +40,15 @@ body.portal {
 .portal-logo {
   display: block;
   margin-bottom: 1.6rem;
-  font-size: clamp(2rem, 3.6vw, 3.2rem);
-  line-height: 1;
+  line-height: 0;
   text-decoration: none;
+}
+
+.portal-logo img {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
 }
 
 .portal-main {

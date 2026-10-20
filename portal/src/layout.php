@@ -49,7 +49,7 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= $heading ?> - Projekt Nebuchadnezzar</title>
+<title><?= $heading ?> - Sektor Sieben</title>
 <link rel="stylesheet" href="assets/ui/nebu-ui.css">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -60,7 +60,7 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <div class="portal-scrim nu-scrim"></div>
 <div class="portal-layout">
 <nav class="portal-nav">
-<a class="portal-logo nu-title" href="index.php">Nebuchadnezzar</a>
+<a class="portal-logo" href="index.php"><img src="assets/logo.svg" alt="Sektor Sieben"></a>
 <ul class="nu-menu">
 <?php foreach ($items as [$label, $href]): ?>
 <li><a class="nu-menu-item<?= $href === $active ? ' is-active' : '' ?>" href="<?= htmlspecialchars($href) ?>"><?= htmlspecialchars($label) ?></a></li>

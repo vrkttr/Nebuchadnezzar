@@ -1,4 +1,4 @@
-# Projekt Nebuchadnezzar
+# Sektor Sieben
 
 Browserbasiertes, serverautoritatives 3D-MMORPG (Aufbau von Grund auf).
 
