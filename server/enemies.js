@@ -2,9 +2,9 @@ import { ENEMY_MELEE_RANGE } from './combat.js';
 import { ENEMY_RADIUS, resolveCollisions } from './world.js';
 
 const SPAWNS = [
-  { type: 'raider', name: 'Plünderer', level: 1, x: 10, y: 0, z: -9, healthMax: 60, lootTable: 'raider' },
-  { type: 'raider', name: 'Plünderer', level: 1, x: 12, y: 0, z: -7, healthMax: 60, lootTable: 'raider' },
-  { type: 'raider', name: 'Plünderer', level: 2, x: 8, y: 0, z: -11, healthMax: 80, lootTable: 'raider' },
+  { type: 'raider', name: 'Plünderer', level: 1, x: -13.2, y: 0, z: 30, healthMax: 60, lootTable: 'raider' },
+  { type: 'raider', name: 'Plünderer', level: 1, x: -15, y: 0, z: 31.4, healthMax: 60, lootTable: 'raider' },
+  { type: 'raider', name: 'Plünderer', level: 2, x: -11.5, y: 0, z: 29.2, healthMax: 80, lootTable: 'raider' },
 ];
 
 const AGGRO_RANGE = 8;

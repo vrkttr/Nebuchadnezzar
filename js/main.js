@@ -6,7 +6,7 @@ const [
   { createRenderer },
   { createScene },
   { createThirdPersonCamera },
-  { createTestZone },
+  { createStartwelt },
   { createPlayer },
   { createPlayerController },
   { createServerConnection },
@@ -35,7 +35,7 @@ const [
   import(v('./core/Renderer.js')),
   import(v('./core/Scene.js')),
   import(v('./core/ThirdPersonCamera.js')),
-  import(v('./world/TestZone.js')),
+  import(v('./world/Startwelt.js')),
   import(v('./entities/Player.js')),
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
@@ -64,7 +64,7 @@ const [
 function start(token) {
   const renderer = createRenderer();
   const scene = createScene();
-  const { spawnPoint } = createTestZone(scene);
+  const { spawnPoint } = createStartwelt(scene);
 
   const dialogue = createDialogue();
   const audio = createAudio();
