@@ -1,4 +1,8 @@
-const SUPPORTED = ['de', 'en'];
+export const SUPPORTED_LANGUAGES = [
+  { code: 'de', name: 'Deutsch' },
+  { code: 'en', name: 'English' },
+];
+const SUPPORTED = SUPPORTED_LANGUAGES.map((entry) => entry.code);
 const DEFAULT_LANGUAGE = 'de';
 const COOKIE_NAME = 'lang';
 const LOCALE_TAGS = { de: 'de-DE', en: 'en-US' };

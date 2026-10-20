@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/ui/nebu-ui.css">
-  <link rel="stylesheet" href="css/hud.css?v=34">
+  <link rel="stylesheet" href="css/hud.css?v=36">
 
   <script type="importmap">
   {
@@ -70,6 +70,7 @@
     <div id="minimap">
       <div id="minimap-circle"></div>
       <div id="zone-name">Ödland – Sektor 7</div>
+      <div id="minimap-coords"></div>
       <div id="buff-bar"></div>
     </div>
 
@@ -109,7 +110,8 @@
         <button title="Missionen" data-i18n-title="hud.menu.quests">Q</button>
         <button title="Erfolge" data-i18n-title="hud.menu.achievements">E</button>
         <button title="Gruppe" data-i18n-title="hud.menu.group">G</button>
-        <button title="Menü" data-i18n-title="hud.menu.menu">M</button>
+        <button title="Karte" data-i18n-title="hud.menu.map">M</button>
+        <button title="Menü" data-i18n-title="hud.menu.menu">Esc</button>
       </div>
       <div id="bag-bar">
         <button class="bag-slot" title="Rucksack" data-i18n-title="inventory.bagTitle"></button>
@@ -173,6 +175,19 @@
     <dl id="character-stats" class="character-stats"></dl>
   </div>
 
+  <div id="map-window" class="window nu-taped hidden">
+    <div class="window-header">
+      <span id="map-title" class="window-title" data-i18n="map.title">Karte</span>
+      <button id="map-close" class="window-close" title="Schließen" data-i18n-title="common.close">×</button>
+    </div>
+    <div id="map-view"><canvas id="map-canvas"></canvas></div>
+    <div id="map-footer">
+      <span id="map-cursor"></span>
+      <span class="window-hint" data-i18n="map.hint">Klick: Markierung setzen oder entfernen.</span>
+      <button id="map-clear" class="window-button" data-i18n="map.clear">Alle entfernen</button>
+    </div>
+  </div>
+
   <div id="confirm-dialog" class="window nu-taped hidden">
     <p id="confirm-text"></p>
     <div class="confirm-buttons">
@@ -185,6 +200,6 @@
   <div id="tooltip" class="hidden"></div>
 
   <script src="js/vendor/howler.min.js"></script>
-  <script type="module" src="js/main.js?v=34"></script>
+  <script type="module" src="js/main.js?v=36"></script>
 </body>
 </html>

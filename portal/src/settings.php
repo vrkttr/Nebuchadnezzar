@@ -37,6 +37,11 @@ renderPageStart(t('settings.title'), 'settings.php', true);
 <?php if ($saved): ?>
 <p class="nu-message is-ok"><?= th('settings.saved') ?></p>
 <?php endif; ?>
+<div class="portal-lang portal-lang-settings"><span class="nu-label"><?= th('portal.language') ?></span>
+<?php foreach (SUPPORTED_LANGUAGES as $code => $name): ?>
+<a class="portal-lang-link<?= $code === currentLanguage() ? ' is-active' : '' ?>" href="language.php?lang=<?= $code ?>" hreflang="<?= $code ?>" lang="<?= $code ?>"><?= htmlspecialchars($name) ?></a>
+<?php endforeach; ?>
+</div>
 <form method="post" class="portal-form">
 <div class="nu-label"><?= th('settings.sound') ?></div>
 <label class="portal-slider">

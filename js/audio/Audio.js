@@ -46,6 +46,9 @@ const SOUND_DEFINITIONS = {
   step_1: { volume: 0.26, variation: 0.1 },
   step_2: { volume: 0.26, variation: 0.1 },
   step_3: { volume: 0.26, variation: 0.1 },
+  step_4: { volume: 0.26, variation: 0.1 },
+  step_5: { volume: 0.26, variation: 0.1 },
+  step_6: { volume: 0.26, variation: 0.1 },
   land: { volume: 0.22, variation: 0.06 },
   jump: { volume: 0.16, variation: 0.06 },
   npc_streuner_idle: { volume: 0.34, variation: 0.05 },
@@ -61,7 +64,7 @@ const SOUND_DEFINITIONS = {
 };
 
 const SOUND_GROUPS = {
-  step: ['step_1', 'step_2', 'step_3'],
+  step: ['step_1', 'step_2', 'step_3', 'step_4', 'step_5', 'step_6'],
   far: ['distant_creak', 'distant_clang'],
   npc_streuner_idle: ['npc_streuner_idle', 'npc_streuner_cough'],
   npc_haendler_idle: ['npc_haendler_idle'],
@@ -178,9 +181,16 @@ export function createAudio() {
   let farTimer = randomBetween(FAR_SOUND_INTERVAL);
   let fireId = null;
 
+  const lastGroupIndex = new Map();
+
   function resolve(name) {
     const group = SOUND_GROUPS[name];
-    return group ? group[Math.floor(Math.random() * group.length)] : name;
+    if (!group) return name;
+
+    let index = Math.floor(Math.random() * group.length);
+    if (group.length > 1 && index === lastGroupIndex.get(name)) index = (index + 1) % group.length;
+    lastGroupIndex.set(name, index);
+    return group[index];
   }
 
   function play(name, options = {}) {

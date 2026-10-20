@@ -30,6 +30,7 @@ const [
   { createChat },
   { createViewCapture },
   { createMinimap },
+  { createWorldMap },
   { createPortraits },
   { createDamageNumbers },
   { createChatBubbles },
@@ -71,6 +72,7 @@ const [
   import(v('./ui/Chat.js')),
   import(v('./core/ViewCapture.js')),
   import(v('./hud/Minimap.js')),
+  import(v('./hud/WorldMap.js')),
   import(v('./hud/Portraits.js')),
   import(v('./hud/DamageNumbers.js')),
   import(v('./hud/ChatBubbles.js')),
@@ -146,7 +148,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -182,6 +184,14 @@ function start(token) {
   const npcs = createNpcs(scene, camera, nameplateContainer);
 
   const viewCapture = createViewCapture(renderer);
+  const worldMap = createWorldMap({
+    scene,
+    renderer,
+    viewCapture,
+    player,
+    sources: { npcs: npcs.getMarkers },
+  });
+  document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.map"]')?.addEventListener('click', () => worldMap.toggle());
   const minimap = createMinimap({
     scene,
     camera,
@@ -192,6 +202,7 @@ function start(token) {
       enemies: enemies.getMarkers,
       npcs: npcs.getMarkers,
       players: remotePlayers.getMarkers,
+      marks: worldMap.getMarkers,
     },
   });
   const portraits = createPortraits({ scene, renderer, viewCapture, player, enemies, gameState });
@@ -218,6 +229,7 @@ function start(token) {
     npcWindow.hide();
     vendorWindow.hide();
     chatBubbles.clear();
+    worldMap.hide();
   }
 
   function nextFrame() {
@@ -272,6 +284,13 @@ function start(token) {
     await nextFrame();
     await nextFrame();
 
+    worldMap.captureZone(world, [
+      player.object,
+      ...enemies.getObjects(),
+      ...npcs.getObjects(),
+      ...worldChests.getObjects(),
+      ...lootMarkers.getObjects(),
+    ]);
     loadingScreen.setProgress(1, t('loading.status.ready'));
     connection.send({ type: 'zone-ready' });
     await loadingScreen.hide();
@@ -535,13 +554,15 @@ function start(token) {
         vendorWindow.isOpen() ||
         lootWindow.isOpen() ||
         inventory.isOpen() ||
-        characterWindow.isOpen()
+        characterWindow.isOpen() ||
+        worldMap.isOpen()
       ) {
         npcWindow.hide();
         vendorWindow.hide();
         lootWindow.hide();
         inventory.hide();
         characterWindow.hide();
+        worldMap.hide();
         return;
       }
 
@@ -557,7 +578,7 @@ function start(token) {
     }
 
     if (event.code === 'KeyM' && !event.repeat) {
-      openPortalMenu();
+      worldMap.toggle();
       return;
     }
 
@@ -650,6 +671,7 @@ function start(token) {
     chatBubbles.update(delta);
     shotEffects.update(delta);
     minimap.update(delta);
+    worldMap.update(delta);
     portraits.update(delta);
 
     renderer.render(scene, camera);

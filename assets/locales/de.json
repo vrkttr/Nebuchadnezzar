@@ -21,7 +21,7 @@
     "Gegner mit höherem Level als du sind gefährlicher, lassen aber auch bessere Beute fallen.",
     "Gegner verfolgen dich nur ein Stück weit von ihrem Spawnpunkt weg. Entkommst du ihnen, kehren sie zurück und heilen sich.",
     "Türen und andere Zugänge erkennst du daran, dass der Mauszeiger beim Darüberfahren zur Hand wird. Du musst nah genug dran sein.",
-    "Mit M oder dem Menü-Symbol an der Minimap öffnest du die Einstellungen im Portal und verlässt dabei das Spiel. Dein Fortschritt wird laufend gespeichert.",
+    "Mit Esc öffnest du das Menü im Portal (dort stellst du auch die Sprache ein), mit M die Karte. Auf der Karte setzt du per Klick Markierungen, die auch auf der Minimap erscheinen.",
     "Beim Händler verkaufst du Gegenstände, die du nicht brauchst. Altmetall und Stoffreste bringen ein wenig Geld."
   ],
   "loading.status.connecting": "Verbinde mit dem Server …",
@@ -199,5 +199,10 @@
   "quest.scrap_for_trader.name": "Material für den Händler",
   "quest.scrap_for_trader.offer": "Der Schrotthändler baut gerade etwas Brauchbares zusammen und braucht Material. Bring ihm Schrottmetall und Stoffreste. Beides findest du bei den Plünderern.",
   "quest.scrap_for_trader.progress": "Der Händler wartet auf Schrottmetall und Stoffreste.",
-  "quest.scrap_for_trader.complete": "Genau das, was ich brauchte. Hier, das habe ich dafür zusammengeschraubt."
+  "quest.scrap_for_trader.complete": "Genau das, was ich brauchte. Hier, das habe ich dafür zusammengeschraubt.",
+  "hud.coords": "X: {x}  Y: {y}",
+  "hud.menu.map": "Karte",
+  "map.title": "Karte",
+  "map.hint": "Klick: Markierung setzen oder entfernen (max. 12).",
+  "map.clear": "Alle entfernen"
 }

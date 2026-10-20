@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { t } from '../i18n/I18n.js';
+import { formatCoordinates } from './WorldMap.js';
 
 const CAPTURE_SIZE = 200;
 const UPDATE_INTERVAL = 0.1;
@@ -14,10 +15,12 @@ const MARKER_COLORS = {
   enemies: '#d9432b',
   npcs: '#e8b84a',
   players: '#9ec4e0',
+  marks: '#f2c23a',
 };
 
 export function createMinimap({ scene, camera, viewCapture, renderer, player, sources }) {
   const container = document.getElementById('minimap-circle');
+  const coordsEl = document.getElementById('minimap-coords');
   const canvas = document.createElement('canvas');
   const pixelRatio = renderer.getPixelRatio();
   canvas.width = Math.round(CAPTURE_SIZE * pixelRatio);
@@ -131,6 +134,8 @@ export function createMinimap({ scene, camera, viewCapture, renderer, player, so
     timer += delta;
     if (timer < UPDATE_INTERVAL) return;
     timer = 0;
+
+    coordsEl.textContent = formatCoordinates(player.object.position.x, player.object.position.z);
 
     camera.getWorldDirection(forward);
     forward.y = 0;
