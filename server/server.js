@@ -22,6 +22,7 @@ import {
 } from './npcInteraction.js';
 import { diffQuestLog, loadQuests, questRows, recordKill, serializeQuestLog } from './quests.js';
 import { PLAYER_RADIUS, resolveCollisions } from './world.js';
+import { serializeZone } from './zoneLoader.js';
 import {
   createLootContainers,
   openLoot,
@@ -253,6 +254,7 @@ wss.on('connection', async (socket, request) => {
       equipment: serializeEquipment(initialState.equipment),
       appearance: initialState.appearance,
       npcs: serializeNpcs(),
+      world: serializeZone(),
     })
   );
 

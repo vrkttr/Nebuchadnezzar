@@ -6,7 +6,7 @@ const [
   { createRenderer },
   { createScene },
   { createThirdPersonCamera },
-  { createStartwelt },
+  { buildZone },
   { createPlayer },
   { createPlayerController },
   { createServerConnection },
@@ -41,7 +41,7 @@ const [
   import(v('./core/Renderer.js')),
   import(v('./core/Scene.js')),
   import(v('./core/ThirdPersonCamera.js')),
-  import(v('./world/Startwelt.js')),
+  import(v('./world/ZoneBuilder.js')),
   import(v('./entities/Characters.js')),
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
@@ -76,7 +76,8 @@ const [
 function start(token) {
   const renderer = createRenderer();
   const scene = createScene();
-  const { spawnPoint } = createStartwelt(scene);
+  const spawnPoint = new THREE.Vector3();
+  let zone = null;
 
   const dialogue = createDialogue();
   const audio = createAudio();
@@ -174,6 +175,7 @@ function start(token) {
     onMessage(message) {
       if (message.type === 'init') {
         ownPlayerId = message.id;
+        if (!zone && message.world) zone = buildZone(scene, message.world);
         enemies.sync(message.enemies ?? []);
         npcs.sync(message.npcs ?? []);
         hud.setAbilities(message.abilities ?? []);

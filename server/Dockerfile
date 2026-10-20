@@ -6,6 +6,7 @@ COPY package.json ./
 RUN npm install --omit=dev
 
 COPY *.js ./
+COPY zones/ ./zones/
 
 EXPOSE 8081
 

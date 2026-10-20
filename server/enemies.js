@@ -1,15 +1,28 @@
 import { ENEMY_MELEE_RANGE } from './combat.js';
 import { ENEMY_RADIUS, isBlocked, resolveCollisions } from './world.js';
+import { zone } from './zoneLoader.js';
 
-const SPAWNS = [
-  { type: 'raider', name: 'Plünderer', level: 1, x: -13.2, y: 0, z: 30, healthMax: 60, lootTable: 'raider' },
-  { type: 'raider', name: 'Plünderer', level: 1, x: -15, y: 0, z: 31.4, healthMax: 60, lootTable: 'raider' },
-  { type: 'raider', name: 'Plünderer', level: 2, x: -11.5, y: 0, z: 29.2, healthMax: 80, lootTable: 'raider' },
-  { type: 'scavenger', name: 'Schrottsammler', level: 2, x: 12, y: 0, z: 32, healthMax: 70, lootTable: 'scavenger' },
-  { type: 'scavenger', name: 'Schrottsammler', level: 2, x: 14, y: 0, z: 30, healthMax: 70, lootTable: 'scavenger' },
-  { type: 'marauder', name: 'Marodeur', level: 3, x: -22, y: 0, z: 26, healthMax: 140, lootTable: 'marauder' },
-  { type: 'marauder', name: 'Marodeur', level: 3, x: -26, y: 0, z: 24, healthMax: 140, lootTable: 'marauder' },
-];
+const ENEMY_TYPES = {
+  raider: { name: 'Plünderer', healthMax: 60, lootTable: 'raider' },
+  scavenger: { name: 'Schrottsammler', healthMax: 70, lootTable: 'scavenger' },
+  marauder: { name: 'Marodeur', healthMax: 140, lootTable: 'marauder' },
+};
+
+const SPAWNS = zone.enemies.map((placement) => {
+  const definition = ENEMY_TYPES[placement.type];
+  if (!definition) throw new Error(`Zonendatei: Unbekannter Gegnertyp "${placement.type}".`);
+  if (!Number.isInteger(placement.level) || placement.level < 1) throw new Error(`Zonendatei: Ungültiges Level für Gegner "${placement.type}".`);
+  return {
+    type: placement.type,
+    name: definition.name,
+    level: placement.level,
+    x: placement.x,
+    y: 0,
+    z: placement.z,
+    healthMax: Number(placement.healthMax) || definition.healthMax,
+    lootTable: definition.lootTable,
+  };
+});
 
 const AGGRO_RANGE = 8;
 const LEASH_RANGE = 20;

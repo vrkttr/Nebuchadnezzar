@@ -2,6 +2,7 @@ import { ABILITIES, DEFAULT_ACTION_BAR, createCooldownState } from './abilities.
 import { applyEquipmentStats } from './equipment.js';
 import { addGold, goldForKill } from './loot.js';
 import { applyLevelStats, grantXp, xpForKill } from './progression.js';
+import { zone } from './zoneLoader.js';
 
 const PLAYER_ATTACK_RANGE = 3;
 const PLAYER_ATTACK_INTERVAL = 1.5;
@@ -15,7 +16,7 @@ export const ENEMY_MELEE_RANGE = 2;
 const ENEMY_ATTACK_INTERVAL = 2;
 const ENEMY_RESPAWN_TIME = 15;
 
-const SPAWN_POINT = { x: 0, y: 0, z: 0 };
+const SPAWN_POINT = zone.spawn;
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;

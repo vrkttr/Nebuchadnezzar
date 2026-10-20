@@ -1,23 +1,17 @@
+import { zone } from './zoneLoader.js';
+
 export const NPC_INTERACT_RANGE = 4;
 
-export const NPCS = {
+const NPC_DEFINITIONS = {
   streuner: {
     id: 'streuner',
     name: 'Streuner',
-    x: -4.6,
-    y: 0,
-    z: -9.2,
-    rotationY: 0.3,
     color: 0x5a5240,
     greeting: 'Bleib in Deckung, Fremder. Draußen im Ödland überlebt nicht jeder die Nacht.',
   },
   haendler: {
     id: 'haendler',
     name: 'Schrotthändler',
-    x: 21.2,
-    y: 0,
-    z: 4,
-    rotationY: -1.57,
     color: 0x4a5a3a,
     greeting: 'Metall, Stoff, Konserven – ich nehme alles, was noch einen Wert hat.',
     vendor: {
@@ -31,6 +25,14 @@ export const NPCS = {
     },
   },
 };
+
+export const NPCS = {};
+
+for (const placement of zone.npcs) {
+  const definition = NPC_DEFINITIONS[placement.npcId];
+  if (!definition) throw new Error(`Zonendatei: Unbekannte npcId "${placement.npcId}".`);
+  NPCS[definition.id] = { ...definition, x: placement.x, y: 0, z: placement.z, rotationY: placement.rotationY };
+}
 
 export function getNpc(npcId) {
   return typeof npcId === 'string' && Object.hasOwn(NPCS, npcId) ? NPCS[npcId] : null;
