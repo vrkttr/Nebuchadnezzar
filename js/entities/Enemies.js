@@ -167,9 +167,19 @@ export function createEnemies(scene, camera, nameplateContainer) {
     }
   }
 
+  function getObject(id) {
+    return enemies.get(id)?.object ?? null;
+  }
+
+  function getMarkers() {
+    return Array.from(enemies.values())
+      .filter((enemy) => !enemy.data.dead)
+      .map((enemy) => ({ x: enemy.object.position.x, z: enemy.object.position.z }));
+  }
+
   function playAttack(id) {
     enemies.get(id)?.playAttack();
   }
 
-  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, update };
+  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, update };
 }

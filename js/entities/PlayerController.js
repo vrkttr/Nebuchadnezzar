@@ -27,6 +27,7 @@ export function createPlayerController(camera) {
       moveX: moveDirection.x,
       moveZ: moveDirection.z,
       jump: isKeyDown('Space'),
+      run: isKeyDown('ShiftLeft') || isKeyDown('ShiftRight'),
     };
   }
 

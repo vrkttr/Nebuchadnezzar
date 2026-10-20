@@ -8,7 +8,8 @@ const DEFAULT_SCALE = 0.95;
 const ATTACK_DURATION = 0.45;
 const AIRBORNE_HEIGHT = 0.08;
 const MOVE_THRESHOLD = 0.3;
-const RUN_THRESHOLD = 2.4;
+const RUN_THRESHOLD = 2.7;
+const PORTRAIT_LAYER = 1;
 const POSE_SMOOTHING = 16;
 const SPEED_SMOOTHING = 10;
 const MAX_SPEED = 12;
@@ -26,6 +27,10 @@ function box(width, height, depth, material, x = 0, y = 0, z = 0) {
 
 function hanging(width, height, depth, material, x = 0, z = 0) {
   return box(width, height, depth, material, x, -height / 2, z);
+}
+
+function enablePortraitLayer(root) {
+  root.traverse((node) => node.layers.enable(PORTRAIT_LAYER));
 }
 
 function pivot(parent, x, y, z) {
@@ -221,7 +226,10 @@ export function createHumanoid(name, options = {}) {
 
     if (slot === 'legs') {
       const mounts = [pivot(legLeft.hip, 0, -0.44, 0), pivot(legRight.hip, 0, -0.44, 0)];
-      for (const mount of mounts) build(mount);
+      for (const mount of mounts) {
+        build(mount);
+        enablePortraitLayer(mount);
+      }
       applyPants(itemId);
       removers[slot] = () => {
         for (const mount of mounts) mount.parent.remove(mount);
@@ -230,6 +238,7 @@ export function createHumanoid(name, options = {}) {
     } else {
       const root = new THREE.Group();
       build(root);
+      enablePortraitLayer(root);
       mountPoints[slot].add(root);
       removers[slot] = () => root.parent.remove(root);
     }
@@ -419,6 +428,7 @@ export function createHumanoid(name, options = {}) {
   }
 
   setEquipment(options.equipment ?? appearance.equipment ?? {});
+  enablePortraitLayer(object);
 
   return { object, update, playAttack, setEquipment };
 }

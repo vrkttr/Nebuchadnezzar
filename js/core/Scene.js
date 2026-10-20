@@ -22,10 +22,12 @@ export function createScene() {
   scene.background = createSkyTexture();
 
   const hemisphere = new THREE.HemisphereLight(0xe2e8e6, 0x7b7660, 2.1);
+  hemisphere.layers.enable(1);
   scene.add(hemisphere);
 
   const sun = new THREE.DirectionalLight(0xfff0d2, 1.7);
   sun.position.set(-18, 30, 14);
+  sun.layers.enable(1);
   scene.add(sun);
 
   return scene;

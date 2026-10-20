@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Projekt Nebuchadnezzar</title>
   <link rel="stylesheet" href="assets/ui/nebu-ui.css">
-  <link rel="stylesheet" href="css/hud.css?v=1">
+  <link rel="stylesheet" href="css/hud.css?v=2">
 
   <script type="importmap">
   {
@@ -82,7 +82,7 @@
 
     <div id="chat-window">
       <div id="chat-messages"></div>
-      <input id="chat-input" type="text" placeholder="Chat noch nicht verfügbar" disabled>
+      <input id="chat-input" type="text" maxlength="200" autocomplete="off" placeholder="Enter: Sagen, /g: Global">
     </div>
 
 
@@ -193,6 +193,6 @@
   <div id="tooltip" class="hidden"></div>
 
   <script src="js/vendor/howler.min.js"></script>
-  <script type="module" src="js/main.js?v=26"></script>
+  <script type="module" src="js/main.js?v=27"></script>
 </body>
 </html>

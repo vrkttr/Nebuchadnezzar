@@ -27,6 +27,10 @@ const [
   { createVendorWindow },
   { createMenuWindow },
   { createWindowManager },
+  { createChat },
+  { createViewCapture },
+  { createMinimap },
+  { createPortraits },
   { createHud },
   { createAudio },
   { gameState },
@@ -57,6 +61,10 @@ const [
   import(v('./ui/VendorWindow.js')),
   import(v('./ui/MenuWindow.js')),
   import(v('./ui/WindowManager.js')),
+  import(v('./ui/Chat.js')),
+  import(v('./core/ViewCapture.js')),
+  import(v('./hud/Minimap.js')),
+  import(v('./hud/Portraits.js')),
   import(v('./hud/Hud.js')),
   import(v('./audio/Audio.js')),
   import(v('./state/GameState.js')),
@@ -141,6 +149,22 @@ function start(token) {
   const enemies = createEnemies(scene, camera, nameplateContainer);
   const npcs = createNpcs(scene, camera, nameplateContainer);
 
+  const viewCapture = createViewCapture(renderer);
+  const minimap = createMinimap({
+    scene,
+    camera,
+    renderer,
+    viewCapture,
+    player,
+    sources: {
+      enemies: enemies.getMarkers,
+      npcs: npcs.getMarkers,
+      players: remotePlayers.getMarkers,
+    },
+  });
+  const portraits = createPortraits({ scene, renderer, viewCapture, player, enemies, gameState });
+  const chat = createChat({ onSend: (text) => connection.send({ type: 'chat', text }) });
+
   let ownPlayerId = null;
 
   const connection = createServerConnection(buildServerUrl(token), {
@@ -154,6 +178,8 @@ function start(token) {
         inventory.render(message.inventory ?? []);
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
+      } else if (message.type === 'chat') {
+        chat.add(message);
       } else if (message.type === 'quests') {
         hud.setQuests(message);
         npcs.setMarkers(message.markers ?? {});
@@ -429,6 +455,9 @@ function start(token) {
       inputSendTimer = 0;
       connection.send({ type: 'input', ...playerController.getInputState() });
     }
+
+    minimap.update(delta);
+    portraits.update(delta);
 
     renderer.render(scene, camera);
   }

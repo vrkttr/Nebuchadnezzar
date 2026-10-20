@@ -68,5 +68,9 @@ export function createNpcs(scene, camera, nameplateContainer) {
     }
   }
 
-  return { sync, setMarkers, getObjects, getPosition, update };
+  function getMarkers() {
+    return Array.from(npcs.values(), (npc) => ({ x: npc.object.position.x, z: npc.object.position.z }));
+  }
+
+  return { sync, setMarkers, getObjects, getPosition, getMarkers, update };
 }

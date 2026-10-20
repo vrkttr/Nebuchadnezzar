@@ -1,3 +1,4 @@
+import { handleChat } from './chat.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
@@ -42,7 +43,8 @@ const dbPool = mysql.createPool({
 
 console.log(`Nebuchadnezzar Game-Server läuft auf Port ${PORT}`);
 
-const MOVE_SPEED = 4;
+const WALK_SPEED = 2;
+const RUN_SPEED = 4;
 const JUMP_SPEED = 5.5;
 const GRAVITY = 14;
 const GROUND_Y = 0;
@@ -77,7 +79,7 @@ function createInitialState(character) {
     rotationY: character.rotationY,
     velocityY: 0,
     isGrounded: true,
-    input: { moveX: 0, moveZ: 0, jump: false },
+    input: { moveX: 0, moveZ: 0, jump: false, run: false },
     inventory: character.inventory,
     consumableReadyAt: 0,
     dataVersion: 0,
@@ -273,6 +275,9 @@ wss.on('connection', async (socket, request) => {
       state.input.moveX = moveX;
       state.input.moveZ = moveZ;
       state.input.jump = Boolean(message.jump);
+      state.input.run = Boolean(message.run);
+    } else if (message.type === 'chat') {
+      handleChat(players, id, message, notify);
     } else if (message.type === 'target') {
       const state = players.get(id);
       if (!state || state.dead) return;
@@ -401,8 +406,9 @@ function simulate() {
 
     const { input } = state;
 
-    state.x += input.moveX * MOVE_SPEED * TICK_DELTA;
-    state.z += input.moveZ * MOVE_SPEED * TICK_DELTA;
+    const speed = input.run ? RUN_SPEED : WALK_SPEED;
+    state.x += input.moveX * speed * TICK_DELTA;
+    state.z += input.moveZ * speed * TICK_DELTA;
 
     if (input.moveX !== 0 || input.moveZ !== 0) {
       state.rotationY = Math.atan2(input.moveX, input.moveZ);

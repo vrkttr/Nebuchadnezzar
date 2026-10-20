@@ -105,5 +105,12 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     remotePlayers.get(id)?.playAttack();
   }
 
-  return { sync, remove, playAttack, update };
+  function getMarkers() {
+    return Array.from(remotePlayers.values(), (remote) => ({
+      x: remote.object.position.x,
+      z: remote.object.position.z,
+    }));
+  }
+
+  return { sync, remove, playAttack, getMarkers, update };
 }
