@@ -1,10 +1,10 @@
 import * as THREE from 'three';
+import { t, tList } from '../i18n/I18n.js';
 
 const MIN_VISIBLE_MS = 800;
 const FADE_MS = 450;
 const TIP_INTERVAL_MS = 7000;
 const TIP_SWAP_MS = 300;
-const LOCALE_URL = 'assets/locales/de.json';
 
 export function createLoadingScreen() {
   const root = document.getElementById('loading-screen');
@@ -20,19 +20,12 @@ export function createLoadingScreen() {
   let progress = 0;
   let shownAt = performance.now();
   let assetRange = [0.4, 0.85];
-  let tips = [];
   let tipIndex = -1;
   let tipTimer = null;
 
-  const localeReady = fetch(LOCALE_URL)
-    .then((response) => (response.ok ? response.json() : null))
-    .then((locale) => {
-      tips = locale?.loading?.tips ?? [];
-      if (locale?.loading?.tipLabel) tipLabel.textContent = locale.loading.tipLabel;
-    })
-    .catch(() => {});
-
   function nextTip() {
+    const tips = tList('loading.tips');
+    tipLabel.textContent = t('loading.tipLabel');
     if (tips.length === 0) {
       tipLabel.hidden = true;
       tipText.textContent = '';
@@ -91,10 +84,6 @@ export function createLoadingScreen() {
     stopTips();
     tipText.classList.remove('swapping');
     nextTip();
-    localeReady.then(() => {
-      if (root.classList.contains('hidden')) return;
-      if (tips.length > 0 && !tipText.textContent) nextTip();
-    });
     tipTimer = setInterval(rotateTip, TIP_INTERVAL_MS);
   }
 

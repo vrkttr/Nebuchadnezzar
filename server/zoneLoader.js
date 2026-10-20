@@ -192,6 +192,7 @@ export function getZones() {
 export function serializeZone(zone) {
   return {
     id: zone.id,
+    id: zone.id,
     name: zone.name,
     indoor: zone.indoor,
     lighting: zone.lighting,

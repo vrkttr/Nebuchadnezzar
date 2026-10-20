@@ -1,15 +1,16 @@
 <?php
 
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/i18n.php';
 
 function portalMenuItems(): array
 {
     $items = [];
 
     if (!isset($_SESSION['user_id'])) {
-        $items[] = ['Anmelden', 'login.php'];
-        $items[] = ['Registrieren', 'register.php'];
-        $items[] = ['Credits', 'credits.php'];
+        $items[] = [t('portal.menu.login'), 'login.php'];
+        $items[] = [t('portal.menu.register'), 'register.php'];
+        $items[] = [t('portal.menu.credits'), 'credits.php'];
 
         return $items;
     }
@@ -25,15 +26,15 @@ function portalMenuItems(): array
     }
 
     if ($hasCharacter) {
-        $items[] = ['Spielen', 'play.php'];
-        $items[] = ['Charakter', 'character.php'];
+        $items[] = [t('portal.menu.play'), 'play.php'];
+        $items[] = [t('portal.menu.character'), 'character.php'];
     } else {
-        $items[] = ['Charakter erstellen', 'character.php'];
+        $items[] = [t('portal.menu.createCharacter'), 'character.php'];
     }
 
-    $items[] = ['Einstellungen', 'settings.php'];
-    $items[] = ['Credits', 'credits.php'];
-    $items[] = ['Abmelden', 'logout.php'];
+    $items[] = [t('portal.menu.settings'), 'settings.php'];
+    $items[] = [t('portal.menu.credits'), 'credits.php'];
+    $items[] = [t('portal.menu.logout'), 'logout.php'];
 
     return $items;
 }
@@ -45,11 +46,11 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
     $panelClass = 'portal-panel nu-paper nu-taped' . ($wide ? ' is-wide' : '');
     ?>
 <!DOCTYPE html>
-<html lang="de">
+<html lang="<?= htmlspecialchars(currentLanguage()) ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= $heading ?> - Sektor Sieben</title>
+<title><?= htmlspecialchars(t('portal.pageTitle', ['heading' => $title])) ?></title>
 <link rel="stylesheet" href="assets/ui/nebu-ui.css">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -66,6 +67,11 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <li><a class="nu-menu-item<?= $href === $active ? ' is-active' : '' ?>" href="<?= htmlspecialchars($href) ?>"><?= htmlspecialchars($label) ?></a></li>
 <?php endforeach; ?>
 </ul>
+<div class="portal-lang"><span class="nu-label"><?= th('portal.language') ?></span>
+<?php foreach (SUPPORTED_LANGUAGES as $code => $name): ?>
+<a class="portal-lang-link<?= $code === currentLanguage() ? ' is-active' : '' ?>" href="language.php?lang=<?= $code ?>" hreflang="<?= $code ?>" lang="<?= $code ?>"><?= htmlspecialchars($name) ?></a>
+<?php endforeach; ?>
+</div>
 </nav>
 <main class="portal-main">
 <?php if ($panel): ?>

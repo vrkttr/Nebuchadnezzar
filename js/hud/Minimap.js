@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { t } from '../i18n/I18n.js';
 
 const CAPTURE_SIZE = 200;
 const UPDATE_INTERVAL = 0.1;
@@ -79,7 +80,7 @@ export function createMinimap({ scene, camera, viewCapture, renderer, player, so
   function drawCardinals(forwardX, forwardZ, center) {
     const directions = [
       ['N', 0, -1, '#e0553a'],
-      ['O', 1, 0, '#e8dcb0'],
+      ['E', 1, 0, '#e8dcb0'],
       ['S', 0, 1, '#e8dcb0'],
       ['W', -1, 0, '#e8dcb0'],
     ];
@@ -100,7 +101,7 @@ export function createMinimap({ scene, camera, viewCapture, renderer, player, so
       context.fillStyle = 'rgba(15, 14, 10, 0.65)';
       context.fill();
       context.fillStyle = color;
-      context.fillText(label, x, y + pixelRatio);
+      context.fillText(t(`compass.${label}`), x, y + pixelRatio);
     }
   }
 

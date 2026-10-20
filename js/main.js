@@ -15,7 +15,7 @@ const [
   { dampFactor, lerpAngle },
   { createDialogue },
   { createIcon },
-  { createTooltip, SLOT_LABELS },
+  { createTooltip },
   { createItemMenu },
   { createConfirmDialog },
   { createCharacterWindow },
@@ -40,6 +40,8 @@ const [
   { createFootsteps },
   { gameState },
   { buildServerUrl, getPortalUrl },
+  { initI18n, t, applyDom },
+  { localizeMessage },
 ] = await Promise.all([
   import('three'),
   import(v('./core/Renderer.js')),
@@ -79,7 +81,12 @@ const [
   import(v('./audio/Footsteps.js')),
   import(v('./state/GameState.js')),
   import(v('./config.js')),
+  import(v('./i18n/I18n.js')),
+  import(v('./i18n/Localizer.js')),
 ]);
+
+await initI18n();
+applyDom();
 
 function start(token) {
   const loadingScreen = createLoadingScreen();
@@ -97,7 +104,6 @@ function start(token) {
     tooltip: createTooltip(gameState),
     itemMenu: createItemMenu(),
     confirmDialog: createConfirmDialog(),
-    slotLabels: SLOT_LABELS,
   };
 
   const hud = createHud(gameState, {
@@ -123,7 +129,7 @@ function start(token) {
     window.location.href = `${getPortalUrl()}settings.php`;
   }
 
-  document.querySelector('#minimap-buttons button[title="Menü"]')?.addEventListener('click', openPortalMenu);
+  document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.menu"]')?.addEventListener('click', openPortalMenu);
 
   const inventory = createInventory(gameState, ui, {
     onUse: (slot) => connection.send({ type: 'item-use', slot }),
@@ -221,7 +227,7 @@ function start(token) {
   async function enterZone(message, firstLoad) {
     const world = message.world;
     loadingScreen.show(world.name, Boolean(world.indoor));
-    loadingScreen.setProgress(0.08, firstLoad ? 'Welt wird aufgebaut …' : 'Zone wird geladen …');
+    loadingScreen.setProgress(0.08, firstLoad ? t('loading.status.world') : t('loading.status.zone'));
 
     if (zone) {
       disposeZone(scene, zone);
@@ -250,13 +256,13 @@ function start(token) {
     npcs.sync(message.npcs ?? []);
     worldChests.sync(message.chests ?? []);
     npcs.setMarkers(questMarkers);
-    loadingScreen.setProgress(0.4, 'Texturen werden geladen …');
+    loadingScreen.setProgress(0.4, t('loading.status.textures'));
 
     await nextFrame();
     await loadingScreen.assetsIdle();
-    loadingScreen.setProgress(0.85, 'Sounds werden geladen …');
+    loadingScreen.setProgress(0.85, t('loading.status.sounds'));
     await audio.ready();
-    loadingScreen.setProgress(0.93, 'Grafik wird vorbereitet …');
+    loadingScreen.setProgress(0.93, t('loading.status.graphics'));
 
     try {
       await renderer.compileAsync(scene, camera);
@@ -266,13 +272,14 @@ function start(token) {
     await nextFrame();
     await nextFrame();
 
-    loadingScreen.setProgress(1, 'Bereit');
+    loadingScreen.setProgress(1, t('loading.status.ready'));
     connection.send({ type: 'zone-ready' });
     await loadingScreen.hide();
   }
 
   const connection = createServerConnection(buildServerUrl(token), {
     onMessage(message) {
+      localizeMessage(message);
       if (message.type === 'init') {
         ownPlayerId = message.id;
         audio.applySettings(message.audio);
@@ -408,9 +415,7 @@ function start(token) {
           player.setDead(gameState.player.dead);
           if (wasAlive && gameState.player.dead) {
             audio.play('player_death');
-            dialogue.show(
-              'Du bist gefallen, hast die Erfahrung dieses Levels verloren und wurdest an deinem Spawnpunkt wiederbelebt.'
-            );
+            dialogue.show(t('death.text'));
           }
         }
       } else if (message.type === 'leave') {

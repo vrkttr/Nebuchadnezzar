@@ -19,6 +19,6 @@ export const gameState = {
   inventory: [],
   equipment: {},
   target: null,
-  zoneName: 'Ödland – Sektor 7',
+  zoneName: '',
   quests: [],
 };

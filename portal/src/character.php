@@ -2,6 +2,7 @@
 
 session_start();
 require __DIR__ . '/db.php';
+require __DIR__ . '/i18n.php';
 require __DIR__ . '/layout.php';
 require __DIR__ . '/appearance.php';
 
@@ -38,17 +39,17 @@ if ($character) {
     $name = trim($_POST['name'] ?? '');
 
     if ($name === '') {
-        $error = 'Bitte einen Charakternamen angeben.';
+        $error = t('character.error.missing');
     } elseif (strlen($name) > 32) {
-        $error = 'Der Name darf maximal 32 Zeichen lang sein.';
+        $error = t('character.error.length', ['max' => 32]);
     } elseif (!preg_match('/^[A-Za-z]+$/', $name)) {
-        $error = 'Der Name darf nur Buchstaben enthalten.';
+        $error = t('character.error.letters');
     } else {
         $stmt = $pdo->prepare('SELECT id FROM characters WHERE name = :name');
         $stmt->execute(['name' => $name]);
 
         if ($stmt->fetch()) {
-            $error = 'Dieser Charaktername ist bereits vergeben.';
+            $error = t('character.error.taken');
         } else {
             $stmt = $pdo->prepare('INSERT INTO characters (user_id, name, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants) VALUES (:user_id, :name, :skin, :hair_style, :hair_color, :top, :pants)');
             $stmt->execute($appearance + [
@@ -66,31 +67,31 @@ $previewScheme = $_SERVER['REQUEST_SCHEME'] ?? 'http';
 $previewUrl = "{$previewScheme}://{$_SERVER['SERVER_NAME']}:8082/preview.html";
 $previewHash = appearanceHash($appearance);
 
-renderPageStart('Charakter', 'character.php', true, true);
+renderPageStart(t('character.title'), 'character.php', true, true);
 ?>
 <?php if ($error !== null): ?>
 <p class="nu-message"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
 <?php if ($saved): ?>
-<p class="nu-message is-ok">Aussehen gespeichert.</p>
+<p class="nu-message is-ok"><?= th('character.saved') ?></p>
 <?php endif; ?>
 <div class="portal-editor">
 <form method="post" id="appearance-form" class="portal-form">
 <?php if ($character): ?>
-<div class="nu-label">Dein Charakter</div>
+<div class="nu-label"><?= th('character.yours') ?></div>
 <p class="portal-character"><?= htmlspecialchars($character['name']) ?></p>
 <?php else: ?>
-<label class="portal-field"><span class="nu-label">Charaktername</span><input class="nu-input" type="text" name="name" maxlength="32" required autofocus autocomplete="off" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></label>
+<label class="portal-field"><span class="nu-label"><?= th('character.name') ?></span><input class="nu-input" type="text" name="name" maxlength="32" required autofocus autocomplete="off" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></label>
 <?php endif; ?>
 <?php renderAppearanceFields($appearance); ?>
 <div class="portal-actions">
-<button class="nu-button" type="submit"><?= $character ? 'Aussehen speichern' : 'Erstellen' ?></button>
+<button class="nu-button" type="submit"><?= th($character ? 'character.saveLook' : 'character.create') ?></button>
 <?php if ($character): ?>
-<a class="nu-button" href="play.php">Spielen</a>
+<a class="nu-button" href="play.php"><?= th('character.play') ?></a>
 <?php endif; ?>
 </div>
 </form>
-<iframe id="appearance-preview" class="portal-preview" title="Vorschau" src="<?= htmlspecialchars($previewUrl . '#' . $previewHash) ?>"></iframe>
+<iframe id="appearance-preview" class="portal-preview" title="<?= th('character.preview') ?>" src="<?= htmlspecialchars($previewUrl . '#' . $previewHash) ?>"></iframe>
 </div>
 <script>
 (function () {

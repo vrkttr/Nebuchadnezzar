@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/ui/nebu-ui.css">
-  <link rel="stylesheet" href="css/hud.css?v=33">
+  <link rel="stylesheet" href="css/hud.css?v=34">
 
   <script type="importmap">
   {
@@ -20,11 +20,11 @@
 <body>
   <div id="loading-screen" class="outdoor">
     <div id="loading-art"></div>
-    <img id="loading-title" src="assets/logo/logo.svg" alt="Sektor Sieben">
+    <img id="loading-title" src="assets/logo/logo.svg" alt="Sektor Sieben" data-i18n-alt="app.title">
     <div id="loading-bottom">
       <div id="loading-zone"></div>
-      <div id="loading-bar"><div id="loading-fill"></div><div id="loading-status">Verbinde mit dem Server …</div></div>
-      <div id="loading-tip"><span id="loading-tip-label">Tipp</span><span id="loading-tip-text"></span></div>
+      <div id="loading-bar"><div id="loading-fill"></div><div id="loading-status" data-i18n="loading.status.connecting">Verbinde mit dem Server …</div></div>
+      <div id="loading-tip"><span id="loading-tip-label" data-i18n="loading.tipLabel">Tipp</span><span id="loading-tip-text"></span></div>
     </div>
   </div>
 
@@ -74,8 +74,8 @@
     </div>
 
     <div id="quest-tracker">
-      <div class="panel-title">Missionen</div>
-      <div id="quest-list" class="empty-state">Keine aktiven Missionen</div>
+      <div class="panel-title" data-i18n="hud.quests.title">Missionen</div>
+      <div id="quest-list" class="empty-state" data-i18n="hud.quests.empty">Keine aktiven Missionen</div>
     </div>
 
     <div id="action-bar">
@@ -95,27 +95,27 @@
 
     <div id="chat-window">
       <div id="chat-messages"></div>
-      <input id="chat-input" type="text" maxlength="200" autocomplete="off" placeholder="Enter: Sagen, /g: Global">
+      <input id="chat-input" type="text" maxlength="200" autocomplete="off" placeholder="Enter: Sagen, /g: Global" data-i18n-placeholder="chat.placeholder">
     </div>
 
 
 
     <div id="dock">
-      <div id="gold-display"><span id="gold-amount">0</span> Gold</div>
+      <div id="gold-display"><span id="gold-amount">0</span> <span data-i18n="hud.gold">Gold</span></div>
       <div id="minimap-buttons">
-        <button title="Charakter">C</button>
-        <button title="Fähigkeiten">F</button>
-        <button title="Perks">P</button>
-        <button title="Missionen">Q</button>
-        <button title="Erfolge">E</button>
-        <button title="Gruppe">G</button>
-        <button title="Menü">M</button>
+        <button title="Charakter" data-i18n-title="hud.menu.character">C</button>
+        <button title="Fähigkeiten" data-i18n-title="hud.menu.skills">F</button>
+        <button title="Perks" data-i18n-title="hud.menu.perks">P</button>
+        <button title="Missionen" data-i18n-title="hud.menu.quests">Q</button>
+        <button title="Erfolge" data-i18n-title="hud.menu.achievements">E</button>
+        <button title="Gruppe" data-i18n-title="hud.menu.group">G</button>
+        <button title="Menü" data-i18n-title="hud.menu.menu">M</button>
       </div>
       <div id="bag-bar">
-        <button class="bag-slot" title="Rucksack"></button>
-        <button class="bag-slot" title="Tasche"></button>
-        <button class="bag-slot" title="Tasche"></button>
-        <button class="bag-slot" title="Tasche"></button>
+        <button class="bag-slot" title="Rucksack" data-i18n-title="inventory.bagTitle"></button>
+        <button class="bag-slot" title="Tasche" data-i18n-title="bag.pocket"></button>
+        <button class="bag-slot" title="Tasche" data-i18n-title="bag.pocket"></button>
+        <button class="bag-slot" title="Tasche" data-i18n-title="bag.pocket"></button>
       </div>
     </div>
 
@@ -126,48 +126,48 @@
 
   <div id="dialogue-box" class="hidden">
     <p id="dialogue-text"></p>
-    <button id="dialogue-close">Schließen</button>
+    <button id="dialogue-close" data-i18n="common.close">Schließen</button>
   </div>
 
   <div id="inventory-window" class="window nu-taped hidden">
     <div class="window-header">
-      <span class="window-title">Rucksack</span>
-      <button id="inventory-close" class="window-close" title="Schließen">×</button>
+      <span class="window-title" data-i18n="inventory.title">Rucksack</span>
+      <button id="inventory-close" class="window-close" title="Schließen" data-i18n-title="common.close">×</button>
     </div>
     <div id="inventory-grid"></div>
   </div>
 
   <div id="loot-window" class="window nu-taped hidden">
     <div class="window-header">
-      <span id="loot-title" class="window-title">Beute</span>
-      <button id="loot-close" class="window-close" title="Schließen">×</button>
+      <span id="loot-title" class="window-title" data-i18n="loot.title">Beute</span>
+      <button id="loot-close" class="window-close" title="Schließen" data-i18n-title="common.close">×</button>
     </div>
     <div id="loot-entries"></div>
-    <button id="loot-take-all" class="window-button">Alles nehmen</button>
+    <button id="loot-take-all" class="window-button" data-i18n="loot.takeAll">Alles nehmen</button>
   </div>
 
   <div id="npc-window" class="window nu-taped hidden">
     <div class="window-header">
-      <span id="npc-title" class="window-title">Gespräch</span>
-      <button id="npc-close" class="window-close" title="Schließen">×</button>
+      <span id="npc-title" class="window-title" data-i18n="npc.title">Gespräch</span>
+      <button id="npc-close" class="window-close" title="Schließen" data-i18n-title="common.close">×</button>
     </div>
     <div id="npc-body"></div>
   </div>
 
   <div id="vendor-window" class="window nu-taped hidden">
     <div class="window-header">
-      <span id="vendor-title" class="window-title">Händler</span>
-      <button id="vendor-close" class="window-close" title="Schließen">×</button>
+      <span id="vendor-title" class="window-title" data-i18n="vendor.title">Händler</span>
+      <button id="vendor-close" class="window-close" title="Schließen" data-i18n-title="common.close">×</button>
     </div>
     <div id="vendor-gold"></div>
     <div id="vendor-stock"></div>
-    <p class="window-hint">Klick: 1 kaufen. Umschalt+Klick: bis zu 5 kaufen. Rechtsklick auf Gegenstände im Rucksack verkauft sie.</p>
+    <p class="window-hint" data-i18n="vendor.hint">Klick: 1 kaufen. Umschalt+Klick: bis zu 5 kaufen. Rechtsklick auf Gegenstände im Rucksack verkauft sie.</p>
   </div>
 
   <div id="character-window" class="window nu-taped hidden">
     <div class="window-header">
-      <span class="window-title">Charakter</span>
-      <button id="character-close" class="window-close" title="Schließen">×</button>
+      <span class="window-title" data-i18n="character.title">Charakter</span>
+      <button id="character-close" class="window-close" title="Schließen" data-i18n-title="common.close">×</button>
     </div>
     <div id="equipment-grid" class="equipment-grid"></div>
     <dl id="character-stats" class="character-stats"></dl>
@@ -176,8 +176,8 @@
   <div id="confirm-dialog" class="window nu-taped hidden">
     <p id="confirm-text"></p>
     <div class="confirm-buttons">
-      <button id="confirm-yes" class="window-button window-button-danger">Zerstören</button>
-      <button id="confirm-no" class="window-button">Abbrechen</button>
+      <button id="confirm-yes" class="window-button window-button-danger" data-i18n="item.destroy">Zerstören</button>
+      <button id="confirm-no" class="window-button" data-i18n="common.cancel">Abbrechen</button>
     </div>
   </div>
 
@@ -185,6 +185,6 @@
   <div id="tooltip" class="hidden"></div>
 
   <script src="js/vendor/howler.min.js"></script>
-  <script type="module" src="js/main.js?v=33"></script>
+  <script type="module" src="js/main.js?v=34"></script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import { t } from '../i18n/I18n.js';
+
 export function createInventory(state, ui, handlers = {}) {
   const windowEl = document.getElementById('inventory-window');
   const grid = document.getElementById('inventory-grid');
@@ -20,7 +22,7 @@ export function createInventory(state, ui, handlers = {}) {
     const name = item?.name ?? slot.itemId;
     const suffix = slot.quantity > 1 ? ` (x${slot.quantity})` : '';
 
-    ui.confirmDialog.open(`„${name}“${suffix} unwiderruflich zerstören?`, 'Zerstören', () =>
+    ui.confirmDialog.open(t('item.destroyConfirm', { name, suffix }), t('item.destroy'), () =>
       handlers.onDestroy?.(index, slot.itemId)
     );
   }
@@ -30,15 +32,15 @@ export function createInventory(state, ui, handlers = {}) {
 
     if (handlers.isVendorOpen?.() && item?.value > 0) {
       actions.push({
-        label: `Verkaufen (${item.value * slot.quantity} Gold)`,
+        label: t('item.sell', { gold: item.value * slot.quantity }),
         onSelect: () => handlers.onSell?.(index, slot.itemId),
       });
     }
 
-    if (item?.slot) actions.push({ label: 'Ausrüsten', onSelect: () => handlers.onUse?.(index) });
-    if (item?.use) actions.push({ label: 'Benutzen', onSelect: () => handlers.onUse?.(index) });
+    if (item?.slot) actions.push({ label: t('item.equip'), onSelect: () => handlers.onUse?.(index) });
+    if (item?.use) actions.push({ label: t('item.use'), onSelect: () => handlers.onUse?.(index) });
 
-    actions.push({ label: 'Zerstören', danger: true, onSelect: () => requestDestroy(index, slot, item) });
+    actions.push({ label: t('item.destroy'), danger: true, onSelect: () => requestDestroy(index, slot, item) });
 
     ui.tooltip.hide();
     ui.itemMenu.open(event, actions);
@@ -123,7 +125,6 @@ export function createInventory(state, ui, handlers = {}) {
 
   if (bagButton) {
     bagButton.replaceChildren(ui.createIcon('backpack'));
-    bagButton.title = 'Rucksack (B)';
     bagButton.addEventListener('click', toggle);
   }
 

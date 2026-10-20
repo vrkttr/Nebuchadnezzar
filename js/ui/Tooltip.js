@@ -1,17 +1,8 @@
-const TYPE_LABELS = {
-  material: 'Material',
-  consumable: 'Verbrauchsgut',
-  weapon: 'Waffe',
-  armor: 'Rüstung',
-  ammo: 'Munition',
-};
+import { t, tOr, formatNumber } from '../i18n/I18n.js';
 
-export const SLOT_LABELS = {
-  weapon: 'Waffe',
-  head: 'Kopf',
-  chest: 'Brust',
-  legs: 'Beine',
-};
+export function slotLabel(slot) {
+  return tOr([`item.slot.${slot}`], slot);
+}
 
 const CURSOR_OFFSET = 14;
 const VIEWPORT_MARGIN = 8;
@@ -55,36 +46,36 @@ export function createTooltip(state) {
   }
 
   function itemLines(item, quantity) {
-    if (!item) return [['Unbekannter Gegenstand', 'tooltip-name']];
+    if (!item) return [[t('item.unknown'), 'tooltip-name']];
 
-    const typeLabel = TYPE_LABELS[item.type] ?? item.type;
+    const typeLabel = tOr([`item.type.${item.type}`], item.type);
     const lines = [
       [item.name, `tooltip-name quality-text-${item.quality}`],
-      [item.type === 'armor' ? `${typeLabel} – ${SLOT_LABELS[item.slot]}` : typeLabel, 'tooltip-dim'],
+      [item.type === 'armor' ? `${typeLabel} – ${slotLabel(item.slot)}` : typeLabel, 'tooltip-dim'],
     ];
 
     if (item.stats?.damageMin !== undefined) {
-      lines.push([`Schaden: ${item.stats.damageMin}–${item.stats.damageMax}`, 'tooltip-stat']);
+      lines.push([t('tooltip.damage', { min: item.stats.damageMin, max: item.stats.damageMax }), 'tooltip-stat']);
     }
 
     if (item.ranged) {
-      lines.push([`Reichweite: ${item.ranged.range} m · ${(1 / item.ranged.interval).toFixed(1).replace('.', ',')} Schuss/s`, 'tooltip-stat']);
-      lines.push([`Munition: ${state.items[item.ranged.ammo]?.name ?? item.ranged.ammo}`, 'tooltip-dim']);
+      lines.push([t('tooltip.ranged', { range: item.ranged.range, rate: formatNumber(1 / item.ranged.interval, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) }), 'tooltip-stat']);
+      lines.push([t('tooltip.ammo', { name: state.items[item.ranged.ammo]?.name ?? item.ranged.ammo }), 'tooltip-dim']);
     }
 
     if (item.stats?.armor) {
-      lines.push([`Rüstung: ${item.stats.armor}`, 'tooltip-stat']);
+      lines.push([t('tooltip.armor', { armor: item.stats.armor }), 'tooltip-stat']);
     }
 
     if (item.slot) {
       lines.push([
-        `Benötigt Level ${item.level}`,
+        t('tooltip.requiresLevel', { level: item.level }),
         state.player.level < item.level ? 'tooltip-bad' : 'tooltip-dim',
       ]);
     }
 
     if (item.use?.heal) {
-      lines.push([`Benutzen: Stellt ${item.use.heal} Gesundheit wieder her.`, 'tooltip-use']);
+      lines.push([t('tooltip.useHeal', { heal: item.use.heal }), 'tooltip-use']);
     }
 
     if (item.description) {
@@ -92,12 +83,12 @@ export function createTooltip(state) {
     }
 
     if (item.value > 0) {
-      lines.push([`Verkaufswert: ${item.value} Gold`, 'tooltip-dim']);
+      lines.push([t('tooltip.value', { value: item.value }), 'tooltip-dim']);
     }
 
     if (item.stackSize > 1) {
       lines.push([
-        quantity ? `Stapel: ${quantity} / ${item.stackSize}` : `Max. Stapel: ${item.stackSize}`,
+        quantity ? t('tooltip.stack', { quantity, max: item.stackSize }) : t('tooltip.maxStack', { max: item.stackSize }),
         'tooltip-dim',
       ]);
     }
@@ -112,9 +103,9 @@ export function createTooltip(state) {
   function showAbility(ability, event) {
     const lines = [
       [ability.name, 'tooltip-name tooltip-ability'],
-      [`${ability.cost} Energie · ${ability.range} m Reichweite`, 'tooltip-dim'],
-      [`Abklingzeit: ${ability.cooldown} s`, 'tooltip-dim'],
-      [`Verursacht ${Math.round(ability.damageMultiplier * 100)} % Schaden.`, 'tooltip-stat'],
+      [t('tooltip.abilityCost', { cost: ability.cost, range: ability.range }), 'tooltip-dim'],
+      [t('tooltip.cooldown', { seconds: ability.cooldown }), 'tooltip-dim'],
+      [t('tooltip.abilityDamage', { percent: Math.round(ability.damageMultiplier * 100) }), 'tooltip-stat'],
     ];
 
     if (ability.description) {

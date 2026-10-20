@@ -1,3 +1,6 @@
+import { t } from '../i18n/I18n.js';
+import { slotLabel } from './Tooltip.js';
+
 const SLOT_ORDER = ['head', 'chest', 'legs', 'weapon'];
 
 export function createCharacterWindow(state, ui, handlers = {}) {
@@ -5,7 +8,7 @@ export function createCharacterWindow(state, ui, handlers = {}) {
   const grid = document.getElementById('equipment-grid');
   const statsEl = document.getElementById('character-stats');
   const closeButton = document.getElementById('character-close');
-  const openButton = document.querySelector('#minimap-buttons button[title="Charakter"]');
+  const openButton = document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.character"]');
 
   const cells = new Map();
   const statValues = new Map();
@@ -29,7 +32,7 @@ export function createCharacterWindow(state, ui, handlers = {}) {
 
       const label = document.createElement('span');
       label.className = 'equipment-slot-label';
-      label.textContent = ui.slotLabels[slot];
+      label.textContent = slotLabel(slot);
 
       const cell = document.createElement('div');
       cell.className = 'inventory-slot equipment-cell';
@@ -43,16 +46,16 @@ export function createCharacterWindow(state, ui, handlers = {}) {
 
   function buildStats() {
     const rows = [
-      ['level', 'Level'],
-      ['health', 'Gesundheit'],
-      ['resource', 'Energie'],
-      ['damage', 'Schaden'],
-      ['armor', 'Rüstung'],
+      ['level', 'character.level'],
+      ['health', 'character.health'],
+      ['resource', 'character.resource'],
+      ['damage', 'character.damage'],
+      ['armor', 'character.armor'],
     ];
 
     for (const [key, label] of rows) {
       const term = document.createElement('dt');
-      term.textContent = label;
+      term.textContent = t(label);
 
       const value = document.createElement('dd');
 
@@ -92,7 +95,7 @@ export function createCharacterWindow(state, ui, handlers = {}) {
     cell.onmouseleave = () => ui.tooltip.hide();
     cell.onclick = (event) => {
       ui.tooltip.hide();
-      ui.itemMenu.open(event, [{ label: 'Ablegen', onSelect: () => handlers.onUnequip?.(slot) }]);
+      ui.itemMenu.open(event, [{ label: t('character.unequip'), onSelect: () => handlers.onUnequip?.(slot) }]);
     };
     cell.oncontextmenu = (event) => {
       event.preventDefault();

@@ -123,11 +123,11 @@ function awardKill(player, playerId, enemy, notify, onKill) {
 
   onKill(playerId, player, enemy);
 
-  notify(playerId, { type: 'event', kind: 'kill', enemyName: enemy.name });
+  notify(playerId, { type: 'event', kind: 'kill', enemyName: enemy.name, enemyType: enemy.type });
 
   const levelsGained = grantXp(player, xpAmount);
   if (xpAmount > 0) {
-    notify(playerId, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: enemy.name });
+    notify(playerId, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: enemy.name, enemyType: enemy.type });
   }
 
   addGold(player, goldAmount);

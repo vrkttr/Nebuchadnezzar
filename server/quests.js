@@ -96,6 +96,7 @@ function objectiveCurrent(player, entry, objective, index) {
 function serializeObjectives(player, quest, entry) {
   return quest.objectives.map((objective, index) => ({
     label: objectiveLabel(objective),
+    itemId: objective.itemId,
     current: entry ? objectiveCurrent(player, entry, objective, index) : 0,
     target: objective.count,
   }));
@@ -156,6 +157,7 @@ export function questsForNpc(player, npcId) {
       text,
       objectives: serializeObjectives(player, quest, entry),
       rewards: serializeRewards(quest),
+      turnInNpc: quest.turnInNpc,
       turnInName: getNpcDefinition(quest.turnInNpc)?.name ?? '',
     });
   }
@@ -190,6 +192,7 @@ export function serializeQuestLog(player) {
       id: quest.id,
       name: quest.name,
       ready: isReady(player, quest, entry),
+      turnInNpc: quest.turnInNpc,
       turnInName: getNpcDefinition(quest.turnInNpc)?.name ?? '',
       objectives: serializeObjectives(player, quest, entry),
     });
@@ -213,7 +216,9 @@ export function diffQuestLog(previous, current) {
           type: 'event',
           kind: 'quest-progress',
           questId: quest.id,
+          index,
           label: objective.label,
+          itemId: objective.itemId,
           current: objective.current,
           target: objective.target,
         });
@@ -304,7 +309,7 @@ export function completeQuest(player, playerId, npcId, questId, notify) {
 
   const levelsGained = grantXp(player, xpAmount);
   if (xpAmount > 0) {
-    notify(playerId, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: quest.name });
+    notify(playerId, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: quest.name, questId: quest.id });
   }
 
   if (levelsGained > 0) {

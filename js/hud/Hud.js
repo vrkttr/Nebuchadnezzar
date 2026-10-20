@@ -1,3 +1,5 @@
+import { t, tOr, formatNumber } from '../i18n/I18n.js';
+
 function toPercent(value, max) {
   if (!max) return 0;
   return Math.max(0, Math.min(100, (value / max) * 100));
@@ -5,48 +7,9 @@ function toPercent(value, max) {
 
 const MAX_CHAT_LINES = 50;
 
-const FAILURE_TEXT = {
-  'no-target': 'Kein Ziel ausgewählt.',
-  'out-of-range': 'Ziel ist zu weit entfernt.',
-  cooldown: 'Fähigkeit ist noch nicht bereit.',
-  'no-resource': 'Nicht genug Energie.',
-  'no-ammo': 'Keine Munition.',
-  'no-line': 'Keine freie Schusslinie.',
-  'melee-only': 'Nur mit Nahkampfwaffen einsetzbar.',
-};
-
-const ITEM_FAILURE_TEXT = {
-  level: 'Dein Level ist zu niedrig.',
-  'full-health': 'Du hast bereits volle Gesundheit.',
-  cooldown: 'Noch nicht bereit.',
-  'not-usable': 'Dieser Gegenstand kann nicht benutzt werden.',
-};
-
-const QUEST_FAILURE_TEXT = {
-  invalid: 'Diese Mission ist nicht verfügbar.',
-  unavailable: 'Diese Mission kannst du derzeit nicht annehmen.',
-  'not-ready': 'Die Ziele sind noch nicht erfüllt.',
-  'inventory-full': 'Dein Inventar ist zu voll für die Belohnung.',
-  'log-full': 'Dein Missionslog ist voll.',
-};
-
-const NPC_FAILURE_TEXT = {
-  'too-far': 'Du bist zu weit entfernt.',
-  gone: 'Diese Person ist nicht mehr da.',
-};
-
-const VENDOR_FAILURE_TEXT = {
-  'no-gold': 'Nicht genug Gold.',
-  'inventory-full': 'Dein Inventar ist voll.',
-  'not-sellable': 'Das kauft der Händler nicht.',
-  invalid: 'Das ist nicht im Angebot.',
-};
-
-const LOOT_FAILURE_TEXT = {
-  gone: 'Diese Beute ist nicht mehr verfügbar.',
-  'not-yours': 'Diese Beute gehört dir nicht.',
-  'too-far': 'Du bist zu weit entfernt.',
-};
+function failureText(group, reason, fallbackKey = 'failure.default') {
+  return tOr([`failure.${group}.${reason}`, `failure.${group}.default`], t(fallbackKey));
+}
 
 export function createHud(state, handlers = {}) {
   const playerName = document.getElementById('player-name');
@@ -121,7 +84,7 @@ export function createHud(state, handlers = {}) {
   function setQuests(payload) {
     if (payload.quests.length === 0) {
       questList.className = 'empty-state';
-      questList.replaceChildren('Keine aktiven Missionen');
+      questList.replaceChildren(t('hud.quests.empty'));
       return;
     }
 
@@ -148,7 +111,7 @@ export function createHud(state, handlers = {}) {
         if (quest.ready) {
           const ready = document.createElement('div');
           ready.className = 'quest-ready';
-          ready.textContent = `Abgabe bei ${quest.turnInName}`;
+          ready.textContent = t('hud.quests.turnIn', { name: quest.turnInName });
           entry.appendChild(ready);
         }
 
@@ -163,52 +126,52 @@ export function createHud(state, handlers = {}) {
 
   function addEvent(event) {
     if (event.kind === 'xp') {
-      addMessage(`+${event.amount} Erfahrung (${event.enemyName})`);
+      addMessage(t('event.xp', { amount: event.amount, source: event.enemyName }));
     } else if (event.kind === 'gold') {
-      addMessage(`+${event.amount} Gold`);
+      addMessage(t('event.gold', { amount: event.amount }));
     } else if (event.kind === 'item') {
       const item = state.items[event.itemId];
       const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
-      addMessage(`Erhalten: ${item?.name ?? event.itemId}${suffix}`);
+      addMessage(t('event.item', { name: item?.name ?? event.itemId, suffix }));
     } else if (event.kind === 'equipped') {
-      addMessage(`${state.items[event.itemId]?.name ?? event.itemId} angelegt`);
+      addMessage(t('event.equipped', { name: itemName(event.itemId) }));
     } else if (event.kind === 'unequipped') {
-      addMessage(`${state.items[event.itemId]?.name ?? event.itemId} abgelegt`);
+      addMessage(t('event.unequipped', { name: itemName(event.itemId) }));
     } else if (event.kind === 'item-used') {
-      addMessage(`${state.items[event.itemId]?.name ?? event.itemId} benutzt: +${event.heal} Gesundheit`);
+      addMessage(t('event.itemUsed', { name: itemName(event.itemId), heal: event.heal }));
     } else if (event.kind === 'item-destroyed') {
       const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
-      addMessage(`Zerstört: ${state.items[event.itemId]?.name ?? event.itemId}${suffix}`);
+      addMessage(t('event.itemDestroyed', { name: itemName(event.itemId), suffix }));
     } else if (event.kind === 'item-failed') {
-      addMessage(ITEM_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+      addMessage(failureText('item', event.reason));
     } else if (event.kind === 'quest-accepted') {
-      addMessage(`Mission angenommen: ${event.name}`);
+      addMessage(t('event.questAccepted', { name: event.name }));
     } else if (event.kind === 'quest-progress') {
-      addMessage(`${event.label}: ${event.current}/${event.target}`);
+      addMessage(t('event.questProgress', { label: event.label, current: event.current, target: event.target }));
     } else if (event.kind === 'quest-ready') {
-      addMessage(`Mission bereit zur Abgabe: ${event.name}`);
+      addMessage(t('event.questReady', { name: event.name }));
     } else if (event.kind === 'quest-completed') {
-      addMessage(`Mission abgeschlossen: ${event.name}`);
+      addMessage(t('event.questCompleted', { name: event.name }));
     } else if (event.kind === 'quest-failed') {
-      addMessage(QUEST_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+      addMessage(failureText('quest', event.reason));
     } else if (event.kind === 'npc-failed') {
-      addMessage(NPC_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+      addMessage(failureText('npc', event.reason));
     } else if (event.kind === 'vendor-failed') {
-      addMessage(VENDOR_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+      addMessage(failureText('vendor', event.reason));
     } else if (event.kind === 'purchased') {
       const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
-      addMessage(`Gekauft: ${itemName(event.itemId)}${suffix} (-${event.cost} Gold)`);
+      addMessage(t('event.purchased', { name: itemName(event.itemId), suffix, cost: event.cost }));
     } else if (event.kind === 'sold') {
       const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
-      addMessage(`Verkauft: ${itemName(event.itemId)}${suffix} (+${event.gold} Gold)`);
+      addMessage(t('event.sold', { name: itemName(event.itemId), suffix, gold: event.gold }));
     } else if (event.kind === 'inventory-full') {
-      addMessage('Dein Inventar ist voll.');
+      addMessage(t('event.inventoryFull'));
     } else if (event.kind === 'loot-failed') {
-      addMessage(LOOT_FAILURE_TEXT[event.reason] ?? 'Beute konnte nicht aufgenommen werden.');
+      addMessage(failureText('loot', event.reason));
     } else if (event.kind === 'levelup') {
-      addMessage(`Level-Aufstieg! Du bist jetzt Level ${event.level}.`);
+      addMessage(t('event.levelUp', { level: event.level }));
     } else if (event.kind === 'ability-failed') {
-      addMessage(FAILURE_TEXT[event.reason] ?? 'Fähigkeit konnte nicht eingesetzt werden.');
+      addMessage(failureText('ability', event.reason));
     }
   }
 
@@ -235,7 +198,7 @@ export function createHud(state, handlers = {}) {
 
     xpFill.style.width = `${toPercent(state.player.xp, state.player.xpToNextLevel)}%`;
 
-    goldAmount.textContent = state.player.gold.toLocaleString('de-DE');
+    goldAmount.textContent = formatNumber(state.player.gold);
 
     zoneName.textContent = state.zoneName;
 

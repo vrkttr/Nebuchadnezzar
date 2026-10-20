@@ -2,6 +2,7 @@
 
 session_start();
 require __DIR__ . '/db.php';
+require __DIR__ . '/i18n.php';
 require __DIR__ . '/layout.php';
 
 $error = null;
@@ -12,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $passwordConfirm = $_POST['password_confirm'] ?? '';
 
     if ($username === '' || $password === '') {
-        $error = 'Bitte Benutzername und Passwort angeben.';
+        $error = t('register.error.missing');
     } elseif (strlen($username) > 32) {
-        $error = 'Benutzername darf maximal 32 Zeichen lang sein.';
+        $error = t('register.error.usernameLength', ['max' => 32]);
     } elseif (strlen($password) < 8) {
-        $error = 'Passwort muss mindestens 8 Zeichen lang sein.';
+        $error = t('register.error.passwordLength', ['min' => 8]);
     } elseif ($password !== $passwordConfirm) {
-        $error = 'Passwörter stimmen nicht überein.';
+        $error = t('register.error.mismatch');
     } else {
         $pdo = getDatabaseConnection();
 
@@ -26,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute(['username' => $username]);
 
         if ($stmt->fetch()) {
-            $error = 'Dieser Benutzername ist bereits vergeben.';
+            $error = t('register.error.taken');
         } else {
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -41,15 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-renderPageStart('Registrierung', 'register.php');
+renderPageStart(t('register.title'), 'register.php');
 ?>
 <?php if ($error !== null): ?>
 <p class="nu-message"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
 <form method="post" class="portal-form">
-<label class="portal-field"><span class="nu-label">Benutzername</span><input class="nu-input" type="text" name="username" maxlength="32" required autofocus autocomplete="username"></label>
-<label class="portal-field"><span class="nu-label">Passwort</span><input class="nu-input" type="password" name="password" required autocomplete="new-password"></label>
-<label class="portal-field"><span class="nu-label">Passwort bestätigen</span><input class="nu-input" type="password" name="password_confirm" required autocomplete="new-password"></label>
-<div class="portal-actions"><button class="nu-button" type="submit">Registrieren</button><a class="nu-button" href="login.php">Zum Login</a></div>
+<label class="portal-field"><span class="nu-label"><?= th('register.username') ?></span><input class="nu-input" type="text" name="username" maxlength="32" required autofocus autocomplete="username"></label>
+<label class="portal-field"><span class="nu-label"><?= th('register.password') ?></span><input class="nu-input" type="password" name="password" required autocomplete="new-password"></label>
+<label class="portal-field"><span class="nu-label"><?= th('register.confirm') ?></span><input class="nu-input" type="password" name="password_confirm" required autocomplete="new-password"></label>
+<div class="portal-actions"><button class="nu-button" type="submit"><?= th('register.submit') ?></button><a class="nu-button" href="login.php"><?= th('register.toLogin') ?></a></div>
 </form>
 <?php renderPageEnd();

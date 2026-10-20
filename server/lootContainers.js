@@ -15,6 +15,7 @@ function serializeContainer(container) {
   return {
     id: container.id,
     name: container.name,
+    source: container.source,
     entries: container.entries.map((entry) => ({
       id: entry.id,
       itemId: entry.itemId,
@@ -82,6 +83,7 @@ export function spawnLootForKill(containers, ownerId, owner, enemy, notify) {
     id,
     ownerId,
     name: enemy.name,
+    source: enemy.type,
     kind: 'pouch',
     x: enemy.x,
     y: enemy.y,
@@ -91,7 +93,7 @@ export function spawnLootForKill(containers, ownerId, owner, enemy, notify) {
   };
 
   containers.set(id, container);
-  notify(ownerId, { type: 'loot-spawn', id, kind: container.kind, name: container.name, x: container.x, y: container.y, z: container.z });
+  notify(ownerId, { type: 'loot-spawn', id, kind: container.kind, name: container.name, source: container.source, x: container.x, y: container.y, z: container.z });
 }
 
 export function spawnChestContainer(containers, ownerId, name, position, drops, notify) {
@@ -102,6 +104,7 @@ export function spawnChestContainer(containers, ownerId, name, position, drops, 
     id,
     ownerId,
     name,
+    source: 'chest',
     kind: 'chest',
     x: position.x,
     y: position.y ?? 0,
@@ -117,6 +120,7 @@ export function spawnChestContainer(containers, ownerId, name, position, drops, 
     id,
     kind: container.kind,
     name: container.name,
+    source: container.source,
     x: container.x,
     y: container.y,
     z: container.z,

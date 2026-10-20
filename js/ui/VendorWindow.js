@@ -1,3 +1,5 @@
+import { t, formatNumber } from '../i18n/I18n.js';
+
 const SHIFT_QUANTITY = 5;
 
 export function createVendorWindow(state, ui, handlers = {}) {
@@ -42,7 +44,7 @@ export function createVendorWindow(state, ui, handlers = {}) {
 
     const price = document.createElement('span');
     price.className = 'vendor-price';
-    price.textContent = `${entry.price} Gold`;
+    price.textContent = t('vendor.price', { price: formatNumber(entry.price) });
 
     row.appendChild(icon);
     row.appendChild(name);
@@ -64,7 +66,7 @@ export function createVendorWindow(state, ui, handlers = {}) {
   function update() {
     if (!data) return;
 
-    goldEl.textContent = `Dein Gold: ${state.player.gold.toLocaleString('de-DE')}`;
+    goldEl.textContent = t('vendor.yourGold', { amount: formatNumber(state.player.gold) });
 
     for (const { price, cost } of priceEls) {
       price.classList.toggle('too-expensive', state.player.gold < cost);

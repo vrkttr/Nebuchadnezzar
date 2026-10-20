@@ -10,8 +10,8 @@ const COMMANDS = {
   global: 'global',
 };
 
-function systemMessage(text) {
-  return { type: 'chat', channel: 'system', text };
+function systemMessage(text, key) {
+  return { type: 'chat', channel: 'system', text, key };
 }
 
 export function handleChat(players, senderId, message, notify, now = Date.now()) {
@@ -27,7 +27,7 @@ export function handleChat(players, senderId, message, notify, now = Date.now())
   if (command) {
     const mapped = COMMANDS[command[1].toLowerCase()];
     if (!mapped) {
-      notify(senderId, systemMessage('Unbekannter Befehl.'));
+      notify(senderId, systemMessage('Unbekannter Befehl.', 'chat.unknownCommand'));
       return;
     }
 
@@ -38,7 +38,7 @@ export function handleChat(players, senderId, message, notify, now = Date.now())
 
   sender.chatTimes = (sender.chatTimes ?? []).filter((time) => now - time < RATE_LIMIT_WINDOW_MS);
   if (sender.chatTimes.length >= RATE_LIMIT_COUNT) {
-    notify(senderId, systemMessage('Du schreibst zu schnell.'));
+    notify(senderId, systemMessage('Du schreibst zu schnell.', 'chat.rateLimit'));
     return;
   }
   sender.chatTimes.push(now);

@@ -1,7 +1,7 @@
 import { releaseAllKeys } from '../input/Keyboard.js';
+import { t } from '../i18n/I18n.js';
 
 const MAX_CHAT_LINES = 50;
-const CHANNEL_PREFIX = { global: '[Global] ' };
 
 export function createChat({ onSend }) {
   const input = document.getElementById('chat-input');
@@ -16,7 +16,7 @@ export function createChat({ onSend }) {
     } else {
       const name = document.createElement('span');
       name.className = 'chat-name';
-      name.textContent = `${CHANNEL_PREFIX[channel] ?? ''}${from}: `;
+      name.textContent = `${channel === 'global' ? t('chat.global') : ''}${from}: `;
       line.appendChild(name);
       line.appendChild(document.createTextNode(text));
     }

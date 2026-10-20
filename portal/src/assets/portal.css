@@ -288,3 +288,22 @@ body.portal {
   align-items: center;
   gap: 8px;
 }
+
+.portal-lang {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.9rem;
+  margin-top: 1.6rem;
+}
+
+.portal-lang-link {
+  color: var(--nu-text-dim);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.portal-lang-link:hover,
+.portal-lang-link.is-active {
+  color: var(--nu-amber);
+}

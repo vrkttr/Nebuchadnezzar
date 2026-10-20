@@ -4,55 +4,55 @@ function appearanceOptions(): array
 {
     return [
         'skin' => [
-            'label' => 'Hautton',
+            'label' => 'skin',
             'items' => [
-                ['Hellbraun', '#d9b394'],
-                ['Hell', '#efd2b8'],
-                ['Beige', '#c79b7c'],
-                ['Mittel', '#a87c5c'],
-                ['Dunkel', '#7a5640'],
-                ['Sehr dunkel', '#4f3626'],
+                [null, '#d9b394'],
+                [null, '#efd2b8'],
+                [null, '#c79b7c'],
+                [null, '#a87c5c'],
+                [null, '#7a5640'],
+                [null, '#4f3626'],
             ],
         ],
         'hair_style' => [
-            'label' => 'Frisur',
+            'label' => 'hair_style',
             'items' => [
-                ['Kurz', null],
-                ['Glatze', null],
-                ['Lang', null],
-                ['Kopftuch', null],
-                ['Mütze', null],
+                [null, null],
+                [null, null],
+                [null, null],
+                [null, null],
+                [null, null],
             ],
         ],
         'hair_color' => [
-            'label' => 'Haarfarbe',
+            'label' => 'hair_color',
             'items' => [
-                ['Dunkelbraun', '#3a2c22'],
-                ['Schwarz', '#16120e'],
-                ['Braun', '#6a4a2c'],
-                ['Blond', '#b89a5a'],
-                ['Rotbraun', '#7a3a1e'],
-                ['Grau', '#8a8a84'],
+                [null, '#3a2c22'],
+                [null, '#16120e'],
+                [null, '#6a4a2c'],
+                [null, '#b89a5a'],
+                [null, '#7a3a1e'],
+                [null, '#8a8a84'],
             ],
         ],
         'top' => [
-            'label' => 'Oberteil',
+            'label' => 'top',
             'items' => [
-                ['Stahlblau', '#4f6272'],
-                ['Oliv', '#5a6a3c'],
-                ['Rostrot', '#7a4a3a'],
-                ['Khaki', '#7a6a4a'],
-                ['Grau', '#5a5a58'],
-                ['Dunkelbraun', '#4a3a2c'],
+                [null, '#4f6272'],
+                [null, '#5a6a3c'],
+                [null, '#7a4a3a'],
+                [null, '#7a6a4a'],
+                [null, '#5a5a58'],
+                [null, '#4a3a2c'],
             ],
         ],
         'pants' => [
-            'label' => 'Hose',
+            'label' => 'pants',
             'items' => [
-                ['Anthrazit', '#3c3a34'],
-                ['Schwarz', '#2e2c28'],
-                ['Braun', '#4a4234'],
-                ['Dunkelblau', '#3a4452'],
+                [null, '#3c3a34'],
+                [null, '#2e2c28'],
+                [null, '#4a4234'],
+                [null, '#3a4452'],
             ],
         ],
     ];
@@ -73,11 +73,11 @@ function readAppearance(array $source): array
 function renderAppearanceFields(array $selected): void
 {
     foreach (appearanceOptions() as $key => $group) {
-        echo '<fieldset class="portal-options"><legend class="nu-label">' . htmlspecialchars($group['label']) . '</legend><div class="portal-swatches">';
+        echo '<fieldset class="portal-options"><legend class="nu-label">' . th('appearance.group.' . $group['label']) . '</legend><div class="portal-swatches">';
 
-        foreach ($group['items'] as $index => [$label, $color]) {
+        foreach ($group['items'] as $index => [, $color]) {
             $checked = ($selected[$key] ?? 0) === $index ? ' checked' : '';
-            $title = htmlspecialchars($label);
+            $title = th('appearance.' . $key . '.' . $index);
             echo '<label class="portal-swatch" title="' . $title . '"><input type="radio" name="' . $key . '" value="' . $index . '"' . $checked . '>';
 
             if ($color !== null) {
