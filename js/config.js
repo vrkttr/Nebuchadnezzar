@@ -9,3 +9,7 @@ export function buildServerUrl(token) {
 export function getPortalUrl() {
   return `${window.location.protocol}//${window.location.hostname}:${PORTAL_PORT}/`;
 }
+
+export function getCreditsUrl() {
+  return `${getPortalUrl()}credits.php`;
+}

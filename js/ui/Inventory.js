@@ -28,6 +28,13 @@ export function createInventory(state, ui, handlers = {}) {
   function openMenu(event, index, slot, item) {
     const actions = [];
 
+    if (handlers.isVendorOpen?.() && item?.value > 0) {
+      actions.push({
+        label: `Verkaufen (${item.value * slot.quantity} Gold)`,
+        onSelect: () => handlers.onSell?.(index, slot.itemId),
+      });
+    }
+
     if (item?.slot) actions.push({ label: 'Ausrüsten', onSelect: () => handlers.onUse?.(index) });
     if (item?.use) actions.push({ label: 'Benutzen', onSelect: () => handlers.onUse?.(index) });
 
@@ -69,6 +76,15 @@ export function createInventory(state, ui, handlers = {}) {
     element.addEventListener('click', (event) => openMenu(event, index, slot, item));
     element.addEventListener('contextmenu', (event) => {
       event.preventDefault();
+
+      if (handlers.isVendorOpen?.()) {
+        if (item?.value > 0) {
+          ui.tooltip.hide();
+          handlers.onSell?.(index, slot.itemId);
+        }
+        return;
+      }
+
       if (item?.slot || item?.use) {
         ui.tooltip.hide();
         handlers.onUse?.(index);

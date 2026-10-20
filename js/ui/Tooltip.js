@@ -85,6 +85,10 @@ export function createTooltip(state) {
       lines.push([item.description, 'tooltip-desc']);
     }
 
+    if (item.value > 0) {
+      lines.push([`Verkaufswert: ${item.value} Gold`, 'tooltip-dim']);
+    }
+
     if (item.stackSize > 1) {
       lines.push([
         quantity ? `Stapel: ${quantity} / ${item.stackSize}` : `Max. Stapel: ${item.stackSize}`,

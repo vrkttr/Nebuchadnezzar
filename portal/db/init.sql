@@ -47,6 +47,15 @@ CREATE TABLE IF NOT EXISTS equipment_items (
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS character_quests (
+    character_id INT NOT NULL,
+    quest_id VARCHAR(64) NOT NULL,
+    status VARCHAR(16) NOT NULL,
+    progress VARCHAR(255) NOT NULL DEFAULT '[]',
+    PRIMARY KEY (character_id, quest_id),
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS login_tokens (
     token VARCHAR(64) PRIMARY KEY,
     character_id INT NOT NULL,

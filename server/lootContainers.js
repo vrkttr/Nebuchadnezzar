@@ -44,7 +44,7 @@ function takeEntry(container, entry, playerId, player, notify) {
 
   if (added <= 0) return 0;
 
-  player.inventoryVersion += 1;
+  player.dataVersion += 1;
   entry.quantity = remaining;
   notify(playerId, { type: 'event', kind: 'item', itemId: entry.itemId, quantity: added });
 

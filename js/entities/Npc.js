@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function createNpc(name, dialogue, color = 0x8a6d3b) {
+export function createNpc(name, color = 0x8a6d3b) {
   const npc = new THREE.Group();
   npc.name = name;
 
@@ -17,7 +17,6 @@ export function createNpc(name, dialogue, color = 0x8a6d3b) {
   npc.add(head);
 
   npc.userData.isNpc = true;
-  npc.userData.dialogue = dialogue;
 
   return npc;
 }

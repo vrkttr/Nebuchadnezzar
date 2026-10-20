@@ -1,6 +1,8 @@
 const SOUND_BASE_PATH = 'assets/audio/';
 const SOUND_EXTENSION = 'ogg';
-const MASTER_VOLUME = 0.8;
+const SETTINGS_KEY = 'nebu.audio';
+const DEFAULT_SETTINGS = { volume: 0.8, ambient: 1, muted: false };
+const AMBIENT_SOUND = 'ambient_wind';
 
 const SOUND_DEFINITIONS = {
   hit: { volume: 0.6, variation: 0.08 },
@@ -12,6 +14,8 @@ const SOUND_DEFINITIONS = {
   gold: { volume: 0.5, variation: 0.05 },
   loot_open: { volume: 0.5, variation: 0.05 },
   item_pickup: { volume: 0.5, variation: 0.06 },
+  quest_accept: { volume: 0.5 },
+  quest_complete: { volume: 0.6 },
   error: { volume: 0.4 },
   target_select: { volume: 0.4 },
   ambient_wind: { volume: 0.25, loop: true },
@@ -29,10 +33,64 @@ const EVENT_SOUNDS = {
   'ability-failed': 'error',
   'inventory-full': 'error',
   'loot-failed': 'error',
+  'quest-accepted': 'quest_accept',
+  'quest-ready': 'quest_accept',
+  'quest-completed': 'quest_complete',
+  purchased: 'gold',
+  sold: 'gold',
+  'quest-failed': 'error',
+  'npc-failed': 'error',
+  'vendor-failed': 'error',
 };
 
+function clampUnit(value, fallback) {
+  return typeof value === 'number' && Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : fallback;
+}
+
+function loadSettings() {
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(SETTINGS_KEY));
+
+    return {
+      volume: clampUnit(stored?.volume, DEFAULT_SETTINGS.volume),
+      ambient: clampUnit(stored?.ambient, DEFAULT_SETTINGS.ambient),
+      muted: Boolean(stored?.muted),
+    };
+  } catch {
+    return { ...DEFAULT_SETTINGS };
+  }
+}
+
+function saveSettings(settings) {
+  try {
+    window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch {
+    return;
+  }
+}
+
 function createSilentAudio() {
-  return { play() {}, playEvent() {}, playDamage() {}, startAmbient() {} };
+  const settings = loadSettings();
+
+  return {
+    play() {},
+    playEvent() {},
+    playDamage() {},
+    startAmbient() {},
+    getSettings: () => ({ ...settings }),
+    setVolume(value) {
+      settings.volume = clampUnit(value, settings.volume);
+      saveSettings(settings);
+    },
+    setAmbientVolume(value) {
+      settings.ambient = clampUnit(value, settings.ambient);
+      saveSettings(settings);
+    },
+    setMuted(value) {
+      settings.muted = Boolean(value);
+      saveSettings(settings);
+    },
+  };
 }
 
 export function createAudio() {
@@ -43,7 +101,10 @@ export function createAudio() {
     return createSilentAudio();
   }
 
-  window.Howler.volume(MASTER_VOLUME);
+  const settings = loadSettings();
+
+  window.Howler.volume(settings.volume);
+  window.Howler.mute(settings.muted);
 
   const sounds = new Map();
 
@@ -52,7 +113,7 @@ export function createAudio() {
       name,
       new Howl({
         src: [`${SOUND_BASE_PATH}${name}.${SOUND_EXTENSION}`],
-        volume: definition.volume,
+        volume: name === AMBIENT_SOUND ? definition.volume * settings.ambient : definition.volume,
         loop: Boolean(definition.loop),
         preload: true,
       })
@@ -87,11 +148,38 @@ export function createAudio() {
   }
 
   function startAmbient() {
-    const ambient = sounds.get('ambient_wind');
+    const ambient = sounds.get(AMBIENT_SOUND);
     if (ambient && !ambient.playing()) {
       ambient.play();
     }
   }
 
-  return { play, playEvent, playDamage, startAmbient };
+  function setVolume(value) {
+    settings.volume = clampUnit(value, settings.volume);
+    window.Howler.volume(settings.volume);
+    saveSettings(settings);
+  }
+
+  function setAmbientVolume(value) {
+    settings.ambient = clampUnit(value, settings.ambient);
+    sounds.get(AMBIENT_SOUND).volume(SOUND_DEFINITIONS[AMBIENT_SOUND].volume * settings.ambient);
+    saveSettings(settings);
+  }
+
+  function setMuted(value) {
+    settings.muted = Boolean(value);
+    window.Howler.mute(settings.muted);
+    saveSettings(settings);
+  }
+
+  return {
+    play,
+    playEvent,
+    playDamage,
+    startAmbient,
+    getSettings: () => ({ ...settings }),
+    setVolume,
+    setAmbientVolume,
+    setMuted,
+  };
 }

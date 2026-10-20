@@ -22,10 +22,14 @@ const [
   { createInventory },
   { createLootWindow },
   { createLootMarkers },
+  { createNpcs },
+  { createNpcWindow },
+  { createVendorWindow },
+  { createMenuWindow },
   { createHud },
   { createAudio },
   { gameState },
-  { buildServerUrl, getPortalUrl },
+  { buildServerUrl, getCreditsUrl, getPortalUrl },
 ] = await Promise.all([
   import('three'),
   import(v('./core/Renderer.js')),
@@ -47,6 +51,10 @@ const [
   import(v('./ui/Inventory.js')),
   import(v('./ui/LootWindow.js')),
   import(v('./entities/LootMarkers.js')),
+  import(v('./entities/Npcs.js')),
+  import(v('./ui/NpcWindow.js')),
+  import(v('./ui/VendorWindow.js')),
+  import(v('./ui/MenuWindow.js')),
   import(v('./hud/Hud.js')),
   import(v('./audio/Audio.js')),
   import(v('./state/GameState.js')),
@@ -56,7 +64,7 @@ const [
 function start(token) {
   const renderer = createRenderer();
   const scene = createScene();
-  const { spawnPoint, npcs } = createTestZone(scene);
+  const { spawnPoint } = createTestZone(scene);
 
   const dialogue = createDialogue();
   const audio = createAudio();
@@ -75,9 +83,23 @@ function start(token) {
     ui,
   });
 
+  const npcWindow = createNpcWindow(gameState, ui, {
+    onAccept: (npcId, questId) => connection.send({ type: 'quest-accept', npcId, questId }),
+    onComplete: (npcId, questId) => connection.send({ type: 'quest-complete', npcId, questId }),
+    onVendor: (npcId) => connection.send({ type: 'vendor-open', npcId }),
+  });
+  const vendorWindow = createVendorWindow(gameState, ui, {
+    onBuy: (npcId, itemId, quantity) =>
+      connection.send({ type: 'vendor-buy', npcId, itemId, quantity }),
+  });
+  const menuWindow = createMenuWindow(audio, getCreditsUrl());
+
   const inventory = createInventory(gameState, ui, {
     onUse: (slot) => connection.send({ type: 'item-use', slot }),
     onDestroy: (slot, itemId) => connection.send({ type: 'item-destroy', slot, itemId }),
+    onSell: (slot, itemId) =>
+      connection.send({ type: 'vendor-sell', npcId: vendorWindow.currentNpcId(), slot, itemId }),
+    isVendorOpen: () => vendorWindow.isOpen(),
   });
   const characterWindow = createCharacterWindow(gameState, ui, {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
@@ -96,6 +118,7 @@ function start(token) {
   let ownTargetRotationY = 0;
   const SMOOTHING = 12;
   const LOOT_CLOSE_RANGE = 6;
+  const NPC_CLOSE_RANGE = 6;
 
   const camera = new THREE.PerspectiveCamera(
     60,
@@ -109,6 +132,7 @@ function start(token) {
   const nameplateContainer = document.getElementById('nameplates');
   const remotePlayers = createRemotePlayers(scene, camera, nameplateContainer);
   const enemies = createEnemies(scene, camera, nameplateContainer);
+  const npcs = createNpcs(scene, camera, nameplateContainer);
 
   let ownPlayerId = null;
 
@@ -117,10 +141,19 @@ function start(token) {
       if (message.type === 'init') {
         ownPlayerId = message.id;
         enemies.sync(message.enemies ?? []);
+        npcs.sync(message.npcs ?? []);
         hud.setAbilities(message.abilities ?? []);
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
         characterWindow.render(message.equipment ?? {});
+      } else if (message.type === 'quests') {
+        hud.setQuests(message);
+        npcs.setMarkers(message.markers ?? {});
+      } else if (message.type === 'npc-window') {
+        npcWindow.show(message);
+      } else if (message.type === 'vendor-window') {
+        npcWindow.hide();
+        vendorWindow.show(message);
       } else if (message.type === 'equipment') {
         characterWindow.render(message.slots ?? {});
       } else if (message.type === 'inventory') {
@@ -218,7 +251,7 @@ function start(token) {
 
     raycaster.setFromCamera(pointer, camera);
     const intersections = raycaster.intersectObjects(
-      [...npcs, ...enemies.getObjects(), ...lootMarkers.getObjects()],
+      [...npcs.getObjects(), ...enemies.getObjects(), ...lootMarkers.getObjects()],
       true
     );
 
@@ -231,7 +264,7 @@ function start(token) {
     if (!target) return;
 
     if (target.userData.isNpc) {
-      dialogue.show(target.userData.dialogue);
+      connection.send({ type: 'npc-interact', npcId: target.userData.npcId });
     } else if (target.userData.isLoot) {
       connection.send({ type: 'loot-open', lootId: target.userData.lootId });
     } else if (target.userData.isEnemy) {
@@ -285,16 +318,36 @@ function start(token) {
         return;
       }
 
-      if (lootWindow.isOpen() || inventory.isOpen() || characterWindow.isOpen()) {
+      if (
+        menuWindow.isOpen() ||
+        npcWindow.isOpen() ||
+        vendorWindow.isOpen() ||
+        lootWindow.isOpen() ||
+        inventory.isOpen() ||
+        characterWindow.isOpen()
+      ) {
+        menuWindow.hide();
+        npcWindow.hide();
+        vendorWindow.hide();
         lootWindow.hide();
         inventory.hide();
         characterWindow.hide();
         return;
       }
 
-      gameState.target = null;
-      enemies.clearSelection();
-      connection.send({ type: 'target', enemyId: null });
+      if (gameState.target) {
+        gameState.target = null;
+        enemies.clearSelection();
+        connection.send({ type: 'target', enemyId: null });
+        return;
+      }
+
+      menuWindow.toggle();
+      return;
+    }
+
+    if (event.code === 'KeyM' && !event.repeat) {
+      menuWindow.toggle();
       return;
     }
 
@@ -330,7 +383,20 @@ function start(token) {
     enemies.update(delta);
     lootMarkers.update(delta);
 
+    npcs.update();
+
     if (characterWindow.isOpen()) characterWindow.update();
+
+    for (const dialogWindow of [npcWindow, vendorWindow]) {
+      if (!dialogWindow.isOpen()) continue;
+
+      const npcPosition = npcs.getPosition(dialogWindow.currentNpcId());
+      if (!npcPosition || player.object.position.distanceTo(npcPosition) > NPC_CLOSE_RANGE) {
+        dialogWindow.hide();
+      }
+    }
+
+    if (vendorWindow.isOpen()) vendorWindow.update();
 
     if (lootWindow.isOpen()) {
       const lootPosition = lootMarkers.getPosition(lootWindow.currentId());

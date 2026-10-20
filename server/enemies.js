@@ -1,15 +1,18 @@
 import { ENEMY_MELEE_RANGE } from './combat.js';
+import { ENEMY_RADIUS, resolveCollisions } from './world.js';
 
 const SPAWNS = [
-  { name: 'Plünderer', level: 1, x: 10, y: 0, z: -9, healthMax: 60, lootTable: 'raider' },
-  { name: 'Plünderer', level: 1, x: 12, y: 0, z: -7, healthMax: 60, lootTable: 'raider' },
-  { name: 'Plünderer', level: 2, x: 8, y: 0, z: -11, healthMax: 80, lootTable: 'raider' },
+  { type: 'raider', name: 'Plünderer', level: 1, x: 10, y: 0, z: -9, healthMax: 60, lootTable: 'raider' },
+  { type: 'raider', name: 'Plünderer', level: 1, x: 12, y: 0, z: -7, healthMax: 60, lootTable: 'raider' },
+  { type: 'raider', name: 'Plünderer', level: 2, x: 8, y: 0, z: -11, healthMax: 80, lootTable: 'raider' },
 ];
 
 const AGGRO_RANGE = 8;
 const LEASH_RANGE = 20;
 const MOVE_SPEED = 3;
 const HOME_TOLERANCE = 0.15;
+const STUCK_PROGRESS_RATIO = 0.2;
+const STUCK_LIMIT = 3;
 
 export function createEnemies() {
   const enemies = new Map();
@@ -18,6 +21,7 @@ export function createEnemies() {
     const id = `enemy-${index + 1}`;
     enemies.set(id, {
       id,
+      type: spawn.type,
       name: spawn.name,
       level: spawn.level,
       lootTable: spawn.lootTable,
@@ -34,6 +38,7 @@ export function createEnemies() {
       dead: false,
       respawnTimer: 0,
       attackTimer: 0,
+      stuckTimer: 0,
     });
   });
 
@@ -89,6 +94,14 @@ function findNearestPlayerInRange(enemy, players, range) {
   return nearestId;
 }
 
+function trackProgress(enemy, distanceBefore, distanceAfter, delta) {
+  if (distanceBefore - distanceAfter < MOVE_SPEED * delta * STUCK_PROGRESS_RATIO) {
+    enemy.stuckTimer += delta;
+  } else {
+    enemy.stuckTimer = 0;
+  }
+}
+
 function moveToward(enemy, targetX, targetZ, delta) {
   const dx = targetX - enemy.x;
   const dz = targetZ - enemy.z;
@@ -113,6 +126,7 @@ export function updateEnemies(enemies, players, delta) {
       if (targetId) {
         enemy.state = 'chase';
         enemy.targetPlayerId = targetId;
+        enemy.stuckTimer = 0;
       }
     } else if (enemy.state === 'chase') {
       const target = players.get(enemy.targetPlayerId);
@@ -121,6 +135,7 @@ export function updateEnemies(enemies, players, delta) {
       if (!target || target.dead || distanceFromSpawn > LEASH_RANGE) {
         enemy.state = 'return';
         enemy.targetPlayerId = null;
+        enemy.stuckTimer = 0;
         continue;
       }
 
@@ -128,17 +143,40 @@ export function updateEnemies(enemies, players, delta) {
 
       if (distanceToTarget > ENEMY_MELEE_RANGE) {
         moveToward(enemy, target.x, target.z, delta);
+        resolveCollisions(enemy, ENEMY_RADIUS);
+        trackProgress(
+          enemy,
+          distanceToTarget,
+          horizontalDistance(enemy.x, enemy.z, target.x, target.z),
+          delta
+        );
+
+        if (enemy.stuckTimer >= STUCK_LIMIT) {
+          enemy.state = 'return';
+          enemy.targetPlayerId = null;
+          enemy.stuckTimer = 0;
+        }
       } else {
+        enemy.stuckTimer = 0;
         enemy.rotationY = Math.atan2(target.x - enemy.x, target.z - enemy.z);
       }
     } else if (enemy.state === 'return') {
+      const distanceBefore = horizontalDistance(enemy.x, enemy.z, enemy.spawnX, enemy.spawnZ);
       const remaining = moveToward(enemy, enemy.spawnX, enemy.spawnZ, delta);
+      resolveCollisions(enemy, ENEMY_RADIUS);
+      trackProgress(
+        enemy,
+        distanceBefore,
+        horizontalDistance(enemy.x, enemy.z, enemy.spawnX, enemy.spawnZ),
+        delta
+      );
 
-      if (remaining <= HOME_TOLERANCE) {
+      if (remaining <= HOME_TOLERANCE || enemy.stuckTimer >= STUCK_LIMIT) {
         enemy.x = enemy.spawnX;
         enemy.z = enemy.spawnZ;
         enemy.state = 'idle';
         enemy.health = enemy.healthMax;
+        enemy.stuckTimer = 0;
       }
     }
   }

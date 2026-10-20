@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { createNpc } from '../entities/Npc.js';
 
 export function createTestZone(scene) {
   const zoneGroup = new THREE.Group();
@@ -14,19 +13,11 @@ export function createTestZone(scene) {
   zoneGroup.add(...createBarricade());
   zoneGroup.add(createWatchtower());
 
-  const npc = createNpc(
-    'Streuner',
-    'Bleib in Deckung, Fremder. Draussen im Oedland ueberlebt nicht jeder die Nacht.',
-    0x5a5240
-  );
-  npc.position.set(-1.5, 0, -2.5);
-  zoneGroup.add(npc);
-
   scene.add(zoneGroup);
 
   const spawnPoint = new THREE.Vector3(0, 0, 0);
 
-  return { zoneGroup, spawnPoint, npcs: [npc] };
+  return { zoneGroup, spawnPoint };
 }
 
 function createGround() {

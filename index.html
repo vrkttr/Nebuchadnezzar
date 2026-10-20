@@ -686,6 +686,260 @@
       margin: 0 8px 8px;
     }
 
+    .nameplate-npc {
+      color: #8fc96a;
+    }
+
+    .npc-marker {
+      margin-right: 4px;
+      color: var(--c-border-bright);
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .quest-entry {
+      margin-bottom: 8px;
+      font-family: var(--font-ui);
+      font-size: 12px;
+    }
+
+    .quest-title {
+      margin-bottom: 2px;
+      color: var(--c-border-bright);
+      font-weight: bold;
+    }
+
+    .quest-objective.done {
+      color: #5fbf6a;
+    }
+
+    .quest-ready {
+      color: var(--c-border-bright);
+      font-style: italic;
+    }
+
+    #npc-window {
+      left: 50%;
+      top: 22%;
+      width: 380px;
+      transform: translateX(-50%);
+    }
+
+    #npc-body {
+      padding: 12px 14px 14px;
+    }
+
+    .npc-text {
+      margin: 0 0 12px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .npc-options {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .npc-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--c-bg-panel-solid);
+      color: var(--c-text);
+      border: 1px solid var(--c-border);
+      border-radius: 2px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .npc-option:hover {
+      border-color: var(--c-border-bright);
+    }
+
+    .npc-option-marker {
+      width: 14px;
+      color: var(--c-border-bright);
+      font-family: var(--font-display);
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .npc-option-active,
+    .npc-option-active .npc-option-marker,
+    .npc-option-leave {
+      color: var(--c-text-dim);
+    }
+
+    .npc-objectives {
+      margin: 0 0 10px;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+
+    .npc-objectives .done {
+      color: #5fbf6a;
+    }
+
+    .npc-hint {
+      margin: 0 0 10px;
+      color: var(--c-text-dim);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .npc-rewards {
+      margin-bottom: 12px;
+      padding-top: 8px;
+      border-top: 1px solid var(--c-border);
+    }
+
+    .npc-rewards-title {
+      margin-bottom: 4px;
+      color: var(--c-border-bright);
+      font-family: var(--font-display);
+      font-size: 12px;
+    }
+
+    .npc-reward-line {
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .npc-reward-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .npc-reward-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      box-sizing: border-box;
+      background: var(--c-slot-bg);
+      border: 1px solid var(--c-border);
+      font-family: var(--font-display);
+      font-size: 12px;
+    }
+
+    .npc-reward-icon .icon {
+      box-sizing: border-box;
+      padding: 2px;
+    }
+
+    .npc-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    #vendor-window {
+      left: 16px;
+      top: 120px;
+      width: 290px;
+    }
+
+    #vendor-gold {
+      padding: 6px 12px 0;
+      color: var(--c-border-bright);
+      font-family: var(--font-display);
+      font-size: 12px;
+    }
+
+    #vendor-stock {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 280px;
+      padding: 8px;
+      overflow-y: auto;
+    }
+
+    .vendor-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 4px 6px;
+      background: var(--c-bg-panel-solid);
+      color: var(--c-text);
+      border: 1px solid var(--c-border);
+      border-radius: 2px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .vendor-row:hover {
+      border-color: var(--c-border-bright);
+    }
+
+    .vendor-price {
+      color: var(--c-border-bright);
+      font-family: var(--font-display);
+    }
+
+    .vendor-price.too-expensive {
+      color: #d05040;
+    }
+
+    .window-hint {
+      margin: 0;
+      padding: 0 12px 10px;
+      color: var(--c-text-dim);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    #menu-window {
+      left: 50%;
+      top: 30%;
+      z-index: 40;
+      width: 300px;
+      transform: translateX(-50%);
+    }
+
+    .menu-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+
+    .menu-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4px 8px;
+      align-items: center;
+    }
+
+    .menu-row input[type='range'] {
+      grid-column: 1 / -1;
+      width: 100%;
+      accent-color: var(--c-border-bright);
+    }
+
+    .menu-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #menu-credits {
+      color: var(--c-border-bright);
+    }
+
     .icon {
       display: block;
       width: 100%;
@@ -1039,6 +1293,45 @@
     <button id="loot-take-all" class="window-button">Alles nehmen</button>
   </div>
 
+  <div id="npc-window" class="window hidden">
+    <div class="window-header">
+      <span id="npc-title" class="window-title">Gespräch</span>
+      <button id="npc-close" class="window-close" title="Schließen">×</button>
+    </div>
+    <div id="npc-body"></div>
+  </div>
+
+  <div id="vendor-window" class="window hidden">
+    <div class="window-header">
+      <span id="vendor-title" class="window-title">Händler</span>
+      <button id="vendor-close" class="window-close" title="Schließen">×</button>
+    </div>
+    <div id="vendor-gold"></div>
+    <div id="vendor-stock"></div>
+    <p class="window-hint">Klick: 1 kaufen. Umschalt+Klick: bis zu 5 kaufen. Rechtsklick auf Gegenstände im Rucksack verkauft sie.</p>
+  </div>
+
+  <div id="menu-window" class="window hidden">
+    <div class="window-header">
+      <span class="window-title">Menü</span>
+      <button id="menu-close" class="window-close" title="Schließen">×</button>
+    </div>
+    <div class="menu-body">
+      <div class="menu-row">
+        <label for="menu-volume">Gesamtlautstärke</label>
+        <span id="menu-volume-value"></span>
+        <input id="menu-volume" type="range" min="0" max="100" step="1">
+      </div>
+      <div class="menu-row">
+        <label for="menu-ambient">Umgebung</label>
+        <span id="menu-ambient-value"></span>
+        <input id="menu-ambient" type="range" min="0" max="100" step="1">
+      </div>
+      <label class="menu-check"><input id="menu-muted" type="checkbox"> Ton aus</label>
+      <a id="menu-credits" href="#" target="_blank" rel="noopener">Credits</a>
+    </div>
+  </div>
+
   <div id="character-window" class="window hidden">
     <div class="window-header">
       <span class="window-title">Charakter</span>
@@ -1060,6 +1353,6 @@
   <div id="tooltip" class="hidden"></div>
 
   <script src="js/vendor/howler.min.js"></script>
-  <script type="module" src="js/main.js?v=23"></script>
+  <script type="module" src="js/main.js?v=24"></script>
 </body>
 </html>

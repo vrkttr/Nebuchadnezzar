@@ -9,6 +9,7 @@ export const ITEMS = {
     level: 1,
     stackSize: 20,
     description: 'Verrostete Metallteile.',
+    value: 1,
   },
   rag_bundle: {
     id: 'rag_bundle',
@@ -20,6 +21,7 @@ export const ITEMS = {
     level: 1,
     stackSize: 20,
     description: 'Zerrissene Stoffstücke.',
+    value: 1,
   },
   canned_food: {
     id: 'canned_food',
@@ -32,6 +34,7 @@ export const ITEMS = {
     stackSize: 10,
     description: 'Verschlossen und noch genießbar.',
     use: { heal: 30 },
+    value: 3,
   },
   rusty_pipe: {
     id: 'rusty_pipe',
@@ -45,6 +48,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Schwer und stumpf.',
     stats: { damageMin: 2, damageMax: 4 },
+    value: 12,
   },
   scrap_helmet: {
     id: 'scrap_helmet',
@@ -58,6 +62,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Ein Bergbauhelm, notdürftig verstärkt.',
     stats: { armor: 2 },
+    value: 10,
   },
   padded_vest: {
     id: 'padded_vest',
@@ -71,6 +76,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Mehrere Lagen Stoff mit eingenähten Platten.',
     stats: { armor: 4 },
+    value: 18,
   },
   patched_trousers: {
     id: 'patched_trousers',
@@ -84,6 +90,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Oft genäht, noch immer dicht.',
     stats: { armor: 3 },
+    value: 8,
   },
 };
 

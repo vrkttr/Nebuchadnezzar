@@ -1,6 +1,6 @@
 import { ABILITIES, DEFAULT_ACTION_BAR, createCooldownState } from './abilities.js';
 import { applyEquipmentStats } from './equipment.js';
-import { goldForKill } from './loot.js';
+import { addGold, goldForKill } from './loot.js';
 import { applyLevelStats, grantXp, xpForKill } from './progression.js';
 
 const PLAYER_ATTACK_RANGE = 3;
@@ -119,7 +119,7 @@ function awardKill(player, playerId, enemy, notify, onKill) {
     notify(playerId, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: enemy.name });
   }
 
-  player.gold += goldAmount;
+  addGold(player, goldAmount);
   notify(playerId, { type: 'event', kind: 'gold', amount: goldAmount });
 
   if (levelsGained > 0) {

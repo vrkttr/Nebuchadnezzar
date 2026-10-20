@@ -1,3 +1,5 @@
+export const MAX_GOLD = 2000000000;
+
 const GOLD_PER_LEVEL_MIN = 2;
 const GOLD_PER_LEVEL_MAX = 5;
 
@@ -26,6 +28,10 @@ export function goldForKill(playerLevel, enemyLevel) {
   const base = randomInt(enemyLevel * GOLD_PER_LEVEL_MIN, enemyLevel * GOLD_PER_LEVEL_MAX);
 
   return Math.max(1, Math.round(base * levelFactor(playerLevel, enemyLevel)));
+}
+
+export function addGold(player, amount) {
+  player.gold = Math.max(0, Math.min(MAX_GOLD, player.gold + amount));
 }
 
 export function rollLoot(tableId, playerLevel, enemyLevel) {

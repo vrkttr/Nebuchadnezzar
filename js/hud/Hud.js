@@ -19,6 +19,26 @@ const ITEM_FAILURE_TEXT = {
   'not-usable': 'Dieser Gegenstand kann nicht benutzt werden.',
 };
 
+const QUEST_FAILURE_TEXT = {
+  invalid: 'Diese Mission ist nicht verfügbar.',
+  unavailable: 'Diese Mission kannst du derzeit nicht annehmen.',
+  'not-ready': 'Die Ziele sind noch nicht erfüllt.',
+  'inventory-full': 'Dein Inventar ist zu voll für die Belohnung.',
+  'log-full': 'Dein Missionslog ist voll.',
+};
+
+const NPC_FAILURE_TEXT = {
+  'too-far': 'Du bist zu weit entfernt.',
+  gone: 'Diese Person ist nicht mehr da.',
+};
+
+const VENDOR_FAILURE_TEXT = {
+  'no-gold': 'Nicht genug Gold.',
+  'inventory-full': 'Dein Inventar ist voll.',
+  'not-sellable': 'Das kauft der Händler nicht.',
+  invalid: 'Das ist nicht im Angebot.',
+};
+
 const LOOT_FAILURE_TEXT = {
   gone: 'Diese Beute ist nicht mehr verfügbar.',
   'not-yours': 'Diese Beute gehört dir nicht.',
@@ -36,6 +56,7 @@ export function createHud(state, handlers = {}) {
   const goldAmount = document.getElementById('gold-amount');
   const zoneName = document.getElementById('zone-name');
   const chatMessages = document.getElementById('chat-messages');
+  const questList = document.getElementById('quest-list');
   const slotElements = Array.from(document.querySelectorAll('#action-bar .action-slot'));
   const abilitySlots = [];
 
@@ -94,6 +115,49 @@ export function createHud(state, handlers = {}) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
+  function setQuests(payload) {
+    if (payload.quests.length === 0) {
+      questList.className = 'empty-state';
+      questList.replaceChildren('Keine aktiven Missionen');
+      return;
+    }
+
+    questList.className = '';
+
+    questList.replaceChildren(
+      ...payload.quests.map((quest) => {
+        const entry = document.createElement('div');
+        entry.className = 'quest-entry';
+
+        const title = document.createElement('div');
+        title.className = 'quest-title';
+        title.textContent = quest.name;
+        entry.appendChild(title);
+
+        for (const objective of quest.objectives) {
+          const line = document.createElement('div');
+          line.className =
+            objective.current >= objective.target ? 'quest-objective done' : 'quest-objective';
+          line.textContent = `${objective.label}: ${objective.current}/${objective.target}`;
+          entry.appendChild(line);
+        }
+
+        if (quest.ready) {
+          const ready = document.createElement('div');
+          ready.className = 'quest-ready';
+          ready.textContent = `Abgabe bei ${quest.turnInName}`;
+          entry.appendChild(ready);
+        }
+
+        return entry;
+      })
+    );
+  }
+
+  function itemName(itemId) {
+    return state.items[itemId]?.name ?? itemId;
+  }
+
   function addEvent(event) {
     if (event.kind === 'xp') {
       addMessage(`+${event.amount} Erfahrung (${event.enemyName})`);
@@ -114,6 +178,26 @@ export function createHud(state, handlers = {}) {
       addMessage(`Zerstört: ${state.items[event.itemId]?.name ?? event.itemId}${suffix}`);
     } else if (event.kind === 'item-failed') {
       addMessage(ITEM_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+    } else if (event.kind === 'quest-accepted') {
+      addMessage(`Mission angenommen: ${event.name}`);
+    } else if (event.kind === 'quest-progress') {
+      addMessage(`${event.label}: ${event.current}/${event.target}`);
+    } else if (event.kind === 'quest-ready') {
+      addMessage(`Mission bereit zur Abgabe: ${event.name}`);
+    } else if (event.kind === 'quest-completed') {
+      addMessage(`Mission abgeschlossen: ${event.name}`);
+    } else if (event.kind === 'quest-failed') {
+      addMessage(QUEST_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+    } else if (event.kind === 'npc-failed') {
+      addMessage(NPC_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+    } else if (event.kind === 'vendor-failed') {
+      addMessage(VENDOR_FAILURE_TEXT[event.reason] ?? 'Aktion nicht möglich.');
+    } else if (event.kind === 'purchased') {
+      const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
+      addMessage(`Gekauft: ${itemName(event.itemId)}${suffix} (-${event.cost} Gold)`);
+    } else if (event.kind === 'sold') {
+      const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
+      addMessage(`Verkauft: ${itemName(event.itemId)}${suffix} (+${event.gold} Gold)`);
     } else if (event.kind === 'inventory-full') {
       addMessage('Dein Inventar ist voll.');
     } else if (event.kind === 'loot-failed') {
@@ -164,5 +248,5 @@ export function createHud(state, handlers = {}) {
     }
   }
 
-  return { update, setAbilities, addEvent };
+  return { update, setAbilities, setQuests, addEvent };
 }

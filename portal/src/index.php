@@ -39,5 +39,6 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
 <?php else: ?>
 <p><a href="login.php">Login</a> | <a href="register.php">Registrieren</a></p>
 <?php endif; ?>
+<p><a href="credits.php">Credits</a></p>
 </body>
 </html>

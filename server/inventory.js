@@ -43,6 +43,41 @@ export function addItem(inventory, itemId, quantity) {
   return remaining;
 }
 
+export function cloneInventory(inventory) {
+  return inventory.map((slot) => (slot ? { ...slot } : null));
+}
+
+export function countItem(inventory, itemId) {
+  let total = 0;
+
+  for (const slot of inventory) {
+    if (slot && slot.itemId === itemId) total += slot.quantity;
+  }
+
+  return total;
+}
+
+export function removeItem(inventory, itemId, quantity) {
+  let remaining = quantity;
+
+  for (let index = inventory.length - 1; index >= 0 && remaining > 0; index -= 1) {
+    const slot = inventory[index];
+    if (!slot || slot.itemId !== itemId) continue;
+
+    const taken = Math.min(slot.quantity, remaining);
+    slot.quantity -= taken;
+    remaining -= taken;
+
+    if (slot.quantity === 0) inventory[index] = null;
+  }
+
+  return quantity - remaining;
+}
+
+export function sendInventory(notify, playerId, player) {
+  notify(playerId, { type: 'inventory', slots: serializeInventory(player.inventory) });
+}
+
 export function serializeInventory(inventory) {
   return inventory.map((slot) => (slot ? { itemId: slot.itemId, quantity: slot.quantity } : null));
 }

@@ -9,7 +9,7 @@ function fail(notify, playerId, reason) {
 }
 
 function sync(notify, playerId, player) {
-  player.inventoryVersion += 1;
+  player.dataVersion += 1;
   notify(playerId, { type: 'inventory', slots: serializeInventory(player.inventory) });
   notify(playerId, { type: 'equipment', slots: serializeEquipment(player.equipment) });
 }

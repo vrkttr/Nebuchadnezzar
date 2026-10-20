@@ -9,6 +9,17 @@ import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
 import { equipmentRows, loadEquipment, serializeEquipment } from './equipment.js';
 import { destroyInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
+import { serializeNpcs } from './npcs.js';
+import {
+  acceptNpcQuest,
+  buyFromVendor,
+  completeNpcQuest,
+  openNpc,
+  openVendor,
+  sellToVendor,
+} from './npcInteraction.js';
+import { diffQuestLog, loadQuests, questRows, recordKill, serializeQuestLog } from './quests.js';
+import { PLAYER_RADIUS, resolveCollisions } from './world.js';
 import {
   createLootContainers,
   openLoot,
@@ -52,11 +63,12 @@ function notify(playerId, message) {
 }
 
 function onKill(playerId, player, enemy) {
+  recordKill(player, enemy);
   spawnLootForKill(lootContainers, playerId, player, enemy, notify);
 }
 
 function createInitialState(character) {
-  return {
+  const state = {
     characterId: character.id,
     characterName: character.name,
     x: character.x,
@@ -68,11 +80,18 @@ function createInitialState(character) {
     input: { moveX: 0, moveZ: 0, jump: false },
     inventory: character.inventory,
     consumableReadyAt: 0,
-    inventoryVersion: 0,
-    savedInventoryVersion: 0,
+    dataVersion: 0,
+    savedDataVersion: 0,
     saveQueue: Promise.resolve(),
+    quests: character.quests,
+    questView: null,
+    questViewKey: '',
     ...createCombatState(character),
   };
+
+  resolveCollisions(state, PLAYER_RADIUS);
+
+  return state;
 }
 
 async function resolveCharacterFromToken(token) {
@@ -108,6 +127,11 @@ async function resolveCharacterFromToken(token) {
     [characterId]
   );
 
+  const [savedQuestRows] = await dbPool.query(
+    'SELECT quest_id, status, progress FROM character_quests WHERE character_id = ?',
+    [characterId]
+  );
+
   return {
     id: row.id,
     name: row.name,
@@ -120,34 +144,40 @@ async function resolveCharacterFromToken(token) {
     gold: row.gold,
     inventory: loadInventory(savedItemRows),
     equipment: loadEquipment(savedEquipmentRows),
+    quests: loadQuests(savedQuestRows),
   };
 }
 
 async function writeState(state) {
+  const dataVersion = state.dataVersion;
   const items = inventoryRows(state.inventory);
   const equipped = equipmentRows(state.equipment);
-  const inventoryVersion = state.inventoryVersion;
+  const quests = questRows(state.quests);
 
-  await dbPool.query(
-    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ? WHERE id = ?',
-    [
-      state.x,
-      state.y,
-      state.z,
-      state.rotationY,
-      state.level,
-      Math.floor(state.xp),
-      state.gold,
-      state.characterId,
-    ]
-  );
+  const characterQuery =
+    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ? WHERE id = ?';
+  const characterParams = [
+    state.x,
+    state.y,
+    state.z,
+    state.rotationY,
+    state.level,
+    Math.floor(state.xp),
+    state.gold,
+    state.characterId,
+  ];
 
-  if (inventoryVersion === state.savedInventoryVersion) return;
+  if (dataVersion === state.savedDataVersion) {
+    await dbPool.query(characterQuery, characterParams);
+    return;
+  }
 
   const connection = await dbPool.getConnection();
 
   try {
     await connection.beginTransaction();
+    await connection.query(characterQuery, characterParams);
+
     await connection.query('DELETE FROM inventory_items WHERE character_id = ?', [state.characterId]);
 
     if (items.length > 0) {
@@ -165,8 +195,17 @@ async function writeState(state) {
       ]);
     }
 
+    await connection.query('DELETE FROM character_quests WHERE character_id = ?', [state.characterId]);
+
+    if (quests.length > 0) {
+      await connection.query(
+        'INSERT INTO character_quests (character_id, quest_id, status, progress) VALUES ?',
+        [quests.map(([questId, status, progress]) => [state.characterId, questId, status, progress])]
+      );
+    }
+
     await connection.commit();
-    state.savedInventoryVersion = inventoryVersion;
+    state.savedDataVersion = dataVersion;
   } catch (error) {
     await connection.rollback();
     throw error;
@@ -207,6 +246,7 @@ wss.on('connection', async (socket, request) => {
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),
+      npcs: serializeNpcs(),
     })
   );
 
@@ -297,6 +337,35 @@ wss.on('connection', async (socket, request) => {
       if (!state || typeof message.slot !== 'string') return;
 
       unequipItem(id, state, message.slot, notify);
+    } else if (message.type === 'npc-interact') {
+      const state = players.get(id);
+      if (state) openNpc(state, id, message.npcId, notify);
+    } else if (message.type === 'quest-accept') {
+      const state = players.get(id);
+      if (state && typeof message.questId === 'string') {
+        acceptNpcQuest(state, id, message.npcId, message.questId, notify);
+      }
+    } else if (message.type === 'quest-complete') {
+      const state = players.get(id);
+      if (state && typeof message.questId === 'string') {
+        completeNpcQuest(state, id, message.npcId, message.questId, notify);
+      }
+    } else if (message.type === 'vendor-open') {
+      const state = players.get(id);
+      if (state) openVendor(state, id, message.npcId, notify);
+    } else if (message.type === 'vendor-buy') {
+      const state = players.get(id);
+      if (!state || typeof message.itemId !== 'string') return;
+
+      buyFromVendor(state, id, message.npcId, message.itemId, Number(message.quantity), notify);
+    } else if (message.type === 'vendor-sell') {
+      const state = players.get(id);
+      if (!state || typeof message.itemId !== 'string') return;
+
+      const slot = Number.parseInt(message.slot, 10);
+      if (!Number.isInteger(slot)) return;
+
+      sellToVendor(state, id, message.npcId, slot, message.itemId, notify);
     }
   });
 
@@ -347,6 +416,8 @@ function simulate() {
     state.velocityY -= GRAVITY * TICK_DELTA;
     state.y += state.velocityY * TICK_DELTA;
 
+    resolveCollisions(state, PLAYER_RADIUS);
+
     if (state.y <= GROUND_Y) {
       state.y = GROUND_Y;
       state.velocityY = 0;
@@ -380,6 +451,19 @@ setInterval(() => {
   broadcast({ type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
 
   for (const [id, state] of players) {
+    const questView = serializeQuestLog(state);
+    const questViewKey = JSON.stringify(questView);
+
+    if (questViewKey !== state.questViewKey) {
+      for (const event of diffQuestLog(state.questView, questView)) {
+        notify(id, event);
+      }
+
+      state.questView = questView;
+      state.questViewKey = questViewKey;
+      notify(id, { type: 'quests', ...questView });
+    }
+
     notify(id, {
       type: 'self',
       level: state.level,
