@@ -5,7 +5,7 @@ import { buyItem, sellItem, serializeVendor } from './vendor.js';
 function resolveNpc(player, playerId, npcId, notify) {
   if (player.dead) return null;
 
-  const npc = getNpc(npcId);
+  const npc = getNpc(npcId, player.zoneId);
 
   if (!npc) {
     notify(playerId, { type: 'event', kind: 'npc-failed', reason: 'gone' });

@@ -43,10 +43,10 @@ export function handleChat(players, senderId, message, notify, now = Date.now())
   }
   sender.chatTimes.push(now);
 
-  const payload = { type: 'chat', channel, from: sender.characterName, text: text.slice(0, MAX_LENGTH) };
+  const payload = { type: 'chat', channel, from: sender.characterName, fromId: senderId, text: text.slice(0, MAX_LENGTH) };
 
   for (const [id, player] of players) {
-    const inRange = Math.hypot(player.x - sender.x, player.z - sender.z) <= CHAT_SAY_RANGE;
+    const inRange = player.zoneId === sender.zoneId && Math.hypot(player.x - sender.x, player.z - sender.z) <= CHAT_SAY_RANGE;
     if (channel === 'global' || inRange) notify(id, payload);
   }
 }

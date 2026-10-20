@@ -36,6 +36,10 @@ export function createLootMarkers(scene) {
     markers.delete(id);
   }
 
+  function clear() {
+    for (const id of Array.from(markers.keys())) remove(id);
+  }
+
   function getObjects() {
     return Array.from(markers.values(), (marker) => marker.object);
   }
@@ -53,5 +57,5 @@ export function createLootMarkers(scene) {
     }
   }
 
-  return { add, remove, getObjects, getPosition, update };
+  return { add, remove, clear, getObjects, getPosition, update };
 }

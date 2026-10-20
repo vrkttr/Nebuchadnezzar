@@ -1,7 +1,7 @@
 import { getItem } from './items.js';
 import { addItem, cloneInventory, countItem, removeItem, sendInventory } from './inventory.js';
 import { addGold } from './loot.js';
-import { getNpc } from './npcs.js';
+import { getNpcDefinition } from './npcs.js';
 import { grantXp } from './progression.js';
 
 export const MAX_ACTIVE_QUESTS = 10;
@@ -156,7 +156,7 @@ export function questsForNpc(player, npcId) {
       text,
       objectives: serializeObjectives(player, quest, entry),
       rewards: serializeRewards(quest),
-      turnInName: getNpc(quest.turnInNpc)?.name ?? '',
+      turnInName: getNpcDefinition(quest.turnInNpc)?.name ?? '',
     });
   }
 
@@ -190,7 +190,7 @@ export function serializeQuestLog(player) {
       id: quest.id,
       name: quest.name,
       ready: isReady(player, quest, entry),
-      turnInName: getNpc(quest.turnInNpc)?.name ?? '',
+      turnInName: getNpcDefinition(quest.turnInNpc)?.name ?? '',
       objectives: serializeObjectives(player, quest, entry),
     });
   }

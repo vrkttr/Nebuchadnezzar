@@ -1,5 +1,5 @@
-import { NPCS } from './npcs.js';
-import { zone } from './zoneLoader.js';
+import { getNpcsOfZone } from './npcs.js';
+import { getZone, getZones } from './zoneLoader.js';
 
 export const PLAYER_RADIUS = 0.4;
 export const ENEMY_RADIUS = 0.5;
@@ -15,14 +15,18 @@ function circle(x, z, radius) {
   return { type: 'circle', x, z, radius };
 }
 
-const COLLIDERS = [
-  ...zone.colliders.map((collider) =>
-    collider.shape === 'circle'
-      ? circle(collider.x, collider.z, collider.radius)
-      : box(collider.x, collider.z, collider.halfX, collider.halfZ, collider.rotation)
-  ),
-  ...Object.values(NPCS).map((npc) => circle(npc.x, npc.z, NPC_RADIUS)),
-];
+const COLLIDERS_BY_ZONE = new Map();
+
+for (const zone of getZones()) {
+  COLLIDERS_BY_ZONE.set(zone.id, [
+    ...zone.colliders.map((collider) =>
+      collider.shape === 'circle'
+        ? circle(collider.x, collider.z, collider.radius)
+        : box(collider.x, collider.z, collider.halfX, collider.halfZ, collider.rotation)
+    ),
+    ...getNpcsOfZone(zone.id).map((npc) => circle(npc.x, npc.z, NPC_RADIUS)),
+  ]);
+}
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -89,13 +93,15 @@ function pushOutOfBox(entity, radius, collider) {
 }
 
 export function resolveCollisions(entity, radius) {
+  const zone = getZone(entity.zoneId);
+  const colliders = COLLIDERS_BY_ZONE.get(entity.zoneId);
   const limitX = zone.halfWidth - radius;
   const limitZ = zone.halfHeight - radius;
 
   for (let iteration = 0; iteration < MAX_ITERATIONS; iteration += 1) {
     let moved = false;
 
-    for (const collider of COLLIDERS) {
+    for (const collider of colliders) {
       const pushed =
         collider.type === 'circle'
           ? pushOutOfCircle(entity, radius, collider)
@@ -111,8 +117,55 @@ export function resolveCollisions(entity, radius) {
   }
 }
 
-export function isBlocked(x, z, radius) {
-  const probe = { x, z };
+export function isBlocked(zoneId, x, z, radius) {
+  const probe = { zoneId, x, z };
   resolveCollisions(probe, radius);
   return Math.hypot(probe.x - x, probe.z - z) > 1e-3;
+}
+
+function segmentHitsCircle(ax, az, bx, bz, circleCollider) {
+  const dx = bx - ax;
+  const dz = bz - az;
+  const lengthSquared = dx * dx + dz * dz;
+  if (lengthSquared < 1e-9) return false;
+  const t = clamp(((circleCollider.x - ax) * dx + (circleCollider.z - az) * dz) / lengthSquared, 0, 1);
+  return Math.hypot(ax + dx * t - circleCollider.x, az + dz * t - circleCollider.z) < circleCollider.radius;
+}
+
+function segmentHitsBox(ax, az, bx, bz, boxCollider) {
+  const toLocalX = (x, z) => (x - boxCollider.x) * boxCollider.cos - (z - boxCollider.z) * boxCollider.sin;
+  const toLocalZ = (x, z) => (x - boxCollider.x) * boxCollider.sin + (z - boxCollider.z) * boxCollider.cos;
+  const startX = toLocalX(ax, az);
+  const startZ = toLocalZ(ax, az);
+  const deltaX = toLocalX(bx, bz) - startX;
+  const deltaZ = toLocalZ(bx, bz) - startZ;
+
+  let near = 0;
+  let far = 1;
+
+  for (const [start, delta, half] of [
+    [startX, deltaX, boxCollider.halfX],
+    [startZ, deltaZ, boxCollider.halfZ],
+  ]) {
+    if (Math.abs(delta) < 1e-9) {
+      if (Math.abs(start) > half) return false;
+      continue;
+    }
+    let t1 = (-half - start) / delta;
+    let t2 = (half - start) / delta;
+    if (t1 > t2) [t1, t2] = [t2, t1];
+    near = Math.max(near, t1);
+    far = Math.min(far, t2);
+    if (near > far) return false;
+  }
+
+  return true;
+}
+
+export function hasLineOfSight(zoneId, ax, az, bx, bz) {
+  for (const collider of COLLIDERS_BY_ZONE.get(zoneId)) {
+    const hit = collider.type === 'circle' ? segmentHitsCircle(ax, az, bx, bz, collider) : segmentHitsBox(ax, az, bx, bz, collider);
+    if (hit) return false;
+  }
+  return true;
 }

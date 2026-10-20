@@ -1,0 +1,2095 @@
+{
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "compressionlevel": -1,
+ "infinite": false,
+ "width": 36,
+ "height": 14,
+ "tilewidth": 32,
+ "tileheight": 32,
+ "nextlayerid": 6,
+ "nextobjectid": 93,
+ "layers": [
+  {
+   "name": "Boden",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "objects": [
+    {
+     "id": 33,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 433.6,
+     "y": 54.4,
+     "width": 284.8,
+     "height": 339.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a867c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 547.2,
+     "y": 352,
+     "width": 57.6,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "cloth"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#5a3a2a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 56,
+     "y": 230.4,
+     "width": 371.2,
+     "height": 160,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "wood"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a7a66"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 56,
+     "y": 57.6,
+     "width": 371.2,
+     "height": 160,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "wood"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a7a66"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 37,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 724.8,
+     "y": 230.4,
+     "width": 371.2,
+     "height": 160,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "wood"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a7a66"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 724.8,
+     "y": 57.6,
+     "width": 371.2,
+     "height": 160,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "wood"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a7a66"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "id": 1
+  },
+  {
+   "name": "Gebaeude",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "objects": [
+    {
+     "id": 1,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 41.6,
+     "y": 41.6,
+     "width": 1068.8,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 41.6,
+     "y": 393.6,
+     "width": 512,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 598.4,
+     "y": 393.6,
+     "width": 512,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 553.6,
+     "y": 393.6,
+     "width": 44.8,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "float",
+       "value": 2.5
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 0.5
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 41.6,
+     "y": 41.6,
+     "width": 12.8,
+     "height": 364.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1097.6,
+     "y": 41.6,
+     "width": 12.8,
+     "height": 364.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 428,
+     "y": 54.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 428,
+     "y": 160,
+     "width": 8,
+     "height": 128,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 428,
+     "y": 326.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 428,
+     "y": 121.6,
+     "width": 8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "float",
+       "value": 2.5
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 0.5
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 428,
+     "y": 288,
+     "width": 8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "float",
+       "value": 2.5
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 0.5
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 716,
+     "y": 54.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 716,
+     "y": 160,
+     "width": 8,
+     "height": 128,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 716,
+     "y": 326.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 716,
+     "y": 121.6,
+     "width": 8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "float",
+       "value": 2.5
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 0.5
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 716,
+     "y": 288,
+     "width": 8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "float",
+       "value": 2.5
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 0.5
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 54.4,
+     "y": 220,
+     "width": 374.4,
+     "height": 8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 723.2,
+     "y": 220,
+     "width": 374.4,
+     "height": 8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b9ae94"
+      }
+     ]
+    },
+    {
+     "id": 32,
+     "name": "",
+     "type": "decke",
+     "class": "decke",
+     "x": 48,
+     "y": 48,
+     "width": 1056,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "name": "",
+     "type": "tuer",
+     "class": "tuer",
+     "x": 595.2,
+     "y": 406.4,
+     "width": 38.4,
+     "height": 12.8,
+     "rotation": -180,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#8a7a62"
+      }
+     ]
+    },
+    {
+     "id": 40,
+     "name": "",
+     "type": "tuer",
+     "class": "tuer",
+     "x": 425.6,
+     "y": 326.4,
+     "width": 38.4,
+     "height": 12.8,
+     "rotation": -90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "offen",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#8a7a62"
+      }
+     ]
+    },
+    {
+     "id": 41,
+     "name": "",
+     "type": "tuer",
+     "class": "tuer",
+     "x": 425.6,
+     "y": 160,
+     "width": 38.4,
+     "height": 12.8,
+     "rotation": -90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "schloss",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#6a5e4a"
+      }
+     ]
+    },
+    {
+     "id": 42,
+     "name": "",
+     "type": "tuer",
+     "class": "tuer",
+     "x": 726.4,
+     "y": 121.6,
+     "width": 38.4,
+     "height": 12.8,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "offen",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#8a7a62"
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "name": "",
+     "type": "tuer",
+     "class": "tuer",
+     "x": 726.4,
+     "y": 288,
+     "width": 38.4,
+     "height": 12.8,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "schloss",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#6a5e4a"
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "name": "",
+     "type": "fenster",
+     "class": "fenster",
+     "x": 272,
+     "y": 409.6,
+     "width": 32,
+     "height": 32,
+     "rotation": -180,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 1.8
+      }
+     ]
+    },
+    {
+     "id": 48,
+     "name": "",
+     "type": "fenster",
+     "class": "fenster",
+     "x": 912,
+     "y": 409.6,
+     "width": 32,
+     "height": 32,
+     "rotation": -180,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 1.8
+      },
+      {
+       "name": "zugenagelt",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "name": "",
+     "type": "fenster",
+     "class": "fenster",
+     "x": 240,
+     "y": 38.4,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 1.8
+      },
+      {
+       "name": "zugenagelt",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 50,
+     "name": "",
+     "type": "fenster",
+     "class": "fenster",
+     "x": 1008,
+     "y": 38.4,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 1.8
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "id": 2
+  },
+  {
+   "name": "Objekte",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "objects": [
+    {
+     "id": 51,
+     "name": "",
+     "type": "treppe",
+     "class": "treppe",
+     "x": 560,
+     "y": 160,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "stufen",
+       "type": "int",
+       "value": 9
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 560,
+     "y": 57.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 1.7
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "name": "",
+     "type": "absperrung",
+     "class": "absperrung",
+     "x": 560,
+     "y": 164.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 56,
+     "name": "",
+     "type": "briefkaesten",
+     "class": "briefkaesten",
+     "x": 732,
+     "y": 208,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "anzahl",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 446.232,
+     "y": 71.494,
+     "width": 32,
+     "height": 32,
+     "rotation": -22.918,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 59,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 451.498,
+     "y": 89.94,
+     "width": 32,
+     "height": 32,
+     "rotation": 11.459,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 61,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 560,
+     "y": 256,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 13
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 560,
+     "y": 96,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 63,
+     "name": "",
+     "type": "bett",
+     "class": "bett",
+     "x": 67.2,
+     "y": 326.4,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 65,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 256,
+     "y": 272,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 67,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 224,
+     "y": 304,
+     "width": 32,
+     "height": 32,
+     "rotation": -90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 68,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 320,
+     "y": 272,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 69,
+     "name": "",
+     "type": "herd",
+     "class": "herd",
+     "x": 352,
+     "y": 224,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 71,
+     "name": "",
+     "type": "kuehlschrank",
+     "class": "kuehlschrank",
+     "x": 387.2,
+     "y": 224,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 73,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 169.6,
+     "y": 403.2,
+     "width": 32,
+     "height": 32,
+     "rotation": -180,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 1.6
+      }
+     ]
+    },
+    {
+     "id": 75,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 240,
+     "y": 294.4,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 11
+      }
+     ]
+    },
+    {
+     "id": 76,
+     "name": "",
+     "type": "fernseher",
+     "class": "fernseher",
+     "x": 912,
+     "y": 47.36,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 78,
+     "name": "",
+     "type": "sofa",
+     "class": "sofa",
+     "x": 944,
+     "y": 156.8,
+     "width": 32,
+     "height": 32,
+     "rotation": -180,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "int",
+       "value": 2
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#4f5a44"
+      }
+     ]
+    },
+    {
+     "id": 80,
+     "name": "",
+     "type": "werkbank",
+     "class": "werkbank",
+     "x": 1100.8,
+     "y": 124.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 82,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 809.6,
+     "y": 44.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 1.6
+      }
+     ]
+    },
+    {
+     "id": 84,
+     "name": "",
+     "type": "bett",
+     "class": "bett",
+     "x": 1024,
+     "y": 214.4,
+     "width": 32,
+     "height": 32,
+     "rotation": -90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#5a5a46"
+      }
+     ]
+    },
+    {
+     "id": 86,
+     "name": "",
+     "type": "kuehlschrank",
+     "class": "kuehlschrank",
+     "x": 764.8,
+     "y": 222.4,
+     "width": 32,
+     "height": 32,
+     "rotation": -180,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 88,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 880,
+     "y": 121.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 11
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "id": 3
+  },
+  {
+   "name": "Kollision",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "objects": [
+    {
+     "id": 2,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 41.6,
+     "y": 41.6,
+     "width": 1068.8,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 41.6,
+     "y": 393.6,
+     "width": 512,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 598.4,
+     "y": 393.6,
+     "width": 512,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 41.6,
+     "y": 41.6,
+     "width": 12.8,
+     "height": 364.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1097.6,
+     "y": 41.6,
+     "width": 12.8,
+     "height": 364.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 428,
+     "y": 54.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 428,
+     "y": 160,
+     "width": 8,
+     "height": 128,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 428,
+     "y": 326.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 716,
+     "y": 54.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 716,
+     "y": 160,
+     "width": 8,
+     "height": 128,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 716,
+     "y": 326.4,
+     "width": 8,
+     "height": 67.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 54.4,
+     "y": 220,
+     "width": 374.4,
+     "height": 8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 723.2,
+     "y": 220,
+     "width": 374.4,
+     "height": 8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 44,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 427.2,
+     "y": 120.96,
+     "width": 9.6,
+     "height": 39.68,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 715.2,
+     "y": 287.36,
+     "width": 9.6,
+     "height": 39.68,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 46,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 553.6,
+     "y": 393.6,
+     "width": 44.8,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 534.4,
+     "y": 52.8,
+     "width": 83.2,
+     "height": 124.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 55,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 528,
+     "y": 177.6,
+     "width": 96,
+     "height": 6.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 58,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 451.2,
+     "y": 64,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 60,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 448,
+     "y": 92.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 64,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 67.2,
+     "y": 310.4,
+     "width": 32,
+     "height": 64,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 66,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 249.6,
+     "y": 273.6,
+     "width": 44.8,
+     "height": 28.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 70,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 356.8,
+     "y": 230.08,
+     "width": 22.4,
+     "height": 19.84,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 72,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 392.64,
+     "y": 229.44,
+     "width": 21.12,
+     "height": 21.12,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 74,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 128,
+     "y": 381.44,
+     "width": 51.2,
+     "height": 11.52,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 77,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 910.4,
+     "y": 54.4,
+     "width": 35.2,
+     "height": 17.92,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 79,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 896,
+     "y": 127.04,
+     "width": 64,
+     "height": 27.52,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 81,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1072.64,
+     "y": 102.4,
+     "width": 24.32,
+     "height": 76.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 83,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 800,
+     "y": 55.04,
+     "width": 51.2,
+     "height": 11.52,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 85,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1008,
+     "y": 182.4,
+     "width": 64,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 87,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 738.24,
+     "y": 195.84,
+     "width": 21.12,
+     "height": 21.12,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    }
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "id": 4
+  },
+  {
+   "name": "Logik",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "objects": [
+    {
+     "id": 89,
+     "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 576,
+     "y": 345.6,
+     "width": 0,
+     "height": 0,
+     "rotation": -180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "eingang"
+      }
+     ]
+    },
+    {
+     "id": 90,
+     "name": "",
+     "type": "teleporter",
+     "class": "teleporter",
+     "x": 550.4,
+     "y": 368,
+     "width": 51.2,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "plattenbau_ausgang"
+      },
+      {
+       "name": "zone",
+       "type": "string",
+       "value": "startwelt"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "tuer_streuner"
+      },
+      {
+       "name": "label",
+       "type": "string",
+       "value": "Plattenbau verlassen"
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.5
+      }
+     ]
+    },
+    {
+     "id": 91,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 208,
+     "y": 352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "healthMax",
+       "type": "int",
+       "value": 50
+      }
+     ]
+    },
+    {
+     "id": 92,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 992,
+     "y": 99.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "healthMax",
+       "type": "int",
+       "value": 55
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "id": 5
+  }
+ ],
+ "tilesets": [],
+ "properties": [
+  {
+   "name": "name",
+   "type": "string",
+   "value": "Plattenbau (innen)"
+  },
+  {
+   "name": "innen",
+   "type": "bool",
+   "value": true
+  },
+  {
+   "name": "licht",
+   "type": "float",
+   "value": 0.55
+  },
+  {
+   "name": "sonne",
+   "type": "float",
+   "value": 0
+  },
+  {
+   "name": "hintergrund",
+   "type": "string",
+   "value": "#070706"
+  },
+  {
+   "name": "groundTexture",
+   "type": "string",
+   "value": "slab"
+  },
+  {
+   "name": "groundColor",
+   "type": "string",
+   "value": "#58544c"
+  }
+ ]
+}

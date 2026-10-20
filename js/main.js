@@ -4,9 +4,9 @@ const v = (path) => (VERSION ? `${path}?v=${VERSION}` : path);
 const [
   THREE,
   { createRenderer },
-  { createScene },
+  { createScene, applyLighting },
   { createThirdPersonCamera },
-  { buildZone },
+  { buildZone, disposeZone },
   { createPlayer },
   { createPlayerController },
   { createServerConnection },
@@ -31,7 +31,10 @@ const [
   { createMinimap },
   { createPortraits },
   { createDamageNumbers },
+  { createChatBubbles },
+  { createShotEffects },
   { createHud },
+  { createLoadingScreen },
   { createAudio },
   { createFootsteps },
   { gameState },
@@ -66,7 +69,10 @@ const [
   import(v('./hud/Minimap.js')),
   import(v('./hud/Portraits.js')),
   import(v('./hud/DamageNumbers.js')),
+  import(v('./hud/ChatBubbles.js')),
+  import(v('./effects/ShotEffects.js')),
   import(v('./hud/Hud.js')),
+  import(v('./ui/LoadingScreen.js')),
   import(v('./audio/Audio.js')),
   import(v('./audio/Footsteps.js')),
   import(v('./state/GameState.js')),
@@ -74,6 +80,7 @@ const [
 ]);
 
 function start(token) {
+  const loadingScreen = createLoadingScreen();
   const renderer = createRenderer();
   const scene = createScene();
   const spawnPoint = new THREE.Vector3();
@@ -180,34 +187,109 @@ function start(token) {
   });
   const portraits = createPortraits({ scene, renderer, viewCapture, player, enemies, gameState });
   const damageNumbers = createDamageNumbers(camera, nameplateContainer);
+  const chatBubbles = createChatBubbles(camera, nameplateContainer);
+  const shotEffects = createShotEffects(scene);
   const chat = createChat({ onSend: (text) => connection.send({ type: 'chat', text }) });
 
   let ownPlayerId = null;
+  let questMarkers = {};
+  let outdoorCameraDistance = null;
+  let wasIndoor = false;
+  const INDOOR_CAMERA_DISTANCE = 3.2;
+
+  function resetZoneEntities() {
+    gameState.target = null;
+    connection.send({ type: 'target', enemyId: null });
+    enemies.clear();
+    npcs.clear();
+    remotePlayers.clear();
+    lootMarkers.clear();
+    lootWindow.hide();
+    npcWindow.hide();
+    vendorWindow.hide();
+    chatBubbles.clear();
+  }
+
+  function nextFrame() {
+    return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+  }
+
+  async function enterZone(message, firstLoad) {
+    const world = message.world;
+    loadingScreen.show(world.name);
+    loadingScreen.setProgress(0.08, firstLoad ? 'Welt wird aufgebaut …' : 'Zone wird geladen …');
+
+    if (zone) {
+      disposeZone(scene, zone);
+      zone = null;
+    }
+    if (!firstLoad) resetZoneEntities();
+
+    zone = buildZone(scene, world);
+    applyLighting(scene, world);
+    audio.setIndoor(Boolean(world.indoor));
+    audio.setEmitters(zone.emitters);
+    thirdPersonCamera.setBlockers(world.cameraBlockers ?? []);
+    if (world.indoor && !wasIndoor) outdoorCameraDistance = thirdPersonCamera.getDistance();
+    thirdPersonCamera.setDistance(world.indoor ? INDOOR_CAMERA_DISTANCE : outdoorCameraDistance ?? thirdPersonCamera.getDistance());
+    wasIndoor = Boolean(world.indoor);
+    gameState.zoneName = world.name;
+
+    const position = message.position ?? { x: 0, y: 0, z: 0, rotationY: 0 };
+    ownTargetPosition.set(position.x, position.y, position.z);
+    player.object.position.copy(ownTargetPosition);
+    ownTargetRotationY = position.rotationY ?? 0;
+    player.object.rotation.y = ownTargetRotationY;
+    thirdPersonCamera.setYaw(ownTargetRotationY + Math.PI);
+
+    enemies.sync(message.enemies ?? []);
+    npcs.sync(message.npcs ?? []);
+    npcs.setMarkers(questMarkers);
+    loadingScreen.setProgress(0.4, 'Texturen werden geladen …');
+
+    await nextFrame();
+    await loadingScreen.assetsIdle();
+    loadingScreen.setProgress(0.85, 'Sounds werden geladen …');
+    await audio.ready();
+    loadingScreen.setProgress(0.93, 'Grafik wird vorbereitet …');
+
+    try {
+      await renderer.compileAsync(scene, camera);
+    } catch {
+      renderer.compile(scene, camera);
+    }
+    await nextFrame();
+    await nextFrame();
+
+    loadingScreen.setProgress(1, 'Bereit');
+    connection.send({ type: 'zone-ready' });
+    await loadingScreen.hide();
+  }
 
   const connection = createServerConnection(buildServerUrl(token), {
     onMessage(message) {
       if (message.type === 'init') {
         ownPlayerId = message.id;
-        if (!zone && message.world) {
-          zone = buildZone(scene, message.world);
-          audio.setEmitters(zone.emitters);
-          thirdPersonCamera.setBlockers(message.world.cameraBlockers ?? []);
-        }
         audio.applySettings(message.audio);
         ownWeapon = message.equipment?.weapon ?? null;
-        enemies.sync(message.enemies ?? []);
-        npcs.sync(message.npcs ?? []);
+        enterZone(message, true);
         hud.setAbilities(message.abilities ?? []);
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
         player.setAppearance(message.appearance);
+      } else if (message.type === 'zone') {
+        enterZone(message, false);
       } else if (message.type === 'chat') {
         chat.add(message);
+        if (message.channel === 'say') {
+          chatBubbles.show(message.fromId === ownPlayerId ? player.object : remotePlayers.getObject(message.fromId), message.text);
+        }
       } else if (message.type === 'quests') {
         hud.setQuests(message);
-        npcs.setMarkers(message.markers ?? {});
+        questMarkers = message.markers ?? {};
+        npcs.setMarkers(questMarkers);
       } else if (message.type === 'npc-window') {
         audio.play(`npc_${message.npcId}_greet`);
         npcWindow.show(message);
@@ -260,14 +342,23 @@ function start(token) {
         }
 
         const attackerIsOwn = message.attackerId === ownPlayerId;
+        const isRanged = Boolean(message.weaponId && gameState.items[message.weaponId]?.ranged);
         if (isEnemyTarget && hitObject) {
-          const family = attackerIsOwn ? audio.weaponFamily(ownWeapon) : 'blunt';
-          const attackerObject = attackerIsOwn ? null : remotePlayers.getObject(message.attackerId);
-          if (attackerIsOwn) audio.play(`swing_${family}`);
-          else if (attackerObject) audio.playAt(`swing_${family}`, attackerObject.position.x, attackerObject.position.z);
-          audio.playAt(`hit_${family}`, hitObject.position.x, hitObject.position.z);
+          const attackerObject = attackerIsOwn ? player.object : remotePlayers.getObject(message.attackerId);
+          if (isRanged) {
+            const shotName = audio.shotSound(message.weaponId);
+            if (shotName && attackerIsOwn) audio.play(shotName);
+            else if (shotName && attackerObject) audio.playAt(shotName, attackerObject.position.x, attackerObject.position.z);
+            audio.playAt('hit_bullet', hitObject.position.x, hitObject.position.z);
+            if (attackerObject) shotEffects.spawn(attackerObject.position, hitObject.position);
+          } else {
+            const family = attackerIsOwn ? audio.weaponFamily(ownWeapon) : 'blunt';
+            if (attackerIsOwn) audio.play(`swing_${family}`);
+            else if (attackerObject) audio.playAt(`swing_${family}`, attackerObject.position.x, attackerObject.position.z);
+            audio.playAt(`hit_${family}`, hitObject.position.x, hitObject.position.z);
+          }
           const type = enemies.getType(message.targetId);
-          if (type && Math.random() < 0.5) audio.playAt(`enemy_grunt_${type}`, hitObject.position.x, hitObject.position.z, 0.8);
+          if (type && Math.random() < 0.25) audio.playAt(`enemy_grunt_${type}`, hitObject.position.x, hitObject.position.z, 0.8);
         } else if (isOwnTarget) {
           const attackerObject = enemies.getObject(message.attackerId);
           if (attackerObject) audio.playAt('enemy_attack', attackerObject.position.x, attackerObject.position.z);
@@ -278,8 +369,8 @@ function start(token) {
         else remotePlayers.playHit(message.targetId);
 
         if (message.targetType === 'enemy' && message.attackerId) {
-          if (message.attackerId === ownPlayerId) player.playAttack();
-          else remotePlayers.playAttack(message.attackerId);
+          if (message.attackerId === ownPlayerId) player.playAttack(isRanged ? 'shot' : 'melee');
+          else remotePlayers.playAttack(message.attackerId, isRanged ? 'shot' : 'melee');
         } else if (message.targetType === 'player' && message.attackerId) {
           enemies.playAttack(message.attackerId);
         }
@@ -319,8 +410,8 @@ function start(token) {
         remotePlayers.remove(message.id);
       }
     },
-    onClose() {
-      if (!ownPlayerId) {
+    onClose(event) {
+      if (!ownPlayerId || event?.code === 4002) {
         window.location.replace(getPortalUrl());
       }
     },
@@ -340,7 +431,8 @@ function start(token) {
       current &&
       !current.userData.isNpc &&
       !current.userData.isEnemy &&
-      !current.userData.isLoot
+      !current.userData.isLoot &&
+      !current.userData.isTeleporter
     ) {
       current = current.parent;
     }
@@ -353,7 +445,7 @@ function start(token) {
 
     raycaster.setFromCamera(pointer, camera);
     const intersections = raycaster.intersectObjects(
-      [...npcs.getObjects(), ...enemies.getObjects(), ...lootMarkers.getObjects()],
+      [...npcs.getObjects(), ...enemies.getObjects(), ...lootMarkers.getObjects(), ...(zone?.teleporters ?? [])],
       true
     );
 
@@ -362,11 +454,14 @@ function start(token) {
   }
 
   renderer.domElement.addEventListener('click', (event) => {
+    if (event.buttons & 2) return;
     const target = pickInteractable(event);
     if (!target) return;
 
     if (target.userData.isNpc) {
       connection.send({ type: 'npc-interact', npcId: target.userData.npcId });
+    } else if (target.userData.isTeleporter) {
+      connection.send({ type: 'zone-enter', teleporterId: target.userData.teleporterId });
     } else if (target.userData.isLoot) {
       connection.send({ type: 'loot-open', lootId: target.userData.lootId });
     } else if (target.userData.isEnemy) {
@@ -467,6 +562,19 @@ function start(token) {
     }
   });
 
+  const cameraFocus = new THREE.Vector3();
+  const CAMERA_HIDE_DISTANCE = 1.6;
+  let playerHiddenFromCamera = false;
+
+  function setPlayerHiddenFromCamera(hidden) {
+    if (hidden === playerHiddenFromCamera) return;
+    playerHiddenFromCamera = hidden;
+    player.object.traverse((node) => {
+      if (hidden) node.layers.disable(0);
+      else node.layers.enable(0);
+    });
+  }
+
   const clock = new THREE.Clock();
   const listenerForward = new THREE.Vector3();
 
@@ -508,6 +616,8 @@ function start(token) {
     }
 
     thirdPersonCamera.update(player.object.position);
+    cameraFocus.set(player.object.position.x, player.object.position.y + 1.4, player.object.position.z);
+    setPlayerHiddenFromCamera(camera.position.distanceTo(cameraFocus) < CAMERA_HIDE_DISTANCE);
     camera.getWorldDirection(listenerForward);
     audio.setListener(player.object.position.x, player.object.position.z, listenerForward.x, listenerForward.z);
     footsteps.update(delta, player.object.position, [...enemies.getMarkers(), ...remotePlayers.getMarkers()]);
@@ -522,6 +632,8 @@ function start(token) {
     }
 
     damageNumbers.update(delta);
+    chatBubbles.update(delta);
+    shotEffects.update(delta);
     minimap.update(delta);
     portraits.update(delta);
 

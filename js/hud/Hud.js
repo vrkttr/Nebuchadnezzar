@@ -10,6 +10,9 @@ const FAILURE_TEXT = {
   'out-of-range': 'Ziel ist zu weit entfernt.',
   cooldown: 'Fähigkeit ist noch nicht bereit.',
   'no-resource': 'Nicht genug Energie.',
+  'no-ammo': 'Keine Munition.',
+  'no-line': 'Keine freie Schusslinie.',
+  'melee-only': 'Nur mit Nahkampfwaffen einsetzbar.',
 };
 
 const ITEM_FAILURE_TEXT = {

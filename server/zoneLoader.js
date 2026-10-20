@@ -1,10 +1,12 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ZONE_FILE = process.env.ZONE_FILE ?? join(dirname(fileURLToPath(import.meta.url)), 'zones', 'startwelt.tmj');
+const ZONE_DIRECTORY = join(dirname(fileURLToPath(import.meta.url)), 'zones');
 const COLLISION_LAYER = 'Kollision';
-const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner']);
+const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter']);
+
+export const DEFAULT_ZONE_ID = 'startwelt';
 
 function readProperties(list) {
   return Object.fromEntries((list ?? []).map((property) => [property.name, property.value]));
@@ -20,7 +22,7 @@ function collectObjects(layers, result = []) {
   return result;
 }
 
-function loadZone(file) {
+function loadZone(id, file) {
   let map;
   try {
     map = JSON.parse(readFileSync(file, 'utf8'));
@@ -38,7 +40,15 @@ function loadZone(file) {
   const mapProperties = readProperties(map.properties);
 
   const zone = {
-    name: mapProperties.name ?? 'zone',
+    id,
+    name: mapProperties.name ?? id,
+    indoor: Boolean(mapProperties.innen),
+    lighting: {
+      ambient: Number(mapProperties.licht ?? 1),
+      sun: Number(mapProperties.sonne ?? 1),
+      background: mapProperties.hintergrund ?? null,
+      fog: mapProperties.nebel ?? null,
+    },
     width,
     height,
     halfWidth,
@@ -46,6 +56,8 @@ function loadZone(file) {
     groundTexture: mapProperties.groundTexture ?? 'grass',
     groundColor: mapProperties.groundColor ?? '#ffffff',
     spawn: null,
+    spawns: {},
+    teleporters: [],
     colliders: [],
     npcs: [],
     enemies: [],
@@ -99,7 +111,22 @@ function loadZone(file) {
 
     if (LOGIC_CLASSES.has(kind)) {
       if (kind === 'spawn') {
-        zone.spawn = { x: center.x, y: 0, z: center.z };
+        const spawn = { x: center.x, y: 0, z: center.z, rotationY };
+        if (props.id) zone.spawns[props.id] = spawn;
+        if (!props.id || !zone.spawn) zone.spawn = spawn;
+      } else if (kind === 'teleporter') {
+        zone.teleporters.push({
+          id: String(props.id),
+          x: center.x,
+          z: center.z,
+          width: objectWidth,
+          depth: objectHeight,
+          height: Number(props.hoehe) || 2.5,
+          rotation: rotationY,
+          zone: String(props.zone),
+          spawn: String(props.spawn),
+          label: props.label ?? 'Tür',
+        });
       } else if (kind === 'npc') {
         zone.npcs.push({ npcId: props.npcId, x: center.x, z: center.z, rotationY, props });
       } else {
@@ -125,17 +152,44 @@ function loadZone(file) {
   return zone;
 }
 
-export const zone = loadZone(ZONE_FILE);
+const ZONES = new Map();
 
-export function serializeZone() {
+for (const file of readdirSync(ZONE_DIRECTORY).filter((name) => name.endsWith('.tmj')).sort()) {
+  const id = basename(file, '.tmj');
+  ZONES.set(id, loadZone(id, join(ZONE_DIRECTORY, file)));
+}
+
+if (!ZONES.has(DEFAULT_ZONE_ID)) throw new Error(`Zonendatei: Die Standardzone "${DEFAULT_ZONE_ID}" fehlt.`);
+
+for (const zone of ZONES.values()) {
+  for (const teleporter of zone.teleporters) {
+    const target = ZONES.get(teleporter.zone);
+    if (!target) throw new Error(`Zonendatei ${zone.id}: Teleporter "${teleporter.id}" verweist auf die unbekannte Zone "${teleporter.zone}".`);
+    if (!target.spawns[teleporter.spawn]) throw new Error(`Zonendatei ${zone.id}: Teleporter "${teleporter.id}" verweist auf den unbekannten Spawnpunkt "${teleporter.spawn}".`);
+  }
+}
+
+export function getZone(zoneId) {
+  return ZONES.get(zoneId) ?? null;
+}
+
+export function getZones() {
+  return Array.from(ZONES.values());
+}
+
+export function serializeZone(zone) {
   return {
+    id: zone.id,
     name: zone.name,
+    indoor: zone.indoor,
+    lighting: zone.lighting,
     width: zone.width,
     height: zone.height,
     groundTexture: zone.groundTexture,
     groundColor: zone.groundColor,
     spawn: zone.spawn,
     objects: zone.visuals,
+    teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
     cameraBlockers: zone.colliders
       .filter((collider) => collider.cameraHeight > 0)
       .map(({ x, z, halfX, halfZ, rotation, cameraHeight }) => ({ x, z, halfX, halfZ, rotation, height: cameraHeight })),

@@ -67,6 +67,10 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     remotePlayers.delete(id);
   }
 
+  function clear() {
+    for (const id of Array.from(remotePlayers.keys())) remove(id);
+  }
+
   function sync(playersState, ownId) {
     const seenIds = new Set();
 
@@ -107,8 +111,8 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }
   }
 
-  function playAttack(id) {
-    remotePlayers.get(id)?.playAttack();
+  function playAttack(id, style) {
+    remotePlayers.get(id)?.playAttack(style);
   }
 
   function playHit(id) {
@@ -127,5 +131,5 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }));
   }
 
-  return { sync, remove, playAttack, playHit, getObject, getMarkers, update };
+  return { sync, clear, remove, playAttack, playHit, getObject, getMarkers, update };
 }

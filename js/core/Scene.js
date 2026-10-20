@@ -17,9 +17,13 @@ function createSkyTexture() {
   return texture;
 }
 
+const HEMISPHERE_INTENSITY = 2.1;
+const SUN_INTENSITY = 1.7;
+
 export function createScene() {
   const scene = new THREE.Scene();
-  scene.background = createSkyTexture();
+  const sky = createSkyTexture();
+  scene.background = sky;
 
   const hemisphere = new THREE.HemisphereLight(0xe2e8e6, 0x7b7660, 2.1);
   hemisphere.layers.enable(1);
@@ -30,5 +34,16 @@ export function createScene() {
   sun.layers.enable(1);
   scene.add(sun);
 
+  scene.userData.environment = { sky, hemisphere, sun };
+
   return scene;
+}
+
+export function applyLighting(scene, world) {
+  const { sky, hemisphere, sun } = scene.userData.environment;
+  const lighting = world.indoor ? world.lighting ?? {} : {};
+
+  scene.background = world.indoor ? new THREE.Color(lighting.background ?? '#070706') : sky;
+  hemisphere.intensity = HEMISPHERE_INTENSITY * (lighting.ambient ?? 1);
+  sun.intensity = SUN_INTENSITY * (lighting.sun ?? 1);
 }

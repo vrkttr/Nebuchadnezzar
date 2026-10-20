@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { scaleUv, createBatch } from './Batch.js';
 import { createAssetLibrary } from './AssetLibrary.js';
 import { createHall } from './builders/Hall.js';
+import { INTERIOR_BUILDERS } from './builders/Interior.js';
 import { addTree } from './builders/Vegetation.js';
 import { createRandom } from './Random.js';
 import { getMaterial, OVERLAY, OVERLAY_TOP } from './Textures.js';
@@ -183,10 +184,13 @@ export function buildZone(scene, world) {
   zone.name = world.name ?? 'Zone';
   const assets = createAssetLibrary();
   assets.register('halle', createHall);
+  for (const [kind, factory] of Object.entries(INTERIOR_BUILDERS)) assets.register(kind, factory);
 
-  const ground = new THREE.PlaneGeometry(GROUND_SIZE, GROUND_SIZE);
+  const groundWidth = world.indoor ? world.width : GROUND_SIZE;
+  const groundDepth = world.indoor ? world.height : GROUND_SIZE;
+  const ground = new THREE.PlaneGeometry(groundWidth, groundDepth);
   ground.rotateX(-Math.PI / 2);
-  scaleUv(ground, GROUND_SIZE / 4, GROUND_SIZE / 4);
+  scaleUv(ground, groundWidth / 4, groundDepth / 4);
   zone.add(new THREE.Mesh(ground, getMaterial(world.groundTexture ?? 'grass', { color: coerceValue(world.groundColor ?? '#c8c8b4') })));
 
   const trees = [];
@@ -214,7 +218,7 @@ export function buildZone(scene, world) {
     } else {
       let instance;
       try {
-        instance = assets.create(object.kind, props);
+        instance = assets.create(object.kind, { ...props, footprint: { width: object.width, depth: object.height } });
       } catch {
         console.warn(`Unbekannter Objekttyp in der Zonendefinition: ${object.kind}`);
         continue;
@@ -228,5 +232,30 @@ export function buildZone(scene, world) {
 
   zone.add(buildForests(trees, bushes));
   scene.add(zone);
-  return { zone, emitters };
+
+  const teleporters = (world.teleporters ?? []).map(buildTeleporter);
+  for (const proxy of teleporters) zone.add(proxy);
+
+  return { zone, emitters, teleporters };
+}
+
+const PROXY_MATERIAL = new THREE.MeshBasicMaterial({ visible: false });
+
+function buildTeleporter(teleporter) {
+  const geometry = new THREE.BoxGeometry(Math.max(teleporter.width, 1.6), teleporter.height, Math.max(teleporter.depth, 0.8));
+  const proxy = new THREE.Mesh(geometry, PROXY_MATERIAL);
+  proxy.position.set(teleporter.x, teleporter.height / 2, teleporter.z);
+  proxy.rotation.y = teleporter.rotation ?? 0;
+  proxy.name = `Teleporter_${teleporter.id}`;
+  proxy.userData.isTeleporter = true;
+  proxy.userData.teleporterId = teleporter.id;
+  proxy.userData.label = teleporter.label;
+  return proxy;
+}
+
+export function disposeZone(scene, built) {
+  scene.remove(built.zone);
+  built.zone.traverse((node) => {
+    if (node.geometry) node.geometry.dispose();
+  });
 }

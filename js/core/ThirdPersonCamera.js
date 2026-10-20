@@ -142,5 +142,18 @@ export function createThirdPersonCamera(camera, domElement) {
     camera.lookAt(pivot);
   }
 
-  return { update, setBlockers };
+  function setYaw(value) {
+    yaw = value;
+  }
+
+  function getDistance() {
+    return distance;
+  }
+
+  function setDistance(value) {
+    distance = Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, value));
+    currentDistance = Math.min(currentDistance, distance);
+  }
+
+  return { update, setBlockers, setYaw, getDistance, setDistance };
 }

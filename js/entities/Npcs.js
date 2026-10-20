@@ -35,6 +35,14 @@ export function createNpcs(scene, camera, nameplateContainer) {
     }
   }
 
+  function clear() {
+    for (const npc of npcs.values()) {
+      scene.remove(npc.object);
+      npc.plate.remove();
+    }
+    npcs.clear();
+  }
+
   function setMarkers(markers) {
     for (const [id, npc] of npcs) {
       const symbol = MARKER_SYMBOLS[markers[id]] ?? '';
@@ -72,5 +80,5 @@ export function createNpcs(scene, camera, nameplateContainer) {
     return Array.from(npcs, ([id, npc]) => ({ npcId: id, x: npc.object.position.x, z: npc.object.position.z }));
   }
 
-  return { sync, setMarkers, getObjects, getPosition, getMarkers, update };
+  return { sync, clear, setMarkers, getObjects, getPosition, getMarkers, update };
 }

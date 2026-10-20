@@ -1,54 +1,60 @@
 const SOUND_BASE_PATH = 'assets/audio/';
 const SOUND_EXTENSION = 'ogg';
 const DEFAULT_SETTINGS = { volume: 0.8, ambient: 1, muted: false };
-const AMBIENT_LOOPS = { ambient_wind: 0.25, ambient_birds: 0.14 };
+const AMBIENT_LOOPS = { ambient_wind: 0.2, ambient_birds: 0.09 };
 const MAX_HEARING_DISTANCE = 32;
 const FIRE_SOUND = 'fire_loop';
-const FIRE_VOLUME = 0.55;
+const FIRE_VOLUME = 0.3;
 const NPC_HEARING_DISTANCE = 16;
+const READY_TIMEOUT = 8000;
+const INDOOR_AMBIENT = 0.2;
 const FAR_SOUND_INTERVAL = [28, 70];
 const NPC_IDLE_INTERVAL = [7, 18];
 
 const SOUND_DEFINITIONS = {
-  hit: { volume: 0.6, variation: 0.08 },
-  hit_blunt: { volume: 0.7, variation: 0.08 },
-  hit_blade: { volume: 0.7, variation: 0.08 },
-  hit_fist: { volume: 0.6, variation: 0.08 },
-  swing_blunt: { volume: 0.5, variation: 0.1 },
-  swing_blade: { volume: 0.5, variation: 0.1 },
-  swing_fist: { volume: 0.4, variation: 0.1 },
-  ability_power_strike: { volume: 0.8, variation: 0.05 },
-  player_hurt: { volume: 0.7, variation: 0.06 },
-  enemy_death: { volume: 0.7, variation: 0.06 },
-  enemy_attack: { volume: 0.6, variation: 0.08 },
-  enemy_grunt_raider: { volume: 0.6, variation: 0.1 },
-  enemy_grunt_scavenger: { volume: 0.6, variation: 0.1 },
-  enemy_grunt_marauder: { volume: 0.7, variation: 0.1 },
-  player_death: { volume: 0.8 },
-  level_up: { volume: 0.7 },
-  gold: { volume: 0.5, variation: 0.05 },
-  loot_open: { volume: 0.5, variation: 0.05 },
-  item_pickup: { volume: 0.5, variation: 0.06 },
-  equip: { volume: 0.5, variation: 0.05 },
-  bag_move: { volume: 0.45, variation: 0.08 },
-  quest_accept: { volume: 0.5 },
-  quest_complete: { volume: 0.6 },
-  error: { volume: 0.4 },
-  target_select: { volume: 0.4 },
-  ui_click: { volume: 0.35, variation: 0.04 },
-  ui_open: { volume: 0.35, variation: 0.04 },
-  step_1: { volume: 0.5, variation: 0.1 },
-  step_2: { volume: 0.5, variation: 0.1 },
-  step_3: { volume: 0.5, variation: 0.1 },
-  land: { volume: 0.5, variation: 0.06 },
-  jump: { volume: 0.4, variation: 0.06 },
-  npc_streuner_idle: { volume: 0.55, variation: 0.05 },
-  npc_streuner_cough: { volume: 0.5, variation: 0.05 },
-  npc_streuner_greet: { volume: 0.7, variation: 0.03 },
-  npc_haendler_idle: { volume: 0.5, variation: 0.05 },
-  npc_haendler_greet: { volume: 0.7, variation: 0.03 },
-  distant_creak: { volume: 0.22, variation: 0.1 },
-  distant_clang: { volume: 0.2, variation: 0.1 },
+  hit: { volume: 0.37, variation: 0.08 },
+  hit_blunt: { volume: 0.43, variation: 0.08 },
+  hit_blade: { volume: 0.43, variation: 0.08 },
+  hit_fist: { volume: 0.37, variation: 0.08 },
+  swing_blunt: { volume: 0.31, variation: 0.1 },
+  swing_blade: { volume: 0.31, variation: 0.1 },
+  swing_fist: { volume: 0.25, variation: 0.1 },
+  ability_power_strike: { volume: 0.5, variation: 0.05 },
+  player_hurt: { volume: 0.43, variation: 0.06 },
+  enemy_death: { volume: 0.43, variation: 0.06 },
+  enemy_attack: { volume: 0.37, variation: 0.08 },
+  enemy_grunt_raider: { volume: 0.37, variation: 0.1 },
+  enemy_grunt_scavenger: { volume: 0.37, variation: 0.1 },
+  enemy_grunt_marauder: { volume: 0.43, variation: 0.1 },
+  player_death: { volume: 0.5 },
+  level_up: { volume: 0.43 },
+  gold: { volume: 0.31, variation: 0.05 },
+  loot_open: { volume: 0.31, variation: 0.05 },
+  item_pickup: { volume: 0.31, variation: 0.06 },
+  equip: { volume: 0.31, variation: 0.05 },
+  bag_move: { volume: 0.28, variation: 0.08 },
+  quest_accept: { volume: 0.31 },
+  quest_complete: { volume: 0.37 },
+  error: { volume: 0.25 },
+  target_select: { volume: 0.25 },
+  ui_click: { volume: 0.22, variation: 0.04 },
+  ui_open: { volume: 0.22, variation: 0.04 },
+  gunshot_usp: { volume: 0.34, variation: 0.05 },
+  gunshot_ak: { volume: 0.46, variation: 0.05 },
+  gun_dry: { volume: 0.28, variation: 0.04 },
+  hit_bullet: { volume: 0.3, variation: 0.08 },
+  step_1: { volume: 0.26, variation: 0.1 },
+  step_2: { volume: 0.26, variation: 0.1 },
+  step_3: { volume: 0.26, variation: 0.1 },
+  land: { volume: 0.22, variation: 0.06 },
+  jump: { volume: 0.16, variation: 0.06 },
+  npc_streuner_idle: { volume: 0.34, variation: 0.05 },
+  npc_streuner_cough: { volume: 0.31, variation: 0.05 },
+  npc_streuner_greet: { volume: 0.43, variation: 0.03 },
+  npc_haendler_idle: { volume: 0.31, variation: 0.05 },
+  npc_haendler_greet: { volume: 0.43, variation: 0.03 },
+  distant_creak: { volume: 0.14, variation: 0.1 },
+  distant_clang: { volume: 0.12, variation: 0.1 },
   ambient_wind: { volume: AMBIENT_LOOPS.ambient_wind, loop: true },
   ambient_birds: { volume: AMBIENT_LOOPS.ambient_birds, loop: true },
   fire_loop: { volume: 0, loop: true },
@@ -84,6 +90,7 @@ const EVENT_SOUNDS = {
 };
 
 const WEAPON_FAMILY = { machete: 'blade', rusty_pipe: 'blunt' };
+const WEAPON_SHOT = { usp_s: 'gunshot_usp', ak47: 'gunshot_ak' };
 
 function clampUnit(value, fallback) {
   return typeof value === 'number' && Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : fallback;
@@ -109,6 +116,9 @@ function createSilentAudio() {
     update: noop,
     applySettings: noop,
     weaponFamily: () => 'fist',
+    shotSound: () => null,
+    setIndoor: noop,
+    ready: () => Promise.resolve(),
   };
 }
 
@@ -125,6 +135,14 @@ export function createAudio() {
   window.Howler.mute(settings.muted);
 
   const sounds = new Map();
+  let pendingLoads = Object.keys(SOUND_DEFINITIONS).length;
+  const readyWaiters = [];
+  let indoor = false;
+
+  function finishLoad() {
+    pendingLoads -= 1;
+    if (pendingLoads <= 0) readyWaiters.splice(0).forEach((resolve) => resolve());
+  }
 
   for (const [name, definition] of Object.entries(SOUND_DEFINITIONS)) {
     sounds.set(
@@ -134,8 +152,23 @@ export function createAudio() {
         volume: definition.volume,
         loop: Boolean(definition.loop),
         preload: true,
+        onload: finishLoad,
+        onloaderror: finishLoad,
       })
     );
+  }
+
+  function ready(timeout = READY_TIMEOUT) {
+    if (pendingLoads <= 0) return Promise.resolve();
+    return new Promise((resolve) => {
+      readyWaiters.push(resolve);
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  function setIndoor(value) {
+    indoor = Boolean(value);
+    applyAmbientVolume();
   }
 
   const listener = { x: 0, z: 0, forwardX: 0, forwardZ: -1 };
@@ -180,7 +213,15 @@ export function createAudio() {
     if (placement) play(name, { volume: placement.volume * volume, pan: placement.pan });
   }
 
+  function shotSound(weaponId) {
+    return WEAPON_SHOT[weaponId] ?? null;
+  }
+
   function playEvent(event) {
+    if (event.kind === 'ability-failed' && event.reason === 'no-ammo') {
+      play('gun_dry');
+      return;
+    }
     const name = EVENT_SOUNDS[event.kind];
     if (name) play(name);
   }
@@ -208,7 +249,7 @@ export function createAudio() {
   }
 
   function applyAmbientVolume() {
-    for (const [name, base] of Object.entries(AMBIENT_LOOPS)) sounds.get(name).volume(base * settings.ambient);
+    for (const [name, base] of Object.entries(AMBIENT_LOOPS)) sounds.get(name).volume(base * settings.ambient * (indoor ? INDOOR_AMBIENT : 1));
   }
 
   function applySettings(next) {
@@ -318,5 +359,8 @@ export function createAudio() {
     update,
     applySettings,
     weaponFamily,
+    shotSound,
+    setIndoor,
+    ready,
   };
 }

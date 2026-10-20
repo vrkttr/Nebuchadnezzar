@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 7,
- "nextobjectid": 329,
+ "nextobjectid": 331,
  "layers": [
   {
    "name": "Boden",
@@ -7493,6 +7493,65 @@
     {
      "id": 316,
      "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 1920,
+     "y": 1616,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "tuer_streuner"
+      }
+     ]
+    },
+    {
+     "id": 317,
+     "name": "",
+     "type": "teleporter",
+     "class": "teleporter",
+     "x": 1891.2,
+     "y": 1548.8,
+     "width": 57.6,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "plattenbau_eingang"
+      },
+      {
+       "name": "zone",
+       "type": "string",
+       "value": "plattenbau_innen"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "eingang"
+      },
+      {
+       "name": "label",
+       "type": "string",
+       "value": "Plattenbau betreten"
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.5
+      }
+     ]
+    },
+    {
+     "id": 318,
+     "name": "",
      "type": "npc",
      "class": "npc",
      "x": 1772.8,
@@ -7511,7 +7570,7 @@
      ]
     },
     {
-     "id": 317,
+     "id": 319,
      "name": "",
      "type": "npc",
      "class": "npc",
@@ -7531,7 +7590,7 @@
      ]
     },
     {
-     "id": 318,
+     "id": 320,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7561,7 +7620,7 @@
      ]
     },
     {
-     "id": 319,
+     "id": 321,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7591,7 +7650,7 @@
      ]
     },
     {
-     "id": 320,
+     "id": 322,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7621,7 +7680,7 @@
      ]
     },
     {
-     "id": 321,
+     "id": 323,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7651,7 +7710,7 @@
      ]
     },
     {
-     "id": 322,
+     "id": 324,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7681,7 +7740,7 @@
      ]
     },
     {
-     "id": 323,
+     "id": 325,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7711,7 +7770,7 @@
      ]
     },
     {
-     "id": 324,
+     "id": 326,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7741,7 +7800,7 @@
      ]
     },
     {
-     "id": 325,
+     "id": 327,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7771,7 +7830,7 @@
      ]
     },
     {
-     "id": 326,
+     "id": 328,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7801,7 +7860,7 @@
      ]
     },
     {
-     "id": 327,
+     "id": 329,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7831,7 +7890,7 @@
      ]
     },
     {
-     "id": 328,
+     "id": 330,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -7873,7 +7932,7 @@
   {
    "name": "name",
    "type": "string",
-   "value": "startwelt"
+   "value": "Ödland – Sektor 7"
   },
   {
    "name": "groundTexture",

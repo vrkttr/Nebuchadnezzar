@@ -1,6 +1,6 @@
 import { ENEMY_MELEE_RANGE } from './combat.js';
 import { ENEMY_RADIUS, isBlocked, resolveCollisions } from './world.js';
-import { zone } from './zoneLoader.js';
+import { getZone, getZones } from './zoneLoader.js';
 
 const ENEMY_TYPES = {
   raider: { name: 'Plünderer', healthMax: 60, lootTable: 'raider' },
@@ -8,21 +8,28 @@ const ENEMY_TYPES = {
   marauder: { name: 'Marodeur', healthMax: 140, lootTable: 'marauder' },
 };
 
-const SPAWNS = zone.enemies.map((placement) => {
-  const definition = ENEMY_TYPES[placement.type];
-  if (!definition) throw new Error(`Zonendatei: Unbekannter Gegnertyp "${placement.type}".`);
-  if (!Number.isInteger(placement.level) || placement.level < 1) throw new Error(`Zonendatei: Ungültiges Level für Gegner "${placement.type}".`);
-  return {
-    type: placement.type,
-    name: definition.name,
-    level: placement.level,
-    x: placement.x,
-    y: 0,
-    z: placement.z,
-    healthMax: Number(placement.healthMax) || definition.healthMax,
-    lootTable: definition.lootTable,
-  };
-});
+const SPAWNS_BY_ZONE = new Map();
+
+for (const zone of getZones()) {
+  SPAWNS_BY_ZONE.set(
+    zone.id,
+    zone.enemies.map((placement) => {
+      const definition = ENEMY_TYPES[placement.type];
+      if (!definition) throw new Error(`Zonendatei: Unbekannter Gegnertyp "${placement.type}".`);
+      if (!Number.isInteger(placement.level) || placement.level < 1) throw new Error(`Zonendatei: Ungültiges Level für Gegner "${placement.type}".`);
+      return {
+        type: placement.type,
+        name: definition.name,
+        level: placement.level,
+        x: placement.x,
+        y: 0,
+        z: placement.z,
+        healthMax: Number(placement.healthMax) || definition.healthMax,
+        lootTable: definition.lootTable,
+      };
+    })
+  );
+}
 
 const AGGRO_RANGE = 8;
 const LEASH_RANGE = 20;
@@ -38,13 +45,14 @@ const WANDER_ARRIVE_DISTANCE = 0.2;
 const WANDER_STUCK_LIMIT = 1.5;
 const WANDER_PICK_ATTEMPTS = 8;
 
-export function createEnemies() {
+export function createEnemies(zoneId) {
   const enemies = new Map();
 
-  SPAWNS.forEach((spawn, index) => {
-    const id = `enemy-${index + 1}`;
+  SPAWNS_BY_ZONE.get(zoneId).forEach((spawn, index) => {
+    const id = `${zoneId}-enemy-${index + 1}`;
     enemies.set(id, {
       id,
+      zoneId,
       type: spawn.type,
       name: spawn.name,
       level: spawn.level,
@@ -161,7 +169,7 @@ function pickWanderTarget(enemy) {
     const x = enemy.spawnX + Math.cos(angle) * radius;
     const z = enemy.spawnZ + Math.sin(angle) * radius;
 
-    if (isBlocked(x, z, ENEMY_RADIUS)) continue;
+    if (isBlocked(enemy.zoneId, x, z, ENEMY_RADIUS)) continue;
 
     enemy.wanderTargetX = x;
     enemy.wanderTargetZ = z;

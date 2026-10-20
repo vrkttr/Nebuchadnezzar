@@ -1,8 +1,10 @@
 import { ABILITIES, DEFAULT_ACTION_BAR, createCooldownState } from './abilities.js';
-import { applyEquipmentStats } from './equipment.js';
+import { applyEquipmentStats, getEquippedWeapon } from './equipment.js';
+import { countItem, removeItem, sendInventory } from './inventory.js';
 import { addGold, goldForKill } from './loot.js';
 import { applyLevelStats, grantXp, xpForKill } from './progression.js';
-import { zone } from './zoneLoader.js';
+import { getZone } from './zoneLoader.js';
+import { hasLineOfSight } from './world.js';
 
 const PLAYER_ATTACK_RANGE = 3;
 const PLAYER_ATTACK_INTERVAL = 1.5;
@@ -16,7 +18,6 @@ export const ENEMY_MELEE_RANGE = 2;
 const ENEMY_ATTACK_INTERVAL = 2;
 const ENEMY_RESPAWN_TIME = 15;
 
-const SPAWN_POINT = zone.spawn;
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -26,7 +27,15 @@ function horizontalDistance(a, b) {
   return Math.hypot(a.x - b.x, a.z - b.z);
 }
 
-function rollPlayerDamage(player) {
+const RANGED_BASE_DAMAGE_SHARE = 0.4;
+
+function rollPlayerDamage(player, ranged = false) {
+  if (ranged) {
+    return randomInt(
+      Math.round(player.damageMin * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMin,
+      Math.round(player.damageMax * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMax
+    );
+  }
   return randomInt(player.damageMin + player.equipDamageMin, player.damageMax + player.equipDamageMax);
 }
 
@@ -94,9 +103,10 @@ function killPlayer(player) {
 }
 
 function respawnPlayer(player) {
-  player.x = SPAWN_POINT.x;
-  player.y = SPAWN_POINT.y;
-  player.z = SPAWN_POINT.z;
+  const spawn = getZone(player.zoneId).spawn;
+  player.x = spawn.x;
+  player.y = spawn.y;
+  player.z = spawn.z;
   player.velocityY = 0;
   player.isGrounded = true;
   player.health = player.healthMax;
@@ -128,10 +138,10 @@ function awardKill(player, playerId, enemy, notify, onKill) {
   }
 }
 
-function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, abilityId = null) {
+function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, abilityId = null, weaponId = null) {
   enemy.health = Math.max(0, enemy.health - amount);
   attacker.combatTimer = 0;
-  emit({ type: 'damage', targetType: 'enemy', targetId: enemy.id, amount, attackerId, abilityId });
+  emit({ type: 'damage', targetType: 'enemy', targetId: enemy.id, amount, attackerId, abilityId, weaponId });
 
   if (enemy.health === 0) {
     killEnemy(enemy);
@@ -152,6 +162,24 @@ function damagePlayer(player, playerId, enemy, emit) {
   if (player.health === 0) {
     killPlayer(player);
   }
+}
+
+function fireRanged(player, playerId, enemy, weapon, emit, notify, onKill) {
+  if (countItem(player.inventory, weapon.ranged.ammo) < 1) {
+    notify(playerId, { type: 'event', kind: 'ability-failed', reason: 'no-ammo', weaponId: weapon.id });
+    return false;
+  }
+
+  if (!hasLineOfSight(player.zoneId, player.x, player.z, enemy.x, enemy.z)) {
+    notify(playerId, { type: 'event', kind: 'ability-failed', reason: 'no-line' });
+    return false;
+  }
+
+  removeItem(player.inventory, weapon.ranged.ammo, 1);
+  player.dataVersion += 1;
+  sendInventory(notify, playerId, player);
+  damageEnemy(enemy, rollPlayerDamage(player, true), playerId, player, emit, notify, onKill, null, weapon.id);
+  return true;
 }
 
 function updatePlayers(players, enemies, delta, emit, notify, onKill) {
@@ -181,13 +209,22 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
     if (!enemy || enemy.dead) {
       player.targetEnemyId = null;
       player.autoAttack = false;
-    } else if (
-      player.autoAttack &&
-      player.attackTimer >= PLAYER_ATTACK_INTERVAL &&
-      horizontalDistance(player, enemy) <= PLAYER_ATTACK_RANGE
-    ) {
-      player.attackTimer = 0;
-      damageEnemy(enemy, rollPlayerDamage(player), playerId, player, emit, notify, onKill);
+    } else if (player.autoAttack) {
+      const weapon = getEquippedWeapon(player.equipment);
+      const ranged = weapon?.ranged ?? null;
+      const interval = ranged ? ranged.interval : PLAYER_ATTACK_INTERVAL;
+      const range = ranged ? ranged.range : PLAYER_ATTACK_RANGE;
+
+      if (player.attackTimer >= interval && horizontalDistance(player, enemy) <= range) {
+        if (!ranged) {
+          player.attackTimer = 0;
+          damageEnemy(enemy, rollPlayerDamage(player), playerId, player, emit, notify, onKill);
+        } else if (fireRanged(player, playerId, enemy, weapon, emit, notify, onKill)) {
+          player.attackTimer = 0;
+        } else {
+          player.autoAttack = false;
+        }
+      }
     }
 
     if (player.combatTimer >= REGEN_DELAY && player.health < player.healthMax) {
@@ -232,6 +269,8 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
   if (!ability) return;
 
   const fail = (reason) => notify(playerId, { type: 'event', kind: 'ability-failed', reason });
+
+  if (getEquippedWeapon(player.equipment)?.ranged) return fail('melee-only');
 
   const enemy = player.targetEnemyId ? enemies.get(player.targetEnemyId) : null;
 

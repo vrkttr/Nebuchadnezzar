@@ -6,6 +6,7 @@ import { resolveAppearance } from './Appearances.js';
 const HIP_HEIGHT = 0.94;
 const DEFAULT_SCALE = 0.95;
 const ATTACK_DURATION = 0.45;
+const SHOT_DURATION = 0.32;
 const AIRBORNE_HEIGHT = 0.08;
 const MOVE_THRESHOLD = 0.3;
 const RUN_THRESHOLD = 2.7;
@@ -103,6 +104,23 @@ const EQUIPMENT_VISUALS = {
     group.add(box(0.04, 0.75, 0.04, material, 0, -0.175, 0));
     group.add(box(0.04, 0.04, 0.12, material, 0, 0.2, 0.05));
     group.add(box(0.04, 0.1, 0.04, material, 0, 0.16, 0.1));
+  },
+  usp_s(group) {
+    const dark = metal(0x2c2c2a);
+    const tube = metal(0x3a3a38);
+    group.add(box(0.045, 0.2, 0.06, dark, 0, -0.1, 0));
+    group.add(box(0.036, 0.15, 0.036, tube, 0, -0.275, 0));
+    group.add(box(0.04, 0.09, 0.05, cloth(0x1e1e1c), 0, -0.04, -0.05));
+  },
+  ak47(group) {
+    const dark = metal(0x2a2a28);
+    const wood = cloth(0x6a4a2e);
+    group.add(box(0.045, 0.22, 0.09, wood, 0, 0.12, -0.01));
+    group.add(box(0.055, 0.32, 0.08, dark, 0, -0.16, 0));
+    group.add(box(0.05, 0.2, 0.07, wood, 0, -0.42, 0.005));
+    group.add(box(0.025, 0.22, 0.025, metal(0x3a3a38), 0, -0.63, 0.015));
+    group.add(box(0.04, 0.08, 0.14, metal(0x4a4438), 0, -0.2, -0.1));
+    group.add(box(0.04, 0.1, 0.04, dark, 0, -0.02, -0.06));
   },
   machete(group) {
     const blade = metal(0x9a9a92);
@@ -332,6 +350,7 @@ export function createHumanoid(name, options = {}) {
   let phase = 0;
   let idleTime = Math.random() * 10;
   let attackTime = -1;
+  let attackStyle = 'melee';
   let hitTime = -1;
   let dead = false;
   let fallAmount = 0;
@@ -394,11 +413,21 @@ export function createHumanoid(name, options = {}) {
     if (attackTime < 0) return null;
 
     attackTime += delta;
-    const t = attackTime / ATTACK_DURATION;
+    const t = attackTime / (attackStyle === 'shot' ? SHOT_DURATION : ATTACK_DURATION);
 
     if (t >= 1) {
       attackTime = -1;
       return null;
+    }
+
+    if (attackStyle === 'shot') {
+      const kick = t < 0.2 ? t / 0.2 : Math.max(0, 1 - (t - 0.2) / 0.5);
+      return {
+        weight: Math.min(1, t / 0.1, (1 - t) / 0.35),
+        shoulder: -1.5 + 0.22 * kick,
+        elbow: -0.2 - 0.12 * kick,
+        twist: 0.12,
+      };
     }
 
     const weight = Math.min(1, t / 0.12, (1 - t) / 0.3);
@@ -496,8 +525,10 @@ export function createHumanoid(name, options = {}) {
     armRight.elbow.rotation.x = elbowRight;
   }
 
-  function playAttack() {
-    if (!dead) attackTime = 0;
+  function playAttack(style = 'melee') {
+    if (dead) return;
+    attackStyle = style;
+    attackTime = 0;
   }
 
   function playHit() {

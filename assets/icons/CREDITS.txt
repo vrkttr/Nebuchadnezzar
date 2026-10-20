@@ -15,3 +15,5 @@ padded_vest.svg       kevlar-vest            Skoll - https://game-icons.net/1x1/
 patched_trousers.svg  trousers               Lorc - https://game-icons.net/1x1/lorc/trousers.html
 backpack.svg          backpack               Delapouite - https://game-icons.net/1x1/delapouite/backpack.html
 power_strike.svg      punch-blast            Lorc - https://game-icons.net/1x1/lorc/punch-blast.html
+
+usp_s.svg, ak47.svg, ammo_9mm.svg, ammo_762.svg: eigene Illustrationen für Projekt Nebuchadnezzar.

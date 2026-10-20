@@ -17,15 +17,17 @@ export function createServerConnection(url, handlers = {}) {
     handlers.onMessage?.(message);
   });
 
-  socket.addEventListener('close', () => {
+  socket.addEventListener('close', (event) => {
     console.log('[ServerConnection] Verbindung zum Server getrennt');
-    handlers.onClose?.();
+    handlers.onClose?.(event);
   });
 
   socket.addEventListener('error', (error) => {
     console.error('[ServerConnection] Verbindungsfehler:', error);
     handlers.onError?.(error);
   });
+
+  window.addEventListener('pagehide', () => socket.close());
 
   return {
     send(message) {

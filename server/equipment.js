@@ -45,3 +45,7 @@ export function computeEquipmentStats(equipment) {
 export function applyEquipmentStats(player) {
   Object.assign(player, computeEquipmentStats(player.equipment));
 }
+
+export function getEquippedWeapon(equipment) {
+  return equipment.weapon ? getItem(equipment.weapon) : null;
+}

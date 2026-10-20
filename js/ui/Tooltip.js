@@ -3,6 +3,7 @@ const TYPE_LABELS = {
   consumable: 'Verbrauchsgut',
   weapon: 'Waffe',
   armor: 'Rüstung',
+  ammo: 'Munition',
 };
 
 export const SLOT_LABELS = {
@@ -64,6 +65,11 @@ export function createTooltip(state) {
 
     if (item.stats?.damageMin !== undefined) {
       lines.push([`Schaden: ${item.stats.damageMin}–${item.stats.damageMax}`, 'tooltip-stat']);
+    }
+
+    if (item.ranged) {
+      lines.push([`Reichweite: ${item.ranged.range} m · ${(1 / item.ranged.interval).toFixed(1).replace('.', ',')} Schuss/s`, 'tooltip-stat']);
+      lines.push([`Munition: ${state.items[item.ranged.ammo]?.name ?? item.ranged.ammo}`, 'tooltip-dim']);
     }
 
     if (item.stats?.armor) {

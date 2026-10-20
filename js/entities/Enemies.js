@@ -111,6 +111,11 @@ export function createEnemies(scene, camera, nameplateContainer) {
     }
   }
 
+  function clear() {
+    for (const id of Array.from(enemies.keys())) remove(id);
+    clearSelection();
+  }
+
   function getObjects() {
     return Array.from(enemies.values())
       .filter((enemy) => !enemy.data.dead)
@@ -207,5 +212,5 @@ export function createEnemies(scene, camera, nameplateContainer) {
     enemies.get(id)?.playHit();
   }
 
-  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
+  return { sync, clear, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
 }

@@ -9,6 +9,7 @@ import { serializeAbilities } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
+import { grantStarterKit } from './starterKit.js';
 import { equipmentRows, loadEquipment, serializeEquipment } from './equipment.js';
 import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
 import { serializeNpcs } from './npcs.js';
@@ -22,7 +23,7 @@ import {
 } from './npcInteraction.js';
 import { diffQuestLog, loadQuests, questRows, recordKill, serializeQuestLog } from './quests.js';
 import { PLAYER_RADIUS, resolveCollisions } from './world.js';
-import { serializeZone } from './zoneLoader.js';
+import { DEFAULT_ZONE_ID, getZone, getZones, serializeZone } from './zoneLoader.js';
 import {
   createLootContainers,
   openLoot,
@@ -56,7 +57,9 @@ const SAVE_INTERVAL_MS = 2000;
 
 const players = new Map();
 const sockets = new Map();
-const enemies = createEnemies();
+const zoneEnemies = new Map(getZones().map((zone) => [zone.id, createEnemies(zone.id)]));
+const TELEPORT_RANGE = 4.5;
+const ZONE_LOAD_TIMEOUT_MS = 15000;
 const lootContainers = createLootContainers();
 
 function notify(playerId, message) {
@@ -75,6 +78,8 @@ function createInitialState(character) {
   const state = {
     characterId: character.id,
     characterName: character.name,
+    zoneId: character.zoneId,
+    loadingUntil: 0,
     appearance: character.appearance,
     x: character.x,
     y: character.y,
@@ -85,7 +90,7 @@ function createInitialState(character) {
     input: { moveX: 0, moveZ: 0, jump: false, run: false },
     inventory: character.inventory,
     consumableReadyAt: 0,
-    dataVersion: 0,
+    dataVersion: character.starterKit ? 1 : 0,
     savedDataVersion: 0,
     saveQueue: Promise.resolve(),
     quests: character.quests,
@@ -99,7 +104,7 @@ function createInitialState(character) {
   return state;
 }
 
-async function resolveCharacterFromToken(token) {
+async function consumeLoginToken(token) {
   if (!token) return null;
 
   const [tokenRows] = await dbPool.query(
@@ -111,10 +116,12 @@ async function resolveCharacterFromToken(token) {
 
   await dbPool.query('DELETE FROM login_tokens WHERE token = ?', [token]);
 
-  const characterId = tokenRows[0].character_id;
+  return tokenRows[0].character_id;
+}
 
+async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -137,22 +144,54 @@ async function resolveCharacterFromToken(token) {
     [characterId]
   );
 
+  const inventory = loadInventory(savedItemRows);
+  const equipment = loadEquipment(savedEquipmentRows);
+  const zoneId = getZone(row.zone) ? row.zone : DEFAULT_ZONE_ID;
+  const startPosition = zoneId === row.zone ? { x: row.pos_x, y: row.pos_y, z: row.pos_z } : getZone(zoneId).spawn;
+  const starterKit = !row.starter_kit;
+  if (starterKit) grantStarterKit(inventory, equipment);
+
   return {
     id: row.id,
     name: row.name,
-    x: row.pos_x,
-    y: row.pos_y,
-    z: row.pos_z,
+    starterKit,
+    zoneId,
+    x: startPosition.x,
+    y: startPosition.y,
+    z: startPosition.z,
     rotationY: row.rotation_y,
     level: row.level,
     xp: row.xp,
     gold: row.gold,
     appearance: loadAppearance(row),
     audio: { volume: row.audio_volume / 100, ambient: row.audio_ambient / 100, muted: Boolean(row.audio_muted) },
-    inventory: loadInventory(savedItemRows),
-    equipment: loadEquipment(savedEquipmentRows),
+    inventory,
+    equipment,
     quests: loadQuests(savedQuestRows),
   };
+}
+
+async function disconnectCharacter(characterId) {
+  for (const [playerId, state] of players) {
+    if (state.characterId !== characterId) continue;
+
+    const socket = sockets.get(playerId);
+    removePlayer(playerId);
+    if (socket) socket.close(4002, 'replaced');
+    await state.saveQueue.catch(() => {});
+    await persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
+  }
+}
+
+function removePlayer(playerId) {
+  const state = players.get(playerId);
+  if (!state) return null;
+
+  removeLootOfPlayer(lootContainers, playerId);
+  players.delete(playerId);
+  sockets.delete(playerId);
+  sendToZone(state.zoneId, { type: 'leave', id: playerId });
+  return state;
 }
 
 async function writeState(state) {
@@ -162,7 +201,7 @@ async function writeState(state) {
   const quests = questRows(state.quests);
 
   const characterQuery =
-    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ? WHERE id = ?';
+    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ?, starter_kit = 1, zone = ? WHERE id = ?';
   const characterParams = [
     state.x,
     state.y,
@@ -171,6 +210,7 @@ async function writeState(state) {
     state.level,
     Math.floor(state.xp),
     state.gold,
+    state.zoneId,
     state.characterId,
   ];
 
@@ -231,15 +271,30 @@ wss.on('connection', async (socket, request) => {
   const url = new URL(request.url, 'http://localhost');
   const token = url.searchParams.get('token');
 
-  const character = await resolveCharacterFromToken(token);
+  const characterId = await consumeLoginToken(token);
+
+  if (characterId === null) {
+    socket.close(4001, 'invalid-token');
+    return;
+  }
+
+  await disconnectCharacter(characterId);
+
+  const character = await loadCharacter(characterId);
 
   if (!character) {
     socket.close(4001, 'invalid-token');
     return;
   }
 
+  socket.isAlive = true;
+  socket.on('pong', () => {
+    socket.isAlive = true;
+  });
+
   const id = randomUUID();
   const initialState = createInitialState(character);
+  initialState.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
   players.set(id, initialState);
   sockets.set(id, socket);
 
@@ -248,14 +303,15 @@ wss.on('connection', async (socket, request) => {
     JSON.stringify({
       type: 'init',
       id,
-      enemies: serializeEnemies(enemies),
+      enemies: serializeEnemies(zoneEnemies.get(initialState.zoneId)),
       abilities: serializeAbilities(initialState.actionBar),
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),
       appearance: initialState.appearance,
-      npcs: serializeNpcs(),
-      world: serializeZone(),
+      npcs: serializeNpcs(initialState.zoneId),
+      world: serializeZone(getZone(initialState.zoneId)),
+      position: { x: initialState.x, y: initialState.y, z: initialState.z, rotationY: initialState.rotationY },
       audio: character.audio,
     })
   );
@@ -290,7 +346,7 @@ wss.on('connection', async (socket, request) => {
       const state = players.get(id);
       if (!state || state.dead) return;
 
-      const enemy = typeof message.enemyId === 'string' ? enemies.get(message.enemyId) : null;
+      const enemy = typeof message.enemyId === 'string' ? zoneEnemies.get(state.zoneId).get(message.enemyId) : null;
 
       if (enemy && !enemy.dead) {
         state.targetEnemyId = enemy.id;
@@ -310,7 +366,8 @@ wss.on('connection', async (socket, request) => {
       const slot = Number.parseInt(message.slot, 10);
       if (!Number.isInteger(slot)) return;
 
-      useAbility(id, state, enemies, slot, broadcast, notify, onKill);
+      if (isLoading(state)) return;
+      useAbility(id, state, zoneEnemies.get(state.zoneId), slot, (payload) => sendToZone(state.zoneId, payload), notify, onKill);
     } else if (message.type === 'loot-open') {
       const state = players.get(id);
       if (!state || typeof message.lootId !== 'string') return;
@@ -355,6 +412,12 @@ wss.on('connection', async (socket, request) => {
       if (!state || typeof message.slot !== 'string') return;
 
       unequipItem(id, state, message.slot, notify);
+    } else if (message.type === 'zone-enter') {
+      const state = players.get(id);
+      if (state && typeof message.teleporterId === 'string') enterTeleporter(id, state, message.teleporterId);
+    } else if (message.type === 'zone-ready') {
+      const state = players.get(id);
+      if (state) state.loadingUntil = 0;
     } else if (message.type === 'npc-interact') {
       const state = players.get(id);
       if (state) openNpc(state, id, message.npcId, notify);
@@ -388,14 +451,10 @@ wss.on('connection', async (socket, request) => {
   });
 
   socket.on('close', () => {
-    const state = players.get(id);
+    const state = removePlayer(id);
     if (state) {
       persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
     }
-    removeLootOfPlayer(lootContainers, id);
-    players.delete(id);
-    sockets.delete(id);
-    broadcast({ type: 'leave', id });
     console.log(`Client getrennt (${id})`);
   });
 
@@ -404,18 +463,72 @@ wss.on('connection', async (socket, request) => {
   });
 });
 
-function broadcast(message) {
+function isLoading(state) {
+  return Date.now() < state.loadingUntil;
+}
+
+function sendToZone(zoneId, message) {
   const data = JSON.stringify(message);
-  for (const client of wss.clients) {
-    if (client.readyState === client.OPEN) {
-      client.send(data);
-    }
+  for (const [playerId, state] of players) {
+    if (state.zoneId !== zoneId || isLoading(state)) continue;
+    const socket = sockets.get(playerId);
+    if (socket && socket.readyState === socket.OPEN) socket.send(data);
   }
+}
+
+function enterTeleporter(playerId, state, teleporterId) {
+  if (state.dead || isLoading(state)) return;
+
+  const teleporter = getZone(state.zoneId).teleporters.find((candidate) => candidate.id === teleporterId);
+  if (!teleporter) return;
+
+  if (Math.hypot(state.x - teleporter.x, state.z - teleporter.z) > TELEPORT_RANGE) {
+    notify(playerId, { type: 'event', kind: 'zone-failed', reason: 'too-far' });
+    return;
+  }
+
+  changeZone(playerId, state, teleporter.zone, teleporter.spawn);
+}
+
+function changeZone(playerId, state, zoneId, spawnId) {
+  const target = getZone(zoneId);
+  const spawn = target?.spawns[spawnId];
+  if (!spawn) return;
+
+  const previousZoneId = state.zoneId;
+  removeLootOfPlayer(lootContainers, playerId);
+
+  state.zoneId = zoneId;
+  state.x = spawn.x;
+  state.y = spawn.y;
+  state.z = spawn.z;
+  state.rotationY = spawn.rotationY;
+  state.velocityY = 0;
+  state.isGrounded = true;
+  state.input.moveX = 0;
+  state.input.moveZ = 0;
+  state.input.jump = false;
+  state.targetEnemyId = null;
+  state.autoAttack = false;
+  state.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
+  state.dataVersion += 1;
+
+  sendToZone(previousZoneId, { type: 'leave', id: playerId });
+
+  notify(playerId, {
+    type: 'zone',
+    world: serializeZone(target),
+    enemies: serializeEnemies(zoneEnemies.get(zoneId)),
+    npcs: serializeNpcs(zoneId),
+    position: { x: spawn.x, y: spawn.y, z: spawn.z, rotationY: spawn.rotationY },
+  });
+
+  persistState(state).catch((error) => console.error('Fehler beim Speichern der Zone:', error));
 }
 
 function simulate() {
   for (const state of players.values()) {
-    if (state.dead) continue;
+    if (state.dead || isLoading(state)) continue;
 
     const { input } = state;
 
@@ -447,29 +560,41 @@ function simulate() {
 
 setInterval(() => {
   simulate();
-  updateEnemies(enemies, players, TICK_DELTA);
-  updateCombat(players, enemies, TICK_DELTA, broadcast, notify, onKill);
+
+  for (const zone of getZones()) {
+    const enemies = zoneEnemies.get(zone.id);
+    const zonePlayers = new Map();
+    for (const [id, state] of players) {
+      if (state.zoneId === zone.id && !isLoading(state)) zonePlayers.set(id, state);
+    }
+
+    updateEnemies(enemies, zonePlayers, TICK_DELTA);
+    updateCombat(zonePlayers, enemies, TICK_DELTA, (payload) => sendToZone(zone.id, payload), notify, onKill);
+
+    if (zonePlayers.size === 0) continue;
+
+    const snapshot = {};
+    for (const [id, state] of zonePlayers) {
+      snapshot[id] = {
+        x: state.x,
+        y: state.y,
+        z: state.z,
+        rotationY: state.rotationY,
+        characterName: state.characterName,
+        level: state.level,
+        health: state.health,
+        healthMax: state.healthMax,
+        dead: state.dead,
+        autoAttack: state.autoAttack,
+        equipment: state.equipment,
+        appearance: state.appearance,
+      };
+    }
+    sendToZone(zone.id, { type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
+  }
+
   updateLootContainers(lootContainers, TICK_DELTA, notify);
   if (players.size === 0) return;
-
-  const snapshot = {};
-  for (const [id, state] of players) {
-    snapshot[id] = {
-      x: state.x,
-      y: state.y,
-      z: state.z,
-      rotationY: state.rotationY,
-      characterName: state.characterName,
-      level: state.level,
-      health: state.health,
-      healthMax: state.healthMax,
-      dead: state.dead,
-      autoAttack: state.autoAttack,
-      equipment: state.equipment,
-      appearance: state.appearance,
-    };
-  }
-  broadcast({ type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
 
   for (const [id, state] of players) {
     const questView = serializeQuestLog(state);
@@ -506,3 +631,15 @@ setInterval(() => {
     persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
   }
 }, SAVE_INTERVAL_MS);
+
+setInterval(() => {
+  for (const client of wss.clients) {
+    if (client.isAlive === false) {
+      client.terminate();
+      continue;
+    }
+
+    client.isAlive = false;
+    client.ping();
+  }
+}, 10000);
