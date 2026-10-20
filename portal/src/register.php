@@ -2,6 +2,7 @@
 
 session_start();
 require __DIR__ . '/db.php';
+require __DIR__ . '/layout.php';
 
 $error = null;
 
@@ -40,25 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+renderPageStart('Registrierung', 'register.php');
 ?>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>Registrierung - Projekt Nebuchadnezzar</title>
-</head>
-<body>
-<h1>Registrierung</h1>
 <?php if ($error !== null): ?>
-<p><?= htmlspecialchars($error) ?></p>
+<p class="nu-message"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
-<form method="post">
-<label>Benutzername<br><input type="text" name="username" maxlength="32" required></label><br>
-<label>Passwort<br><input type="password" name="password" required></label><br>
-<label>Passwort bestätigen<br><input type="password" name="password_confirm" required></label><br>
-<button type="submit">Registrieren</button>
+<form method="post" class="portal-form">
+<label class="portal-field"><span class="nu-label">Benutzername</span><input class="nu-input" type="text" name="username" maxlength="32" required autofocus autocomplete="username"></label>
+<label class="portal-field"><span class="nu-label">Passwort</span><input class="nu-input" type="password" name="password" required autocomplete="new-password"></label>
+<label class="portal-field"><span class="nu-label">Passwort bestätigen</span><input class="nu-input" type="password" name="password_confirm" required autocomplete="new-password"></label>
+<div class="portal-actions"><button class="nu-button" type="submit">Registrieren</button><a class="nu-button" href="login.php">Zum Login</a></div>
 </form>
-<p><a href="login.php">Zum Login</a></p>
-<p><a href="index.php">Zurück</a></p>
-</body>
-</html>
+<?php renderPageEnd();

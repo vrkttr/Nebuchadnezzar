@@ -2,6 +2,7 @@
 
 session_start();
 require __DIR__ . '/db.php';
+require __DIR__ . '/layout.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -42,26 +43,19 @@ if (!$character && $_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+renderPageStart('Charakter', 'character.php');
 ?>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>Charakter - Projekt Nebuchadnezzar</title>
-</head>
-<body>
-<h1>Charakter</h1>
 <?php if ($character): ?>
-<p>Dein Charakter: <?= htmlspecialchars($character['name']) ?></p>
+<div class="nu-label">Dein Charakter</div>
+<p class="portal-character"><?= htmlspecialchars($character['name']) ?></p>
+<div class="portal-actions"><a class="nu-button" href="play.php">Spielen</a></div>
 <?php else: ?>
 <?php if ($error !== null): ?>
-<p><?= htmlspecialchars($error) ?></p>
+<p class="nu-message"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
-<form method="post">
-<label>Charaktername<br><input type="text" name="name" maxlength="32" required></label><br>
-<button type="submit">Erstellen</button>
+<form method="post" class="portal-form">
+<label class="portal-field"><span class="nu-label">Charaktername</span><input class="nu-input" type="text" name="name" maxlength="32" required autofocus autocomplete="off"></label>
+<div class="portal-actions"><button class="nu-button" type="submit">Erstellen</button></div>
 </form>
 <?php endif; ?>
-<p><a href="index.php">Zurück</a></p>
-</body>
-</html>
+<?php renderPageEnd();
