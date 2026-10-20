@@ -1,12 +1,17 @@
 import { createHumanoid } from './Humanoid.js';
+import { buildPlayerAppearance } from './AppearanceOptions.js';
+import { APPEARANCES } from './Appearances.js';
 
 function variantFromId(id) {
   const digits = String(id).match(/\d+/);
   return digits ? Number(digits[0]) : 0;
 }
 
-export function createPlayer(appearance = 'player') {
-  const humanoid = createHumanoid(appearance);
+export function createPlayer(appearanceName = 'player', indices = null) {
+  const humanoid = createHumanoid(appearanceName, {
+    appearance: indices ? buildPlayerAppearance(indices, APPEARANCES[appearanceName]) : undefined,
+  });
+  let appearanceKey = indices ? indices.join(',') : '';
   humanoid.object.name = 'Player';
 
   return {
@@ -16,7 +21,15 @@ export function createPlayer(appearance = 'player') {
     },
     update: humanoid.update,
     playAttack: humanoid.playAttack,
+    playHit: humanoid.playHit,
+    setDead: humanoid.setDead,
     setEquipment: humanoid.setEquipment,
+    setAppearance(next) {
+      const key = Array.isArray(next) ? next.join(',') : '';
+      if (!Array.isArray(next) || key === appearanceKey) return;
+      appearanceKey = key;
+      humanoid.setAppearance(buildPlayerAppearance(next, APPEARANCES[appearanceName]));
+    },
   };
 }
 
@@ -34,5 +47,11 @@ export function createEnemy(id, type = 'raider') {
   humanoid.object.userData.isEnemy = true;
   humanoid.object.userData.enemyId = id;
 
-  return { object: humanoid.object, update: humanoid.update, playAttack: humanoid.playAttack };
+  return {
+    object: humanoid.object,
+    update: humanoid.update,
+    playAttack: humanoid.playAttack,
+    playHit: humanoid.playHit,
+    setDead: humanoid.setDead,
+  };
 }

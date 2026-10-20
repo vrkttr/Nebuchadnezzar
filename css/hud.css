@@ -1360,3 +1360,28 @@ button {
   text-align: right;
   font-family: var(--nu-font-display);
 }
+
+.damage-number {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  font-family: var(--nu-font-display);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-shadow: 0 0 3px #000000, 0 2px 0 #000000;
+  pointer-events: none;
+}
+
+.damage-dealt {
+  color: #f0d27a;
+}
+
+.damage-taken {
+  color: #e0664c;
+  font-size: 22px;
+}
+
+.damage-other {
+  color: #b9b29a;
+  font-size: 16px;
+}

@@ -22,7 +22,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     const name = state.characterName ?? '???';
 
     if (!remote) {
-      const created = createPlayer('remote');
+      const created = createPlayer('remote', state.appearance);
       scene.add(created.object);
 
       remote = {
@@ -30,7 +30,10 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
         setPosition: created.setPosition,
         animate: created.update,
         playAttack: created.playAttack,
+        playHit: created.playHit,
+        setDead: created.setDead,
         setEquipment: created.setEquipment,
+        setAppearance: created.setAppearance,
         target: new THREE.Vector3(state.x, state.y, state.z),
         targetRotationY: state.rotationY ?? 0,
         nameplateEl: createNameplateElement(name),
@@ -39,6 +42,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
       remote.setPosition(state.x, state.y, state.z);
       remote.object.rotation.y = remote.targetRotationY;
       remote.setEquipment(state.equipment);
+      remote.setDead(state.dead);
 
       remotePlayers.set(id, remote);
       return;
@@ -47,6 +51,8 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     remote.target.set(state.x, state.y, state.z);
     remote.targetRotationY = state.rotationY ?? remote.targetRotationY;
     remote.setEquipment(state.equipment);
+    remote.setAppearance(state.appearance);
+    remote.setDead(state.dead);
 
     if (remote.nameplateEl.textContent !== name) {
       remote.nameplateEl.textContent = name;
@@ -105,6 +111,14 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     remotePlayers.get(id)?.playAttack();
   }
 
+  function playHit(id) {
+    remotePlayers.get(id)?.playHit();
+  }
+
+  function getObject(id) {
+    return remotePlayers.get(id)?.object ?? null;
+  }
+
   function getMarkers() {
     return Array.from(remotePlayers.values(), (remote) => ({
       x: remote.object.position.x,
@@ -112,5 +126,5 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }));
   }
 
-  return { sync, remove, playAttack, getMarkers, update };
+  return { sync, remove, playAttack, playHit, getObject, getMarkers, update };
 }

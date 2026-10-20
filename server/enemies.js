@@ -5,6 +5,10 @@ const SPAWNS = [
   { type: 'raider', name: 'Plünderer', level: 1, x: -13.2, y: 0, z: 30, healthMax: 60, lootTable: 'raider' },
   { type: 'raider', name: 'Plünderer', level: 1, x: -15, y: 0, z: 31.4, healthMax: 60, lootTable: 'raider' },
   { type: 'raider', name: 'Plünderer', level: 2, x: -11.5, y: 0, z: 29.2, healthMax: 80, lootTable: 'raider' },
+  { type: 'scavenger', name: 'Schrottsammler', level: 2, x: 12, y: 0, z: 32, healthMax: 70, lootTable: 'scavenger' },
+  { type: 'scavenger', name: 'Schrottsammler', level: 2, x: 14, y: 0, z: 30, healthMax: 70, lootTable: 'scavenger' },
+  { type: 'marauder', name: 'Marodeur', level: 3, x: -22, y: 0, z: 26, healthMax: 140, lootTable: 'marauder' },
+  { type: 'marauder', name: 'Marodeur', level: 3, x: -26, y: 0, z: 24, healthMax: 140, lootTable: 'marauder' },
 ];
 
 const AGGRO_RANGE = 8;

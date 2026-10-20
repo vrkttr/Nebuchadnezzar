@@ -1,4 +1,5 @@
 import { handleChat } from './chat.js';
+import { loadAppearance } from './appearance.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
@@ -73,6 +74,7 @@ function createInitialState(character) {
   const state = {
     characterId: character.id,
     characterName: character.name,
+    appearance: character.appearance,
     x: character.x,
     y: character.y,
     z: character.z,
@@ -111,7 +113,7 @@ async function resolveCharacterFromToken(token) {
   const characterId = tokenRows[0].character_id;
 
   const [characterRows] = await dbPool.query(
-    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y, level, xp, gold FROM characters WHERE id = ?',
+    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y, level, xp, gold, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants FROM characters WHERE id = ?',
     [characterId]
   );
 
@@ -144,6 +146,7 @@ async function resolveCharacterFromToken(token) {
     level: row.level,
     xp: row.xp,
     gold: row.gold,
+    appearance: loadAppearance(row),
     inventory: loadInventory(savedItemRows),
     equipment: loadEquipment(savedEquipmentRows),
     quests: loadQuests(savedQuestRows),
@@ -248,6 +251,7 @@ wss.on('connection', async (socket, request) => {
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),
+      appearance: initialState.appearance,
       npcs: serializeNpcs(),
     })
   );
@@ -453,6 +457,7 @@ setInterval(() => {
       dead: state.dead,
       autoAttack: state.autoAttack,
       equipment: state.equipment,
+      appearance: state.appearance,
     };
   }
   broadcast({ type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });

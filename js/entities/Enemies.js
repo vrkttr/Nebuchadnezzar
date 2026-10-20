@@ -4,6 +4,7 @@ import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
 
 const NAMEPLATE_HEIGHT = 2.2;
 const SMOOTHING = 12;
+const CORPSE_DURATION = 4;
 
 export function createEnemies(scene, camera, nameplateContainer) {
   const enemies = new Map();
@@ -24,13 +25,21 @@ export function createEnemies(scene, camera, nameplateContainer) {
   }
 
   function applyVisibility(enemy) {
-    const alive = !enemy.data.dead;
-    enemy.object.visible = alive;
-    enemy.nameplateEl.style.display = alive ? 'block' : 'none';
+    const dead = Boolean(enemy.data.dead);
+
+    if (dead !== enemy.wasDead) {
+      enemy.setDead(dead);
+      enemy.corpseTime = 0;
+      if (!dead) enemy.object.position.copy(enemy.target);
+      enemy.wasDead = dead;
+    }
+
+    enemy.object.visible = !dead || enemy.corpseTime < CORPSE_DURATION;
+    enemy.nameplateEl.style.display = dead ? 'none' : 'block';
   }
 
   function add(data) {
-    const { object, update: animate, playAttack } = createEnemy(data.id, data.type);
+    const { object, update: animate, playAttack, playHit, setDead } = createEnemy(data.id, data.type);
     object.position.set(data.x, data.y, data.z);
     object.rotation.y = data.rotationY ?? 0;
     scene.add(object);
@@ -45,6 +54,10 @@ export function createEnemies(scene, camera, nameplateContainer) {
       object,
       animate,
       playAttack,
+      playHit,
+      setDead,
+      wasDead: false,
+      corpseTime: 0,
       nameplateEl,
       target: new THREE.Vector3(data.x, data.y, data.z),
       targetRotationY: data.rotationY ?? 0,
@@ -149,7 +162,12 @@ export function createEnemies(scene, camera, nameplateContainer) {
     for (const enemy of enemies.values()) {
       enemy.object.position.lerp(enemy.target, factor);
       enemy.object.rotation.y = lerpAngle(enemy.object.rotation.y, enemy.targetRotationY, factor);
-      enemy.animate(delta);
+      if (enemy.data.dead) {
+        enemy.corpseTime += delta;
+        if (enemy.corpseTime >= CORPSE_DURATION) enemy.object.visible = false;
+      }
+
+      if (enemy.object.visible) enemy.animate(delta);
       updateNameplate(enemy);
     }
 
@@ -181,5 +199,9 @@ export function createEnemies(scene, camera, nameplateContainer) {
     enemies.get(id)?.playAttack();
   }
 
-  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, update };
+  function playHit(id) {
+    enemies.get(id)?.playHit();
+  }
+
+  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, playHit, update };
 }

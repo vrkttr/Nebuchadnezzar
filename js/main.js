@@ -31,6 +31,7 @@ const [
   { createViewCapture },
   { createMinimap },
   { createPortraits },
+  { createDamageNumbers },
   { createHud },
   { createAudio },
   { gameState },
@@ -65,6 +66,7 @@ const [
   import(v('./core/ViewCapture.js')),
   import(v('./hud/Minimap.js')),
   import(v('./hud/Portraits.js')),
+  import(v('./hud/DamageNumbers.js')),
   import(v('./hud/Hud.js')),
   import(v('./audio/Audio.js')),
   import(v('./state/GameState.js')),
@@ -163,6 +165,7 @@ function start(token) {
     },
   });
   const portraits = createPortraits({ scene, renderer, viewCapture, player, enemies, gameState });
+  const damageNumbers = createDamageNumbers(camera, nameplateContainer);
   const chat = createChat({ onSend: (text) => connection.send({ type: 'chat', text }) });
 
   let ownPlayerId = null;
@@ -178,6 +181,7 @@ function start(token) {
         inventory.render(message.inventory ?? []);
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
+        player.setAppearance(message.appearance);
       } else if (message.type === 'chat') {
         chat.add(message);
       } else if (message.type === 'quests') {
@@ -217,6 +221,25 @@ function start(token) {
         audio.playEvent(message);
       } else if (message.type === 'damage') {
         audio.playDamage(message, ownPlayerId);
+        const isEnemyTarget = message.targetType === 'enemy';
+        const isOwnTarget = !isEnemyTarget && message.targetId === ownPlayerId;
+        const hitObject = isEnemyTarget
+          ? enemies.getObject(message.targetId)
+          : isOwnTarget
+            ? player.object
+            : remotePlayers.getObject(message.targetId);
+
+        if (hitObject) {
+          let kind = 'other';
+          if (isEnemyTarget && message.attackerId === ownPlayerId) kind = 'dealt';
+          if (isOwnTarget) kind = 'taken';
+          damageNumbers.spawn(hitObject.position, message.amount, kind);
+        }
+
+        if (isEnemyTarget) enemies.playHit(message.targetId);
+        else if (isOwnTarget) player.playHit();
+        else remotePlayers.playHit(message.targetId);
+
         if (message.targetType === 'enemy' && message.attackerId) {
           if (message.attackerId === ownPlayerId) player.playAttack();
           else remotePlayers.playAttack(message.attackerId);
@@ -247,6 +270,7 @@ function start(token) {
           gameState.player.health = ownState.health;
           gameState.player.healthMax = ownState.healthMax;
           gameState.player.dead = Boolean(ownState.dead);
+          player.setDead(gameState.player.dead);
           if (wasAlive && gameState.player.dead) {
             audio.play('player_death');
             dialogue.show(
@@ -456,6 +480,7 @@ function start(token) {
       connection.send({ type: 'input', ...playerController.getInputState() });
     }
 
+    damageNumbers.update(delta);
     minimap.update(delta);
     portraits.update(delta);
 

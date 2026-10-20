@@ -13,6 +13,10 @@ const PORTRAIT_LAYER = 1;
 const POSE_SMOOTHING = 16;
 const SPEED_SMOOTHING = 10;
 const MAX_SPEED = 12;
+const HIT_DURATION = 0.28;
+const HIT_RECOIL = 0.3;
+const FALL_SPEED = 2.5;
+const FALL_LIFT = 0.12;
 const EQUIPMENT_SLOTS = ['weapon', 'head', 'chest', 'legs'];
 
 const cloth = (color) => getMaterial('cloth', { color });
@@ -49,6 +53,11 @@ function buildHair(appearance) {
   if (style === 'short') {
     group.add(box(0.27, 0.06, 0.28, hair, 0, 0.265, 0));
     group.add(box(0.27, 0.2, 0.05, hair, 0, 0.18, -0.115));
+  } else if (style === 'long') {
+    group.add(box(0.27, 0.06, 0.28, hair, 0, 0.265, 0));
+    group.add(box(0.27, 0.36, 0.05, hair, 0, 0.1, -0.115));
+    group.add(box(0.03, 0.2, 0.24, hair, 0.135, 0.17, -0.02));
+    group.add(box(0.03, 0.2, 0.24, hair, -0.135, 0.17, -0.02));
   } else if (style === 'bandana') {
     group.add(box(0.27, 0.07, 0.28, cloth(hairColor), 0, 0.21, 0));
     group.add(box(0.27, 0.07, 0.28, hair, 0, 0.265, 0));
@@ -95,6 +104,17 @@ const EQUIPMENT_VISUALS = {
     group.add(box(0.04, 0.04, 0.12, material, 0, 0.2, 0.05));
     group.add(box(0.04, 0.1, 0.04, material, 0, 0.16, 0.1));
   },
+  machete(group) {
+    const blade = metal(0x9a9a92);
+    group.add(box(0.03, 0.62, 0.07, blade, 0, -0.43, 0.01));
+    group.add(box(0.035, 0.12, 0.04, cloth(0x2a2420), 0, 0.04, 0));
+  },
+  riot_helmet(group) {
+    const shell = metal(0x3a3e44);
+    group.add(box(0.3, 0.14, 0.31, shell, 0, 0.27, 0));
+    group.add(box(0.3, 0.2, 0.05, shell, 0, 0.14, -0.14));
+    group.add(box(0.28, 0.1, 0.03, getMaterial('plastic', { color: 0x1a2a2a }), 0, 0.18, 0.15));
+  },
   scrap_helmet(group) {
     const material = metal(0x70665a);
     group.add(box(0.3, 0.13, 0.3, material, 0, 0.27, 0));
@@ -119,7 +139,7 @@ const EQUIPMENT_VISUALS = {
 const PANTS_OVERRIDE = { patched_trousers: 0x5c5242 };
 
 export function createHumanoid(name, options = {}) {
-  const appearance = resolveAppearance(name, options.variant ?? 0);
+  let appearance = options.appearance ?? resolveAppearance(name, options.variant ?? 0);
   const object = new THREE.Group();
   object.scale.setScalar(appearance.scale ?? DEFAULT_SCALE);
 
@@ -130,7 +150,8 @@ export function createHumanoid(name, options = {}) {
   pickProxy.position.y = 0.9;
   object.add(pickProxy);
 
-  const hips = pivot(object, 0, HIP_HEIGHT, 0);
+  const body = pivot(object, 0, 0, 0);
+  const hips = pivot(body, 0, HIP_HEIGHT, 0);
   const torso = pivot(hips, 0, 0, 0);
   const headPivot = pivot(torso, 0, 0.66, 0);
 
@@ -141,7 +162,13 @@ export function createHumanoid(name, options = {}) {
   };
 
   hips.add(pants(box(0.44, 0.16, 0.25, cloth(appearance.pants), 0, 0.02, 0)));
-  torso.add(box(0.46, 0.58, 0.26, cloth(appearance.top), 0, 0.37, 0));
+  const topMeshes = [];
+  const skinMeshes = [];
+  const forearmMeshes = [];
+
+  const torsoMesh = box(0.46, 0.58, 0.26, cloth(appearance.top), 0, 0.37, 0);
+  topMeshes.push(torsoMesh);
+  torso.add(torsoMesh);
   torso.add(box(0.2, 0.04, 0.27, cloth(0x3a342a), 0, 0.1, 0));
 
   const skinMaterial = skin(appearance.skin);
@@ -157,7 +184,7 @@ export function createHumanoid(name, options = {}) {
   head.position.y = 0.145;
   headPivot.add(head);
 
-  const hair = buildHair(appearance);
+  let hair = buildHair(appearance);
   headPivot.add(hair);
 
   if (appearance.mask) {
@@ -175,12 +202,18 @@ export function createHumanoid(name, options = {}) {
   function buildArm(side) {
     const shoulder = pivot(torso, side * 0.3, 0.58, 0);
     const sleeve = cloth(appearance.top);
-    shoulder.add(hanging(0.13, 0.3, 0.14, sleeve));
+    const upperArm = hanging(0.13, 0.3, 0.14, sleeve);
+    topMeshes.push(upperArm);
+    shoulder.add(upperArm);
     const elbow = pivot(shoulder, 0, -0.3, 0);
     const forearmMaterial = appearance.sleeves === 'short' ? skinMaterial : sleeve;
-    elbow.add(hanging(0.12, 0.28, 0.13, forearmMaterial));
+    const forearm = hanging(0.12, 0.28, 0.13, forearmMaterial);
+    forearmMeshes.push(forearm);
+    elbow.add(forearm);
     const hand = pivot(elbow, 0, -0.28, 0);
-    hand.add(box(0.1, 0.1, 0.1, skinMaterial, 0, -0.04, 0));
+    const handMesh = box(0.1, 0.1, 0.1, skinMaterial, 0, -0.04, 0);
+    skinMeshes.push(handMesh);
+    hand.add(handMesh);
     return { shoulder, elbow, hand };
   }
 
@@ -213,6 +246,27 @@ export function createHumanoid(name, options = {}) {
     removers[slot]?.();
     removers[slot] = null;
     equipped[slot] = null;
+  }
+
+  function applyLook(next) {
+    appearance = next;
+    const topMaterial = cloth(appearance.top);
+    const skinTone = skin(appearance.skin);
+    const faceTone = getMaterial('face', { color: appearance.skin });
+
+    for (const mesh of topMeshes) mesh.material = topMaterial;
+    for (const mesh of skinMeshes) mesh.material = skinTone;
+    for (const mesh of forearmMeshes) {
+      mesh.material = appearance.sleeves === 'short' ? skinTone : topMaterial;
+    }
+    head.material = [skinTone, skinTone, skinTone, skinTone, faceTone, skinTone];
+    applyPants(equipped.legs);
+
+    headPivot.remove(hair);
+    hair = buildHair(appearance);
+    enablePortraitLayer(hair);
+    hair.visible = !equipped.head;
+    headPivot.add(hair);
   }
 
   function applyPants(itemId) {
@@ -278,6 +332,9 @@ export function createHumanoid(name, options = {}) {
   let phase = 0;
   let idleTime = Math.random() * 10;
   let attackTime = -1;
+  let hitTime = -1;
+  let dead = false;
+  let fallAmount = 0;
 
   function computeTarget(airborne, moving, running) {
     if (airborne) {
@@ -393,14 +450,29 @@ export function createHumanoid(name, options = {}) {
       phase += (running ? 9 + speed * 0.8 : 3.2 + speed * 2.2) * delta;
     }
 
-    computeTarget(airborne, moving, running);
+    computeTarget(airborne && !dead, moving && !dead, running);
 
     const factor = dampFactor(POSE_SMOOTHING, delta);
     for (const key of Object.keys(current)) {
       current[key] += (target[key] - current[key]) * factor;
     }
 
-    const attack = attackOverride(delta);
+    const fallTarget = dead ? 1 : 0;
+    const fallStep = FALL_SPEED * delta;
+    fallAmount += Math.max(-fallStep, Math.min(fallStep, fallTarget - fallAmount));
+    const fallEase = fallAmount * fallAmount * (3 - 2 * fallAmount);
+    body.rotation.x = -fallEase * (Math.PI / 2);
+    body.position.y = fallEase * FALL_LIFT;
+
+    let hitKick = 0;
+    if (hitTime >= 0) {
+      hitTime += delta;
+      const progress = hitTime / HIT_DURATION;
+      if (progress >= 1) hitTime = -1;
+      else hitKick = Math.sin(progress * Math.PI) * HIT_RECOIL;
+    }
+
+    const attack = dead ? null : attackOverride(delta);
     let shoulderRight = current.shoulderRight;
     let elbowRight = current.elbowRight;
     let torsoY = current.torsoY;
@@ -412,7 +484,8 @@ export function createHumanoid(name, options = {}) {
     }
 
     hips.position.y = HIP_HEIGHT + current.bob;
-    torso.rotation.set(current.torsoX, torsoY, 0);
+    torso.rotation.set(current.torsoX - hitKick, torsoY, 0);
+    headPivot.rotation.x = -hitKick * 0.8;
     legLeft.hip.rotation.x = current.hipLeft;
     legLeft.knee.rotation.x = current.kneeLeft;
     legRight.hip.rotation.x = current.hipRight;
@@ -424,11 +497,27 @@ export function createHumanoid(name, options = {}) {
   }
 
   function playAttack() {
-    attackTime = 0;
+    if (!dead) attackTime = 0;
+  }
+
+  function playHit() {
+    if (!dead) hitTime = 0;
+  }
+
+  function setDead(value) {
+    dead = Boolean(value);
+    if (dead) {
+      attackTime = -1;
+      hitTime = -1;
+    }
+  }
+
+  function isDown() {
+    return dead && fallAmount >= 1;
   }
 
   setEquipment(options.equipment ?? appearance.equipment ?? {});
   enablePortraitLayer(object);
 
-  return { object, update, playAttack, setEquipment };
+  return { object, update, playAttack, playHit, setDead, isDown, setEquipment, setAppearance: applyLook };
 }

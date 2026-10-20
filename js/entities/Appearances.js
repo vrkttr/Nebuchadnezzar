@@ -59,6 +59,32 @@ export const APPEARANCES = {
     mask: 0x1c1a18,
     equipment: { weapon: 'rusty_pipe' },
   },
+  scavenger: {
+    skin: 0xc79b7c,
+    hair: 0x5a5448,
+    hairStyle: 'hood',
+    hairColor: 0x6a6048,
+    top: 0x6a6048,
+    pants: 0x4a4234,
+    shoes: 0x2a2620,
+    sleeves: 'long',
+    scarf: 0x7a6a4a,
+    backpack: 'big',
+    backpackColor: 0x5a4a34,
+    equipment: { weapon: 'rusty_pipe' },
+  },
+  marauder: {
+    skin: 0xa87c5c,
+    hair: 0x16120e,
+    hairStyle: 'bald',
+    top: 0x3a3a38,
+    pants: 0x2a2826,
+    shoes: 0x1a1612,
+    sleeves: 'long',
+    mask: 0x1c1a18,
+    scale: 1.05,
+    equipment: { weapon: 'machete', head: 'riot_helmet', chest: 'padded_vest' },
+  },
 };
 
 const RAIDER_TOPS = [0x6a2a20, 0x5a3a24, 0x4a2a3a];
