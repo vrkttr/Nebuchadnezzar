@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createEnemy } from './Enemy.js';
+import { createEnemy } from './Characters.js';
 import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
 
 const NAMEPLATE_HEIGHT = 2.2;
@@ -30,7 +30,7 @@ export function createEnemies(scene, camera, nameplateContainer) {
   }
 
   function add(data) {
-    const object = createEnemy(data.id);
+    const { object, update: animate, playAttack } = createEnemy(data.id, data.type);
     object.position.set(data.x, data.y, data.z);
     object.rotation.y = data.rotationY ?? 0;
     scene.add(object);
@@ -43,6 +43,8 @@ export function createEnemies(scene, camera, nameplateContainer) {
     const enemy = {
       data,
       object,
+      animate,
+      playAttack,
       nameplateEl,
       target: new THREE.Vector3(data.x, data.y, data.z),
       targetRotationY: data.rotationY ?? 0,
@@ -147,6 +149,7 @@ export function createEnemies(scene, camera, nameplateContainer) {
     for (const enemy of enemies.values()) {
       enemy.object.position.lerp(enemy.target, factor);
       enemy.object.rotation.y = lerpAngle(enemy.object.rotation.y, enemy.targetRotationY, factor);
+      enemy.animate(delta);
       updateNameplate(enemy);
     }
 
@@ -164,5 +167,9 @@ export function createEnemies(scene, camera, nameplateContainer) {
     }
   }
 
-  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, update };
+  function playAttack(id) {
+    enemies.get(id)?.playAttack();
+  }
+
+  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, update };
 }

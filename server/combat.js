@@ -146,7 +146,7 @@ function damagePlayer(player, playerId, enemy, emit) {
   const amount = Math.max(1, Math.round((rawAmount * ARMOR_CONSTANT) / (ARMOR_CONSTANT + player.armor)));
   player.health = Math.max(0, player.health - amount);
   player.combatTimer = 0;
-  emit({ type: 'damage', targetType: 'player', targetId: playerId, amount });
+  emit({ type: 'damage', targetType: 'player', targetId: playerId, amount, attackerId: enemy.id });
 
   if (player.health === 0) {
     killPlayer(player);

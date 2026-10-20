@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createNpc } from './Npc.js';
+import { createNpc } from './Characters.js';
 
 const PLATE_HEIGHT = 2.2;
 const MARKER_SYMBOLS = { available: '!', ready: '?' };
@@ -12,7 +12,7 @@ export function createNpcs(scene, camera, nameplateContainer) {
     for (const data of list) {
       if (npcs.has(data.id)) continue;
 
-      const object = createNpc(data.name, data.color);
+      const { object, update: animate } = createNpc(data);
       object.position.set(data.x, data.y, data.z);
       object.rotation.y = data.rotationY ?? 0;
       object.userData.npcId = data.id;
@@ -31,7 +31,7 @@ export function createNpcs(scene, camera, nameplateContainer) {
       plate.appendChild(label);
       nameplateContainer.appendChild(plate);
 
-      npcs.set(data.id, { data, object, plate, marker });
+      npcs.set(data.id, { data, object, plate, marker, animate });
     }
   }
 
@@ -51,8 +51,9 @@ export function createNpcs(scene, camera, nameplateContainer) {
     return npcs.get(id)?.object.position ?? null;
   }
 
-  function update() {
+  function update(delta) {
     for (const npc of npcs.values()) {
+      npc.animate(delta);
       projected.set(npc.object.position.x, npc.object.position.y + PLATE_HEIGHT, npc.object.position.z);
       projected.project(camera);
 

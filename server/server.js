@@ -446,6 +446,7 @@ setInterval(() => {
       healthMax: state.healthMax,
       dead: state.dead,
       autoAttack: state.autoAttack,
+      equipment: state.equipment,
     };
   }
   broadcast({ type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });

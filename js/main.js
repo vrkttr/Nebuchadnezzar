@@ -26,6 +26,7 @@ const [
   { createNpcWindow },
   { createVendorWindow },
   { createMenuWindow },
+  { createWindowManager },
   { createHud },
   { createAudio },
   { gameState },
@@ -36,7 +37,7 @@ const [
   import(v('./core/Scene.js')),
   import(v('./core/ThirdPersonCamera.js')),
   import(v('./world/Startwelt.js')),
-  import(v('./entities/Player.js')),
+  import(v('./entities/Characters.js')),
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
   import(v('./entities/RemotePlayers.js')),
@@ -55,6 +56,7 @@ const [
   import(v('./ui/NpcWindow.js')),
   import(v('./ui/VendorWindow.js')),
   import(v('./ui/MenuWindow.js')),
+  import(v('./ui/WindowManager.js')),
   import(v('./hud/Hud.js')),
   import(v('./audio/Audio.js')),
   import(v('./state/GameState.js')),
@@ -104,6 +106,11 @@ function start(token) {
   const characterWindow = createCharacterWindow(gameState, ui, {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
+  const windowManager = createWindowManager();
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'menu', 'character']) {
+    windowManager.register(document.getElementById(`${name}-window`), name);
+  }
+
   const lootMarkers = createLootMarkers(scene);
   const lootWindow = createLootWindow(gameState, ui, {
     onTake: (lootId, entryId) => connection.send({ type: 'loot-take', lootId, entryId }),
@@ -146,6 +153,7 @@ function start(token) {
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
         characterWindow.render(message.equipment ?? {});
+        player.setEquipment(message.equipment);
       } else if (message.type === 'quests') {
         hud.setQuests(message);
         npcs.setMarkers(message.markers ?? {});
@@ -156,6 +164,7 @@ function start(token) {
         vendorWindow.show(message);
       } else if (message.type === 'equipment') {
         characterWindow.render(message.slots ?? {});
+        player.setEquipment(message.slots);
       } else if (message.type === 'inventory') {
         inventory.render(message.slots ?? []);
       } else if (message.type === 'loot-spawn') {
@@ -182,6 +191,12 @@ function start(token) {
         audio.playEvent(message);
       } else if (message.type === 'damage') {
         audio.playDamage(message, ownPlayerId);
+        if (message.targetType === 'enemy' && message.attackerId) {
+          if (message.attackerId === ownPlayerId) player.playAttack();
+          else remotePlayers.playAttack(message.attackerId);
+        } else if (message.targetType === 'player' && message.attackerId) {
+          enemies.playAttack(message.attackerId);
+        }
       } else if (message.type === 'state') {
         const ownState = ownPlayerId ? message.players[ownPlayerId] : null;
         if (ownState) {
@@ -379,11 +394,12 @@ function start(token) {
     const factor = dampFactor(SMOOTHING, delta);
     player.object.position.lerp(ownTargetPosition, factor);
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
+    player.update(delta);
     remotePlayers.update(delta);
     enemies.update(delta);
     lootMarkers.update(delta);
 
-    npcs.update();
+    npcs.update(delta);
 
     if (characterWindow.isOpen()) characterWindow.update();
 

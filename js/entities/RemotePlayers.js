@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import { createPlayer } from './Player.js';
+import { createPlayer } from './Characters.js';
 import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
 
-const REMOTE_PLAYER_COLOR = 0xd9534f;
 const SMOOTHING = 12;
 const NAMEPLATE_HEIGHT = 2.2;
 
@@ -23,12 +22,15 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     const name = state.characterName ?? '???';
 
     if (!remote) {
-      const created = createPlayer(REMOTE_PLAYER_COLOR);
+      const created = createPlayer('remote');
       scene.add(created.object);
 
       remote = {
         object: created.object,
         setPosition: created.setPosition,
+        animate: created.update,
+        playAttack: created.playAttack,
+        setEquipment: created.setEquipment,
         target: new THREE.Vector3(state.x, state.y, state.z),
         targetRotationY: state.rotationY ?? 0,
         nameplateEl: createNameplateElement(name),
@@ -36,6 +38,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
 
       remote.setPosition(state.x, state.y, state.z);
       remote.object.rotation.y = remote.targetRotationY;
+      remote.setEquipment(state.equipment);
 
       remotePlayers.set(id, remote);
       return;
@@ -43,6 +46,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
 
     remote.target.set(state.x, state.y, state.z);
     remote.targetRotationY = state.rotationY ?? remote.targetRotationY;
+    remote.setEquipment(state.equipment);
 
     if (remote.nameplateEl.textContent !== name) {
       remote.nameplateEl.textContent = name;
@@ -92,9 +96,14 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     for (const remote of remotePlayers.values()) {
       remote.object.position.lerp(remote.target, factor);
       remote.object.rotation.y = lerpAngle(remote.object.rotation.y, remote.targetRotationY, factor);
+      remote.animate(delta);
       updateNameplatePosition(remote);
     }
   }
 
-  return { sync, remove, update };
+  function playAttack(id) {
+    remotePlayers.get(id)?.playAttack();
+  }
+
+  return { sync, remove, playAttack, update };
 }

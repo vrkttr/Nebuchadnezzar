@@ -168,3 +168,9 @@ export function resolveCollisions(entity, radius) {
     if (!moved) break;
   }
 }
+
+export function isBlocked(x, z, radius) {
+  const probe = { x, z };
+  resolveCollisions(probe, radius);
+  return Math.hypot(probe.x - x, probe.z - z) > 1e-3;
+}
