@@ -7,7 +7,6 @@
   "portal.menu.createCharacter": "Charakter erstellen",
   "portal.menu.settings": "Einstellungen",
   "portal.menu.logout": "Abmelden",
-  "portal.language": "Sprache",
   "portal.pageTitle": "{heading} - Sektor Sieben",
   "login.title": "Anmeldung",
   "login.registered": "Registrierung erfolgreich, bitte einloggen.",
@@ -102,5 +101,7 @@
   "credits.fonts.heading": "Schriften",
   "credits.software.heading": "Software",
   "credits.license.mit": "MIT-Lizenz",
-  "credits.and": "und"
+  "credits.and": "und",
+  "settings.language": "Sprache",
+  "settings.languageLabel": "Anzeigesprache"
 }

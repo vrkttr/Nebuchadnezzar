@@ -67,11 +67,6 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <li><a class="nu-menu-item<?= $href === $active ? ' is-active' : '' ?>" href="<?= htmlspecialchars($href) ?>"><?= htmlspecialchars($label) ?></a></li>
 <?php endforeach; ?>
 </ul>
-<div class="portal-lang"><span class="nu-label"><?= th('portal.language') ?></span>
-<?php foreach (SUPPORTED_LANGUAGES as $code => $name): ?>
-<a class="portal-lang-link<?= $code === currentLanguage() ? ' is-active' : '' ?>" href="language.php?lang=<?= $code ?>" hreflang="<?= $code ?>" lang="<?= $code ?>"><?= htmlspecialchars($name) ?></a>
-<?php endforeach; ?>
-</div>
 </nav>
 <main class="portal-main">
 <?php if ($panel): ?>

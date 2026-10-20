@@ -14,7 +14,7 @@ body.portal {
 .portal-bg {
   position: fixed;
   inset: 0;
-  background: url('bg/startwelt.jpg') center / cover no-repeat;
+  background: #14120d url('bg/outdoor.svg') center bottom / cover no-repeat;
 }
 
 .portal-scrim {
@@ -268,42 +268,40 @@ body.portal {
   letter-spacing: 0.04em;
 }
 
-.portal-slider {
-  display: grid;
-  gap: 6px;
+.portal-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
 }
 
-.portal-slider span {
+.portal-group + .portal-group {
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(0, 0, 0, 0.35);
+}
+
+.portal-group-title {
+  margin: 0;
+  font-family: var(--nu-font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.portal-field-value {
   display: flex;
   justify-content: space-between;
 }
 
-.portal-slider input[type='range'] {
+.portal-range {
   width: 100%;
   accent-color: var(--nu-amber-dark);
 }
 
-.portal-check {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.portal-checkbox {
+  align-self: flex-start;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--nu-amber-dark);
 }
 
-.portal-lang {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 0.9rem;
-  margin-top: 1.6rem;
-}
-
-.portal-lang-link {
-  color: var(--nu-text-dim);
-  text-decoration: none;
-  letter-spacing: 1px;
-}
-
-.portal-lang-link:hover,
-.portal-lang-link.is-active {
-  color: var(--nu-amber);
-}

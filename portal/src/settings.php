@@ -37,22 +37,31 @@ renderPageStart(t('settings.title'), 'settings.php', true);
 <?php if ($saved): ?>
 <p class="nu-message is-ok"><?= th('settings.saved') ?></p>
 <?php endif; ?>
-<div class="portal-lang portal-lang-settings"><span class="nu-label"><?= th('portal.language') ?></span>
-<?php foreach (SUPPORTED_LANGUAGES as $code => $name): ?>
-<a class="portal-lang-link<?= $code === currentLanguage() ? ' is-active' : '' ?>" href="language.php?lang=<?= $code ?>" hreflang="<?= $code ?>" lang="<?= $code ?>"><?= htmlspecialchars($name) ?></a>
-<?php endforeach; ?>
-</div>
 <form method="post" class="portal-form">
-<div class="nu-label"><?= th('settings.sound') ?></div>
-<label class="portal-slider">
-<span><?= th('settings.volume') ?> <output id="volume-value"><?= (int) $settings['audio_volume'] ?> %</output></span>
-<input type="range" name="volume" min="0" max="100" step="1" value="<?= (int) $settings['audio_volume'] ?>" data-output="volume-value">
+<section class="portal-group">
+<h2 class="portal-group-title"><?= th('settings.language') ?></h2>
+<label class="portal-field"><span class="nu-label"><?= th('settings.languageLabel') ?></span>
+<select class="nu-input" id="language-select">
+<?php foreach (SUPPORTED_LANGUAGES as $code => $name): ?>
+<option value="<?= $code ?>"<?= $code === currentLanguage() ? ' selected' : '' ?>><?= htmlspecialchars($name) ?></option>
+<?php endforeach; ?>
+</select></label>
+</section>
+<section class="portal-group">
+<h2 class="portal-group-title"><?= th('settings.sound') ?></h2>
+<label class="portal-field">
+<span class="nu-label portal-field-value"><?= th('settings.volume') ?> <output id="volume-value"><?= (int) $settings['audio_volume'] ?> %</output></span>
+<input type="range" name="volume" min="0" max="100" step="1" value="<?= (int) $settings['audio_volume'] ?>" data-output="volume-value" class="portal-range">
 </label>
-<label class="portal-slider">
-<span><?= th('settings.ambient') ?> <output id="ambient-value"><?= (int) $settings['audio_ambient'] ?> %</output></span>
-<input type="range" name="ambient" min="0" max="100" step="1" value="<?= (int) $settings['audio_ambient'] ?>" data-output="ambient-value">
+<label class="portal-field">
+<span class="nu-label portal-field-value"><?= th('settings.ambient') ?> <output id="ambient-value"><?= (int) $settings['audio_ambient'] ?> %</output></span>
+<input type="range" name="ambient" min="0" max="100" step="1" value="<?= (int) $settings['audio_ambient'] ?>" data-output="ambient-value" class="portal-range">
 </label>
-<label class="portal-check"><input type="checkbox" name="muted" value="1"<?= $settings['audio_muted'] ? ' checked' : '' ?>> <?= th('settings.mute') ?></label>
+<label class="portal-field">
+<span class="nu-label"><?= th('settings.mute') ?></span>
+<input type="checkbox" name="muted" value="1" class="portal-checkbox"<?= $settings['audio_muted'] ? ' checked' : '' ?>>
+</label>
+</section>
 <div class="portal-actions">
 <button class="nu-button" type="submit"><?= th('settings.save') ?></button>
 <?php if ($hasCharacter): ?>
@@ -65,6 +74,9 @@ document.querySelectorAll('input[type="range"]').forEach(function (input) {
     input.addEventListener('input', function () {
         document.getElementById(input.dataset.output).textContent = input.value + ' %';
     });
+});
+document.getElementById('language-select').addEventListener('change', function (event) {
+    window.location.href = 'language.php?lang=' + encodeURIComponent(event.target.value);
 });
 </script>
 <?php renderPageEnd();

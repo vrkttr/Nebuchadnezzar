@@ -7,7 +7,6 @@
   "portal.menu.createCharacter": "Create character",
   "portal.menu.settings": "Settings",
   "portal.menu.logout": "Log out",
-  "portal.language": "Language",
   "portal.pageTitle": "{heading} - Sektor Sieben",
   "login.title": "Log in",
   "login.registered": "Registration successful, please log in.",
@@ -102,5 +101,7 @@
   "credits.fonts.heading": "Fonts",
   "credits.software.heading": "Software",
   "credits.license.mit": "MIT License",
-  "credits.and": "and"
+  "credits.and": "and",
+  "settings.language": "Language",
+  "settings.languageLabel": "Display language"
 }
