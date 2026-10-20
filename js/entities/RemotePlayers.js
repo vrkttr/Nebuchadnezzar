@@ -120,7 +120,8 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
   }
 
   function getMarkers() {
-    return Array.from(remotePlayers.values(), (remote) => ({
+    return Array.from(remotePlayers, ([id, remote]) => ({
+      key: `player-${id}`,
       x: remote.object.position.x,
       z: remote.object.position.z,
     }));

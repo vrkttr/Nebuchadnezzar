@@ -10,7 +10,7 @@ import { xpToNextLevel } from './progression.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
 import { equipmentRows, loadEquipment, serializeEquipment } from './equipment.js';
-import { destroyInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
+import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
 import { serializeNpcs } from './npcs.js';
 import {
   acceptNpcQuest,
@@ -114,7 +114,7 @@ async function resolveCharacterFromToken(token) {
   const characterId = tokenRows[0].character_id;
 
   const [characterRows] = await dbPool.query(
-    'SELECT id, name, pos_x, pos_y, pos_z, rotation_y, level, xp, gold, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants FROM characters WHERE id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -148,6 +148,7 @@ async function resolveCharacterFromToken(token) {
     xp: row.xp,
     gold: row.gold,
     appearance: loadAppearance(row),
+    audio: { volume: row.audio_volume / 100, ambient: row.audio_ambient / 100, muted: Boolean(row.audio_muted) },
     inventory: loadInventory(savedItemRows),
     equipment: loadEquipment(savedEquipmentRows),
     quests: loadQuests(savedQuestRows),
@@ -255,6 +256,7 @@ wss.on('connection', async (socket, request) => {
       appearance: initialState.appearance,
       npcs: serializeNpcs(),
       world: serializeZone(),
+      audio: character.audio,
     })
   );
 
@@ -343,6 +345,11 @@ wss.on('connection', async (socket, request) => {
       if (!Number.isInteger(slot)) return;
 
       destroyInventoryItem(id, state, slot, message.itemId, notify);
+    } else if (message.type === 'item-move') {
+      const state = players.get(id);
+      if (!state) return;
+
+      moveInventoryItem(id, state, Number.parseInt(message.from, 10), Number.parseInt(message.to, 10), notify);
     } else if (message.type === 'item-unequip') {
       const state = players.get(id);
       if (!state || typeof message.slot !== 'string') return;

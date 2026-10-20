@@ -6002,7 +6002,13 @@
      "height": 358.4,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 12.5
+      }
+     ]
     },
     {
      "id": 146,
@@ -6015,7 +6021,13 @@
      "height": 774.4,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 12.5
+      }
+     ]
     },
     {
      "id": 147,
@@ -6084,7 +6096,13 @@
      "height": 620.8,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.2
+      }
+     ]
     },
     {
      "id": 152,
@@ -6741,7 +6759,13 @@
      "height": 352,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
     },
     {
      "id": 214,
@@ -6754,7 +6778,13 @@
      "height": 3168,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
     },
     {
      "id": 215,
@@ -6767,7 +6797,13 @@
      "height": 352,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
     },
     {
      "id": 216,
@@ -6780,7 +6816,13 @@
      "height": 3168,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
     },
     {
      "id": 219,
@@ -6793,7 +6835,13 @@
      "height": 480,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 8
+      }
+     ]
     },
     {
      "id": 220,
@@ -6806,7 +6854,13 @@
      "height": 2656,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 8
+      }
+     ]
     },
     {
      "id": 222,
@@ -6819,7 +6873,13 @@
      "height": 198.4,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
     },
     {
      "id": 224,
@@ -6832,7 +6892,13 @@
      "height": 198.4,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
     },
     {
      "id": 226,
@@ -6845,7 +6911,13 @@
      "height": 198.4,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
     },
     {
      "id": 228,
@@ -6858,7 +6930,13 @@
      "height": 198.4,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 5.2
+      }
+     ]
     },
     {
      "id": 230,
@@ -6871,7 +6949,13 @@
      "height": 198.4,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 5.2
+      }
+     ]
     },
     {
      "id": 232,
@@ -6884,7 +6968,13 @@
      "height": 80,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
     },
     {
      "id": 234,
@@ -6897,7 +6987,13 @@
      "height": 80,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 5.2
+      }
+     ]
     },
     {
      "id": 236,
@@ -6910,7 +7006,13 @@
      "height": 80,
      "rotation": 0,
      "visible": true,
-     "properties": []
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
     },
     {
      "id": 238,

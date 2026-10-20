@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Projekt Nebuchadnezzar</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/ui/nebu-ui.css">
-  <link rel="stylesheet" href="css/hud.css?v=29">
+  <link rel="stylesheet" href="css/hud.css?v=30">
 
   <script type="importmap">
   {
@@ -151,27 +154,6 @@
     <p class="window-hint">Klick: 1 kaufen. Umschalt+Klick: bis zu 5 kaufen. Rechtsklick auf Gegenstände im Rucksack verkauft sie.</p>
   </div>
 
-  <div id="menu-window" class="window nu-taped hidden">
-    <div class="window-header">
-      <span class="window-title">Menü</span>
-      <button id="menu-close" class="window-close" title="Schließen">×</button>
-    </div>
-    <div class="menu-body">
-      <div class="menu-row">
-        <label for="menu-volume">Gesamtlautstärke</label>
-        <span id="menu-volume-value"></span>
-        <input id="menu-volume" type="range" min="0" max="100" step="1">
-      </div>
-      <div class="menu-row">
-        <label for="menu-ambient">Umgebung</label>
-        <span id="menu-ambient-value"></span>
-        <input id="menu-ambient" type="range" min="0" max="100" step="1">
-      </div>
-      <label class="menu-check"><input id="menu-muted" type="checkbox"> Ton aus</label>
-      <a id="menu-credits" href="#" target="_blank" rel="noopener">Credits</a>
-    </div>
-  </div>
-
   <div id="character-window" class="window nu-taped hidden">
     <div class="window-header">
       <span class="window-title">Charakter</span>
@@ -193,6 +175,6 @@
   <div id="tooltip" class="hidden"></div>
 
   <script src="js/vendor/howler.min.js"></script>
-  <script type="module" src="js/main.js?v=29"></script>
+  <script type="module" src="js/main.js?v=30"></script>
 </body>
 </html>

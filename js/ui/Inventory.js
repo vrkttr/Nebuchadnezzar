@@ -48,6 +48,19 @@ export function createInventory(state, ui, handlers = {}) {
     const element = document.createElement('div');
     element.className = 'inventory-slot';
 
+    element.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+      element.classList.add('drop-target');
+    });
+    element.addEventListener('dragleave', () => element.classList.remove('drop-target'));
+    element.addEventListener('drop', (event) => {
+      event.preventDefault();
+      element.classList.remove('drop-target');
+      const from = Number.parseInt(event.dataTransfer.getData('text/plain'), 10);
+      if (Number.isInteger(from) && from !== index) handlers.onMove?.(from, index);
+    });
+
     if (!slot) return element;
 
     const item = state.items[slot.itemId];
@@ -73,6 +86,14 @@ export function createInventory(state, ui, handlers = {}) {
     element.addEventListener('mouseenter', (event) => ui.tooltip.showItem(slot.itemId, slot.quantity, event));
     element.addEventListener('mousemove', (event) => ui.tooltip.move(event));
     element.addEventListener('mouseleave', () => ui.tooltip.hide());
+    element.draggable = true;
+    element.addEventListener('dragstart', (event) => {
+      ui.tooltip.hide();
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', String(index));
+      element.classList.add('dragging');
+    });
+    element.addEventListener('dragend', () => element.classList.remove('dragging'));
     element.addEventListener('click', (event) => openMenu(event, index, slot, item));
     element.addEventListener('contextmenu', (event) => {
       event.preventDefault();

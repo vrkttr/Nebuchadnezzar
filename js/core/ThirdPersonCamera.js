@@ -57,6 +57,67 @@ export function createThirdPersonCamera(camera, domElement) {
   );
 
   const offset = new THREE.Vector3();
+  const pivot = new THREE.Vector3();
+  const desired = new THREE.Vector3();
+  const CAMERA_MARGIN = 0.35;
+  const MIN_CAMERA_DISTANCE = 0.6;
+  const MIN_CAMERA_HEIGHT = 0.3;
+  const RECOVER_SPEED = 6;
+  let blockers = [];
+  let currentDistance = distance;
+  let lastTime = performance.now();
+
+  function setBlockers(list) {
+    blockers = list.map((blocker) => ({
+      ...blocker,
+      cos: Math.cos(blocker.rotation),
+      sin: Math.sin(blocker.rotation),
+      halfX: blocker.halfX + CAMERA_MARGIN,
+      halfZ: blocker.halfZ + CAMERA_MARGIN,
+    }));
+  }
+
+  function firstHit(from, to) {
+    let nearest = 1;
+
+    for (const blocker of blocks()) {
+      const fx = from.x - blocker.x;
+      const fz = from.z - blocker.z;
+      const tx = to.x - blocker.x;
+      const tz = to.z - blocker.z;
+      const start = [fx * blocker.cos - fz * blocker.sin, fx * blocker.sin + fz * blocker.cos];
+      const end = [tx * blocker.cos - tz * blocker.sin, tx * blocker.sin + tz * blocker.cos];
+      const half = [blocker.halfX, blocker.halfZ];
+      let enter = 0;
+      let leave = 1;
+      let hit = true;
+
+      for (let axis = 0; axis < 2; axis += 1) {
+        const delta = end[axis] - start[axis];
+
+        if (Math.abs(delta) < 1e-9) {
+          if (Math.abs(start[axis]) > half[axis]) hit = false;
+          continue;
+        }
+
+        let near = (-half[axis] - start[axis]) / delta;
+        let far = (half[axis] - start[axis]) / delta;
+        if (near > far) [near, far] = [far, near];
+        enter = Math.max(enter, near);
+        leave = Math.min(leave, far);
+      }
+
+      if (!hit || enter > leave || enter <= 0) continue;
+      if (from.y + (to.y - from.y) * enter > blocker.height + 0.3) continue;
+      nearest = Math.min(nearest, enter);
+    }
+
+    return nearest;
+  }
+
+  function blocks() {
+    return blockers;
+  }
 
   function update(target) {
     offset.set(
@@ -65,9 +126,21 @@ export function createThirdPersonCamera(camera, domElement) {
       Math.cos(yaw) * Math.cos(pitch)
     ).multiplyScalar(distance);
 
-    camera.position.copy(target).add(offset);
-    camera.lookAt(target.x, target.y + 1.2, target.z);
+    pivot.set(target.x, target.y + 1.2, target.z);
+    desired.copy(pivot).add(offset);
+
+    const now = performance.now();
+    const elapsed = Math.min(0.1, (now - lastTime) / 1000);
+    lastTime = now;
+
+    const allowed = Math.max(MIN_CAMERA_DISTANCE, firstHit(pivot, desired) * distance - CAMERA_MARGIN);
+    const limit = Math.min(distance, allowed);
+    currentDistance = limit < currentDistance ? limit : Math.min(limit, currentDistance + RECOVER_SPEED * elapsed);
+
+    camera.position.copy(pivot).addScaledVector(offset, currentDistance / distance);
+    camera.position.y = Math.max(camera.position.y, MIN_CAMERA_HEIGHT);
+    camera.lookAt(pivot);
   }
 
-  return { update };
+  return { update, setBlockers };
 }

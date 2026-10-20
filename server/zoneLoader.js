@@ -86,7 +86,7 @@ function loadZone(file) {
 
     if (layer === COLLISION_LAYER) {
       if (shape === 'rect') {
-        zone.colliders.push({ shape: 'box', x: center.x, z: center.z, halfX: objectWidth / 2, halfZ: objectHeight / 2, rotation: rotationY });
+        zone.colliders.push({ shape: 'box', x: center.x, z: center.z, halfX: objectWidth / 2, halfZ: objectHeight / 2, rotation: rotationY, cameraHeight: Number(props.kamera) || 0 });
       } else if (shape === 'ellipse') {
         zone.colliders.push({ shape: 'circle', x: center.x, z: center.z, radius: objectWidth / 2 });
       } else {
@@ -136,5 +136,8 @@ export function serializeZone() {
     groundColor: zone.groundColor,
     spawn: zone.spawn,
     objects: zone.visuals,
+    cameraBlockers: zone.colliders
+      .filter((collider) => collider.cameraHeight > 0)
+      .map(({ x, z, halfX, halfZ, rotation, cameraHeight }) => ({ x, z, halfX, halfZ, rotation, height: cameraHeight })),
   };
 }

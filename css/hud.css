@@ -1385,3 +1385,53 @@ button {
   color: #b9b29a;
   font-size: 16px;
 }
+
+.inventory-slot.dragging {
+  opacity: 0.4;
+}
+
+.inventory-slot.drop-target {
+  outline: 2px dashed var(--nu-amber);
+  outline-offset: -2px;
+}
+
+#minimap {
+  width: 248px;
+  top: 12px;
+  right: 12px;
+}
+
+#minimap-circle {
+  width: 200px;
+  height: 200px;
+  margin: 24px 0;
+  border: 0;
+  border-radius: 50%;
+  clip-path: none;
+  background: var(--nu-board-dark);
+  pointer-events: auto;
+}
+
+#minimap-circle canvas {
+  border-radius: 50%;
+}
+
+#minimap-circle::after {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  width: auto;
+  height: auto;
+  border: 0;
+  transform: none;
+  background: url('../assets/ui/compass.png') center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+#zone-name {
+  margin-top: -8px;
+}
+
+#quest-tracker {
+  top: 350px;
+}

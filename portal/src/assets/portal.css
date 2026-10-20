@@ -254,3 +254,31 @@ body.portal {
     grid-template-columns: 1fr;
   }
 }
+
+.portal-lead {
+  margin: 0 0 18px;
+  font-family: var(--nu-font-display);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+}
+
+.portal-slider {
+  display: grid;
+  gap: 6px;
+}
+
+.portal-slider span {
+  display: flex;
+  justify-content: space-between;
+}
+
+.portal-slider input[type='range'] {
+  width: 100%;
+  accent-color: var(--nu-amber-dark);
+}
+
+.portal-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -191,6 +191,7 @@ export function buildZone(scene, world) {
 
   const trees = [];
   const bushes = [];
+  const emitters = [];
 
   for (const object of world.objects ?? []) {
     const props = coerceProps(object.props);
@@ -218,6 +219,7 @@ export function buildZone(scene, world) {
         console.warn(`Unbekannter Objekttyp in der Zonendefinition: ${object.kind}`);
         continue;
       }
+      if (object.kind === 'fass' && props.burning) emitters.push({ x: object.x, z: object.z });
       instance.position.set(object.x, props.y ?? 0, object.z);
       instance.rotation.y = object.rotation;
       zone.add(instance);
@@ -226,5 +228,5 @@ export function buildZone(scene, world) {
 
   zone.add(buildForests(trees, bushes));
   scene.add(zone);
-  return { zone };
+  return { zone, emitters };
 }

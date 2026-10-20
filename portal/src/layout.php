@@ -31,6 +31,7 @@ function portalMenuItems(): array
         $items[] = ['Charakter erstellen', 'character.php'];
     }
 
+    $items[] = ['Einstellungen', 'settings.php'];
     $items[] = ['Credits', 'credits.php'];
     $items[] = ['Abmelden', 'logout.php'];
 
@@ -50,6 +51,8 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= $heading ?> - Projekt Nebuchadnezzar</title>
 <link rel="stylesheet" href="assets/ui/nebu-ui.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="stylesheet" href="assets/portal.css">
 </head>
 <body class="portal">

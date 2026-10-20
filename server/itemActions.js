@@ -100,3 +100,28 @@ export function unequipItem(playerId, player, equipmentSlot, notify) {
   sync(notify, playerId, player);
   notify(playerId, { type: 'event', kind: 'unequipped', itemId });
 }
+
+export function moveInventoryItem(playerId, player, from, to, notify) {
+  const size = player.inventory.length;
+  const valid = (index) => Number.isInteger(index) && index >= 0 && index < size;
+  if (!valid(from) || !valid(to) || from === to || player.dead) return;
+
+  const source = player.inventory[from];
+  if (!source) return;
+
+  const target = player.inventory[to];
+  const item = getItem(source.itemId);
+
+  if (target && target.itemId === source.itemId && item && item.stackSize > 1) {
+    const moved = Math.min(item.stackSize - target.quantity, source.quantity);
+    target.quantity += moved;
+    source.quantity -= moved;
+    if (source.quantity === 0) player.inventory[from] = null;
+  } else {
+    player.inventory[from] = target;
+    player.inventory[to] = source;
+  }
+
+  player.dataVersion += 1;
+  notify(playerId, { type: 'inventory', slots: serializeInventory(player.inventory) });
+}

@@ -192,7 +192,11 @@ export function createEnemies(scene, camera, nameplateContainer) {
   function getMarkers() {
     return Array.from(enemies.values())
       .filter((enemy) => !enemy.data.dead)
-      .map((enemy) => ({ x: enemy.object.position.x, z: enemy.object.position.z }));
+      .map((enemy) => ({ key: `enemy-${enemy.data.id}`, x: enemy.object.position.x, z: enemy.object.position.z }));
+  }
+
+  function getType(id) {
+    return enemies.get(id)?.data.type;
   }
 
   function playAttack(id) {
@@ -203,5 +207,5 @@ export function createEnemies(scene, camera, nameplateContainer) {
     enemies.get(id)?.playHit();
   }
 
-  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, playHit, update };
+  return { sync, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
 }

@@ -69,7 +69,7 @@ export function createNpcs(scene, camera, nameplateContainer) {
   }
 
   function getMarkers() {
-    return Array.from(npcs.values(), (npc) => ({ x: npc.object.position.x, z: npc.object.position.z }));
+    return Array.from(npcs, ([id, npc]) => ({ npcId: id, x: npc.object.position.x, z: npc.object.position.z }));
   }
 
   return { sync, setMarkers, getObjects, getPosition, getMarkers, update };

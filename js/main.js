@@ -25,7 +25,6 @@ const [
   { createNpcs },
   { createNpcWindow },
   { createVendorWindow },
-  { createMenuWindow },
   { createWindowManager },
   { createChat },
   { createViewCapture },
@@ -34,8 +33,9 @@ const [
   { createDamageNumbers },
   { createHud },
   { createAudio },
+  { createFootsteps },
   { gameState },
-  { buildServerUrl, getCreditsUrl, getPortalUrl },
+  { buildServerUrl, getPortalUrl },
 ] = await Promise.all([
   import('three'),
   import(v('./core/Renderer.js')),
@@ -60,7 +60,6 @@ const [
   import(v('./entities/Npcs.js')),
   import(v('./ui/NpcWindow.js')),
   import(v('./ui/VendorWindow.js')),
-  import(v('./ui/MenuWindow.js')),
   import(v('./ui/WindowManager.js')),
   import(v('./ui/Chat.js')),
   import(v('./core/ViewCapture.js')),
@@ -69,6 +68,7 @@ const [
   import(v('./hud/DamageNumbers.js')),
   import(v('./hud/Hud.js')),
   import(v('./audio/Audio.js')),
+  import(v('./audio/Footsteps.js')),
   import(v('./state/GameState.js')),
   import(v('./config.js')),
 ]);
@@ -105,20 +105,33 @@ function start(token) {
     onBuy: (npcId, itemId, quantity) =>
       connection.send({ type: 'vendor-buy', npcId, itemId, quantity }),
   });
-  const menuWindow = createMenuWindow(audio, getCreditsUrl());
+  const footsteps = createFootsteps(audio);
+  audio.bindUi(document);
+  let ownWeapon = null;
+  let zoneEmitters = [];
+
+  function openPortalMenu() {
+    window.location.href = `${getPortalUrl()}settings.php`;
+  }
+
+  document.querySelector('#minimap-buttons button[title="Menü"]')?.addEventListener('click', openPortalMenu);
 
   const inventory = createInventory(gameState, ui, {
     onUse: (slot) => connection.send({ type: 'item-use', slot }),
     onDestroy: (slot, itemId) => connection.send({ type: 'item-destroy', slot, itemId }),
     onSell: (slot, itemId) =>
       connection.send({ type: 'vendor-sell', npcId: vendorWindow.currentNpcId(), slot, itemId }),
+    onMove: (from, to) => {
+      audio.play('bag_move');
+      connection.send({ type: 'item-move', from, to });
+    },
     isVendorOpen: () => vendorWindow.isOpen(),
   });
   const characterWindow = createCharacterWindow(gameState, ui, {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'menu', 'character']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -175,7 +188,13 @@ function start(token) {
     onMessage(message) {
       if (message.type === 'init') {
         ownPlayerId = message.id;
-        if (!zone && message.world) zone = buildZone(scene, message.world);
+        if (!zone && message.world) {
+          zone = buildZone(scene, message.world);
+          audio.setEmitters(zone.emitters);
+          thirdPersonCamera.setBlockers(message.world.cameraBlockers ?? []);
+        }
+        audio.applySettings(message.audio);
+        ownWeapon = message.equipment?.weapon ?? null;
         enemies.sync(message.enemies ?? []);
         npcs.sync(message.npcs ?? []);
         hud.setAbilities(message.abilities ?? []);
@@ -190,6 +209,7 @@ function start(token) {
         hud.setQuests(message);
         npcs.setMarkers(message.markers ?? {});
       } else if (message.type === 'npc-window') {
+        audio.play(`npc_${message.npcId}_greet`);
         npcWindow.show(message);
       } else if (message.type === 'vendor-window') {
         npcWindow.hide();
@@ -197,6 +217,7 @@ function start(token) {
       } else if (message.type === 'equipment') {
         characterWindow.render(message.slots ?? {});
         player.setEquipment(message.slots);
+        ownWeapon = message.slots?.weapon ?? null;
       } else if (message.type === 'inventory') {
         inventory.render(message.slots ?? []);
       } else if (message.type === 'loot-spawn') {
@@ -236,6 +257,20 @@ function start(token) {
           if (isEnemyTarget && message.attackerId === ownPlayerId) kind = 'dealt';
           if (isOwnTarget) kind = 'taken';
           damageNumbers.spawn(hitObject.position, message.amount, kind);
+        }
+
+        const attackerIsOwn = message.attackerId === ownPlayerId;
+        if (isEnemyTarget && hitObject) {
+          const family = attackerIsOwn ? audio.weaponFamily(ownWeapon) : 'blunt';
+          const attackerObject = attackerIsOwn ? null : remotePlayers.getObject(message.attackerId);
+          if (attackerIsOwn) audio.play(`swing_${family}`);
+          else if (attackerObject) audio.playAt(`swing_${family}`, attackerObject.position.x, attackerObject.position.z);
+          audio.playAt(`hit_${family}`, hitObject.position.x, hitObject.position.z);
+          const type = enemies.getType(message.targetId);
+          if (type && Math.random() < 0.5) audio.playAt(`enemy_grunt_${type}`, hitObject.position.x, hitObject.position.z, 0.8);
+        } else if (isOwnTarget) {
+          const attackerObject = enemies.getObject(message.attackerId);
+          if (attackerObject) audio.playAt('enemy_attack', attackerObject.position.x, attackerObject.position.z);
         }
 
         if (isEnemyTarget) enemies.playHit(message.targetId);
@@ -386,14 +421,12 @@ function start(token) {
       }
 
       if (
-        menuWindow.isOpen() ||
         npcWindow.isOpen() ||
         vendorWindow.isOpen() ||
         lootWindow.isOpen() ||
         inventory.isOpen() ||
         characterWindow.isOpen()
       ) {
-        menuWindow.hide();
         npcWindow.hide();
         vendorWindow.hide();
         lootWindow.hide();
@@ -409,12 +442,12 @@ function start(token) {
         return;
       }
 
-      menuWindow.toggle();
+      openPortalMenu();
       return;
     }
 
     if (event.code === 'KeyM' && !event.repeat) {
-      menuWindow.toggle();
+      openPortalMenu();
       return;
     }
 
@@ -435,6 +468,7 @@ function start(token) {
   });
 
   const clock = new THREE.Clock();
+  const listenerForward = new THREE.Vector3();
 
   const INPUT_SEND_INTERVAL = 0.05;
   let inputSendTimer = 0;
@@ -474,6 +508,11 @@ function start(token) {
     }
 
     thirdPersonCamera.update(player.object.position);
+    camera.getWorldDirection(listenerForward);
+    audio.setListener(player.object.position.x, player.object.position.z, listenerForward.x, listenerForward.z);
+    footsteps.update(delta, player.object.position, [...enemies.getMarkers(), ...remotePlayers.getMarkers()]);
+    audio.setNpcSources(npcs.getMarkers());
+    audio.update(delta);
     hud.update();
 
     inputSendTimer += delta;

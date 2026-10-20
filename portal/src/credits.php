@@ -5,6 +5,8 @@ require __DIR__ . '/layout.php';
 
 renderPageStart('Credits', 'credits.php', true, true);
 ?>
+<p class="portal-lead">Entwickelt und realisiert von David Vierkötter</p>
+
 <h2 class="nu-title">Icons</h2>
 <p>
 Die Icons für Gegenstände, Fähigkeiten und Oberfläche stammen von

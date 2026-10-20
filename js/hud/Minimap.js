@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const CAPTURE_SIZE = 160;
+const CAPTURE_SIZE = 200;
 const UPDATE_INTERVAL = 0.1;
 const CAMERA_HEIGHT = 80;
 const MIN_RADIUS = 15;
@@ -76,6 +76,34 @@ export function createMinimap({ scene, camera, viewCapture, renderer, player, so
     }
   }
 
+  function drawCardinals(forwardX, forwardZ, center) {
+    const directions = [
+      ['N', 0, -1, '#e0553a'],
+      ['O', 1, 0, '#e8dcb0'],
+      ['S', 0, 1, '#e8dcb0'],
+      ['W', -1, 0, '#e8dcb0'],
+    ];
+    const distance = center - 13 * pixelRatio;
+
+    context.font = `${12 * pixelRatio}px 'Allerta Stencil', sans-serif`;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+
+    for (const [label, dx, dz, color] of directions) {
+      const ahead = dx * forwardX + dz * forwardZ;
+      const right = -dx * forwardZ + dz * forwardX;
+      const x = center + right * distance;
+      const y = center - ahead * distance;
+
+      context.beginPath();
+      context.arc(x, y, 9 * pixelRatio, 0, Math.PI * 2);
+      context.fillStyle = 'rgba(15, 14, 10, 0.65)';
+      context.fill();
+      context.fillStyle = color;
+      context.fillText(label, x, y + pixelRatio);
+    }
+  }
+
   function drawArrow(forwardX, forwardZ, center) {
     const facingX = Math.sin(player.object.rotation.y);
     const facingZ = Math.cos(player.object.rotation.y);
@@ -120,6 +148,7 @@ export function createMinimap({ scene, camera, viewCapture, renderer, player, so
     const scale = center / radius;
     drawMarkers(forward.x, forward.z, center, scale);
     drawArrow(forward.x, forward.z, center);
+    drawCardinals(forward.x, forward.z, center);
   }
 
   applyRadius();
