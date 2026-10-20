@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 7,
- "nextobjectid": 331,
+ "nextobjectid": 335,
  "layers": [
   {
    "name": "Boden",
@@ -7916,6 +7916,126 @@
        "name": "healthMax",
        "type": "int",
        "value": 140
+      }
+     ]
+    },
+    {
+     "id": 331,
+     "name": "",
+     "type": "",
+     "class": "lootkiste",
+     "x": 2608.0,
+     "y": 1616.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 30,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "wasserturm"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 332,
+     "name": "",
+     "type": "",
+     "class": "lootkiste",
+     "x": 1760.0,
+     "y": 1072.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "plattenbau_hinten"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 333,
+     "name": "",
+     "type": "",
+     "class": "lootkiste",
+     "x": 960.0,
+     "y": 3360.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": -20,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "halle_west"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 334,
+     "name": "",
+     "type": "",
+     "class": "lootkiste",
+     "x": 3456.0,
+     "y": 3200.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 75,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "ostrand"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
       }
      ]
     }

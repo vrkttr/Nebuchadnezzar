@@ -22,6 +22,7 @@ const [
   { createInventory },
   { createLootWindow },
   { createLootMarkers },
+  { createWorldChests },
   { createNpcs },
   { createNpcWindow },
   { createVendorWindow },
@@ -60,6 +61,7 @@ const [
   import(v('./ui/Inventory.js')),
   import(v('./ui/LootWindow.js')),
   import(v('./entities/LootMarkers.js')),
+  import(v('./entities/WorldChests.js')),
   import(v('./entities/Npcs.js')),
   import(v('./ui/NpcWindow.js')),
   import(v('./ui/VendorWindow.js')),
@@ -143,6 +145,7 @@ function start(token) {
   }
 
   const lootMarkers = createLootMarkers(scene);
+  const worldChests = createWorldChests(scene);
   const lootWindow = createLootWindow(gameState, ui, {
     onTake: (lootId, entryId) => connection.send({ type: 'loot-take', lootId, entryId }),
     onTakeAll: (lootId) => connection.send({ type: 'loot-take-all', lootId }),
@@ -204,6 +207,7 @@ function start(token) {
     npcs.clear();
     remotePlayers.clear();
     lootMarkers.clear();
+    worldChests.clear();
     lootWindow.hide();
     npcWindow.hide();
     vendorWindow.hide();
@@ -216,7 +220,7 @@ function start(token) {
 
   async function enterZone(message, firstLoad) {
     const world = message.world;
-    loadingScreen.show(world.name);
+    loadingScreen.show(world.name, Boolean(world.indoor));
     loadingScreen.setProgress(0.08, firstLoad ? 'Welt wird aufgebaut …' : 'Zone wird geladen …');
 
     if (zone) {
@@ -244,6 +248,7 @@ function start(token) {
 
     enemies.sync(message.enemies ?? []);
     npcs.sync(message.npcs ?? []);
+    worldChests.sync(message.chests ?? []);
     npcs.setMarkers(questMarkers);
     loadingScreen.setProgress(0.4, 'Texturen werden geladen …');
 
@@ -302,6 +307,8 @@ function start(token) {
         ownWeapon = message.slots?.weapon ?? null;
       } else if (message.type === 'inventory') {
         inventory.render(message.slots ?? []);
+      } else if (message.type === 'chest-remove') {
+        worldChests.remove(message.id);
       } else if (message.type === 'loot-spawn') {
         lootMarkers.add(message);
       } else if (message.type === 'loot-window') {
@@ -432,6 +439,7 @@ function start(token) {
       !current.userData.isNpc &&
       !current.userData.isEnemy &&
       !current.userData.isLoot &&
+      !current.userData.isChest &&
       !current.userData.isTeleporter
     ) {
       current = current.parent;
@@ -445,7 +453,7 @@ function start(token) {
 
     raycaster.setFromCamera(pointer, camera);
     const intersections = raycaster.intersectObjects(
-      [...npcs.getObjects(), ...enemies.getObjects(), ...lootMarkers.getObjects(), ...(zone?.teleporters ?? [])],
+      [...npcs.getObjects(), ...enemies.getObjects(), ...lootMarkers.getObjects(), ...worldChests.getObjects(), ...(zone?.teleporters ?? [])],
       true
     );
 
@@ -462,6 +470,8 @@ function start(token) {
       connection.send({ type: 'npc-interact', npcId: target.userData.npcId });
     } else if (target.userData.isTeleporter) {
       connection.send({ type: 'zone-enter', teleporterId: target.userData.teleporterId });
+    } else if (target.userData.isChest) {
+      connection.send({ type: 'chest-open', chestId: target.userData.chestId });
     } else if (target.userData.isLoot) {
       connection.send({ type: 'loot-open', lootId: target.userData.lootId });
     } else if (target.userData.isEnemy) {

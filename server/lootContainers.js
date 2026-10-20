@@ -3,6 +3,7 @@ import { rollLoot } from './loot.js';
 
 const LOOT_RANGE = 5;
 const LOOT_LIFETIME = 120;
+const CHEST_LIFETIME = 600;
 
 let nextLootId = 1;
 
@@ -81,6 +82,7 @@ export function spawnLootForKill(containers, ownerId, owner, enemy, notify) {
     id,
     ownerId,
     name: enemy.name,
+    kind: 'pouch',
     x: enemy.x,
     y: enemy.y,
     z: enemy.z,
@@ -89,7 +91,38 @@ export function spawnLootForKill(containers, ownerId, owner, enemy, notify) {
   };
 
   containers.set(id, container);
-  notify(ownerId, { type: 'loot-spawn', id, name: container.name, x: container.x, y: container.y, z: container.z });
+  notify(ownerId, { type: 'loot-spawn', id, kind: container.kind, name: container.name, x: container.x, y: container.y, z: container.z });
+}
+
+export function spawnChestContainer(containers, ownerId, name, position, drops, notify) {
+  const id = `loot-${nextLootId}`;
+  nextLootId += 1;
+
+  const container = {
+    id,
+    ownerId,
+    name,
+    kind: 'chest',
+    x: position.x,
+    y: position.y ?? 0,
+    z: position.z,
+    rotationY: position.rotationY ?? 0,
+    lifetime: CHEST_LIFETIME,
+    entries: drops.map((drop, index) => ({ id: index + 1, ...drop })),
+  };
+
+  containers.set(id, container);
+  notify(ownerId, {
+    type: 'loot-spawn',
+    id,
+    kind: container.kind,
+    name: container.name,
+    x: container.x,
+    y: container.y,
+    z: container.z,
+    rotationY: container.rotationY,
+  });
+  notify(ownerId, { type: 'loot-window', ...serializeContainer(container) });
 }
 
 export function openLoot(containers, playerId, player, lootId, notify) {

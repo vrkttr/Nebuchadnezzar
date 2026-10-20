@@ -1,31 +1,25 @@
-import * as THREE from 'three';
+import { createChest, createCoinPouch } from '../world/builders/LootProps.js';
 
-const BASE_HEIGHT = 0.35;
-const BOB_AMPLITUDE = 0.08;
-const BOB_SPEED = 2.2;
-const SPIN_SPEED = 1;
+const GLINT_SPEED = 3;
+const POUCH_SCALE = 1.4;
 
 export function createLootMarkers(scene) {
   const markers = new Map();
-  const geometry = new THREE.BoxGeometry(0.5, 0.36, 0.4);
-  const material = new THREE.MeshBasicMaterial({ color: 0xd98f2b });
-  const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x241a08 });
-  const edgeGeometry = new THREE.EdgesGeometry(geometry);
-
   let elapsed = 0;
 
   function add(data) {
     if (markers.has(data.id)) return;
 
-    const object = new THREE.Group();
-    object.add(new THREE.Mesh(geometry, material));
-    object.add(new THREE.LineSegments(edgeGeometry, edgeMaterial));
-    object.position.set(data.x, data.y + BASE_HEIGHT, data.z);
+    const isChest = data.kind === 'chest';
+    const object = isChest ? createChest({ open: true }) : createCoinPouch();
+    object.position.set(data.x, data.y, data.z);
+    object.rotation.y = data.rotationY ?? 0;
+    if (!isChest) object.scale.setScalar(POUCH_SCALE);
     object.userData.isLoot = true;
     object.userData.lootId = data.id;
 
     scene.add(object);
-    markers.set(data.id, { object, baseY: data.y + BASE_HEIGHT });
+    markers.set(data.id, { object, pulses: !isChest });
   }
 
   function remove(id) {
@@ -50,10 +44,10 @@ export function createLootMarkers(scene) {
 
   function update(delta) {
     elapsed += delta;
+    const pulse = 1 + Math.sin(elapsed * GLINT_SPEED) * 0.04;
 
     for (const marker of markers.values()) {
-      marker.object.position.y = marker.baseY + Math.sin(elapsed * BOB_SPEED) * BOB_AMPLITUDE;
-      marker.object.rotation.y += SPIN_SPEED * delta;
+      if (marker.pulses) marker.object.scale.setScalar(POUCH_SCALE * pulse);
     }
   }
 

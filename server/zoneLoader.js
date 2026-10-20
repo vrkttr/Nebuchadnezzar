@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const ZONE_DIRECTORY = join(dirname(fileURLToPath(import.meta.url)), 'zones');
 const COLLISION_LAYER = 'Kollision';
-const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter']);
+const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste']);
 
 export const DEFAULT_ZONE_ID = 'startwelt';
 
@@ -58,6 +58,7 @@ function loadZone(id, file) {
     spawn: null,
     spawns: {},
     teleporters: [],
+    chests: [],
     colliders: [],
     npcs: [],
     enemies: [],
@@ -126,6 +127,17 @@ function loadZone(id, file) {
           zone: String(props.zone),
           spawn: String(props.spawn),
           label: props.label ?? 'Tür',
+        });
+      } else if (kind === 'lootkiste') {
+        if (!props.id) throw new Error(`Zonendatei ${id}: Lootkiste ${object.id} braucht die Eigenschaft "id".`);
+        if (zone.chests.some((chest) => chest.id === String(props.id))) throw new Error(`Zonendatei ${id}: Lootkiste "${props.id}" ist doppelt vergeben.`);
+        zone.chests.push({
+          id: String(props.id),
+          x: center.x,
+          z: center.z,
+          rotationY,
+          lootTable: String(props.loot ?? 'chest_common'),
+          name: props.name ?? 'Versteckte Kiste',
         });
       } else if (kind === 'npc') {
         zone.npcs.push({ npcId: props.npcId, x: center.x, z: center.z, rotationY, props });

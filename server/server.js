@@ -23,6 +23,7 @@ import {
 } from './npcInteraction.js';
 import { diffQuestLog, loadQuests, questRows, recordKill, serializeQuestLog } from './quests.js';
 import { PLAYER_RADIUS, resolveCollisions } from './world.js';
+import { chestKey, openChest, serializeChests } from './worldChests.js';
 import { DEFAULT_ZONE_ID, getZone, getZones, serializeZone } from './zoneLoader.js';
 import {
   createLootContainers,
@@ -94,6 +95,7 @@ function createInitialState(character) {
     savedDataVersion: 0,
     saveQueue: Promise.resolve(),
     quests: character.quests,
+    openedChests: character.openedChests,
     questView: null,
     questViewKey: '',
     ...createCombatState(character),
@@ -144,6 +146,11 @@ async function loadCharacter(characterId) {
     [characterId]
   );
 
+  const [savedChestRows] = await dbPool.query(
+    'SELECT zone, chest_id FROM character_chests WHERE character_id = ?',
+    [characterId]
+  );
+
   const inventory = loadInventory(savedItemRows);
   const equipment = loadEquipment(savedEquipmentRows);
   const zoneId = getZone(row.zone) ? row.zone : DEFAULT_ZONE_ID;
@@ -168,6 +175,7 @@ async function loadCharacter(characterId) {
     inventory,
     equipment,
     quests: loadQuests(savedQuestRows),
+    openedChests: new Set(savedChestRows.map((chest) => chestKey(chest.zone, chest.chest_id))),
   };
 }
 
@@ -310,6 +318,7 @@ wss.on('connection', async (socket, request) => {
       equipment: serializeEquipment(initialState.equipment),
       appearance: initialState.appearance,
       npcs: serializeNpcs(initialState.zoneId),
+      chests: serializeChests(initialState.zoneId, initialState.openedChests),
       world: serializeZone(getZone(initialState.zoneId)),
       position: { x: initialState.x, y: initialState.y, z: initialState.z, rotationY: initialState.rotationY },
       audio: character.audio,
@@ -368,6 +377,15 @@ wss.on('connection', async (socket, request) => {
 
       if (isLoading(state)) return;
       useAbility(id, state, zoneEnemies.get(state.zoneId), slot, (payload) => sendToZone(state.zoneId, payload), notify, onKill);
+    } else if (message.type === 'chest-open') {
+      const state = players.get(id);
+      if (!state || isLoading(state) || typeof message.chestId !== 'string') return;
+
+      openChest(lootContainers, id, state, message.chestId, notify, (zoneId, chestId) => {
+        dbPool
+          .query('INSERT IGNORE INTO character_chests (character_id, zone, chest_id) VALUES (?, ?, ?)', [state.characterId, zoneId, chestId])
+          .catch((error) => console.error('Fehler beim Speichern der Kiste:', error));
+      });
     } else if (message.type === 'loot-open') {
       const state = players.get(id);
       if (!state || typeof message.lootId !== 'string') return;
@@ -520,6 +538,7 @@ function changeZone(playerId, state, zoneId, spawnId) {
     world: serializeZone(target),
     enemies: serializeEnemies(zoneEnemies.get(zoneId)),
     npcs: serializeNpcs(zoneId),
+    chests: serializeChests(zoneId, state.openedChests),
     position: { x: spawn.x, y: spawn.y, z: spawn.z, rotationY: spawn.rotationY },
   });
 

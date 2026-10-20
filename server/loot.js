@@ -37,6 +37,62 @@ const LOOT_TABLES = {
   ],
 };
 
+const CHEST_TABLES = {
+  chest_common: {
+    gold: [4, 9],
+    guaranteed: 1,
+    entries: [
+      { itemId: 'scrap_metal', chance: 0.7, min: 2, max: 5 },
+      { itemId: 'rag_bundle', chance: 0.5, min: 2, max: 4 },
+      { itemId: 'canned_food', chance: 0.6, min: 1, max: 3 },
+      { itemId: 'ammo_9mm', chance: 0.55, min: 8, max: 18 },
+      { itemId: 'ammo_762', chance: 0.35, min: 6, max: 14 },
+      { itemId: 'scrap_helmet', chance: 0.14, min: 1, max: 1 },
+      { itemId: 'patched_trousers', chance: 0.14, min: 1, max: 1 },
+      { itemId: 'padded_vest', chance: 0.1, min: 1, max: 1 },
+      { itemId: 'riot_helmet', chance: 0.06, min: 1, max: 1 },
+      { itemId: 'machete', chance: 0.03, min: 1, max: 1 },
+    ],
+  },
+  chest_flat: {
+    gold: [3, 7],
+    guaranteed: 1,
+    entries: [
+      { itemId: 'canned_food', chance: 0.75, min: 1, max: 3 },
+      { itemId: 'rag_bundle', chance: 0.6, min: 2, max: 4 },
+      { itemId: 'ammo_9mm', chance: 0.5, min: 6, max: 14 },
+      { itemId: 'scrap_metal', chance: 0.4, min: 1, max: 3 },
+      { itemId: 'patched_trousers', chance: 0.12, min: 1, max: 1 },
+      { itemId: 'rusty_pipe', chance: 0.08, min: 1, max: 1 },
+    ],
+  },
+};
+
+export function hasChestTable(tableId) {
+  return Object.hasOwn(CHEST_TABLES, tableId);
+}
+
+export function rollChest(tableId, playerLevel) {
+  const table = CHEST_TABLES[tableId];
+  if (!table) return { gold: 0, drops: [] };
+
+  const level = Math.max(1, playerLevel);
+  const gold = randomInt(table.gold[0] * level, table.gold[1] * level);
+  const roll = () =>
+    table.entries
+      .filter((entry) => Math.random() < entry.chance)
+      .map((entry) => ({ itemId: entry.itemId, quantity: randomInt(entry.min, entry.max) }));
+
+  let drops = roll();
+  for (let attempt = 0; attempt < 5 && drops.length < table.guaranteed; attempt += 1) drops = roll();
+  if (drops.length < table.guaranteed) {
+    const fallback = table.entries[0];
+    drops = [{ itemId: fallback.itemId, quantity: randomInt(fallback.min, fallback.max) }];
+  }
+
+  return { gold, drops };
+}
+
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

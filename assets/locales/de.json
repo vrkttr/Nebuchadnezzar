@@ -1,0 +1,26 @@
+{
+  "loading": {
+    "tipLabel": "Tipp",
+    "tips": [
+      "Halte die rechte Maustaste gedrückt, um die Kamera zu drehen. Mit dem Mausrad zoomst du heran und heraus.",
+      "Linke und rechte Maustaste gleichzeitig gedrückt lassen den Charakter geradeaus laufen.",
+      "Standardmäßig gehst du. Halte Shift gedrückt, um zu rennen.",
+      "Ein Linksklick auf einen Gegner wählt ihn als Ziel an und startet den automatischen Angriff. Mit Escape hebst du die Auswahl wieder auf.",
+      "Der Kraftschlag auf Taste 1 verursacht doppelten Schaden, kostet aber Energie und hat eine Abklingzeit. Er funktioniert nur mit Nahkampfwaffen.",
+      "Fernkampfwaffen verbrauchen bei jedem Schuss Munition und brauchen freie Sicht auf das Ziel. Munition findest du als Beute oder kaufst sie beim Händler.",
+      "Mit B öffnest du den Rucksack, mit C das Charakterfenster. Ausrüstung legst du per Klick im Rucksack an.",
+      "Fahre mit der Maus über einen Gegenstand, um seine Werte zu sehen. Im Rucksack kannst du Gegenstände über das Menü zerstören.",
+      "Außerhalb des Kampfes regenerieren Lebenspunkte und Energie nach kurzer Zeit von selbst.",
+      "Wenn dein Charakter stirbt, verliert er die gesamte Erfahrung des aktuellen Levels. Bereits erreichte Level gehen nie verloren.",
+      "Beute gehört dem Spieler, der den Gegner besiegt hat. Der Münzbeutel verschwindet nach zwei Minuten, hole dir die Gegenstände also rechtzeitig.",
+      "In der Welt sind Kisten versteckt. Jeder Charakter kann jede Kiste nur ein einziges Mal öffnen. Danach ist sie für ihn für immer verschwunden.",
+      "Ein Symbol über dem Kopf eines Händlers oder Streuners zeigt dir, dass es dort etwas zu tun gibt. Sprich sie mit einem Linksklick an.",
+      "Mit /g schreibst du im globalen Chat, ohne Zusatz hören dich nur Spieler in deiner Nähe.",
+      "Gegner mit höherem Level als du sind gefährlicher, lassen aber auch bessere Beute fallen.",
+      "Gegner verfolgen dich nur ein Stück weit von ihrem Spawnpunkt weg. Entkommst du ihnen, kehren sie zurück und heilen sich.",
+      "Türen und andere Zugänge erkennst du daran, dass der Mauszeiger beim Darüberfahren zur Hand wird. Du musst nah genug dran sein.",
+      "Mit M oder dem Menü-Symbol an der Minimap öffnest du die Einstellungen im Portal und verlässt dabei das Spiel. Dein Fortschritt wird laufend gespeichert.",
+      "Beim Händler verkaufst du Gegenstände, die du nicht brauchst. Altmetall und Stoffreste bringen ein wenig Geld."
+    ]
+  }
+}

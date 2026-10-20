@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/ui/nebu-ui.css">
-  <link rel="stylesheet" href="css/hud.css?v=31">
+  <link rel="stylesheet" href="css/hud.css?v=32">
 
   <script type="importmap">
   {
@@ -18,12 +18,13 @@
   </script>
 </head>
 <body>
-  <div id="loading-screen">
-    <div id="loading-panel">
-      <div id="loading-title">Projekt Nebuchadnezzar</div>
+  <div id="loading-screen" class="outdoor">
+    <div id="loading-art"></div>
+    <div id="loading-title">Projekt Nebuchadnezzar</div>
+    <div id="loading-bottom">
       <div id="loading-zone"></div>
-      <div id="loading-bar"><div id="loading-fill"></div></div>
-      <div id="loading-status">Verbinde mit dem Server …</div>
+      <div id="loading-bar"><div id="loading-fill"></div><div id="loading-status">Verbinde mit dem Server …</div></div>
+      <div id="loading-tip"><span id="loading-tip-label">Tipp</span><span id="loading-tip-text"></span></div>
     </div>
   </div>
 
@@ -184,6 +185,6 @@
   <div id="tooltip" class="hidden"></div>
 
   <script src="js/vendor/howler.min.js"></script>
-  <script type="module" src="js/main.js?v=31"></script>
+  <script type="module" src="js/main.js?v=32"></script>
 </body>
 </html>

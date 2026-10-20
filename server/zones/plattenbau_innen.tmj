@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 6,
- "nextobjectid": 93,
+ "nextobjectid": 95,
  "layers": [
   {
    "name": "Boden",
@@ -2043,6 +2043,66 @@
        "name": "healthMax",
        "type": "int",
        "value": 55
+      }
+     ]
+    },
+    {
+     "id": 93,
+     "name": "",
+     "type": "",
+     "class": "lootkiste",
+     "x": 304.0,
+     "y": 368.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "wohnung_west"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_flat"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 94,
+     "name": "",
+     "type": "",
+     "class": "lootkiste",
+     "x": 1011.2,
+     "y": 73.6,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 180,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "wohnung_ost"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_flat"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
       }
      ]
     }

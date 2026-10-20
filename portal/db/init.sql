@@ -75,3 +75,11 @@ CREATE TABLE IF NOT EXISTS login_tokens (
     expires_at TIMESTAMP NOT NULL,
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS character_chests (
+    character_id INT NOT NULL,
+    zone VARCHAR(32) NOT NULL,
+    chest_id VARCHAR(32) NOT NULL,
+    PRIMARY KEY (character_id, zone, chest_id),
+    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
+);
