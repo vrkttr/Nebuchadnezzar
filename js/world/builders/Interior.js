@@ -337,6 +337,71 @@ export function createBarrier({ breite = 3.2 }) {
   return finish(batch, 'Absperrung');
 }
 
+export function createManhole() {
+  const batch = createBatch();
+  const rim = getMaterial('rust_metal', { color: 0x4a443a });
+  const lid = getMaterial('rust_metal', { color: 0x9a7a52 });
+  const bar = getMaterial('steel', { color: 0xb4a58a });
+  const dark = getColorMaterial(0x0e0d0b);
+
+  batch.cylinder(rim, 0.7, 0.7, 0.03, 16, { y: 0.015, repeatX: 2, repeatY: 0.5 });
+  batch.cylinder(dark, 0.6, 0.6, 0.04, 16, { y: 0.02 });
+  batch.cylinder(lid, 0.56, 0.56, 0.05, 16, { y: 0.035, repeatX: 2, repeatY: 0.5 });
+  for (let i = -2; i <= 2; i += 1) {
+    batch.box(bar, 1.0, 0.012, 0.045, { y: 0.065, z: i * 0.18, tile: 1 });
+    batch.box(bar, 0.045, 0.012, 1.0, { y: 0.067, x: i * 0.18, tile: 1 });
+  }
+  for (const x of [-0.2, 0.2]) batch.box(dark, 0.14, 0.014, 0.04, { y: 0.07, x, tile: 1 });
+
+  return finish(batch, 'Kanaldeckel');
+}
+
+export function createPipe({ footprint, hoehe = 2, seed = 1 }) {
+  const batch = createBatch();
+  const random = createRandom(seed);
+  const metal = getMaterial('rust_metal', { color: random.pick([0x6a5a48, 0x58564c, 0x6a4a3a]) });
+  const steel = getMaterial('steel', { color: 0x4a483e });
+  const alongX = footprint.width >= footprint.depth;
+  const length = Math.max(footprint.width, footprint.depth);
+  const rotation = alongX ? { rz: Math.PI / 2 } : { rx: Math.PI / 2 };
+
+  batch.cylinder(metal, 0.14, 0.14, length, 10, { y: hoehe, repeatX: 2, repeatY: length / 2, ...rotation });
+  for (let offset = -length / 2 + 1; offset <= length / 2 - 0.5; offset += 2.5) {
+    batch.cylinder(steel, 0.18, 0.18, 0.07, 10, { y: hoehe, [alongX ? 'x' : 'z']: offset, ...rotation });
+  }
+  if (random.next() < 0.4) {
+    const at = random.range(-length / 3, length / 3);
+    batch.cylinder(steel, 0.04, 0.04, 0.22, 6, { y: hoehe + 0.2, [alongX ? 'x' : 'z']: at });
+    batch.cylinder(steel, 0.12, 0.12, 0.025, 10, { y: hoehe + 0.32, [alongX ? 'x' : 'z']: at });
+  }
+
+  return finish(batch, 'Rohr');
+}
+
+export function createLadder({ hoehe = 3, licht = false }) {
+  const batch = createBatch();
+  const metal = getMaterial('rust_metal', { color: 0x6a5a48 });
+  const glow = getColorMaterial(0xdfe8e0, { unlit: true });
+  const concrete = getMaterial('concrete_panel', { color: 0x6a665c });
+  const wallZ = 0.52;
+
+  for (const x of [-0.22, 0.22]) batch.box(metal, 0.05, hoehe, 0.05, { x, y: hoehe / 2, z: wallZ - 0.1, tile: 1 });
+  for (let y = 0.3; y < hoehe; y += 0.3) batch.box(metal, 0.44, 0.03, 0.03, { y, z: wallZ - 0.1, tile: 1 });
+  for (const y of [0.6, 1.8]) for (const x of [-0.22, 0.22]) batch.box(metal, 0.04, 0.04, 0.1, { x, y, z: wallZ - 0.05, tile: 1 });
+  batch.box(concrete, 1.3, 0.12, 1.3, { y: hoehe - 0.06, z: wallZ - 0.5, tile: 1 });
+  batch.quad(glow, 0.9, 0.9, { y: hoehe - 0.125, z: wallZ - 0.5, rx: Math.PI / 2 });
+
+  const group = finish(batch, 'Leiter');
+
+  if (licht) {
+    const light = new THREE.PointLight(0xcfe0e8, 14, 12, 1.6);
+    light.position.set(0, hoehe - 0.6, wallZ - 0.5);
+    group.add(light);
+  }
+
+  return group;
+}
+
 export const INTERIOR_BUILDERS = {
   wand: createWall,
   decke: createCeiling,
@@ -356,4 +421,7 @@ export const INTERIOR_BUILDERS = {
   treppe: createStairs,
   schutt: createRubble,
   absperrung: createBarrier,
+  kanaldeckel: createManhole,
+  rohr: createPipe,
+  leiter: createLadder,
 };

@@ -38,7 +38,7 @@ export function createPortraits({ scene, renderer, viewCapture, player, enemies,
   }
 
   function frameCamera(object) {
-    const headY = object.position.y + object.scale.y * HEAD_HEIGHT_FACTOR;
+    const headY = object.position.y + (object.userData.headHeight ?? object.scale.y * HEAD_HEIGHT_FACTOR);
     const dirX = Math.sin(object.rotation.y);
     const dirZ = Math.cos(object.rotation.y);
 

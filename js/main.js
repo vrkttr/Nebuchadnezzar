@@ -252,6 +252,7 @@ function start(token) {
     audio.setIndoor(Boolean(world.indoor));
     audio.setEmitters(zone.emitters);
     thirdPersonCamera.setBlockers(world.cameraBlockers ?? []);
+    enemies.setBlockers(world.cameraBlockers ?? []);
     if (world.indoor && !wasIndoor) outdoorCameraDistance = thirdPersonCamera.getDistance();
     thirdPersonCamera.setDistance(world.indoor ? INDOOR_CAMERA_DISTANCE : outdoorCameraDistance ?? thirdPersonCamera.getDistance());
     wasIndoor = Boolean(world.indoor);

@@ -1,11 +1,25 @@
-import { ENEMY_MELEE_RANGE } from './combat.js';
 import { ENEMY_RADIUS, isBlocked, resolveCollisions } from './world.js';
 import { getZone, getZones } from './zoneLoader.js';
 
+const HUMAN = { moveSpeed: 3, aggroRange: 8, attackInterval: 2, damageFactor: 1, meleeRange: 2 };
+const DOG = { moveSpeed: 4.6, aggroRange: 11, attackInterval: 1.4, damageFactor: 0.8, meleeRange: 1.8 };
+const RAT = { moveSpeed: 3.8, aggroRange: 7, attackInterval: 1.2, damageFactor: 0.65, meleeRange: 1.5 };
+
 const ENEMY_TYPES = {
-  raider: { name: 'Plünderer', healthMax: 60, lootTable: 'raider' },
-  scavenger: { name: 'Schrottsammler', healthMax: 70, lootTable: 'scavenger' },
-  marauder: { name: 'Marodeur', healthMax: 140, lootTable: 'marauder' },
+  stray_dog: { ...DOG, name: 'Streunender Hund', healthBase: 15, healthPerLevel: 8, damageFactor: 0.7, lootTable: 'dog' },
+  feral_dog: { ...DOG, name: 'Wilder Hund', healthBase: 25, healthPerLevel: 12, moveSpeed: 5, aggroRange: 13, lootTable: 'dog' },
+  raider: { ...HUMAN, name: 'Plünderer', healthBase: 35, healthPerLevel: 10, lootTable: 'raider' },
+  scavenger: { ...HUMAN, name: 'Schrottsammler', healthBase: 45, healthPerLevel: 10, damageFactor: 0.9, lootTable: 'scavenger' },
+  marauder: { ...HUMAN, name: 'Marodeur', healthBase: 80, healthPerLevel: 20, lootTable: 'marauder' },
+  deserter: { ...HUMAN, name: 'Deserteur', healthBase: 70, healthPerLevel: 16, aggroRange: 10, damageFactor: 1.1, lootTable: 'deserter' },
+  brute: { ...HUMAN, name: 'Schläger', healthBase: 120, healthPerLevel: 25, moveSpeed: 2.6, attackInterval: 2.5, damageFactor: 1.5, lootTable: 'brute' },
+  rat: { ...RAT, name: 'Kanalratte', healthBase: 25, healthPerLevel: 4, lootTable: 'rat' },
+  giant_rat: { ...RAT, name: 'Riesenratte', healthBase: 50, healthPerLevel: 10, moveSpeed: 3.5, damageFactor: 0.85, meleeRange: 1.8, lootTable: 'rat' },
+  plague_rat: { ...RAT, name: 'Seuchenratte', healthBase: 55, healthPerLevel: 12, damageFactor: 1, aggroRange: 9, lootTable: 'rat' },
+  rat_king: { ...RAT, name: 'Rattenkönig', healthBase: 200, healthPerLevel: 25, moveSpeed: 2.8, attackInterval: 2, damageFactor: 1.5, meleeRange: 2.4, aggroRange: 10, lootTable: 'rat_king' },
+  sewer_dweller: { ...HUMAN, name: 'Kanalbewohner', healthBase: 90, healthPerLevel: 14, damageFactor: 1.1, lootTable: 'sewer_dweller' },
+  caretaker: { ...HUMAN, name: 'Der Hausmeister', healthBase: 3000, healthPerLevel: 0, moveSpeed: 2.4, attackInterval: 3, damageFactor: 0.7, aggroRange: 6, lootTable: 'boss' },
+  block_warden: { ...HUMAN, name: 'Die Blockwartin', healthBase: 2400, healthPerLevel: 0, moveSpeed: 3.2, attackInterval: 2, damageFactor: 0.55, aggroRange: 7, lootTable: 'boss' },
 };
 
 const SPAWNS_BY_ZONE = new Map();
@@ -24,16 +38,19 @@ for (const zone of getZones()) {
         x: placement.x,
         y: 0,
         z: placement.z,
-        healthMax: Number(placement.healthMax) || definition.healthMax,
+        healthMax: Number(placement.healthMax) || definition.healthBase + definition.healthPerLevel * placement.level,
         lootTable: definition.lootTable,
+        moveSpeed: definition.moveSpeed,
+        aggroRange: definition.aggroRange,
+        attackInterval: definition.attackInterval,
+        damageFactor: definition.damageFactor,
+        meleeRange: definition.meleeRange,
       };
     })
   );
 }
 
-const AGGRO_RANGE = 8;
 const LEASH_RANGE = 20;
-const MOVE_SPEED = 3;
 const HOME_TOLERANCE = 0.15;
 const STUCK_PROGRESS_RATIO = 0.2;
 const STUCK_LIMIT = 3;
@@ -57,6 +74,11 @@ export function createEnemies(zoneId) {
       name: spawn.name,
       level: spawn.level,
       lootTable: spawn.lootTable,
+      moveSpeed: spawn.moveSpeed,
+      aggroRange: spawn.aggroRange,
+      attackInterval: spawn.attackInterval,
+      damageFactor: spawn.damageFactor,
+      meleeRange: spawn.meleeRange,
       x: spawn.x,
       y: spawn.y,
       z: spawn.z,
@@ -132,14 +154,14 @@ function findNearestPlayerInRange(enemy, players, range) {
 }
 
 function trackProgress(enemy, distanceBefore, distanceAfter, delta) {
-  if (distanceBefore - distanceAfter < MOVE_SPEED * delta * STUCK_PROGRESS_RATIO) {
+  if (distanceBefore - distanceAfter < enemy.moveSpeed * delta * STUCK_PROGRESS_RATIO) {
     enemy.stuckTimer += delta;
   } else {
     enemy.stuckTimer = 0;
   }
 }
 
-function moveToward(enemy, targetX, targetZ, delta, speed = MOVE_SPEED) {
+function moveToward(enemy, targetX, targetZ, delta, speed = enemy.moveSpeed) {
   const dx = targetX - enemy.x;
   const dz = targetZ - enemy.z;
   const distance = Math.hypot(dx, dz);
@@ -210,7 +232,7 @@ export function updateEnemies(enemies, players, delta) {
     if (enemy.dead) continue;
 
     if (enemy.state === 'idle') {
-      const targetId = findNearestPlayerInRange(enemy, players, AGGRO_RANGE);
+      const targetId = findNearestPlayerInRange(enemy, players, enemy.aggroRange);
       if (targetId) {
         enemy.state = 'chase';
         enemy.targetPlayerId = targetId;
@@ -232,7 +254,7 @@ export function updateEnemies(enemies, players, delta) {
 
       const distanceToTarget = horizontalDistance(enemy.x, enemy.z, target.x, target.z);
 
-      if (distanceToTarget > ENEMY_MELEE_RANGE) {
+      if (distanceToTarget > enemy.meleeRange) {
         moveToward(enemy, target.x, target.z, delta);
         resolveCollisions(enemy, ENEMY_RADIUS);
         trackProgress(

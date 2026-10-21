@@ -46,4 +46,7 @@ export function applyLighting(scene, world) {
   scene.background = world.indoor ? new THREE.Color(lighting.background ?? '#070706') : sky;
   hemisphere.intensity = HEMISPHERE_INTENSITY * (lighting.ambient ?? 1);
   sun.intensity = SUN_INTENSITY * (lighting.sun ?? 1);
+
+  const [fogColor, fogNear, fogFar] = String(lighting.fog ?? '').split(':');
+  scene.fog = world.indoor && fogColor && Number(fogFar) > 0 ? new THREE.Fog(fogColor, Number(fogNear), Number(fogFar)) : null;
 }

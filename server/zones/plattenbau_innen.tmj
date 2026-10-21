@@ -2002,15 +2002,10 @@
       {
        "name": "type",
        "type": "string",
-       "value": "scavenger"
+       "value": "caretaker"
       },
       {
        "name": "level",
-       "type": "int",
-       "value": 1
-      },
-      {
-       "name": "healthMax",
        "type": "int",
        "value": 50
       }
@@ -2032,17 +2027,12 @@
       {
        "name": "type",
        "type": "string",
-       "value": "raider"
+       "value": "block_warden"
       },
       {
        "name": "level",
        "type": "int",
-       "value": 1
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 55
+       "value": 50
       }
      ]
     },

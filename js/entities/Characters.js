@@ -1,6 +1,7 @@
 import { createHumanoid } from './Humanoid.js';
 import { buildPlayerAppearance } from './AppearanceOptions.js';
 import { APPEARANCES } from './Appearances.js';
+import { createAnimal, isAnimal } from './Animal.js';
 
 function variantFromId(id) {
   const digits = String(id).match(/\d+/);
@@ -42,7 +43,7 @@ export function createNpc(data) {
 }
 
 export function createEnemy(id, type = 'raider') {
-  const humanoid = createHumanoid(type, { variant: variantFromId(id) });
+  const humanoid = isAnimal(type) ? createAnimal(type) : createHumanoid(type, { variant: variantFromId(id) });
   humanoid.object.name = `Enemy_${id}`;
   humanoid.object.userData.isEnemy = true;
   humanoid.object.userData.enemyId = id;

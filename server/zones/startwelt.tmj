@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 7,
- "nextobjectid": 335,
+ "nextobjectid": 372,
  "layers": [
   {
    "name": "Boden",
@@ -3505,6 +3505,18 @@
        "value": true
       }
      ]
+    },
+    {
+     "id": 335,
+     "name": "",
+     "type": "kanaldeckel",
+     "class": "kanaldeckel",
+     "x": 3344,
+     "y": 1648,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
     }
    ],
    "opacity": 1,
@@ -7590,336 +7602,6 @@
      ]
     },
     {
-     "id": 320,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1497.6,
-     "y": 2880,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "raider"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 1
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 60
-      }
-     ]
-    },
-    {
-     "id": 321,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1440,
-     "y": 2924.8,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "raider"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 1
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 60
-      }
-     ]
-    },
-    {
-     "id": 322,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1552,
-     "y": 2854.4,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "raider"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 2
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 80
-      }
-     ]
-    },
-    {
-     "id": 323,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 2304,
-     "y": 2944,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "scavenger"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 2
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 70
-      }
-     ]
-    },
-    {
-     "id": 324,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 2368,
-     "y": 2880,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "scavenger"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 2
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 70
-      }
-     ]
-    },
-    {
-     "id": 325,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1216,
-     "y": 2752,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "marauder"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 3
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 140
-      }
-     ]
-    },
-    {
-     "id": 326,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1088,
-     "y": 2688,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "marauder"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 3
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 140
-      }
-     ]
-    },
-    {
-     "id": 327,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 2816,
-     "y": 3200,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "scavenger"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 2
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 70
-      }
-     ]
-    },
-    {
-     "id": 328,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 2944,
-     "y": 3168,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "scavenger"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 2
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 70
-      }
-     ]
-    },
-    {
-     "id": 329,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 960,
-     "y": 3264,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "raider"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 2
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 80
-      }
-     ]
-    },
-    {
-     "id": 330,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 3392,
-     "y": 2848,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "marauder"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 3
-      },
-      {
-       "name": "healthMax",
-       "type": "int",
-       "value": 140
-      }
-     ]
-    },
-    {
      "id": 331,
      "name": "",
      "type": "",
@@ -8036,6 +7718,915 @@
        "name": "name",
        "type": "string",
        "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 336,
+     "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 3360,
+     "y": 1728,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kanaldeckel"
+      }
+     ]
+    },
+    {
+     "id": 337,
+     "name": "",
+     "type": "teleporter",
+     "class": "teleporter",
+     "x": 3328,
+     "y": 1632,
+     "width": 64,
+     "height": 64,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kanalisation_eingang"
+      },
+      {
+       "name": "zone",
+       "type": "string",
+       "value": "kanalisation"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "eingang"
+      },
+      {
+       "name": "label",
+       "type": "string",
+       "value": "Kanalisation betreten"
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 0.5
+      }
+     ]
+    },
+    {
+     "id": 338,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1497.6,
+     "y": 2880,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 339,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1440,
+     "y": 2924.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 340,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1552,
+     "y": 2854.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 341,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2304,
+     "y": 2944,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 342,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2368,
+     "y": 2880,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 343,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1216,
+     "y": 2752,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 344,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1088,
+     "y": 2688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 345,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2816,
+     "y": 3200,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 346,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2944,
+     "y": 3168,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 347,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 960,
+     "y": 3264,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 348,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3392,
+     "y": 2848,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 349,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1664,
+     "y": 960,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 350,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 896,
+     "y": 2016,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 351,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1472,
+     "y": 1152,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 352,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1216,
+     "y": 1312,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 353,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2688,
+     "y": 1216,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 354,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1152,
+     "y": 1024,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 355,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2560,
+     "y": 2688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 356,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2752,
+     "y": 2912,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 357,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1824,
+     "y": 3008,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 358,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 832,
+     "y": 1088,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 359,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3232,
+     "y": 1152,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 360,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3232,
+     "y": 2464,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 361,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2848,
+     "y": 960,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 362,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1472,
+     "y": 3200,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 363,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 832,
+     "y": 1536,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 364,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2976,
+     "y": 2720,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": 365,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1824,
+     "y": 3264,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 366,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 896,
+     "y": 3008,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 367,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2560,
+     "y": 3264,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 368,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3168,
+     "y": 2976,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 369,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2144,
+     "y": 3424,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 370,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2944,
+     "y": 1504,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 371,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1984,
+     "y": 2560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 2
       }
      ]
     }

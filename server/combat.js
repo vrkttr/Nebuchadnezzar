@@ -14,8 +14,6 @@ const REGEN_PER_SECOND = 3;
 const RESOURCE_REGEN_PER_SECOND = 2;
 const ARMOR_CONSTANT = 50;
 
-export const ENEMY_MELEE_RANGE = 2;
-const ENEMY_ATTACK_INTERVAL = 2;
 const ENEMY_RESPAWN_TIME = 15;
 
 
@@ -153,7 +151,7 @@ function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, 
 }
 
 function damagePlayer(player, playerId, enemy, emit) {
-  const rawAmount = randomInt(3 + enemy.level * 2, 6 + enemy.level * 3);
+  const rawAmount = Math.round(randomInt(3 + enemy.level * 2, 6 + enemy.level * 3) * enemy.damageFactor);
   const amount = Math.max(1, Math.round((rawAmount * ARMOR_CONSTANT) / (ARMOR_CONSTANT + player.armor)));
   player.health = Math.max(0, player.health - amount);
   player.combatTimer = 0;
@@ -248,14 +246,14 @@ function updateEnemyAttacks(players, enemies, delta, emit) {
 
     const target = players.get(enemy.targetPlayerId);
 
-    if (!target || target.dead || horizontalDistance(enemy, target) > ENEMY_MELEE_RANGE) {
+    if (!target || target.dead || horizontalDistance(enemy, target) > enemy.meleeRange) {
       enemy.attackTimer = 0;
       continue;
     }
 
     enemy.attackTimer += delta;
 
-    if (enemy.attackTimer >= ENEMY_ATTACK_INTERVAL) {
+    if (enemy.attackTimer >= enemy.attackInterval) {
       enemy.attackTimer = 0;
       damagePlayer(target, enemy.targetPlayerId, enemy, emit);
     }

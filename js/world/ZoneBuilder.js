@@ -196,11 +196,16 @@ export function buildZone(scene, world) {
   const trees = [];
   const bushes = [];
   const emitters = [];
+  const wallGroups = new Map();
 
   for (const object of world.objects ?? []) {
     const props = coerceProps(object.props);
 
-    if (object.kind === 'flaeche') {
+    if (object.kind === 'wand' && props.buendeln) {
+      const key = [props.material ?? 'concrete_panel', props.color ?? '', props.hoehe ?? 3, props.y0 ?? 0, props.tile ?? 3].join('|');
+      if (!wallGroups.has(key)) wallGroups.set(key, { props, walls: [] });
+      wallGroups.get(key).walls.push(object);
+    } else if (object.kind === 'flaeche') {
       zone.add(buildSurface(object, props));
     } else if (object.kind === 'fleck') {
       zone.add(buildPatch(object.width / 2, object.x, object.z, object.rotation, props));
@@ -230,6 +235,8 @@ export function buildZone(scene, world) {
     }
   }
 
+  for (const { props, walls } of wallGroups.values()) zone.add(buildWallBatch(props, walls));
+
   zone.add(buildForests(trees, bushes));
   scene.add(zone);
 
@@ -237,6 +244,17 @@ export function buildZone(scene, world) {
   for (const proxy of teleporters) zone.add(proxy);
 
   return { zone, emitters, teleporters };
+}
+
+function buildWallBatch(props, walls) {
+  const height = props.hoehe ?? 3;
+  const y0 = props.y0 ?? 0;
+  const material = getMaterial(props.material ?? 'concrete_panel', { color: props.color ?? 0xc9bb9a });
+  const batch = createBatch();
+  for (const wall of walls) {
+    batch.box(material, wall.width, height, wall.height, { x: wall.x, y: y0 + height / 2, z: wall.z, ry: wall.rotation, tile: props.tile ?? 3 });
+  }
+  return batch.build('Waende');
 }
 
 const PROXY_MATERIAL = new THREE.MeshBasicMaterial({ visible: false });

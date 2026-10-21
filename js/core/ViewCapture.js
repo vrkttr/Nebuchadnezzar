@@ -8,12 +8,15 @@ export function createViewCapture(renderer) {
     const bufferHeight = renderer.domElement.height;
     const sourceSize = Math.round(size * pixelRatio);
     const scissorWasEnabled = renderer.getScissorTest();
+    const savedFog = scene.fog;
+    scene.fog = null;
 
     renderer.getViewport(savedViewport);
     renderer.setScissorTest(true);
     renderer.setViewport(0, 0, size, size);
     renderer.setScissor(0, 0, size, size);
     renderer.render(scene, camera);
+    scene.fog = savedFog;
 
     context.drawImage(
       renderer.domElement,

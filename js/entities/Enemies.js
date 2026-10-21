@@ -1,14 +1,18 @@
 import * as THREE from 'three';
 import { createEnemy } from './Characters.js';
 import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
+import { createOcclusion } from '../utils/Occlusion.js';
 
 const NAMEPLATE_HEIGHT = 2.2;
 const SMOOTHING = 12;
 const CORPSE_DURATION = 4;
+const NAMEPLATE_RANGE = 28;
 
 export function createEnemies(scene, camera, nameplateContainer) {
   const enemies = new Map();
   const projected = new THREE.Vector3();
+  const occlusion = createOcclusion();
+  const plateAnchor = new THREE.Vector3();
 
   const selectionRing = new THREE.Mesh(
     new THREE.RingGeometry(0.6, 0.75, 32),
@@ -144,14 +148,16 @@ export function createEnemies(scene, camera, nameplateContainer) {
   function updateNameplate(enemy) {
     if (enemy.data.dead) return;
 
-    projected.set(
+    plateAnchor.set(
       enemy.object.position.x,
-      enemy.object.position.y + NAMEPLATE_HEIGHT,
+      enemy.object.position.y + (enemy.object.userData.nameplateHeight ?? NAMEPLATE_HEIGHT),
       enemy.object.position.z
     );
-    projected.project(camera);
+    const hidden =
+      plateAnchor.distanceTo(camera.position) > NAMEPLATE_RANGE || occlusion.isBlocked(camera.position, plateAnchor);
+    projected.copy(plateAnchor).project(camera);
 
-    if (projected.z > 1) {
+    if (hidden || projected.z > 1) {
       enemy.nameplateEl.style.display = 'none';
       return;
     }
@@ -212,5 +218,5 @@ export function createEnemies(scene, camera, nameplateContainer) {
     enemies.get(id)?.playHit();
   }
 
-  return { sync, clear, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
+  return { setBlockers: occlusion.setBlockers, sync, clear, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
 }
