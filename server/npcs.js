@@ -10,6 +10,25 @@ const NPC_DEFINITIONS = {
     greeting: 'Allein überlebt man ein paar Wochen. Wer Rückhalt will, gründet eine Gilde oder schließt sich einer an.',
     guild: true,
   },
+  pumpenwart: {
+    id: 'pumpenwart',
+    name: 'Pumpenwart',
+    color: 0x3a4a5a,
+    greeting: 'Solange der Turm Wasser hält, hält die Siedlung. Ich sorge dafür, dass das so bleibt. Und bete, dass nichts kaputtgeht.',
+  },
+  funkerin: {
+    id: 'funkerin',
+    name: 'Funkerin',
+    color: 0x5a3a4a,
+    greeting: 'Psst. Hörst du das Rauschen? Dazwischen verstecken sich Stimmen. Man muss nur wissen, wann man zuhört und wann nicht.',
+  },
+  kanalwaerter: {
+    id: 'kanalwaerter',
+    name: 'Kanalwärter',
+    color: 0x3a3a34,
+    greeting:
+      'Siehst du den Deckel dort? Die Tore sind bewacht, die Zäune hoch, aber unter der Erde läuft ein Weg, der auf keiner Karte steht. Wer wirklich raus will aus Sektor 7, geht nicht durchs Tor. Nimm Licht mit, eine Waffe und gute Nerven. Die Ratten sind das kleinste Problem.',
+  },
   streuner: {
     id: 'streuner',
     name: 'Streuner',

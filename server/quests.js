@@ -39,6 +39,149 @@ export const QUESTS = {
     ],
     rewards: { xp: 80, gold: 35, items: [{ itemId: 'scrap_helmet', quantity: 1 }] },
   },
+  stray_name: {
+    id: 'stray_name',
+    name: 'Ein Name auf der Liste',
+    level: 2,
+    giverNpc: 'streuner',
+    turnInNpc: 'streuner',
+    requires: 'clear_raiders',
+    offerText:
+      'Ich führe Buch über die, die nicht zurückgekommen sind. Marta steht seit vier Tagen drauf. Sie wollte zum Lagerhaus im Südwesten, dem mit dem aufgebrochenen Rolltor. Sieh nach. Und bring nichts mit, was ich nicht sehen will.',
+    progressText: 'Das Lagerhaus im Südwesten. Das Rolltor steht offen, du kannst es nicht verfehlen.',
+    completeText:
+      'Nur ein Ring? Mehr war da nicht? ... Dann ist es so. Nimm das hier, für den Weg. Und lass mich einen Moment allein.',
+    objectives: [{ type: 'reach', zone: 'startwelt', x: -30, z: 45, radius: 4.5, count: 1, label: 'Lagerhaus im Südwesten aufsuchen' }],
+    rewards: { xp: 70, gold: 25, items: [{ itemId: 'bandage', quantity: 2 }, { itemId: 'painkillers', quantity: 1 }] },
+  },
+  trader_goods: {
+    id: 'trader_goods',
+    name: 'Ware ohne Papiere',
+    level: 3,
+    giverNpc: 'haendler',
+    turnInNpc: 'haendler',
+    requires: 'scrap_for_trader',
+    offerText:
+      'Ich brauche Konserven und Hundefell. Das Fell kommt auf Mäntel, die Konserven auf Tische, und wo beides herkommt, interessiert keinen. Auch mich nicht. Bring es einfach.',
+    progressText: 'Fünf Konserven, vier Felle. Ich zähle nicht nach, wie du dazu kommst.',
+    completeText: 'Sauber. Fragen kosten bei mir extra, deshalb stelle ich keine. Hier, die Jacke lag noch da.',
+    objectives: [
+      { type: 'collect', itemId: 'canned_food', count: 5 },
+      { type: 'collect', itemId: 'dog_fur', count: 4 },
+    ],
+    rewards: { xp: 90, gold: 50, items: [{ itemId: 'leather_jacket', quantity: 1 }] },
+  },
+  trader_debt: {
+    id: 'trader_debt',
+    name: 'Schulden verjähren nicht',
+    level: 4,
+    giverNpc: 'haendler',
+    turnInNpc: 'haendler',
+    requires: 'trader_goods',
+    offerText:
+      'Ein paar Marodeure im Südwesten schulden mir seit dem Frühjahr Munition. Ich schicke keine Mahnung. Sie müssen es nicht lebend zurückzahlen.',
+    progressText: 'Die Marodeure treiben sich im Südwesten herum. Es sind kräftige Kerle, geh nicht unvorbereitet hin.',
+    completeText: 'Dann sind wir quitt. Mit denen, meine ich. Mit dir sowieso. Das ist deine Abfindung.',
+    objectives: [{ type: 'kill', enemyType: 'marauder', count: 3, label: 'Marodeure getötet' }],
+    rewards: { xp: 140, gold: 80, items: [{ itemId: 'revolver', quantity: 1 }, { itemId: 'ammo_357', quantity: 12 }] },
+  },
+  pump_parts: {
+    id: 'pump_parts',
+    name: 'Trockenlauf',
+    level: 2,
+    giverNpc: 'pumpenwart',
+    turnInNpc: 'pumpenwart',
+    requires: null,
+    offerText:
+      'Die Pumpe saugt Luft. Dichtung hinüber, Gestänge verbogen. Ich brauche Schrottmetall und Panzerband, mehr nicht. Ohne Wasser brauchen wir uns um alles andere keine Gedanken zu machen.',
+    progressText: 'Schrott und Panzerband. Das Gestänge richte ich selbst, wenn du mir das Material bringst.',
+    completeText: 'Das hält. Vorerst. Hier, etwas für die Mühe. Trink was, bevor du wieder losziehst.',
+    objectives: [
+      { type: 'collect', itemId: 'scrap_metal', count: 5 },
+      { type: 'collect', itemId: 'duct_tape', count: 2 },
+    ],
+    rewards: { xp: 70, gold: 30, items: [{ itemId: 'canned_food', quantity: 2 }, { itemId: 'bandage', quantity: 1 }] },
+  },
+  pump_valve: {
+    id: 'pump_valve',
+    name: 'Das fehlende Ventil',
+    level: 2,
+    giverNpc: 'pumpenwart',
+    turnInNpc: 'pumpenwart',
+    requires: 'pump_parts',
+    offerText:
+      'Das Absperrventil hat jemand ausgebaut. So etwas macht einer, der Tauschware sucht. Ich habe ihn gesehen, wie er nach Süden verschwand, mit dem Ding unter der Plane eines Wracks. Es war ein Wrack mit grüner Plane, südlich der Stromleitung, nicht weit vom Plünderer-Zelt. Schau dir die Stelle an und gib mir Bescheid, ob es noch da ist.',
+    progressText: 'Das Wrack mit der grünen Plane. Südlich der Stromleitung, unweit vom Plünderer-Zelt.',
+    completeText: 'Da lag es also. Wie dreist. Ich hole es später selbst, wenn die Luft rein ist. Hier, du hast dir das verdient.',
+    objectives: [{ type: 'reach', zone: 'startwelt', x: -18, z: 24.5, radius: 4.5, count: 1, label: 'Wrack mit der grünen Plane untersuchen' }],
+    rewards: { xp: 90, gold: 40, items: [{ itemId: 'hard_hat', quantity: 1 }] },
+  },
+  pump_dogs: {
+    id: 'pump_dogs',
+    name: 'Rudel am Brunnen',
+    level: 3,
+    giverNpc: 'pumpenwart',
+    turnInNpc: 'pumpenwart',
+    requires: 'pump_valve',
+    offerText:
+      'Seit ein paar Nächten schleicht ein Rudel um den Wasserturm. Sie riechen die Feuchtigkeit und werden dreister. Ich will nicht, dass morgen jemand mit zerfetzter Wade am Brunnen liegt. Erledige sie.',
+    progressText: 'Streunende und wilde Hunde. Sie lauern am Rand der Siedlung.',
+    completeText: 'Endlich Ruhe. Das war nicht schön, aber nötig. Nimm das, ich habe es noch aus besseren Zeiten.',
+    objectives: [
+      { type: 'kill', enemyType: 'stray_dog', count: 3, label: 'Streunende Hunde getötet' },
+      { type: 'kill', enemyType: 'feral_dog', count: 2, label: 'Wilde Hunde getötet' },
+    ],
+    rewards: { xp: 110, gold: 45, items: [{ itemId: 'medkit', quantity: 1 }] },
+  },
+  radio_power: {
+    id: 'radio_power',
+    name: 'Strom für die Stimme',
+    level: 3,
+    giverNpc: 'funkerin',
+    turnInNpc: 'funkerin',
+    requires: null,
+    offerText:
+      'Mein Funkgerät läuft auf Batterien, und die sind alle. Eine einzige frische, dazu Panzerband für die Kontakte und etwas Schrott für das Gehäuse. Gutes Gerät ist wertvoller als gute Freunde. Das Gerät verrät dich nicht.',
+    progressText: 'Eine Batterie, zwei Rollen Panzerband, drei Stück Schrott. Dann kann ich weitermachen.',
+    completeText: 'Hör dir das an. Rauschen. Wundervolles, ehrliches Rauschen. Hier, für deine Mühe.',
+    objectives: [
+      { type: 'collect', itemId: 'battery', count: 1 },
+      { type: 'collect', itemId: 'duct_tape', count: 2 },
+      { type: 'collect', itemId: 'scrap_metal', count: 3 },
+    ],
+    rewards: { xp: 90, gold: 35, items: [{ itemId: 'ammo_9mm', quantity: 24 }, { itemId: 'bandage', quantity: 2 }] },
+  },
+  radio_mast: {
+    id: 'radio_mast',
+    name: 'Der zweite Mast',
+    level: 3,
+    giverNpc: 'funkerin',
+    turnInNpc: 'funkerin',
+    requires: 'radio_power',
+    offerText:
+      'Mein Empfang ist schlecht. Ich vermute, die Antennenleitung ist durchgescheuert. Sie hängt an der Stromtrasse im Süden, am zweiten Mast von Westen aus gezählt. Sieh nach, ob dort etwas hängt oder liegt, das da nicht hingehört, und berichte mir.',
+    progressText: 'Die Stromtrasse im Süden. Der zweite Mast von Westen aus gezählt.',
+    completeText: 'Durchgescheuert, wie ich dachte. Jemand hat das Kabel gekappt, mit Absicht. Interessant. Und unangenehm.',
+    objectives: [{ type: 'reach', zone: 'startwelt', x: -14, z: 20.6, radius: 4.5, count: 1, label: 'Zweiten Mast der Stromtrasse untersuchen' }],
+    rewards: { xp: 100, gold: 40, items: [{ itemId: 'duct_tape', quantity: 2 }] },
+  },
+  radio_containers: {
+    id: 'radio_containers',
+    name: 'Zwischen den Containern',
+    level: 4,
+    giverNpc: 'funkerin',
+    turnInNpc: 'funkerin',
+    requires: 'radio_mast',
+    offerText:
+      'Ich brauche ein neues Antennenkabel. Im Containerlager im Nordosten liegt welches, in der Gasse zwischen dem grünen und dem ockerfarbenen Container. Dort treiben sich Plünderer herum, räum ein wenig auf, dann sieh dir die Stelle an.',
+    progressText: 'Nordöstlich, das Containerlager. Zwischen dem grünen und dem ockerfarbenen Container.',
+    completeText: 'Das Kabel ist ab. Ich muss es nur noch finden. Gute Arbeit. Das hier habe ich übrig.',
+    objectives: [
+      { type: 'kill', enemyType: 'raider', count: 2, label: 'Plünderer getötet' },
+      { type: 'reach', zone: 'startwelt', x: 43.5, z: -19.4, radius: 4.5, count: 1, label: 'Gasse zwischen grünem und ockerfarbenem Container aufsuchen' },
+    ],
+    rewards: { xp: 130, gold: 60, items: [{ itemId: 'motorcycle_helmet', quantity: 1 }] },
+  },
 };
 
 export function getQuest(questId) {
@@ -89,7 +232,7 @@ function objectiveLabel(objective) {
 }
 
 function objectiveCurrent(player, entry, objective, index) {
-  if (objective.type === 'kill') return Math.min(objective.count, entry.progress[index] ?? 0);
+  if (objective.type === 'kill' || objective.type === 'reach') return Math.min(objective.count, entry.progress[index] ?? 0);
   return Math.min(objective.count, countItem(player.inventory, objective.itemId));
 }
 
@@ -245,6 +388,27 @@ export function recordKill(player, enemy) {
         entry.progress[index] < objective.count
       ) {
         entry.progress[index] += 1;
+        player.dataVersion += 1;
+      }
+    });
+  }
+}
+
+export function recordPosition(player) {
+  if (player.dead) return;
+
+  for (const quest of Object.values(QUESTS)) {
+    const entry = player.quests[quest.id];
+    if (entry?.status !== 'active') continue;
+
+    quest.objectives.forEach((objective, index) => {
+      if (
+        objective.type === 'reach' &&
+        entry.progress[index] < objective.count &&
+        objective.zone === player.zoneId &&
+        Math.hypot(player.x - objective.x, player.z - objective.z) <= objective.radius
+      ) {
+        entry.progress[index] = objective.count;
         player.dataVersion += 1;
       }
     });

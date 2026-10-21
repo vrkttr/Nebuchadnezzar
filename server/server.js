@@ -26,7 +26,7 @@ import {
   resolveGuildNpc,
   sellToVendor,
 } from './npcInteraction.js';
-import { diffQuestLog, loadQuests, questRows, recordKill, serializeQuestLog } from './quests.js';
+import { diffQuestLog, loadQuests, questRows, recordKill, recordPosition, serializeQuestLog } from './quests.js';
 import { PLAYER_RADIUS, resolveCollisions } from './world.js';
 import { chestKey, openChest, serializeChests } from './worldChests.js';
 import { DEFAULT_ZONE_ID, getZone, getZones, serializeZone } from './zoneLoader.js';
@@ -748,6 +748,7 @@ setInterval(() => {
   if (players.size === 0) return;
 
   for (const [id, state] of players) {
+    if (!isLoading(state)) recordPosition(state);
     const questView = serializeQuestLog(state);
     const questViewKey = JSON.stringify(questView);
 

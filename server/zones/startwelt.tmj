@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 7,
- "nextobjectid": 373,
+ "nextobjectid": 377,
  "layers": [
   {
    "name": "Boden",
@@ -7608,6 +7608,86 @@
        "name": "npcId",
        "type": "string",
        "value": "haendler"
+      }
+     ]
+    },
+    {
+     "id": 373,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2336,
+     "y": 1888,
+     "width": 0,
+     "height": 0,
+     "rotation": 85.601,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "pumpenwart"
+      }
+     ]
+    },
+    {
+     "id": 374,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 1360.0,
+     "y": 2112,
+     "width": 0,
+     "height": 0,
+     "rotation": -108.925,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "funkerin"
+      }
+     ]
+    },
+    {
+     "id": 375,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 3248.0,
+     "y": 1648.0,
+     "width": 0,
+     "height": 0,
+     "rotation": -90.0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "kanalwaerter"
+      }
+     ]
+    },
+    {
+     "id": 376,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2496,
+     "y": 2208,
+     "width": 0,
+     "height": 0,
+     "rotation": 116.565,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "gildenverwalter"
       }
      ]
     },
