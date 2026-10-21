@@ -31,12 +31,11 @@ function enterFullscreen() {
 }
 
 export function armAutoFullscreen() {
-  if (armedFullscreen || document.fullscreenElement) return;
+  if (armedFullscreen) return;
   armedFullscreen = true;
 
-  const trigger = () => {
-    window.removeEventListener('mousedown', trigger, true);
-    window.removeEventListener('keydown', trigger, true);
+  const trigger = (event) => {
+    if (event.code === 'Escape' || event.code === 'F11') return;
     enterFullscreen();
   };
 
