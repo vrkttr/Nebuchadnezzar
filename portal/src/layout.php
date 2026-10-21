@@ -94,6 +94,7 @@ function renderPageEnd(bool $panel = true): void
 </main>
 </div>
 <button type="button" id="music-toggle" class="portal-music" data-on="<?= htmlspecialchars(t('portal.music.on')) ?>" data-off="<?= htmlspecialchars(t('portal.music.off')) ?>"></button>
+<script src="assets/portal-nav.js"></script>
 <script src="assets/menu-music.js" data-src="assets/audio/menu_theme.ogg"></script>
 <div class="portal-version"><?= htmlspecialchars(t('portal.version', ['version' => GAME_VERSION])) ?></div>
 </body>

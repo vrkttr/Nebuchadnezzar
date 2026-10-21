@@ -85,7 +85,12 @@ document.querySelectorAll('input[type="range"]').forEach(function (input) {
     });
 });
 document.getElementById('language-select').addEventListener('change', function (event) {
-    window.location.href = 'language.php?lang=' + encodeURIComponent(event.target.value);
+    var target = 'language.php?lang=' + encodeURIComponent(event.target.value);
+    if (window.portalNavigate) {
+        window.portalNavigate(target);
+    } else {
+        window.location.href = target;
+    }
 });
 </script>
 <?php renderPageEnd();

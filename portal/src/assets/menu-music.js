@@ -68,6 +68,8 @@
     if (!audio.paused) write('menuMusicPosition', audio.currentTime);
   }, 2000);
 
+  button.addEventListener('portal:relabel', label);
+
   button.addEventListener('click', function (event) {
     event.stopPropagation();
     enabled = !enabled;
