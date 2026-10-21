@@ -1,12 +1,12 @@
 import { handleChat } from './chat.js';
-import { answerGuildInvite, createGuild, inviteToGuild, leaveGuild } from './guilds.js';
+import { answerGuildInvite, createGuild, inviteToGuild, kickFromGuild, leaveGuild } from './guilds.js';
 import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } from './enemies.js';
-import { createCombatState, updateCombat, useAbility } from './combat.js';
+import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
 import { serializeAbilities, setActionSlot, syncActionLayout } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
 import { getClassModifiers, isValidClass } from './classes.js';
@@ -78,9 +78,29 @@ function notify(playerId, message) {
   }
 }
 
-function onKill(playerId, player, enemy) {
-  recordKill(player, enemy);
-  spawnLootForKill(lootContainers, playerId, player, enemy, notify);
+setGroupResolver((killerId, killer, enemy) => {
+  const group = killer.groupId ? groups.groups.get(killer.groupId) : null;
+  if (!group) return [];
+
+  const mates = [];
+  for (const memberId of group.members) {
+    const state = players.get(memberId);
+    if (!state || memberId === killerId || state.dead || state.zoneId !== killer.zoneId) continue;
+    if (Math.hypot(state.x - enemy.x, state.z - enemy.z) > GROUP_SHARE_RANGE) continue;
+    mates.push({ id: memberId, state });
+  }
+  return mates;
+});
+
+function onKill(recipients, lootOwner, enemy) {
+  for (const { state } of recipients) recordKill(state, enemy);
+  const spawned = spawnLootForKill(lootContainers, lootOwner.id, lootOwner.state, enemy, notify);
+
+  if (spawned && recipients.length > 1) {
+    for (const { id } of recipients) {
+      notify(id, { type: 'chat', channel: 'system', text: `${lootOwner.state.characterName} erhält die Beute.`, key: 'group.lootWinner', params: { name: lootOwner.state.characterName } });
+    }
+  }
 }
 
 function sendAbilities(playerId, state) {
@@ -120,6 +140,7 @@ function createInitialState(character) {
     groupId: null,
     guildId: character.guildId ?? null,
     guildName: character.guildName ?? null,
+    guildLeaderId: character.guildLeaderId ?? null,
     pendingGuildInvite: null,
     pendingInvite: null,
     ...createCombatState(character),
@@ -157,7 +178,7 @@ function parseActionLayout(raw) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -200,6 +221,7 @@ async function loadCharacter(characterId) {
     classId: isValidClass(row.class_id) ? row.class_id : null,
     guildId: row.guild_name ? row.guild_id : null,
     guildName: row.guild_name ?? null,
+    guildLeaderId: row.guild_name ? row.guild_leader_id ?? null : null,
     autoFullscreen: row.auto_fullscreen === undefined ? true : Boolean(row.auto_fullscreen),
     touchControls: ['auto', 'on', 'off'].includes(row.touch_controls) ? row.touch_controls : 'auto',
     actionLayout: parseActionLayout(row.action_bar),
@@ -426,6 +448,10 @@ wss.on('connection', async (socket, request) => {
         leaveGuild(dbPool, players, id, notify)
           .then(() => refreshNpcWindow(state, id, npc, notify))
           .catch((error) => console.error('Fehler beim Verlassen der Gilde:', error));
+      }
+    } else if (message.type === 'guild-kick') {
+      if (typeof message.playerId === 'string') {
+        kickFromGuild(dbPool, players, id, message.playerId, notify).catch((error) => console.error('Fehler beim Entfernen aus der Gilde:', error));
       }
     } else if (message.type === 'guild-invite') {
       if (typeof message.playerId === 'string') inviteToGuild(players, id, message.playerId, notify);
@@ -709,6 +735,7 @@ setInterval(() => {
         autoAttack: state.autoAttack,
         crouching: state.input.crouch,
         guildName: state.guildName,
+        guildLeader: Boolean(state.guildId) && state.guildLeaderId === state.characterId,
         equipment: state.equipment,
         appearance: state.appearance,
       };

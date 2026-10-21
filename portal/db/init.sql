@@ -96,3 +96,5 @@ CREATE TABLE IF NOT EXISTS guilds (
 );
 
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS guild_id INT NULL;
+ALTER TABLE guilds ADD COLUMN IF NOT EXISTS leader_id INT NULL;
+UPDATE guilds g SET g.leader_id = (SELECT MIN(c.id) FROM characters c WHERE c.guild_id = g.id) WHERE g.leader_id IS NULL;

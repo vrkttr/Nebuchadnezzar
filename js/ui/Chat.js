@@ -16,7 +16,7 @@ export function createChat({ onSend }) {
     } else {
       const name = document.createElement('span');
       name.className = 'chat-name';
-      name.textContent = `${channel === 'global' ? t('chat.global') : channel === 'party' ? t('chat.party') : ''}${from}: `;
+      name.textContent = `${channel === 'global' ? t('chat.global') : channel === 'party' ? t('chat.party') : channel === 'guild' ? t('chat.guild') : ''}${from}: `;
       line.appendChild(name);
       line.appendChild(document.createTextNode(text));
     }

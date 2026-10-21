@@ -131,6 +131,9 @@ function start(token) {
     onGuildInvite: () => {
       if (gameState.playerTarget) connection.send({ type: 'guild-invite', playerId: gameState.playerTarget });
     },
+    onGuildKick: () => {
+      if (gameState.playerTarget) connection.send({ type: 'guild-kick', playerId: gameState.playerTarget });
+    },
     onInvite: () => {
       if (gameState.playerTarget) connection.send({ type: 'group-invite', playerId: gameState.playerTarget });
     },
@@ -496,6 +499,7 @@ function start(token) {
           }
           ownTargetRotationY = ownState.rotationY ?? ownTargetRotationY;
           gameState.player.guildName = ownState.guildName ?? null;
+          gameState.player.guildLeader = Boolean(ownState.guildLeader);
           if (ownState.characterName) {
             gameState.player.name = ownState.characterName;
           }
@@ -822,6 +826,12 @@ function start(token) {
             !ownGroup.members.some((member) => member.id === gameState.playerTarget)))
     );
     gameState.canGuildInviteTarget = Boolean(gameState.playerTargetData && gameState.player.guildName && !gameState.playerTargetData.guildName);
+    gameState.canGuildKickTarget = Boolean(
+      gameState.playerTargetData &&
+        gameState.player.guildLeader &&
+        gameState.player.guildName &&
+        gameState.playerTargetData.guildName === gameState.player.guildName
+    );
     hud.update();
 
     inputSendTimer += delta;

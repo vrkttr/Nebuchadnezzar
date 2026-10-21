@@ -47,7 +47,7 @@
   "bag.pocket": "Tasche",
   "inventory.title": "Rucksack",
   "inventory.bagTitle": "Rucksack (B)",
-  "chat.placeholder": "Enter: Sagen, /g: Global, /p: Gruppe",
+  "chat.placeholder": "Enter: Sagen, /g: Global, /p: Gruppe, /gi: Gilde",
   "chat.global": "[Global] ",
   "chat.rateLimit": "Du schreibst zu schnell.",
   "chat.unknownCommand": "Unbekannter Befehl.",
@@ -359,7 +359,7 @@
   "guild.found": "Gilde gründen",
   "guild.create": "Gründen",
   "guild.namePlaceholder": "Gildenname",
-  "guild.nameHint": "Der Name darf nur aus Buchstaben bestehen (3 bis 20) und muss einzigartig sein.",
+  "guild.nameHint": "Der Name darf nur aus Buchstaben bestehen (3 bis 20) und muss einzigartig sein. Die Gründung kostet {cost} Gold.",
   "guild.leave": "Gilde {name} verlassen",
   "guild.leaveConfirm": "Gilde {name} wirklich verlassen?",
   "guild.leaveYes": "Verlassen",
@@ -377,5 +377,13 @@
   "touch.crouch": "Ducken",
   "touch.crouchTitle": "Ducken umschalten",
   "touch.target": "Ziel",
-  "touch.targetTitle": "Nächstes Ziel"
+  "touch.targetTitle": "Nächstes Ziel",
+  "chat.guild": "[Gilde] ",
+  "chat.noGuild": "Du bist in keiner Gilde.",
+  "guild.kick": "Aus Gilde",
+  "guild.noGold": "Die Gründung einer Gilde kostet {cost} Gold.",
+  "guild.kicked": "Du wurdest aus der Gilde {name} entfernt.",
+  "guild.memberKicked": "{name} wurde aus der Gilde entfernt.",
+  "guild.leaderChanged": "Die Gildenführung wurde neu vergeben.",
+  "group.lootWinner": "{name} erhält die Beute."
 }

@@ -11,6 +11,9 @@ const COMMANDS = {
   p: 'party',
   party: 'party',
   gruppe: 'party',
+  gi: 'guild',
+  gilde: 'guild',
+  guild: 'guild',
 };
 
 function systemMessage(text, key) {
@@ -44,6 +47,11 @@ export function handleChat(players, senderId, message, notify, now = Date.now())
     return;
   }
 
+  if (channel === 'guild' && !sender.guildId) {
+    notify(senderId, systemMessage('Du bist in keiner Gilde.', 'chat.noGuild'));
+    return;
+  }
+
   sender.chatTimes = (sender.chatTimes ?? []).filter((time) => now - time < RATE_LIMIT_WINDOW_MS);
   if (sender.chatTimes.length >= RATE_LIMIT_COUNT) {
     notify(senderId, systemMessage('Du schreibst zu schnell.', 'chat.rateLimit'));
@@ -56,6 +64,10 @@ export function handleChat(players, senderId, message, notify, now = Date.now())
   for (const [id, player] of players) {
     if (channel === 'party') {
       if (player.groupId === sender.groupId) notify(id, payload);
+      continue;
+    }
+    if (channel === 'guild') {
+      if (player.guildId === sender.guildId) notify(id, payload);
       continue;
     }
     const inRange = player.zoneId === sender.zoneId && Math.hypot(player.x - sender.x, player.z - sender.z) <= CHAT_SAY_RANGE;

@@ -47,7 +47,7 @@
   "bag.pocket": "Pocket",
   "inventory.title": "Backpack",
   "inventory.bagTitle": "Backpack (B)",
-  "chat.placeholder": "Enter: Say, /g: Global, /p: Party",
+  "chat.placeholder": "Enter: Say, /g: Global, /p: Party, /gi: Guild",
   "chat.global": "[Global] ",
   "chat.rateLimit": "You are typing too fast.",
   "chat.unknownCommand": "Unknown command.",
@@ -359,7 +359,7 @@
   "guild.found": "Found a guild",
   "guild.create": "Found",
   "guild.namePlaceholder": "Guild name",
-  "guild.nameHint": "The name may only contain letters (3 to 20) and must be unique.",
+  "guild.nameHint": "The name may only contain letters (3 to 20) and must be unique. Founding costs {cost} gold.",
   "guild.leave": "Leave guild {name}",
   "guild.leaveConfirm": "Really leave the guild {name}?",
   "guild.leaveYes": "Leave",
@@ -377,5 +377,13 @@
   "touch.crouch": "Crouch",
   "touch.crouchTitle": "Toggle crouch",
   "touch.target": "Target",
-  "touch.targetTitle": "Next target"
+  "touch.targetTitle": "Next target",
+  "chat.guild": "[Guild] ",
+  "chat.noGuild": "You are not in a guild.",
+  "guild.kick": "Remove from guild",
+  "guild.noGold": "Founding a guild costs {cost} gold.",
+  "guild.kicked": "You were removed from the guild {name}.",
+  "guild.memberKicked": "{name} was removed from the guild.",
+  "guild.leaderChanged": "The guild leadership has been reassigned.",
+  "group.lootWinner": "{name} receives the loot."
 }

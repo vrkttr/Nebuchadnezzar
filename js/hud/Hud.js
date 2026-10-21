@@ -43,6 +43,8 @@ export function createHud(state, handlers = {}) {
   const targetHealthFill = document.getElementById('target-health-fill');
   const targetInvite = document.getElementById('target-invite');
   targetInvite.addEventListener('click', () => handlers.onInvite?.());
+  const targetGuildKick = document.getElementById('target-guild-kick');
+  targetGuildKick.addEventListener('click', () => handlers.onGuildKick?.());
   const targetGuildInvite = document.getElementById('target-guild-invite');
   targetGuildInvite.addEventListener('click', () => handlers.onGuildInvite?.());
 
@@ -256,6 +258,7 @@ export function createHud(state, handlers = {}) {
       targetHealthFill.style.width = `${toPercent(state.playerTargetData.health, state.playerTargetData.healthMax)}%`;
       targetInvite.classList.toggle('hidden', !state.canInviteTarget);
       targetGuildInvite.classList.toggle('hidden', !state.canGuildInviteTarget);
+      targetGuildKick.classList.toggle('hidden', !state.canGuildKickTarget);
     } else {
       targetInvite.classList.add('hidden');
       targetGuildInvite.classList.add('hidden');

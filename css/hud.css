@@ -1149,43 +1149,6 @@ button {
   line-height: 1.35;
 }
 
-#menu-window {
-  left: calc(50% - 150px);
-  top: 30%;
-  width: 300px;
-}
-
-.menu-body {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 12px 14px 16px;
-  font-size: 13px;
-}
-
-.menu-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 4px 8px;
-  align-items: center;
-}
-
-.menu-row input[type='range'] {
-  grid-column: 1 / -1;
-  width: 100%;
-  accent-color: var(--nu-amber-dark);
-}
-
-.menu-check {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#menu-credits {
-  color: var(--nu-red);
-}
-
 .icon {
   display: block;
   width: 100%;
@@ -1949,6 +1912,11 @@ textarea {
 
 .chat-line-party .chat-name {
   color: #8fd18f;
+}
+
+.chat-line-guild,
+.chat-line-guild .chat-name {
+  color: #6fd66f;
 }
 
 .nameplate-guild {

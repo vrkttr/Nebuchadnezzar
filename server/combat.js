@@ -15,8 +15,9 @@ const REGEN_PER_SECOND = 3;
 const RESOURCE_REGEN_PER_SECOND = 2;
 const ARMOR_CONSTANT = 50;
 
-const ENEMY_RESPAWN_TIME = 120;
-
+const ENEMY_RESPAWN_TIME = 60;
+const GROUP_BONUS_PER_MEMBER = 0.2;
+export const GROUP_SHARE_RANGE = 60;
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -137,24 +138,36 @@ function respawnPlayer(player) {
   player.combatTimer = REGEN_DELAY;
 }
 
-function awardKill(player, playerId, enemy, notify, onKill) {
-  const xpAmount = xpForKill(player.level, enemy.level);
-  const goldAmount = Math.max(1, Math.round(goldForKill(player.level, enemy.level) * getClassModifiers(player.classId).goldMult));
+let resolveGroupMates = () => [];
 
-  onKill(playerId, player, enemy);
+export function setGroupResolver(resolver) {
+  resolveGroupMates = resolver;
+}
 
-  notify(playerId, { type: 'event', kind: 'kill', enemyName: enemy.name, enemyType: enemy.type });
+function awardKill(killer, killerId, enemy, notify, onKill) {
+  const recipients = [{ id: killerId, state: killer }, ...resolveGroupMates(killerId, killer, enemy)];
+  const share = (1 + GROUP_BONUS_PER_MEMBER * (recipients.length - 1)) / recipients.length;
+  const lootOwner = recipients[Math.floor(Math.random() * recipients.length)];
 
-  const levelsGained = grantXp(player, xpAmount);
-  if (xpAmount > 0) {
-    notify(playerId, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: enemy.name, enemyType: enemy.type });
-  }
+  onKill(recipients, lootOwner, enemy);
 
-  addGold(player, goldAmount);
-  notify(playerId, { type: 'event', kind: 'gold', amount: goldAmount });
+  for (const { id, state } of recipients) {
+    const xpAmount = Math.round(xpForKill(state.level, enemy.level) * share);
+    const goldAmount = Math.max(1, Math.round(goldForKill(state.level, enemy.level) * getClassModifiers(state.classId).goldMult * share));
 
-  if (levelsGained > 0) {
-    notify(playerId, { type: 'event', kind: 'levelup', level: player.level });
+    notify(id, { type: 'event', kind: 'kill', enemyName: enemy.name, enemyType: enemy.type });
+
+    const levelsGained = grantXp(state, xpAmount);
+    if (xpAmount > 0) {
+      notify(id, { type: 'event', kind: 'xp', amount: xpAmount, enemyName: enemy.name, enemyType: enemy.type });
+    }
+
+    addGold(state, goldAmount);
+    notify(id, { type: 'event', kind: 'gold', amount: goldAmount });
+
+    if (levelsGained > 0) {
+      notify(id, { type: 'event', kind: 'levelup', level: state.level });
+    }
   }
 }
 

@@ -140,7 +140,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
       })
     );
 
-    body.replaceChildren(element('p', 'npc-text', t('guild.nameHint')), input, buttons);
+    body.replaceChildren(element('p', 'npc-text', t('guild.nameHint', { cost: (data.guildCost ?? 0).toLocaleString('de-DE') })), input, buttons);
     setTimeout(() => input.focus(), 0);
   }
 

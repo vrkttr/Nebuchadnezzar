@@ -1,5 +1,8 @@
+import { addGold } from './loot.js';
+
 export const GUILD_NAME_MIN = 3;
 export const GUILD_NAME_MAX = 20;
+export const GUILD_FOUNDING_COST = 10000;
 const INVITE_TIMEOUT_MS = 30000;
 const NAME_PATTERN = /^\p{L}+$/u;
 
@@ -16,9 +19,10 @@ export function isValidGuildName(name) {
   );
 }
 
-function setGuild(state, guildId, guildName) {
+function setGuild(state, guildId, guildName, leaderId = null) {
   state.guildId = guildId;
   state.guildName = guildName;
+  state.guildLeaderId = leaderId;
 }
 
 function notifyMembers(players, guildId, notify, message) {
@@ -42,13 +46,26 @@ export async function createGuild(db, players, playerId, rawName, notify) {
     return false;
   }
 
+  if (player.gold < GUILD_FOUNDING_COST) {
+    notify(playerId, system(`Die Gründung einer Gilde kostet ${GUILD_FOUNDING_COST} Gold.`, 'guild.noGold', { cost: GUILD_FOUNDING_COST }));
+    return false;
+  }
+
   if (player.guildBusy) return false;
   player.guildBusy = true;
 
   try {
-    const [result] = await db.query('INSERT INTO guilds (name) VALUES (?)', [name]);
+    const [result] = await db.query('INSERT INTO guilds (name, leader_id) VALUES (?, ?)', [name, player.characterId]);
+    if (player.gold < GUILD_FOUNDING_COST || player.guildId) {
+      await db.query('DELETE FROM guilds WHERE id = ?', [result.insertId]);
+      notify(playerId, system(`Die Gründung einer Gilde kostet ${GUILD_FOUNDING_COST} Gold.`, 'guild.noGold', { cost: GUILD_FOUNDING_COST }));
+      return false;
+    }
+
     await db.query('UPDATE characters SET guild_id = ? WHERE id = ?', [result.insertId, player.characterId]);
-    setGuild(player, result.insertId, name);
+    addGold(player, -GUILD_FOUNDING_COST);
+    player.dataVersion += 1;
+    setGuild(player, result.insertId, name, player.characterId);
     notify(playerId, system(`Die Gilde ${name} wurde gegründet.`, 'guild.created', { name }));
     return true;
   } catch (error) {
@@ -97,12 +114,48 @@ export async function answerGuildInvite(db, players, playerId, accept, notify, n
 
   if (invite.expiresAt <= now || player.guildId) return;
 
-  const [rows] = await db.query('SELECT id FROM guilds WHERE id = ?', [invite.guildId]);
+  const [rows] = await db.query('SELECT id, leader_id FROM guilds WHERE id = ?', [invite.guildId]);
   if (rows.length === 0 || !players.has(playerId)) return;
 
   await db.query('UPDATE characters SET guild_id = ? WHERE id = ?', [invite.guildId, player.characterId]);
-  setGuild(player, invite.guildId, invite.guildName);
+  setGuild(player, invite.guildId, invite.guildName, rows[0].leader_id ?? null);
   notifyMembers(players, invite.guildId, notify, system(`${player.characterName} ist der Gilde beigetreten.`, 'guild.memberJoined', { name: player.characterName }));
+}
+
+async function removeMember(db, players, guildId, guildName, member, notify) {
+  const wasLeader = member.guildLeaderId === member.characterId;
+  await db.query('UPDATE characters SET guild_id = NULL WHERE id = ?', [member.characterId]);
+  setGuild(member, null, null);
+
+  const [rows] = await db.query('SELECT COUNT(*) AS members FROM characters WHERE guild_id = ?', [guildId]);
+  if (Number(rows[0].members) === 0) {
+    await db.query('DELETE FROM guilds WHERE id = ?', [guildId]);
+    return;
+  }
+
+  if (!wasLeader) return;
+
+  const [next] = await db.query('SELECT id FROM characters WHERE guild_id = ? ORDER BY id LIMIT 1', [guildId]);
+  const leaderId = next[0].id;
+  await db.query('UPDATE guilds SET leader_id = ? WHERE id = ?', [leaderId, guildId]);
+  for (const other of players.values()) {
+    if (other.guildId === guildId) other.guildLeaderId = leaderId;
+  }
+  notifyMembers(players, guildId, notify, system('Die Gildenführung wurde neu vergeben.', 'guild.leaderChanged'));
+}
+
+export async function kickFromGuild(db, players, leaderPlayerId, targetId, notify) {
+  const leader = players.get(leaderPlayerId);
+  const target = players.get(targetId);
+  if (!leader?.guildId || !target || leaderPlayerId === targetId) return false;
+  if (leader.guildLeaderId !== leader.characterId || target.guildId !== leader.guildId) return false;
+
+  const guildId = leader.guildId;
+  const guildName = leader.guildName;
+  await removeMember(db, players, guildId, guildName, target, notify);
+  notify(targetId, system(`Du wurdest aus der Gilde ${guildName} entfernt.`, 'guild.kicked', { name: guildName }));
+  notifyMembers(players, guildId, notify, system(`${target.characterName} wurde aus der Gilde entfernt.`, 'guild.memberKicked', { name: target.characterName }));
+  return true;
 }
 
 export async function leaveGuild(db, players, playerId, notify) {
@@ -111,15 +164,9 @@ export async function leaveGuild(db, players, playerId, notify) {
 
   const guildId = player.guildId;
   const guildName = player.guildName;
-  await db.query('UPDATE characters SET guild_id = NULL WHERE id = ?', [player.characterId]);
-  setGuild(player, null, null);
+  await removeMember(db, players, guildId, guildName, player, notify);
   notify(playerId, system(`Du hast die Gilde ${guildName} verlassen.`, 'guild.left', { name: guildName }));
   notifyMembers(players, guildId, notify, system(`${player.characterName} hat die Gilde verlassen.`, 'guild.memberLeft', { name: player.characterName }));
-
-  const [rows] = await db.query('SELECT COUNT(*) AS members FROM characters WHERE guild_id = ?', [guildId]);
-  if (Number(rows[0].members) === 0) {
-    await db.query('DELETE FROM guilds WHERE id = ?', [guildId]);
-  }
 
   return true;
 }

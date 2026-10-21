@@ -1,5 +1,6 @@
 import { NPC_INTERACT_RANGE, getNpc } from './npcs.js';
 import { acceptQuest, completeQuest, questsForNpc } from './quests.js';
+import { GUILD_FOUNDING_COST } from './guilds.js';
 import { buyItem, sellItem, serializeVendor } from './vendor.js';
 
 function resolveNpc(player, playerId, npcId, notify) {
@@ -29,6 +30,7 @@ function sendNpcWindow(player, playerId, npc, notify) {
     vendor: Boolean(npc.vendor),
     guild: Boolean(npc.guild),
     guildName: player.guildName ?? null,
+    guildCost: GUILD_FOUNDING_COST,
     quests: questsForNpc(player, npc.id),
   });
 }
