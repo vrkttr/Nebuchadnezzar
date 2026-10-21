@@ -118,6 +118,7 @@ export function createBatch() {
     if (name) group.name = name;
 
     for (const bucket of buckets.values()) {
+      if (bucket.positions.length === 0) continue;
       const geometry = new THREE.BufferGeometry();
       geometry.setAttribute('position', new THREE.Float32BufferAttribute(bucket.positions, 3));
       geometry.setAttribute('normal', new THREE.Float32BufferAttribute(bucket.normals, 3));

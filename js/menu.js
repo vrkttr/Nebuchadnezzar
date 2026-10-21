@@ -15,13 +15,17 @@ const FOG = 0xcdb593;
 const PIXEL_RATIO_LIMIT = 1.5;
 
 document.body.style.margin = '0';
-document.body.style.background = '#14120d';
+document.body.style.background = 'transparent';
 document.body.style.overflow = 'hidden';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: STILL });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, PIXEL_RATIO_LIMIT));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.domElement.style.display = 'block';
+if (!STILL) {
+  renderer.domElement.style.opacity = '0';
+  renderer.domElement.style.transition = 'opacity 0.9s ease-out';
+}
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
@@ -369,9 +373,14 @@ if (STILL) {
     window.renderDone = true;
   }, 2500);
 } else {
+  let shown = false;
   const loop = () => {
     requestAnimationFrame(loop);
     frame(Math.min(clock.getDelta(), 0.1));
+    if (!shown) {
+      shown = true;
+      renderer.domElement.style.opacity = '1';
+    }
   };
   loop();
 }

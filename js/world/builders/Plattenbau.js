@@ -134,7 +134,7 @@ export function createPlattenbau(params = {}) {
   }
 
   for (let n = 0; n < 7; n += 1) {
-    const i = random.int(inhabited[0], inhabited[1]);
+    const i = inhabited.length === 2 ? random.int(inhabited[0], inhabited[1]) : random.int(0, cells - 1);
     if (entrance === i) continue;
     const f = random.int(0, floors - 2);
     const patch = random.next() < 0.5 ? wood : plaster;
