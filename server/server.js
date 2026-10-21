@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { createCombatState, updateCombat, useAbility } from './combat.js';
-import { serializeAbilities } from './abilities.js';
+import { buildActionBar, serializeAbilities } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
@@ -302,6 +302,7 @@ wss.on('connection', async (socket, request) => {
 
   const id = randomUUID();
   const initialState = createInitialState(character);
+  initialState.abilityLevel = initialState.level;
   initialState.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
   players.set(id, initialState);
   sockets.set(id, socket);
@@ -510,7 +511,7 @@ function enterTeleporter(playerId, state, teleporterId) {
 
 function changeZone(playerId, state, zoneId, spawnId) {
   const target = getZone(zoneId);
-  const spawn = target?.spawns[spawnId];
+  const spawn = spawnId ? target?.spawns[spawnId] : target?.spawn;
   if (!spawn) return;
 
   const previousZoneId = state.zoneId;
@@ -590,6 +591,14 @@ setInterval(() => {
     updateEnemies(enemies, zonePlayers, TICK_DELTA);
     updateCombat(zonePlayers, enemies, TICK_DELTA, (payload) => sendToZone(zone.id, payload), notify, onKill);
 
+    for (const [id, state] of zonePlayers) {
+      if (!state.pendingZone) continue;
+      const target = state.pendingZone;
+      state.pendingZone = null;
+      changeZone(id, state, target, null);
+      zonePlayers.delete(id);
+    }
+
     if (zonePlayers.size === 0) continue;
 
     const snapshot = {};
@@ -627,6 +636,12 @@ setInterval(() => {
       state.questView = questView;
       state.questViewKey = questViewKey;
       notify(id, { type: 'quests', ...questView });
+    }
+
+    if (state.abilityLevel !== state.level) {
+      state.abilityLevel = state.level;
+      state.actionBar = buildActionBar(state.level);
+      notify(id, { type: 'abilities', abilities: serializeAbilities(state.actionBar) });
     }
 
     notify(id, {

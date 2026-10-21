@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { createBatch, tiledBox, scaleUv } from '../Batch.js';
 import { createRandom } from '../Random.js';
-import { getMaterial, getColorMaterial } from '../Textures.js';
+import { getMaterial, getColorMaterial, OVERLAY_TOP } from '../Textures.js';
 
 const PLASTER = '#c9bb9a';
 
@@ -339,19 +339,19 @@ export function createBarrier({ breite = 3.2 }) {
 
 export function createManhole() {
   const batch = createBatch();
-  const rim = getMaterial('rust_metal', { color: 0x4a443a });
-  const lid = getMaterial('rust_metal', { color: 0x9a7a52 });
-  const bar = getMaterial('steel', { color: 0xb4a58a });
-  const dark = getColorMaterial(0x0e0d0b);
+  const rim = getMaterial('rust_metal', { color: 0x4a443a, ...OVERLAY_TOP });
+  const lid = getMaterial('rust_metal', { color: 0x9a7a52, ...OVERLAY_TOP });
+  const bar = getMaterial('steel', { color: 0xb4a58a, ...OVERLAY_TOP });
+  const dark = getColorMaterial(0x0e0d0b, OVERLAY_TOP);
 
-  batch.cylinder(rim, 0.7, 0.7, 0.03, 16, { y: 0.015, repeatX: 2, repeatY: 0.5 });
-  batch.cylinder(dark, 0.6, 0.6, 0.04, 16, { y: 0.02 });
-  batch.cylinder(lid, 0.56, 0.56, 0.05, 16, { y: 0.035, repeatX: 2, repeatY: 0.5 });
+  batch.cylinder(rim, 0.72, 0.72, 0.06, 16, { y: 0.03, repeatX: 2, repeatY: 0.5 });
+  batch.cylinder(dark, 0.64, 0.64, 0.07, 16, { y: 0.035 });
+  batch.cylinder(lid, 0.58, 0.58, 0.08, 16, { y: 0.04, repeatX: 2, repeatY: 0.5 });
   for (let i = -2; i <= 2; i += 1) {
-    batch.box(bar, 1.0, 0.012, 0.045, { y: 0.065, z: i * 0.18, tile: 1 });
-    batch.box(bar, 0.045, 0.012, 1.0, { y: 0.067, x: i * 0.18, tile: 1 });
+    batch.box(bar, 1.0, 0.03, 0.05, { y: 0.085, z: i * 0.18, tile: 1 });
+    batch.box(bar, 0.05, 0.03, 1.0, { y: 0.087, x: i * 0.18, tile: 1 });
   }
-  for (const x of [-0.2, 0.2]) batch.box(dark, 0.14, 0.014, 0.04, { y: 0.07, x, tile: 1 });
+  for (const x of [-0.2, 0.2]) batch.box(dark, 0.14, 0.03, 0.04, { y: 0.09, x, tile: 1 });
 
   return finish(batch, 'Kanaldeckel');
 }
@@ -383,6 +383,8 @@ export function createLadder({ hoehe = 3, licht = false }) {
   const metal = getMaterial('rust_metal', { color: 0x6a5a48 });
   const glow = getColorMaterial(0xdfe8e0, { unlit: true });
   const concrete = getMaterial('concrete_panel', { color: 0x6a665c });
+  const pool = getColorMaterial(0xdfe8d0, { unlit: true, transparent: true, opacity: 0.28, depthWrite: false, ...OVERLAY_TOP });
+  const marker = getColorMaterial(0xd8b030, { unlit: true, ...OVERLAY_TOP });
   const wallZ = 0.52;
 
   for (const x of [-0.22, 0.22]) batch.box(metal, 0.05, hoehe, 0.05, { x, y: hoehe / 2, z: wallZ - 0.1, tile: 1 });
@@ -390,6 +392,8 @@ export function createLadder({ hoehe = 3, licht = false }) {
   for (const y of [0.6, 1.8]) for (const x of [-0.22, 0.22]) batch.box(metal, 0.04, 0.04, 0.1, { x, y, z: wallZ - 0.05, tile: 1 });
   batch.box(concrete, 1.3, 0.12, 1.3, { y: hoehe - 0.06, z: wallZ - 0.5, tile: 1 });
   batch.quad(glow, 0.9, 0.9, { y: hoehe - 0.125, z: wallZ - 0.5, rx: Math.PI / 2 });
+  batch.quad(pool, 1.8, 1.8, { y: 0.05, z: wallZ - 0.9, rx: -Math.PI / 2 });
+  batch.box(marker, 1.1, 0.05, 0.08, { y: 0.05, z: wallZ - 1.9, tile: 1 });
 
   const group = finish(batch, 'Leiter');
 

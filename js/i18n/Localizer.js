@@ -78,6 +78,9 @@ export function localizeMessage(message) {
       (message.chests ?? []).forEach(localizeChest);
       if (message.world) localizeWorld(message.world);
       break;
+    case 'abilities':
+      (message.abilities ?? []).forEach(localizeAbility);
+      break;
     case 'zone':
       (message.npcs ?? []).forEach(localizeNpc);
       (message.enemies ?? []).forEach(localizeEnemy);

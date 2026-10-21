@@ -1,9 +1,9 @@
-import { ABILITIES, DEFAULT_ACTION_BAR, createCooldownState } from './abilities.js';
+import { ABILITIES, buildActionBar, createCooldownState } from './abilities.js';
 import { applyEquipmentStats, getEquippedWeapon } from './equipment.js';
 import { countItem, removeItem, sendInventory } from './inventory.js';
 import { addGold, goldForKill } from './loot.js';
 import { applyLevelStats, grantXp, xpForKill } from './progression.js';
-import { getZone } from './zoneLoader.js';
+import { DEFAULT_ZONE_ID, getZone } from './zoneLoader.js';
 import { hasLineOfSight } from './world.js';
 
 const PLAYER_ATTACK_RANGE = 3;
@@ -59,7 +59,8 @@ export function createCombatState(character) {
     attackTimer: PLAYER_ATTACK_INTERVAL,
     combatTimer: REGEN_DELAY,
     cooldowns: createCooldownState(),
-    actionBar: { ...DEFAULT_ACTION_BAR },
+    actionBar: buildActionBar(character.level),
+    buffs: {},
   };
 
   applyLevelStats(state);
@@ -86,6 +87,7 @@ function respawnEnemy(enemy) {
   enemy.state = 'idle';
   enemy.targetPlayerId = null;
   enemy.attackTimer = 0;
+  enemy.stunTimer = 0;
 }
 
 function killPlayer(player) {
@@ -94,6 +96,7 @@ function killPlayer(player) {
   player.targetEnemyId = null;
   player.autoAttack = false;
   player.xp = 0;
+  player.buffs = {};
   player.input.moveX = 0;
   player.input.moveZ = 0;
   player.input.jump = false;
@@ -101,15 +104,20 @@ function killPlayer(player) {
 }
 
 function respawnPlayer(player) {
-  const spawn = getZone(player.zoneId).spawn;
-  player.x = spawn.x;
-  player.y = spawn.y;
-  player.z = spawn.z;
+  if (player.zoneId !== DEFAULT_ZONE_ID) {
+    player.pendingZone = DEFAULT_ZONE_ID;
+  } else {
+    const spawn = getZone(player.zoneId).spawn;
+    player.x = spawn.x;
+    player.y = spawn.y;
+    player.z = spawn.z;
+  }
   player.velocityY = 0;
   player.isGrounded = true;
   player.health = player.healthMax;
   player.resource = player.resourceMax;
   player.cooldowns = createCooldownState();
+  player.buffs = {};
   player.dead = false;
   player.attackTimer = PLAYER_ATTACK_INTERVAL;
   player.combatTimer = REGEN_DELAY;
@@ -152,7 +160,8 @@ function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, 
 
 function damagePlayer(player, playerId, enemy, emit) {
   const rawAmount = Math.round(randomInt(3 + enemy.level * 2, 6 + enemy.level * 3) * enemy.damageFactor);
-  const amount = Math.max(1, Math.round((rawAmount * ARMOR_CONSTANT) / (ARMOR_CONSTANT + player.armor)));
+  const reduction = player.buffs?.brace > 0 ? ABILITIES.brace.damageReduction : 0;
+  const amount = Math.max(1, Math.round(((rawAmount * ARMOR_CONSTANT) / (ARMOR_CONSTANT + player.armor)) * (1 - reduction)));
   player.health = Math.max(0, player.health - amount);
   player.combatTimer = 0;
   emit({ type: 'damage', targetType: 'player', targetId: playerId, amount, attackerId: enemy.id });
@@ -162,7 +171,7 @@ function damagePlayer(player, playerId, enemy, emit) {
   }
 }
 
-function fireRanged(player, playerId, enemy, weapon, emit, notify, onKill) {
+function fireRanged(player, playerId, enemy, weapon, emit, notify, onKill, multiplier = 1, abilityId = null) {
   if (countItem(player.inventory, weapon.ranged.ammo) < 1) {
     notify(playerId, { type: 'event', kind: 'ability-failed', reason: 'no-ammo', weaponId: weapon.id });
     return false;
@@ -176,7 +185,7 @@ function fireRanged(player, playerId, enemy, weapon, emit, notify, onKill) {
   removeItem(player.inventory, weapon.ranged.ammo, 1);
   player.dataVersion += 1;
   sendInventory(notify, playerId, player);
-  damageEnemy(enemy, rollPlayerDamage(player, true), playerId, player, emit, notify, onKill, null, weapon.id);
+  damageEnemy(enemy, Math.round(rollPlayerDamage(player, true) * multiplier), playerId, player, emit, notify, onKill, abilityId, weapon.id);
   return true;
 }
 
@@ -193,6 +202,11 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
 
     for (const abilityId of Object.keys(player.cooldowns)) {
       player.cooldowns[abilityId] = Math.max(0, player.cooldowns[abilityId] - delta);
+    }
+
+    for (const buffId of Object.keys(player.buffs)) {
+      player.buffs[buffId] -= delta;
+      if (player.buffs[buffId] <= 0) delete player.buffs[buffId];
     }
 
     if (player.resource < player.resourceMax) {
@@ -239,6 +253,12 @@ function updateEnemyAttacks(players, enemies, delta, emit) {
       continue;
     }
 
+    if (enemy.stunTimer > 0) {
+      enemy.stunTimer = Math.max(0, enemy.stunTimer - delta);
+      enemy.attackTimer = 0;
+      continue;
+    }
+
     if (enemy.state !== 'chase') {
       enemy.attackTimer = 0;
       continue;
@@ -268,19 +288,58 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
 
   const fail = (reason) => notify(playerId, { type: 'event', kind: 'ability-failed', reason });
 
-  if (getEquippedWeapon(player.equipment)?.ranged) return fail('melee-only');
+  if (player.cooldowns[ability.id] > 0) return fail('cooldown');
+  if (player.resource < ability.cost) return fail('no-resource');
 
+  const spend = () => {
+    player.resource -= ability.cost;
+    player.cooldowns[ability.id] = ability.cooldown;
+  };
+
+  if (ability.kind === 'heal') {
+    if (player.health >= player.healthMax) return fail('full-health');
+    spend();
+    const amount = Math.round(player.healthMax * ability.healPercent);
+    player.health = Math.min(player.healthMax, player.health + amount);
+    notify(playerId, { type: 'event', kind: 'heal', amount, abilityId: ability.id });
+    return;
+  }
+
+  if (ability.kind === 'resource') {
+    spend();
+    player.resource = Math.min(player.resourceMax, player.resource + ability.restore);
+    notify(playerId, { type: 'event', kind: 'restore', amount: ability.restore, abilityId: ability.id });
+    return;
+  }
+
+  if (ability.kind === 'buff') {
+    spend();
+    player.buffs[ability.id] = ability.duration;
+    notify(playerId, { type: 'event', kind: 'buff', abilityId: ability.id, seconds: ability.duration });
+    return;
+  }
+
+  const weapon = getEquippedWeapon(player.equipment);
   const enemy = player.targetEnemyId ? enemies.get(player.targetEnemyId) : null;
 
   if (!enemy || enemy.dead) return fail('no-target');
-  if (player.cooldowns[ability.id] > 0) return fail('cooldown');
-  if (player.resource < ability.cost) return fail('no-resource');
+
+  if (ability.kind === 'ranged') {
+    if (!weapon?.ranged) return fail('needs-ranged');
+    if (horizontalDistance(player, enemy) > weapon.ranged.range) return fail('out-of-range');
+    if (!fireRanged(player, playerId, enemy, weapon, emit, notify, onKill, ability.damageMultiplier, ability.id)) return;
+    spend();
+    player.attackTimer = 0;
+    return;
+  }
+
+  if (weapon?.ranged) return fail('melee-only');
   if (horizontalDistance(player, enemy) > ability.range) return fail('out-of-range');
 
-  player.resource -= ability.cost;
-  player.cooldowns[ability.id] = ability.cooldown;
+  spend();
 
   const amount = Math.round(rollPlayerDamage(player) * ability.damageMultiplier);
+  if (ability.stunSeconds) enemy.stunTimer = ability.stunSeconds;
   damageEnemy(enemy, amount, playerId, player, emit, notify, onKill, ability.id);
 }
 

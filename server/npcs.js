@@ -17,6 +17,17 @@ const NPC_DEFINITIONS = {
     vendor: {
       stock: [
         { itemId: 'canned_food', price: 8 },
+        { itemId: 'bandage', price: 6 },
+        { itemId: 'painkillers', price: 14 },
+        { itemId: 'medkit', price: 45 },
+        { itemId: 'ammo_357', price: 3 },
+        { itemId: 'ammo_shell', price: 4 },
+        { itemId: 'kitchen_knife', price: 14 },
+        { itemId: 'baseball_bat', price: 38 },
+        { itemId: 'work_overall', price: 18 },
+        { itemId: 'work_pants', price: 24 },
+        { itemId: 'hard_hat', price: 26 },
+        { itemId: 'revolver', price: 210 },
         { itemId: 'ammo_9mm', price: 1 },
         { itemId: 'ammo_762', price: 2 },
         { itemId: 'patched_trousers', price: 25 },

@@ -6,7 +6,7 @@ import { createOcclusion } from '../utils/Occlusion.js';
 const NAMEPLATE_HEIGHT = 2.2;
 const SMOOTHING = 12;
 const CORPSE_DURATION = 4;
-const NAMEPLATE_RANGE = 28;
+const NAMEPLATE_RANGE = 35;
 
 export function createEnemies(scene, camera, nameplateContainer) {
   const enemies = new Map();

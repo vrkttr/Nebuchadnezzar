@@ -34,6 +34,14 @@ export function createHud(state, handlers = {}) {
   function setAbilities(list) {
     abilitySlots.length = 0;
 
+    for (const element of slotElements) {
+      element.querySelectorAll('.slot-name, .slot-cooldown').forEach((child) => child.remove());
+      element.onclick = null;
+      element.onmouseenter = null;
+      element.onmousemove = null;
+      element.onmouseleave = null;
+    }
+
     for (const ability of list) {
       const element = slotElements[ability.slot - 1];
       if (!element) continue;
@@ -56,12 +64,12 @@ export function createHud(state, handlers = {}) {
 
       element.appendChild(nameEl);
       element.appendChild(cooldownEl);
-      element.addEventListener('click', () => handlers.onAbility?.(ability.slot));
+      element.onclick = () => handlers.onAbility?.(ability.slot);
 
       if (handlers.ui) {
-        element.addEventListener('mouseenter', (event) => handlers.ui.tooltip.showAbility(ability, event));
-        element.addEventListener('mousemove', (event) => handlers.ui.tooltip.move(event));
-        element.addEventListener('mouseleave', () => handlers.ui.tooltip.hide());
+        element.onmouseenter = (event) => handlers.ui.tooltip.showAbility(ability, event);
+        element.onmousemove = (event) => handlers.ui.tooltip.move(event);
+        element.onmouseleave = () => handlers.ui.tooltip.hide();
       }
 
       abilitySlots.push({ ability, element, cooldownEl, cooldownTextEl });
@@ -142,6 +150,12 @@ export function createHud(state, handlers = {}) {
     } else if (event.kind === 'item-destroyed') {
       const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
       addMessage(t('event.itemDestroyed', { name: itemName(event.itemId), suffix }));
+    } else if (event.kind === 'heal') {
+      addMessage(t('event.heal', { amount: event.amount }));
+    } else if (event.kind === 'restore') {
+      addMessage(t('event.restore', { amount: event.amount }));
+    } else if (event.kind === 'buff') {
+      addMessage(t('event.buff', { seconds: event.seconds }));
     } else if (event.kind === 'item-failed') {
       addMessage(failureText('item', event.reason));
     } else if (event.kind === 'quest-accepted') {

@@ -311,6 +311,8 @@ function start(token) {
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
         player.setAppearance(message.appearance);
+      } else if (message.type === 'abilities') {
+        hud.setAbilities(message.abilities ?? []);
       } else if (message.type === 'zone') {
         enterZone(message, false);
       } else if (message.type === 'chat') {

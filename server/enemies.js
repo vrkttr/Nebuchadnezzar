@@ -92,6 +92,7 @@ export function createEnemies(zoneId) {
       dead: false,
       respawnTimer: 0,
       attackTimer: 0,
+      stunTimer: 0,
       stuckTimer: 0,
       wanderTargetX: null,
       wanderTargetZ: null,
@@ -230,6 +231,7 @@ function updateWander(enemy, delta) {
 export function updateEnemies(enemies, players, delta) {
   for (const enemy of enemies.values()) {
     if (enemy.dead) continue;
+    if (enemy.stunTimer > 0) continue;
 
     if (enemy.state === 'idle') {
       const targetId = findNearestPlayerInRange(enemy, players, enemy.aggroRange);

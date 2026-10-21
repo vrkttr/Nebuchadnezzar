@@ -106,7 +106,12 @@
       {
        "name": "y",
        "type": "float",
-       "value": 0.012
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
       }
      ]
     },
@@ -227,7 +232,12 @@
       {
        "name": "y",
        "type": "float",
-       "value": 0.012
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
       }
      ],
      "ellipse": true

@@ -100,13 +100,35 @@ export function createTooltip(state) {
     show(itemLines(state.items[itemId], quantity), event);
   }
 
+  function abilityEffectLine(ability) {
+    if (ability.kind === 'heal') return t('tooltip.abilityHeal', { percent: Math.round(ability.healPercent * 100) });
+    if (ability.kind === 'resource') return t('tooltip.abilityRestore', { amount: ability.restore });
+    if (ability.kind === 'buff') {
+      return t('tooltip.abilityBuff', { percent: Math.round(ability.damageReduction * 100), seconds: ability.duration });
+    }
+    return t('tooltip.abilityDamage', { percent: Math.round(ability.damageMultiplier * 100) });
+  }
+
   function showAbility(ability, event) {
+    let costLine;
+    if (ability.kind === 'ranged') {
+      costLine = t('tooltip.abilityCostRanged', { cost: ability.cost });
+    } else if (ability.range > 0) {
+      costLine = t('tooltip.abilityCost', { cost: ability.cost, range: ability.range });
+    } else {
+      costLine = t('tooltip.abilityCostSelf', { cost: ability.cost });
+    }
+
     const lines = [
       [ability.name, 'tooltip-name tooltip-ability'],
-      [t('tooltip.abilityCost', { cost: ability.cost, range: ability.range }), 'tooltip-dim'],
+      [costLine, 'tooltip-dim'],
       [t('tooltip.cooldown', { seconds: ability.cooldown }), 'tooltip-dim'],
-      [t('tooltip.abilityDamage', { percent: Math.round(ability.damageMultiplier * 100) }), 'tooltip-stat'],
+      [abilityEffectLine(ability), 'tooltip-stat'],
     ];
+
+    if (ability.stunSeconds) {
+      lines.push([t('tooltip.abilityStun', { seconds: ability.stunSeconds }), 'tooltip-stat']);
+    }
 
     if (ability.description) {
       lines.push([ability.description, 'tooltip-desc']);

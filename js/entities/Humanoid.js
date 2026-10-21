@@ -148,13 +148,120 @@ const EQUIPMENT_VISUALS = {
     group.add(box(0.1, 0.06, 0.31, dark, 0.14, 0.62, 0));
     group.add(box(0.1, 0.06, 0.31, dark, -0.14, 0.62, 0));
   },
+  kitchen_knife(group) {
+    group.add(box(0.02, 0.2, 0.05, metal(0xa8a8a0), 0, -0.14, 0.01));
+    group.add(box(0.03, 0.09, 0.035, cloth(0x2a2420), 0, 0.0, 0));
+  },
+  baseball_bat(group) {
+    const wood = cloth(0x8a6a44);
+    group.add(box(0.035, 0.5, 0.035, wood, 0, -0.3, 0));
+    group.add(box(0.06, 0.3, 0.06, wood, 0, -0.62, 0));
+    group.add(box(0.04, 0.12, 0.04, cloth(0x3a3a38), 0, 0, 0));
+  },
+  fire_axe(group) {
+    group.add(box(0.035, 0.85, 0.035, cloth(0x7a5a3a), 0, -0.3, 0));
+    group.add(box(0.05, 0.16, 0.2, metal(0x8a2a22), 0, -0.68, 0.09));
+    group.add(box(0.03, 0.1, 0.1, metal(0x9a9a92), 0, -0.68, 0.2));
+  },
+  sledgehammer(group) {
+    group.add(box(0.04, 0.95, 0.04, cloth(0x7a5a3a), 0, -0.3, 0));
+    group.add(box(0.12, 0.16, 0.26, metal(0x55554f), 0, -0.76, 0));
+  },
+  spiked_bat(group) {
+    const wood = cloth(0x6a4e32);
+    const nail = metal(0x8a6a50);
+    group.add(box(0.035, 0.5, 0.035, wood, 0, -0.3, 0));
+    group.add(box(0.07, 0.3, 0.07, wood, 0, -0.62, 0));
+    for (const [y, x, z] of [[-0.54, 0.06, 0], [-0.62, -0.06, 0], [-0.7, 0, 0.06], [-0.58, 0, -0.06], [-0.68, 0.06, 0]]) {
+      group.add(box(0.03, 0.03, 0.03, nail, x, y, z));
+    }
+  },
+  revolver(group) {
+    const dark = metal(0x2c2c2a);
+    group.add(box(0.04, 0.12, 0.05, cloth(0x3a2a1e), 0, -0.05, -0.02));
+    group.add(box(0.04, 0.05, 0.14, dark, 0, -0.12, 0.05));
+    group.add(box(0.05, 0.06, 0.05, metal(0x4a4a46), 0, -0.12, 0.0));
+    group.add(box(0.03, 0.03, 0.16, metal(0x3a3a38), 0, -0.14, 0.13));
+  },
+  shotgun(group) {
+    const wood = cloth(0x6a4a2e);
+    const dark = metal(0x2a2a28);
+    group.add(box(0.05, 0.14, 0.2, wood, 0, -0.1, -0.12));
+    group.add(box(0.045, 0.06, 0.55, dark, 0, -0.14, 0.2));
+    group.add(box(0.05, 0.05, 0.22, wood, 0, -0.2, 0.18));
+  },
+  hunting_rifle(group) {
+    const wood = cloth(0x7a5a38);
+    const dark = metal(0x2a2a28);
+    group.add(box(0.05, 0.14, 0.26, wood, 0, -0.1, -0.12));
+    group.add(box(0.035, 0.05, 0.7, dark, 0, -0.14, 0.3));
+    group.add(box(0.04, 0.05, 0.18, metal(0x1e1e1c), 0, -0.07, 0.08));
+  },
+  hard_hat(group) {
+    const shell = cloth(0xc9a22a);
+    group.add(box(0.3, 0.12, 0.3, shell, 0, 0.27, 0));
+    group.add(box(0.3, 0.03, 0.12, shell, 0, 0.22, 0.2));
+    group.add(box(0.06, 0.03, 0.26, cloth(0xa8841c), 0, 0.34, 0));
+  },
+  motorcycle_helmet(group) {
+    const shell = cloth(0x2a2e34);
+    group.add(box(0.32, 0.22, 0.33, shell, 0, 0.23, 0));
+    group.add(box(0.3, 0.1, 0.03, getMaterial('plastic', { color: 0x151a1c }), 0, 0.19, 0.17));
+    group.add(box(0.28, 0.08, 0.1, shell, 0, 0.06, 0.1));
+  },
+  gas_mask(group) {
+    const rubber = cloth(0x3a3e34);
+    group.add(box(0.3, 0.14, 0.3, rubber, 0, 0.26, 0));
+    group.add(box(0.26, 0.12, 0.05, rubber, 0, 0.14, 0.15));
+    group.add(box(0.07, 0.07, 0.1, metal(0x55554f), 0, 0.08, 0.2));
+    group.add(box(0.06, 0.04, 0.03, getMaterial('plastic', { color: 0x1a2a2a }), 0.07, 0.17, 0.17));
+    group.add(box(0.06, 0.04, 0.03, getMaterial('plastic', { color: 0x1a2a2a }), -0.07, 0.17, 0.17));
+  },
+  work_overall(group) {
+    const body = cloth(0x3a5a7a);
+    const dark = cloth(0x2a425a);
+    group.add(box(0.5, 0.42, 0.29, body, 0, 0.4, 0));
+    group.add(box(0.14, 0.1, 0.04, dark, 0.12, 0.34, 0.16));
+    group.add(box(0.06, 0.4, 0.04, dark, 0.15, 0.4, 0.16));
+    group.add(box(0.06, 0.4, 0.04, dark, -0.15, 0.4, 0.16));
+  },
+  leather_jacket(group) {
+    const body = cloth(0x4a3224);
+    group.add(box(0.52, 0.42, 0.3, body, 0, 0.4, 0));
+    group.add(box(0.1, 0.1, 0.31, cloth(0x3a261a), 0.14, 0.62, 0));
+    group.add(box(0.1, 0.1, 0.31, cloth(0x3a261a), -0.14, 0.62, 0));
+    group.add(box(0.03, 0.4, 0.04, metal(0x8a8a82), 0, 0.4, 0.16));
+  },
+  kevlar_vest(group) {
+    const body = cloth(0x2e3236);
+    group.add(box(0.53, 0.44, 0.32, body, 0, 0.4, 0));
+    group.add(box(0.36, 0.26, 0.04, metal(0x3e444a), 0, 0.44, 0.17));
+    group.add(box(0.12, 0.08, 0.04, cloth(0x1e2124), 0.14, 0.26, 0.17));
+    group.add(box(0.12, 0.08, 0.04, cloth(0x1e2124), -0.14, 0.26, 0.17));
+  },
+  work_pants(group) {
+    group.add(box(0.14, 0.12, 0.03, cloth(0x4a6a8a), 0, -0.02, 0.12));
+  },
+  cargo_pants(group) {
+    group.add(box(0.15, 0.14, 0.03, cloth(0x5a5a40), 0.0, -0.05, 0.12));
+    group.add(box(0.16, 0.12, 0.17, cloth(0x2a2a22), 0, -0.34, 0.0));
+  },
+  military_pants(group) {
+    group.add(box(0.15, 0.14, 0.03, cloth(0x4a4e34), 0.0, -0.05, 0.12));
+    group.add(box(0.16, 0.12, 0.17, cloth(0x2e3022), 0, -0.34, 0.0));
+  },
   patched_trousers(group) {
     const patch = cloth(0x7a6a4a);
     group.add(box(0.15, 0.11, 0.03, patch, 0, 0, 0.12));
   },
 };
 
-const PANTS_OVERRIDE = { patched_trousers: 0x5c5242 };
+const PANTS_OVERRIDE = {
+  patched_trousers: 0x5c5242,
+  work_pants: 0x3a5a7a,
+  cargo_pants: 0x58583c,
+  military_pants: 0x484c32,
+};
 
 export function createHumanoid(name, options = {}) {
   let appearance = options.appearance ?? resolveAppearance(name, options.variant ?? 0);
