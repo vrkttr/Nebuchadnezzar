@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id'])) {
 
 $pdo = getDatabaseConnection();
 
-$stmt = $pdo->prepare('SELECT id FROM characters WHERE user_id = :user_id');
+$stmt = $pdo->prepare('SELECT id, class_id FROM characters WHERE user_id = :user_id');
 $stmt->execute(['user_id' => $_SESSION['user_id']]);
 $character = $stmt->fetch();
 
-if (!$character) {
+if (!$character || $character['class_id'] === null) {
     header('Location: character.php');
     exit;
 }

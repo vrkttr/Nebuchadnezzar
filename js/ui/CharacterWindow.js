@@ -46,6 +46,7 @@ export function createCharacterWindow(state, ui, handlers = {}) {
 
   function buildStats() {
     const rows = [
+      ['class', 'character.class'],
       ['level', 'character.level'],
       ['health', 'character.health'],
       ['resource', 'character.resource'],
@@ -116,6 +117,9 @@ export function createCharacterWindow(state, ui, handlers = {}) {
   function update() {
     const { player } = state;
 
+    const classValue = statValues.get('class');
+    classValue.textContent = player.classId ? t(`class.${player.classId}.name`) : '—';
+    classValue.title = player.classId ? `${t(`class.${player.classId}.description`)}\n${t(`class.${player.classId}.bonus`)}` : '';
     statValues.get('level').textContent = player.level;
     statValues.get('health').textContent = `${Math.round(player.health)} / ${player.healthMax}`;
     statValues.get('resource').textContent = `${Math.round(player.resource)} / ${player.resourceMax}`;

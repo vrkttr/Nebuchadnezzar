@@ -317,5 +317,21 @@
   "abilities.onBar": "Aktionsleiste: Platz {slot}",
   "abilities.notOnBar": "Nicht in der Leiste",
   "abilities.unlockLevel": "Ab Level {level}",
-  "hud.crouch": "Geduckt"
+  "hud.crouch": "Geduckt",
+  "class.soldier.name": "Ex-Soldat",
+  "class.soldier.description": "Jahre im Dienst haben dich gelehrt, ruhig zu bleiben, wenn es laut wird. Mit Schusswaffen triffst du härter, und deine alte Ausbildung hält dir im Ernstfall den Rücken frei.",
+  "class.soldier.bonus": "+15 % Schaden mit Fernkampfwaffen, +3 Rüstung",
+  "class.butcher.name": "Fleischer",
+  "class.butcher.description": "Du hast dein Leben lang mit Messer und Beil gearbeitet. Wenn es in den Nahkampf geht, weißt du genau, wohin du schlagen musst, und du bist zäher, als du aussiehst.",
+  "class.butcher.bonus": "+15 % Schaden im Nahkampf, +5 % Gesundheit",
+  "class.builder.name": "Bauarbeiter",
+  "class.builder.description": "Stahlkappenschuhe, Helm, zwölf Stunden Schicht. Du steckst mehr ein als die meisten und gehst nicht so schnell zu Boden.",
+  "class.builder.bonus": "+15 % Gesundheit, +5 Rüstung",
+  "class.medic.name": "Sanitäter",
+  "class.medic.description": "Du hast gelernt, unter Druck Wunden zu versorgen. Verbandszeug und Medizin wirken bei dir deutlich besser als bei anderen.",
+  "class.medic.bonus": "+40 % Heilung durch Verbinden, Verbandszeug und Medizin",
+  "class.scout.name": "Kundschafter",
+  "class.scout.description": "Du kennst Schleichwege und findest, was andere übersehen. Du bist schneller unterwegs, wirst später bemerkt und sammelst mehr Gold ein.",
+  "class.scout.bonus": "+10 % Lauftempo, −20 % Aggro-Radius der Gegner, +25 % Gold aus Beute",
+  "character.class": "Klasse"
 }

@@ -1,6 +1,7 @@
 export const gameState = {
   player: {
     name: '',
+    classId: null,
     level: 1,
     health: 100,
     healthMax: 100,

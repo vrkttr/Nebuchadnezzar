@@ -1,4 +1,5 @@
 import { ABILITIES, createActionLayout, createCooldownState, syncActionLayout } from './abilities.js';
+import { getClassModifiers } from './classes.js';
 import { applyEquipmentStats, getEquippedWeapon } from './equipment.js';
 import { countItem, removeItem, sendInventory } from './inventory.js';
 import { addGold, goldForKill } from './loot.js';
@@ -28,13 +29,21 @@ function horizontalDistance(a, b) {
 const RANGED_BASE_DAMAGE_SHARE = 0.4;
 
 function rollPlayerDamage(player, ranged = false) {
+  const modifiers = getClassModifiers(player.classId);
+
   if (ranged) {
-    return randomInt(
-      Math.round(player.damageMin * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMin,
-      Math.round(player.damageMax * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMax
+    return Math.round(
+      randomInt(
+        Math.round(player.damageMin * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMin,
+        Math.round(player.damageMax * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMax
+      ) * modifiers.rangedDamageMult
     );
   }
-  return randomInt(player.damageMin + player.equipDamageMin, player.damageMax + player.equipDamageMax);
+
+  return Math.round(
+    randomInt(player.damageMin + player.equipDamageMin, player.damageMax + player.equipDamageMax) *
+      modifiers.meleeDamageMult
+  );
 }
 
 export function createCombatState(character) {
@@ -55,6 +64,7 @@ export function createCombatState(character) {
     armor: 0,
     equipDamageMin: 0,
     equipDamageMax: 0,
+    classId: character.classId ?? null,
     dead: false,
     respawnTimer: 0,
     targetEnemyId: null,
@@ -129,7 +139,7 @@ function respawnPlayer(player) {
 
 function awardKill(player, playerId, enemy, notify, onKill) {
   const xpAmount = xpForKill(player.level, enemy.level);
-  const goldAmount = goldForKill(player.level, enemy.level);
+  const goldAmount = Math.max(1, Math.round(goldForKill(player.level, enemy.level) * getClassModifiers(player.classId).goldMult));
 
   onKill(playerId, player, enemy);
 
@@ -303,7 +313,7 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
   if (ability.kind === 'heal') {
     if (player.health >= player.healthMax) return fail('full-health');
     spend();
-    const amount = Math.round(player.healthMax * ability.healPercent);
+    const amount = Math.round(player.healthMax * ability.healPercent * getClassModifiers(player.classId).healMult);
     player.health = Math.min(player.healthMax, player.health + amount);
     notify(playerId, { type: 'event', kind: 'heal', amount, abilityId: ability.id });
     return;

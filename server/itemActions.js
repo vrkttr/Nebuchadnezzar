@@ -1,3 +1,4 @@
+import { getClassModifiers } from './classes.js';
 import { getItem } from './items.js';
 import { addItem, serializeInventory } from './inventory.js';
 import { EQUIPMENT_SLOTS, applyEquipmentStats, serializeEquipment } from './equipment.js';
@@ -36,7 +37,7 @@ function consumeItem(notify, playerId, player, slotIndex, item) {
 
   if (item.use.heal) {
     const before = player.health;
-    player.health = Math.min(player.healthMax, before + item.use.heal);
+    player.health = Math.min(player.healthMax, before + Math.round(item.use.heal * getClassModifiers(player.classId).healMult));
     healed = Math.round(player.health - before);
 
     if (healed <= 0) {

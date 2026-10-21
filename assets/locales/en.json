@@ -317,5 +317,21 @@
   "abilities.onBar": "Action bar: slot {slot}",
   "abilities.notOnBar": "Not on the bar",
   "abilities.unlockLevel": "Unlocks at level {level}",
-  "hud.crouch": "Crouching"
+  "hud.crouch": "Crouching",
+  "class.soldier.name": "Ex-Soldier",
+  "class.soldier.description": "Years of service taught you to stay calm when things get loud. You hit harder with firearms, and your old training has your back when it counts.",
+  "class.soldier.bonus": "+15% ranged damage, +3 armor",
+  "class.butcher.name": "Butcher",
+  "class.butcher.description": "You spent your life working with knife and cleaver. When it comes to close combat you know exactly where to strike, and you are tougher than you look.",
+  "class.butcher.bonus": "+15% melee damage, +5% health",
+  "class.builder.name": "Construction Worker",
+  "class.builder.description": "Steel-toed boots, hard hat, twelve-hour shifts. You take more punishment than most and do not go down easily.",
+  "class.builder.bonus": "+15% health, +5 armor",
+  "class.medic.name": "Paramedic",
+  "class.medic.description": "You learned to treat wounds under pressure. Bandages and medicine work much better in your hands than in anyone else's.",
+  "class.medic.bonus": "+40% healing from Bandage up, bandages and medicine",
+  "class.scout.name": "Scout",
+  "class.scout.description": "You know the back routes and find what others overlook. You move faster, get noticed later and pick up more gold.",
+  "class.scout.bonus": "+10% movement speed, −20% enemy aggro range, +25% gold from loot",
+  "character.class": "Class"
 }

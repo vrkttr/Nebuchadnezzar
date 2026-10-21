@@ -17,13 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $volume = max(0, min(100, (int) ($_POST['volume'] ?? 80)));
     $ambient = max(0, min(100, (int) ($_POST['ambient'] ?? 100)));
     $muted = isset($_POST['muted']) ? 1 : 0;
+    $autoFullscreen = isset($_POST['auto_fullscreen']) ? 1 : 0;
 
-    $stmt = $pdo->prepare('UPDATE users SET audio_volume = :volume, audio_ambient = :ambient, audio_muted = :muted WHERE id = :id');
-    $stmt->execute(['volume' => $volume, 'ambient' => $ambient, 'muted' => $muted, 'id' => $_SESSION['user_id']]);
+    $stmt = $pdo->prepare('UPDATE users SET audio_volume = :volume, audio_ambient = :ambient, audio_muted = :muted, auto_fullscreen = :auto_fullscreen WHERE id = :id');
+    $stmt->execute(['volume' => $volume, 'ambient' => $ambient, 'muted' => $muted, 'auto_fullscreen' => $autoFullscreen, 'id' => $_SESSION['user_id']]);
     $saved = true;
 }
 
-$stmt = $pdo->prepare('SELECT audio_volume, audio_ambient, audio_muted FROM users WHERE id = :id');
+$stmt = $pdo->prepare('SELECT audio_volume, audio_ambient, audio_muted, auto_fullscreen FROM users WHERE id = :id');
 $stmt->execute(['id' => $_SESSION['user_id']]);
 $settings = $stmt->fetch();
 
@@ -61,6 +62,14 @@ renderPageStart(t('settings.title'), 'settings.php', true);
 <span class="nu-label"><?= th('settings.mute') ?></span>
 <input type="checkbox" name="muted" value="1" class="portal-checkbox"<?= $settings['audio_muted'] ? ' checked' : '' ?>>
 </label>
+</section>
+<section class="portal-group">
+<h2 class="portal-group-title"><?= th('settings.display') ?></h2>
+<label class="portal-field">
+<span class="nu-label"><?= th('settings.autoFullscreen') ?></span>
+<input type="checkbox" name="auto_fullscreen" value="1" class="portal-checkbox"<?= $settings['auto_fullscreen'] ? ' checked' : '' ?>>
+</label>
+<p class="portal-hint"><?= th('settings.autoFullscreenHint') ?></p>
 </section>
 <div class="portal-actions">
 <button class="nu-button" type="submit"><?= th('settings.save') ?></button>

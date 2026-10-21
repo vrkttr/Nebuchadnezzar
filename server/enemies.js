@@ -1,3 +1,4 @@
+import { getClassModifiers } from './classes.js';
 import { ENEMY_RADIUS, isBlocked, resolveCollisions } from './world.js';
 import { getZone, getZones } from './zoneLoader.js';
 
@@ -146,7 +147,7 @@ function findNearestPlayerInRange(enemy, players, range) {
     if (player.dead) continue;
 
     const distance = horizontalDistance(enemy.x, enemy.z, player.x, player.z);
-    const reach = player.input?.crouch ? range * CROUCH_AGGRO_FACTOR : range;
+    const reach = range * (player.input?.crouch ? CROUCH_AGGRO_FACTOR : 1) * getClassModifiers(player.classId).aggroMult;
     if (distance <= reach && distance <= nearestDistance) {
       nearestDistance = distance;
       nearestId = id;

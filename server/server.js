@@ -7,6 +7,7 @@ import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } 
 import { createCombatState, updateCombat, useAbility } from './combat.js';
 import { serializeAbilities, setActionSlot, syncActionLayout } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
+import { getClassModifiers, isValidClass } from './classes.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
 import { grantStarterKit } from './starterKit.js';
@@ -146,7 +147,7 @@ function parseActionLayout(raw) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, u.auto_fullscreen, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -186,6 +187,8 @@ async function loadCharacter(characterId) {
     name: row.name,
     starterKit,
     introSeen: Boolean(row.intro_seen),
+    classId: isValidClass(row.class_id) ? row.class_id : null,
+    autoFullscreen: row.auto_fullscreen === undefined ? true : Boolean(row.auto_fullscreen),
     actionLayout: parseActionLayout(row.action_bar),
     zoneId,
     x: startPosition.x,
@@ -340,6 +343,8 @@ wss.on('connection', async (socket, request) => {
       enemies: serializeEnemies(zoneEnemies.get(initialState.zoneId)),
       abilities: serializeAbilities(initialState.level, initialState.actionBar),
       showIntro: !character.introSeen,
+      classId: initialState.classId,
+      autoFullscreen: character.autoFullscreen,
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),
@@ -599,7 +604,7 @@ function simulate() {
 
     const { input } = state;
 
-    const speed = input.crouch ? CROUCH_SPEED : input.run ? RUN_SPEED : WALK_SPEED;
+    const speed = (input.crouch ? CROUCH_SPEED : input.run ? RUN_SPEED : WALK_SPEED) * getClassModifiers(state.classId).moveSpeedMult;
     state.x += input.moveX * speed * TICK_DELTA;
     state.z += input.moveZ * speed * TICK_DELTA;
 

@@ -1,3 +1,4 @@
+import { getClassModifiers } from './classes.js';
 import { getItem } from './items.js';
 
 export const EQUIPMENT_SLOTS = ['weapon', 'head', 'chest', 'legs'];
@@ -44,6 +45,7 @@ export function computeEquipmentStats(equipment) {
 
 export function applyEquipmentStats(player) {
   Object.assign(player, computeEquipmentStats(player.equipment));
+  player.armor += getClassModifiers(player.classId).armorBonus;
 }
 
 export function getEquippedWeapon(equipment) {

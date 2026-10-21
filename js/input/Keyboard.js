@@ -6,6 +6,7 @@ const BLOCKED_FUNCTION_KEYS = new Set(['F1', 'F3', 'F6', 'F7']);
 const LOCKED_KEYS = ['KeyW', 'KeyT', 'KeyN', 'Tab', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9'];
 
 let leaving = false;
+let armedFullscreen = false;
 
 function isTextField(target) {
   return target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA');
@@ -17,10 +18,30 @@ function toggleFullscreen() {
     return;
   }
 
+  enterFullscreen();
+}
+
+function enterFullscreen() {
+  if (document.fullscreenElement) return;
+
   document.documentElement
     .requestFullscreen()
     .then(() => navigator.keyboard?.lock?.(LOCKED_KEYS))
     .catch(() => {});
+}
+
+export function armAutoFullscreen() {
+  if (armedFullscreen || document.fullscreenElement) return;
+  armedFullscreen = true;
+
+  const trigger = () => {
+    window.removeEventListener('mousedown', trigger, true);
+    window.removeEventListener('keydown', trigger, true);
+    enterFullscreen();
+  };
+
+  window.addEventListener('mousedown', trigger, true);
+  window.addEventListener('keydown', trigger, true);
 }
 
 function shouldBlock(event) {

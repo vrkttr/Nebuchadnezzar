@@ -39,7 +39,7 @@ const [
   { createIntroWindow },
   { createAbilitiesWindow },
   { createAbilityDrag },
-  { allowLeave },
+  { allowLeave, armAutoFullscreen },
   { createHud },
   { createLoadingScreen },
   { createAudio },
@@ -323,6 +323,8 @@ function start(token) {
       localizeMessage(message);
       if (message.type === 'init') {
         ownPlayerId = message.id;
+        gameState.player.classId = message.classId ?? null;
+        if (message.autoFullscreen) armAutoFullscreen();
         audio.applySettings(message.audio);
         ownWeapon = message.equipment?.weapon ?? null;
         enterZone(message, true).then(() => {

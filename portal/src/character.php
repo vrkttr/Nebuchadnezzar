@@ -5,6 +5,7 @@ require __DIR__ . '/db.php';
 require __DIR__ . '/i18n.php';
 require __DIR__ . '/layout.php';
 require __DIR__ . '/appearance.php';
+require __DIR__ . '/classes.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -14,11 +15,24 @@ if (!isset($_SESSION['user_id'])) {
 $pdo = getDatabaseConnection();
 $error = null;
 
-$stmt = $pdo->prepare('SELECT id, name, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants FROM characters WHERE user_id = :user_id');
+$stmt = $pdo->prepare('SELECT id, name, class_id, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants FROM characters WHERE user_id = :user_id');
 $stmt->execute(['user_id' => $_SESSION['user_id']]);
 $character = $stmt->fetch();
 
 $appearance = readAppearance($_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : []);
+
+if ($character && $character['class_id'] === null && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $classId = $_POST['class_id'] ?? null;
+
+    if (isValidCharacterClass($classId)) {
+        $stmt = $pdo->prepare('UPDATE characters SET class_id = :class_id WHERE id = :id AND class_id IS NULL');
+        $stmt->execute(['class_id' => $classId, 'id' => $character['id']]);
+        header('Location: character.php');
+        exit;
+    }
+
+    $error = t('class.error.missing');
+}
 
 if ($character) {
     $appearance = [
@@ -37,6 +51,8 @@ if ($character) {
         $error = t('character.error.length', ['max' => 32]);
     } elseif (!preg_match('/^[A-Za-z]+$/', $name)) {
         $error = t('character.error.letters');
+    } elseif (!isValidCharacterClass($_POST['class_id'] ?? null)) {
+        $error = t('class.error.missing');
     } else {
         $stmt = $pdo->prepare('SELECT id FROM characters WHERE name = :name');
         $stmt->execute(['name' => $name]);
@@ -44,10 +60,11 @@ if ($character) {
         if ($stmt->fetch()) {
             $error = t('character.error.taken');
         } else {
-            $stmt = $pdo->prepare('INSERT INTO characters (user_id, name, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants) VALUES (:user_id, :name, :skin, :hair_style, :hair_color, :top, :pants)');
+            $stmt = $pdo->prepare('INSERT INTO characters (user_id, name, class_id, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants) VALUES (:user_id, :name, :class_id, :skin, :hair_style, :hair_color, :top, :pants)');
             $stmt->execute($appearance + [
                 'user_id' => $_SESSION['user_id'],
                 'name' => $name,
+                'class_id' => $_POST['class_id'],
             ]);
 
             header('Location: character.php');
@@ -70,14 +87,29 @@ renderPageStart(t('character.title'), 'character.php', true, true);
 <div class="portal-form">
 <div class="nu-label"><?= th('character.yours') ?></div>
 <p class="portal-character"><?= htmlspecialchars($character['name']) ?></p>
+<?php if ($character['class_id'] !== null): ?>
+<div class="nu-label"><?= th('class.group') ?></div>
+<p class="portal-character"><?= th('class.' . $character['class_id'] . '.name') ?></p>
+<p class="portal-hint"><?= th('class.' . $character['class_id'] . '.description') ?></p>
+<p class="portal-class-bonus"><?= th('class.' . $character['class_id'] . '.bonus') ?></p>
 <p class="portal-hint"><?= th('character.locked') ?></p>
 <div class="portal-actions">
 <a class="nu-button" href="play.php"><?= th('character.play') ?></a>
 </div>
+<?php else: ?>
+<form method="post" class="portal-form">
+<p class="portal-hint"><?= th('class.chooseNow') ?></p>
+<?php renderClassFields(null); ?>
+<div class="portal-actions">
+<button class="nu-button" type="submit"><?= th('class.confirm') ?></button>
+</div>
+</form>
+<?php endif; ?>
 </div>
 <?php else: ?>
 <form method="post" id="appearance-form" class="portal-form">
 <label class="portal-field"><span class="nu-label"><?= th('character.name') ?></span><input class="nu-input" type="text" name="name" maxlength="32" required autofocus autocomplete="off" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></label>
+<?php renderClassFields($_POST['class_id'] ?? null); ?>
 <?php renderAppearanceFields($appearance); ?>
 <p class="portal-hint"><?= th('character.lockWarning') ?></p>
 <div class="portal-actions">
