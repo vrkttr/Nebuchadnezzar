@@ -22,7 +22,8 @@
     "Gegner verfolgen dich nur ein Stück weit von ihrem Spawnpunkt weg. Entkommst du ihnen, kehren sie zurück und heilen sich.",
     "Türen und andere Zugänge erkennst du daran, dass der Mauszeiger beim Darüberfahren zur Hand wird. Du musst nah genug dran sein.",
     "Mit Esc öffnest du das Menü im Portal (dort stellst du auch die Sprache ein), mit M die Karte. Auf der Karte setzt du per Klick Markierungen, die auch auf der Minimap erscheinen.",
-    "Beim Händler verkaufst du Gegenstände, die du nicht brauchst. Altmetall und Stoffreste bringen ein wenig Geld."
+    "Beim Händler verkaufst du Gegenstände, die du nicht brauchst. Altmetall und Stoffreste bringen ein wenig Geld.",
+    "Mit F11 wechselst du in den Vollbild. Dort sind Browser-Kürzel wie Strg+W gesperrt, sodass du geduckt laufen kannst, ohne den Tab zu schließen."
   ],
   "loading.status.connecting": "Verbinde mit dem Server …",
   "loading.status.world": "Welt wird aufgebaut …",

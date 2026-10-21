@@ -1798,3 +1798,20 @@ body.dragging-ability .action-slot {
 .action-slot {
   touch-action: none;
 }
+
+#crouch-indicator.hidden {
+  display: none;
+}
+
+html,
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}

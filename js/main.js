@@ -39,6 +39,7 @@ const [
   { createIntroWindow },
   { createAbilitiesWindow },
   { createAbilityDrag },
+  { allowLeave },
   { createHud },
   { createLoadingScreen },
   { createAudio },
@@ -85,6 +86,7 @@ const [
   import(v('./ui/IntroWindow.js')),
   import(v('./ui/AbilitiesWindow.js')),
   import(v('./ui/AbilityDrag.js')),
+  import(v('./input/Keyboard.js')),
   import(v('./hud/Hud.js')),
   import(v('./ui/LoadingScreen.js')),
   import(v('./audio/Audio.js')),
@@ -141,6 +143,7 @@ function start(token) {
   let zoneEmitters = [];
 
   function openPortalMenu() {
+    allowLeave();
     window.location.href = `${getPortalUrl()}settings.php`;
   }
 
@@ -468,6 +471,7 @@ function start(token) {
     },
     onClose(event) {
       if (!ownPlayerId || event?.code === 4002) {
+        allowLeave();
         window.location.replace(getPortalUrl());
       }
     },
@@ -757,5 +761,6 @@ const token = new URLSearchParams(window.location.search).get('token');
 if (token) {
   start(token);
 } else {
+  allowLeave();
   window.location.replace(getPortalUrl());
 }

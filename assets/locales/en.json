@@ -22,7 +22,8 @@
     "Enemies only chase you a certain distance from their spawn point. If you escape them, they return and heal.",
     "You can recognise doors and other entrances by the mouse cursor turning into a hand when you hover over them. You have to be close enough.",
     "Press Esc to open the menu in the portal (where you can also change the language) and M for the map. Click the map to place markers, which also show on the minimap.",
-    "Sell items you do not need to the trader. Scrap metal and rags earn you a little money."
+    "Sell items you do not need to the trader. Scrap metal and rags earn you a little money.",
+    "Press F11 to go fullscreen. Browser shortcuts like Ctrl+W are locked there, so you can crouch-walk without closing the tab."
   ],
   "loading.status.connecting": "Connecting to the server …",
   "loading.status.world": "Building the world …",
