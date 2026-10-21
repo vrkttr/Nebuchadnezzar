@@ -310,5 +310,11 @@
   "item.battery.description": "Noch ein Rest Ladung drin.",
   "intro.title": "Willkommen in Sektor Sieben",
   "intro.text": "Folgt…",
-  "intro.start": "Los geht's"
+  "intro.start": "Los geht's",
+  "abilities.title": "Fähigkeiten",
+  "abilities.hint": "Ziehe Fähigkeiten in die Aktionsleiste. Von der Leiste weggezogen werden sie entfernt.",
+  "abilities.onBar": "Aktionsleiste: Platz {slot}",
+  "abilities.notOnBar": "Nicht in der Leiste",
+  "abilities.unlockLevel": "Ab Level {level}",
+  "hud.crouch": "Geduckt"
 }

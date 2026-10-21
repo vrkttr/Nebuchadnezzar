@@ -87,12 +87,83 @@ export const ABILITIES = {
   },
 };
 
-export function buildActionBar(level) {
-  const bar = {};
-  for (const ability of Object.values(ABILITIES)) {
-    if (level >= ability.unlockLevel) bar[ability.slot] = ability.id;
+export const ACTION_BAR_SLOTS = 12;
+
+export function createActionLayout(saved) {
+  const layout = { bar: {}, seen: [] };
+
+  if (saved && typeof saved === 'object') {
+    for (const [slot, abilityId] of Object.entries(saved.bar ?? {})) {
+      const index = Number(slot);
+      if (Number.isInteger(index) && index >= 1 && index <= ACTION_BAR_SLOTS && ABILITIES[abilityId]) {
+        layout.bar[index] = abilityId;
+      }
+    }
+
+    if (Array.isArray(saved.seen)) {
+      layout.seen = saved.seen.filter((abilityId) => ABILITIES[abilityId]);
+    }
   }
-  return bar;
+
+  return layout;
+}
+
+function removeFromBar(layout, abilityId) {
+  for (const [slot, id] of Object.entries(layout.bar)) {
+    if (id === abilityId) delete layout.bar[slot];
+  }
+}
+
+export function syncActionLayout(layout, level) {
+  let changed = false;
+
+  for (const [slot, abilityId] of Object.entries(layout.bar)) {
+    if (!ABILITIES[abilityId] || level < ABILITIES[abilityId].unlockLevel) {
+      delete layout.bar[slot];
+      changed = true;
+    }
+  }
+
+  for (const ability of Object.values(ABILITIES)) {
+    if (level < ability.unlockLevel || layout.seen.includes(ability.id)) continue;
+
+    layout.seen.push(ability.id);
+    changed = true;
+
+    let slot = ability.slot;
+    if (layout.bar[slot]) {
+      slot = 1;
+      while (slot <= ACTION_BAR_SLOTS && layout.bar[slot]) slot += 1;
+    }
+
+    if (slot <= ACTION_BAR_SLOTS) layout.bar[slot] = ability.id;
+  }
+
+  return changed;
+}
+
+export function setActionSlot(layout, level, slot, abilityId) {
+  if (!Number.isInteger(slot) || slot < 1 || slot > ACTION_BAR_SLOTS) return false;
+
+  if (abilityId === null) {
+    if (!layout.bar[slot]) return false;
+    delete layout.bar[slot];
+    return true;
+  }
+
+  const ability = ABILITIES[abilityId];
+  if (!ability || level < ability.unlockLevel) return false;
+  if (layout.bar[slot] === abilityId) return false;
+
+  const displaced = layout.bar[slot];
+  const previousSlot = Object.keys(layout.bar).find((key) => layout.bar[key] === abilityId);
+
+  removeFromBar(layout, abilityId);
+  layout.bar[slot] = abilityId;
+
+  if (displaced && previousSlot !== undefined) layout.bar[previousSlot] = displaced;
+
+  return true;
 }
 
 export function createCooldownState() {
@@ -103,28 +174,28 @@ export function createCooldownState() {
   return cooldowns;
 }
 
-export function serializeAbilities(actionBar) {
-  return Object.entries(actionBar)
-    .filter(([, abilityId]) => ABILITIES[abilityId])
-    .map(([slot, abilityId]) => {
-      const ability = ABILITIES[abilityId];
-      return {
-        slot: Number(slot),
-        id: ability.id,
-        kind: ability.kind,
-        name: ability.name,
-        shortName: ability.shortName,
-        icon: ability.icon,
-        description: ability.description,
-        damageMultiplier: ability.damageMultiplier,
-        healPercent: ability.healPercent,
-        restore: ability.restore,
-        damageReduction: ability.damageReduction,
-        duration: ability.duration,
-        stunSeconds: ability.stunSeconds,
-        cost: ability.cost,
-        cooldown: ability.cooldown,
-        range: ability.range,
-      };
-    });
+export function serializeAbilities(level, actionBar) {
+  const slotById = {};
+  for (const [slot, abilityId] of Object.entries(actionBar)) slotById[abilityId] = Number(slot);
+
+  return Object.values(ABILITIES).map((ability) => ({
+    slot: slotById[ability.id] ?? null,
+    id: ability.id,
+    kind: ability.kind,
+    name: ability.name,
+    shortName: ability.shortName,
+    icon: ability.icon,
+    description: ability.description,
+    damageMultiplier: ability.damageMultiplier,
+    healPercent: ability.healPercent,
+    restore: ability.restore,
+    damageReduction: ability.damageReduction,
+    duration: ability.duration,
+    stunSeconds: ability.stunSeconds,
+    cost: ability.cost,
+    cooldown: ability.cooldown,
+    range: ability.range,
+    unlockLevel: ability.unlockLevel,
+    unlocked: level >= ability.unlockLevel,
+  }));
 }

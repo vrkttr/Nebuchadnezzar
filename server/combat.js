@@ -1,4 +1,4 @@
-import { ABILITIES, buildActionBar, createCooldownState } from './abilities.js';
+import { ABILITIES, createActionLayout, createCooldownState, syncActionLayout } from './abilities.js';
 import { applyEquipmentStats, getEquippedWeapon } from './equipment.js';
 import { countItem, removeItem, sendInventory } from './inventory.js';
 import { addGold, goldForKill } from './loot.js';
@@ -38,6 +38,9 @@ function rollPlayerDamage(player, ranged = false) {
 }
 
 export function createCombatState(character) {
+  const actionLayout = createActionLayout(character.actionLayout);
+  syncActionLayout(actionLayout, character.level);
+
   const state = {
     level: character.level,
     xp: character.xp,
@@ -59,7 +62,8 @@ export function createCombatState(character) {
     attackTimer: PLAYER_ATTACK_INTERVAL,
     combatTimer: REGEN_DELAY,
     cooldowns: createCooldownState(),
-    actionBar: buildActionBar(character.level),
+    actionLayout,
+    actionBar: actionLayout.bar,
     buffs: {},
   };
 

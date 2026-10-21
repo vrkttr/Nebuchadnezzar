@@ -8,7 +8,7 @@ const SMOOTHING = 12;
 const CORPSE_DURATION = 4;
 const NAMEPLATE_RANGE = 35;
 
-export function createEnemies(scene, camera, nameplateContainer) {
+export function createEnemies(scene, camera, nameplateContainer, player) {
   const enemies = new Map();
   const projected = new THREE.Vector3();
   const occlusion = createOcclusion();
@@ -218,5 +218,40 @@ export function createEnemies(scene, camera, nameplateContainer) {
     enemies.get(id)?.playHit();
   }
 
-  return { setBlockers: occlusion.setBlockers, sync, clear, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
+  const toEnemy = new THREE.Vector3();
+  const cameraForward = new THREE.Vector3();
+
+  function getTargetCandidates(maxRange) {
+    camera.getWorldDirection(cameraForward);
+    cameraForward.y = 0;
+    cameraForward.normalize();
+
+    const origin = camera.position;
+    const front = [];
+    const back = [];
+
+    for (const enemy of enemies.values()) {
+      if (enemy.data.dead || !enemy.object.visible) continue;
+
+      toEnemy.set(
+        enemy.object.position.x - origin.x,
+        0,
+        enemy.object.position.z - origin.z
+      );
+      const distance = Math.hypot(enemy.object.position.x - player.x, enemy.object.position.z - player.z);
+      if (distance > maxRange) continue;
+
+      plateAnchor.set(enemy.object.position.x, enemy.object.position.y + 1, enemy.object.position.z);
+      if (occlusion.isBlocked(origin, plateAnchor)) continue;
+
+      toEnemy.normalize();
+      (toEnemy.dot(cameraForward) > 0 ? front : back).push({ id: enemy.data.id, distance });
+    }
+
+    front.sort((a, b) => a.distance - b.distance);
+    back.sort((a, b) => a.distance - b.distance);
+    return [...front, ...back].map((entry) => entry.id);
+  }
+
+  return { getData: (id) => enemies.get(id)?.data ?? null, getTargetCandidates, setBlockers: occlusion.setBlockers, sync, clear, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
 }

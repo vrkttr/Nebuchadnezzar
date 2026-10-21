@@ -310,5 +310,11 @@
   "item.battery.description": "Still some charge left.",
   "intro.title": "Welcome to Sector Seven",
   "intro.text": "To be continued…",
-  "intro.start": "Let's go"
+  "intro.start": "Let's go",
+  "abilities.title": "Abilities",
+  "abilities.hint": "Drag abilities onto the action bar. Dragging one off the bar removes it.",
+  "abilities.onBar": "Action bar: slot {slot}",
+  "abilities.notOnBar": "Not on the bar",
+  "abilities.unlockLevel": "Unlocks at level {level}",
+  "hud.crouch": "Crouching"
 }

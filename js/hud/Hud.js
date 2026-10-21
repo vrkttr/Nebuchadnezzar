@@ -26,6 +26,17 @@ export function createHud(state, handlers = {}) {
   const slotElements = Array.from(document.querySelectorAll('#action-bar .action-slot'));
   const abilitySlots = [];
 
+  slotElements.forEach((element, index) => {
+    element.dataset.slot = String(index + 1);
+    handlers.ui?.abilityDrag.attach(element, () => {
+      const entry = abilitySlots.find((slot) => slot.element === element);
+      if (!entry) return null;
+
+      handlers.ui.tooltip.hide();
+      return { abilityId: entry.ability.id, fromSlot: index + 1, icon: element.querySelector('.slot-icon'), label: entry.ability.shortName };
+    });
+  });
+
   const targetFrame = document.getElementById('target-frame');
   const targetName = document.getElementById('target-name');
   const targetLevel = document.getElementById('target-level');
@@ -43,6 +54,7 @@ export function createHud(state, handlers = {}) {
     }
 
     for (const ability of list) {
+      if (!ability.slot) continue;
       const element = slotElements[ability.slot - 1];
       if (!element) continue;
 
@@ -74,6 +86,14 @@ export function createHud(state, handlers = {}) {
 
       abilitySlots.push({ ability, element, cooldownEl, cooldownTextEl });
     }
+  }
+
+  const crouchVignette = document.getElementById('crouch-vignette');
+  const crouchIndicator = document.getElementById('crouch-indicator');
+
+  function setCrouch(active) {
+    crouchVignette.classList.toggle('active', active);
+    crouchIndicator.classList.toggle('hidden', !active);
   }
 
   function addMessage(text) {
@@ -228,5 +248,5 @@ export function createHud(state, handlers = {}) {
     }
   }
 
-  return { update, setAbilities, setQuests, addEvent };
+  return { update, setAbilities, setCrouch, setQuests, addEvent };
 }

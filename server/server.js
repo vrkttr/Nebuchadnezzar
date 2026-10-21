@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { createCombatState, updateCombat, useAbility } from './combat.js';
-import { buildActionBar, serializeAbilities } from './abilities.js';
+import { serializeAbilities, setActionSlot, syncActionLayout } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
@@ -49,6 +49,8 @@ console.log(`Sektor Sieben Game-Server läuft auf Port ${PORT}`);
 
 const WALK_SPEED = 2;
 const RUN_SPEED = 4;
+const CROUCH_SPEED = 1;
+const TAB_TARGET_RANGE = 40;
 const JUMP_SPEED = 5.5;
 const GRAVITY = 14;
 const GROUND_Y = 0;
@@ -75,6 +77,16 @@ function onKill(playerId, player, enemy) {
   spawnLootForKill(lootContainers, playerId, player, enemy, notify);
 }
 
+function sendAbilities(playerId, state) {
+  notify(playerId, { type: 'abilities', abilities: serializeAbilities(state.level, state.actionBar) });
+}
+
+function saveActionLayout(state) {
+  dbPool
+    .query('UPDATE characters SET action_bar = ? WHERE id = ?', [JSON.stringify(state.actionLayout), state.characterId])
+    .catch((error) => console.error('Fehler beim Speichern der Aktionsleiste:', error));
+}
+
 function createInitialState(character) {
   const state = {
     characterId: character.id,
@@ -89,7 +101,7 @@ function createInitialState(character) {
     rotationY: character.rotationY,
     velocityY: 0,
     isGrounded: true,
-    input: { moveX: 0, moveZ: 0, jump: false, run: false },
+    input: { moveX: 0, moveZ: 0, jump: false, run: false, crouch: false },
     inventory: character.inventory,
     consumableReadyAt: 0,
     dataVersion: character.starterKit ? 1 : 0,
@@ -122,9 +134,19 @@ async function consumeLoginToken(token) {
   return tokenRows[0].character_id;
 }
 
+function parseActionLayout(raw) {
+  if (!raw) return null;
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -164,6 +186,7 @@ async function loadCharacter(characterId) {
     name: row.name,
     starterKit,
     introSeen: Boolean(row.intro_seen),
+    actionLayout: parseActionLayout(row.action_bar),
     zoneId,
     x: startPosition.x,
     y: startPosition.y,
@@ -315,7 +338,7 @@ wss.on('connection', async (socket, request) => {
       type: 'init',
       id,
       enemies: serializeEnemies(zoneEnemies.get(initialState.zoneId)),
-      abilities: serializeAbilities(initialState.actionBar),
+      abilities: serializeAbilities(initialState.level, initialState.actionBar),
       showIntro: !character.introSeen,
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
@@ -353,6 +376,7 @@ wss.on('connection', async (socket, request) => {
       state.input.moveZ = moveZ;
       state.input.jump = Boolean(message.jump);
       state.input.run = Boolean(message.run);
+      state.input.crouch = Boolean(message.crouch);
     } else if (message.type === 'intro-seen') {
       const state = players.get(id);
       if (!state || state.introSeen) return;
@@ -360,6 +384,15 @@ wss.on('connection', async (socket, request) => {
       dbPool
         .query('UPDATE characters SET intro_seen = 1 WHERE id = ?', [state.characterId])
         .catch((error) => console.error('Fehler beim Speichern des Intros:', error));
+    } else if (message.type === 'actionbar-set') {
+      const state = players.get(id);
+      if (!state) return;
+
+      const abilityId = typeof message.abilityId === 'string' ? message.abilityId : null;
+      if (setActionSlot(state.actionLayout, state.level, Number(message.slot), abilityId)) {
+        sendAbilities(id, state);
+        saveActionLayout(state);
+      }
     } else if (message.type === 'chat') {
       handleChat(players, id, message, notify);
     } else if (message.type === 'target') {
@@ -367,6 +400,10 @@ wss.on('connection', async (socket, request) => {
       if (!state || state.dead) return;
 
       const enemy = typeof message.enemyId === 'string' ? zoneEnemies.get(state.zoneId).get(message.enemyId) : null;
+
+      const outOfRange = message.tab === true && enemy && Math.hypot(enemy.x - state.x, enemy.z - state.z) > TAB_TARGET_RANGE;
+
+      if (outOfRange) return;
 
       if (enemy && !enemy.dead) {
         state.targetEnemyId = enemy.id;
@@ -562,7 +599,7 @@ function simulate() {
 
     const { input } = state;
 
-    const speed = input.run ? RUN_SPEED : WALK_SPEED;
+    const speed = input.crouch ? CROUCH_SPEED : input.run ? RUN_SPEED : WALK_SPEED;
     state.x += input.moveX * speed * TICK_DELTA;
     state.z += input.moveZ * speed * TICK_DELTA;
 
@@ -624,6 +661,7 @@ setInterval(() => {
         healthMax: state.healthMax,
         dead: state.dead,
         autoAttack: state.autoAttack,
+        crouching: state.input.crouch,
         equipment: state.equipment,
         appearance: state.appearance,
       };
@@ -650,8 +688,9 @@ setInterval(() => {
 
     if (state.abilityLevel !== state.level) {
       state.abilityLevel = state.level;
-      state.actionBar = buildActionBar(state.level);
-      notify(id, { type: 'abilities', abilities: serializeAbilities(state.actionBar) });
+      syncActionLayout(state.actionLayout, state.level);
+      sendAbilities(id, state);
+      saveActionLayout(state);
     }
 
     notify(id, {

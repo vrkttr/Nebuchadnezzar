@@ -8,6 +8,11 @@ const DEFAULT_SCALE = 0.95;
 const ATTACK_DURATION = 0.45;
 const SHOT_DURATION = 0.32;
 const AIRBORNE_HEIGHT = 0.08;
+const STANDING_HEAD_HEIGHT = 1.72;
+const CROUCH_HEAD_DROP = 0.25;
+const CROUCH_DROP = 0.2;
+const CROUCH_HIP = 0.85;
+const CROUCH_KNEE = 1.35;
 const MOVE_THRESHOLD = 0.3;
 const RUN_THRESHOLD = 2.7;
 const PORTRAIT_LAYER = 1;
@@ -449,6 +454,7 @@ export function createHumanoid(name, options = {}) {
     torsoX: 0,
     torsoY: 0,
     bob: 0,
+    crouch: 0,
   };
   const target = { ...current };
   const lastPosition = new THREE.Vector3();
@@ -460,6 +466,7 @@ export function createHumanoid(name, options = {}) {
   let attackStyle = 'melee';
   let hitTime = -1;
   let dead = false;
+  let crouching = false;
   let fallAmount = 0;
 
   function computeTarget(airborne, moving, running) {
@@ -586,7 +593,8 @@ export function createHumanoid(name, options = {}) {
       phase += (running ? 9 + speed * 0.8 : 3.2 + speed * 2.2) * delta;
     }
 
-    computeTarget(airborne && !dead, moving && !dead, running);
+    computeTarget(airborne && !dead, moving && !dead, running && !crouching);
+    target.crouch = crouching && !dead && !airborne ? 1 : 0;
 
     const factor = dampFactor(POSE_SMOOTHING, delta);
     for (const key of Object.keys(current)) {
@@ -619,13 +627,18 @@ export function createHumanoid(name, options = {}) {
       torsoY += (attack.twist - torsoY) * attack.weight;
     }
 
-    hips.position.y = HIP_HEIGHT + current.bob;
-    torso.rotation.set(current.torsoX - hitKick, torsoY, 0);
+    const crouch = current.crouch;
+    object.userData.headHeight = object.scale.y * STANDING_HEAD_HEIGHT - crouch * CROUCH_HEAD_DROP;
+    const stride = 1 - crouch * 0.5;
+    const bend = 1 - crouch * 0.4;
+
+    hips.position.y = HIP_HEIGHT + current.bob - crouch * CROUCH_DROP;
+    torso.rotation.set(current.torsoX + crouch * 0.32 - hitKick, torsoY, 0);
     headPivot.rotation.x = -hitKick * 0.8;
-    legLeft.hip.rotation.x = current.hipLeft;
-    legLeft.knee.rotation.x = current.kneeLeft;
-    legRight.hip.rotation.x = current.hipRight;
-    legRight.knee.rotation.x = current.kneeRight;
+    legLeft.hip.rotation.x = current.hipLeft * stride - crouch * CROUCH_HIP;
+    legLeft.knee.rotation.x = current.kneeLeft * bend + crouch * CROUCH_KNEE;
+    legRight.hip.rotation.x = current.hipRight * stride - crouch * CROUCH_HIP;
+    legRight.knee.rotation.x = current.kneeRight * bend + crouch * CROUCH_KNEE;
     armLeft.shoulder.rotation.x = current.shoulderLeft;
     armLeft.elbow.rotation.x = current.elbowLeft;
     armRight.shoulder.rotation.x = shoulderRight;
@@ -650,6 +663,10 @@ export function createHumanoid(name, options = {}) {
     }
   }
 
+  function setCrouch(value) {
+    crouching = Boolean(value);
+  }
+
   function isDown() {
     return dead && fallAmount >= 1;
   }
@@ -657,5 +674,5 @@ export function createHumanoid(name, options = {}) {
   setEquipment(options.equipment ?? appearance.equipment ?? {});
   enablePortraitLayer(object);
 
-  return { object, update, playAttack, playHit, setDead, isDown, setEquipment, setAppearance: applyLook };
+  return { object, update, playAttack, playHit, setDead, setCrouch, isDown, setEquipment, setAppearance: applyLook };
 }

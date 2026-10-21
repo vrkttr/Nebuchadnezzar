@@ -37,6 +37,8 @@ const [
   { createShotEffects },
   { createPlane },
   { createIntroWindow },
+  { createAbilitiesWindow },
+  { createAbilityDrag },
   { createHud },
   { createLoadingScreen },
   { createAudio },
@@ -81,6 +83,8 @@ const [
   import(v('./effects/ShotEffects.js')),
   import(v('./effects/Plane.js')),
   import(v('./ui/IntroWindow.js')),
+  import(v('./ui/AbilitiesWindow.js')),
+  import(v('./ui/AbilityDrag.js')),
   import(v('./hud/Hud.js')),
   import(v('./ui/LoadingScreen.js')),
   import(v('./audio/Audio.js')),
@@ -110,6 +114,10 @@ function start(token) {
     tooltip: createTooltip(gameState),
     itemMenu: createItemMenu(),
     confirmDialog: createConfirmDialog(),
+    abilityDrag: createAbilityDrag({
+      onDrop: (slot, abilityId) => connection.send({ type: 'actionbar-set', slot, abilityId }),
+      onRemove: (slot) => connection.send({ type: 'actionbar-set', slot, abilityId: null }),
+    }),
   };
 
   const hud = createHud(gameState, {
@@ -122,6 +130,7 @@ function start(token) {
     onComplete: (npcId, questId) => connection.send({ type: 'quest-complete', npcId, questId }),
     onVendor: (npcId) => connection.send({ type: 'vendor-open', npcId }),
   });
+  const abilitiesWindow = createAbilitiesWindow(ui);
   const vendorWindow = createVendorWindow(gameState, ui, {
     onBuy: (npcId, itemId, quantity) =>
       connection.send({ type: 'vendor-buy', npcId, itemId, quantity }),
@@ -152,7 +161,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -184,7 +193,7 @@ function start(token) {
   const playerController = createPlayerController(camera);
   const nameplateContainer = document.getElementById('nameplates');
   const remotePlayers = createRemotePlayers(scene, camera, nameplateContainer);
-  const enemies = createEnemies(scene, camera, nameplateContainer);
+  const enemies = createEnemies(scene, camera, nameplateContainer, player.object.position);
   const npcs = createNpcs(scene, camera, nameplateContainer);
 
   const viewCapture = createViewCapture(renderer);
@@ -317,6 +326,7 @@ function start(token) {
           if (message.showIntro) introWindow.show();
         });
         hud.setAbilities(message.abilities ?? []);
+        abilitiesWindow.render(message.abilities ?? []);
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
         characterWindow.render(message.equipment ?? {});
@@ -324,6 +334,7 @@ function start(token) {
         player.setAppearance(message.appearance);
       } else if (message.type === 'abilities') {
         hud.setAbilities(message.abilities ?? []);
+        abilitiesWindow.render(message.abilities ?? []);
       } else if (message.type === 'zone') {
         enterZone(message, false);
       } else if (message.type === 'chat') {
@@ -551,6 +562,30 @@ function start(token) {
     Equal: 12,
   };
 
+  const TAB_TARGET_RANGE = 35;
+  let tabVisited = new Set();
+
+  function cycleTarget() {
+    const candidates = enemies.getTargetCandidates(TAB_TARGET_RANGE);
+    if (candidates.length === 0) return;
+
+    if (gameState.target) tabVisited.add(gameState.target.id);
+
+    let next = candidates.find((id) => !tabVisited.has(id));
+    if (!next) {
+      tabVisited = new Set(gameState.target ? [gameState.target.id] : []);
+      next = candidates.find((id) => !tabVisited.has(id)) ?? candidates[0];
+    }
+
+    const data = enemies.getData(next);
+    if (!data) return;
+
+    gameState.target = data;
+    audio.play('target_select');
+    enemies.select(data.id);
+    connection.send({ type: 'target', enemyId: data.id, tab: true });
+  }
+
   window.addEventListener('keydown', (event) => {
     if (event.code === 'Escape') {
       if (ui.confirmDialog.isOpen()) {
@@ -574,8 +609,10 @@ function start(token) {
         lootWindow.isOpen() ||
         inventory.isOpen() ||
         characterWindow.isOpen() ||
+        abilitiesWindow.isOpen() ||
         worldMap.isOpen()
       ) {
+        abilitiesWindow.hide();
         npcWindow.hide();
         vendorWindow.hide();
         lootWindow.hide();
@@ -603,6 +640,17 @@ function start(token) {
 
     if (event.code === 'KeyB' && !event.repeat) {
       inventory.toggle();
+      return;
+    }
+
+    if (event.code === 'KeyF' && !event.repeat) {
+      abilitiesWindow.toggle();
+      return;
+    }
+
+    if (event.code === 'Tab') {
+      event.preventDefault();
+      if (!event.repeat) cycleTarget();
       return;
     }
 
@@ -683,7 +731,11 @@ function start(token) {
     inputSendTimer += delta;
     if (inputSendTimer >= INPUT_SEND_INTERVAL) {
       inputSendTimer = 0;
-      connection.send({ type: 'input', ...playerController.getInputState() });
+      const inputState = playerController.getInputState();
+      const crouching = inputState.crouch && !gameState.player.dead;
+      player.setCrouch(crouching);
+      hud.setCrouch(crouching);
+      connection.send({ type: 'input', ...inputState });
     }
 
     damageNumbers.update(delta);

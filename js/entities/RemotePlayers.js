@@ -32,6 +32,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
         playAttack: created.playAttack,
         playHit: created.playHit,
         setDead: created.setDead,
+        setCrouch: created.setCrouch,
         setEquipment: created.setEquipment,
         setAppearance: created.setAppearance,
         target: new THREE.Vector3(state.x, state.y, state.z),
@@ -43,6 +44,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
       remote.object.rotation.y = remote.targetRotationY;
       remote.setEquipment(state.equipment);
       remote.setDead(state.dead);
+      remote.setCrouch(state.crouching);
 
       remotePlayers.set(id, remote);
       return;
@@ -53,6 +55,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     remote.setEquipment(state.equipment);
     remote.setAppearance(state.appearance);
     remote.setDead(state.dead);
+    remote.setCrouch(state.crouching);
 
     if (remote.nameplateEl.textContent !== name) {
       remote.nameplateEl.textContent = name;

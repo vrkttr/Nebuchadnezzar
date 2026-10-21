@@ -1,6 +1,7 @@
 import { ENEMY_RADIUS, isBlocked, resolveCollisions } from './world.js';
 import { getZone, getZones } from './zoneLoader.js';
 
+const CROUCH_AGGRO_FACTOR = 0.5;
 const HUMAN = { moveSpeed: 3, aggroRange: 8, attackInterval: 2, damageFactor: 1, meleeRange: 2 };
 const DOG = { moveSpeed: 4.6, aggroRange: 11, attackInterval: 1.4, damageFactor: 0.8, meleeRange: 1.8 };
 const RAT = { moveSpeed: 3.8, aggroRange: 7, attackInterval: 1.2, damageFactor: 0.65, meleeRange: 1.5 };
@@ -145,7 +146,8 @@ function findNearestPlayerInRange(enemy, players, range) {
     if (player.dead) continue;
 
     const distance = horizontalDistance(enemy.x, enemy.z, player.x, player.z);
-    if (distance <= nearestDistance) {
+    const reach = player.input?.crouch ? range * CROUCH_AGGRO_FACTOR : range;
+    if (distance <= reach && distance <= nearestDistance) {
       nearestDistance = distance;
       nearestId = id;
     }

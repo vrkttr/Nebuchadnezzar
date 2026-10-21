@@ -1667,3 +1667,134 @@ button {
 #map-canvas {
   cursor: grab;
 }
+
+#crouch-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+#crouch-vignette.active {
+  opacity: 1;
+}
+
+#crouch-indicator {
+  position: fixed;
+  left: 50%;
+  bottom: 118px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--nu-line);
+  font-family: var(--nu-font-display);
+  font-size: 12px;
+  color: var(--nu-amber);
+  pointer-events: none;
+}
+
+#crouch-indicator svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+#abilities-window {
+  left: calc(50% - 400px);
+  top: 16%;
+  width: 300px;
+}
+
+#abilities-hint {
+  margin: 0;
+  padding: 10px 14px 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--nu-ink-soft);
+}
+
+#abilities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px 14px;
+}
+
+.ability-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px;
+  border: 1px solid transparent;
+}
+
+.ability-row:hover {
+  border-color: var(--nu-line);
+}
+
+.ability-row.locked {
+  opacity: 0.45;
+}
+
+.ability-row-icon {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  box-sizing: border-box;
+  background: var(--board-slot);
+  background-blend-mode: multiply;
+  border: 2px solid var(--nu-line);
+  cursor: grab;
+}
+
+.ability-row.locked .ability-row-icon {
+  cursor: default;
+}
+
+.ability-row-name {
+  font-family: var(--nu-font-display);
+  font-size: 14px;
+  color: var(--nu-ink);
+}
+
+.ability-row-meta {
+  font-size: 12px;
+  color: var(--nu-ink-soft);
+}
+
+.ability-ghost {
+  position: fixed;
+  z-index: 2000;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  pointer-events: none;
+  opacity: 0.85;
+  background: var(--board-slot);
+  border: 2px solid var(--nu-amber);
+  box-sizing: border-box;
+}
+
+.ability-ghost .slot-icon {
+  width: 100%;
+  height: 100%;
+}
+
+body.dragging-ability {
+  cursor: grabbing;
+  user-select: none;
+}
+
+body.dragging-ability .action-slot {
+  border-color: var(--nu-amber);
+}
+
+.action-slot {
+  touch-action: none;
+}
