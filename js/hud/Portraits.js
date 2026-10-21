@@ -7,7 +7,7 @@ const HEAD_HEIGHT_FACTOR = 1.72;
 const CAMERA_DISTANCE = 1.1;
 const BACKGROUND_COLOR = 0x26231c;
 
-export function createPortraits({ scene, renderer, viewCapture, player, enemies, gameState }) {
+export function createPortraits({ scene, renderer, viewCapture, player, enemies, remotePlayers, gameState }) {
   const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 20);
   camera.layers.set(PORTRAIT_LAYER);
 
@@ -20,7 +20,11 @@ export function createPortraits({ scene, renderer, viewCapture, player, enemies,
     {
       canvas: createCanvas('#target-frame .portrait'),
       frame: document.getElementById('target-frame'),
-      resolve: () => (gameState.target ? enemies.getObject(gameState.target.id) : null),
+      resolve: () => {
+        if (gameState.target) return enemies.getObject(gameState.target.id);
+        if (gameState.playerTarget) return remotePlayers.getObject(gameState.playerTarget);
+        return null;
+      },
     },
   ];
 

@@ -1,5 +1,5 @@
 import { releaseAllKeys } from '../input/Keyboard.js';
-import { t } from '../i18n/I18n.js';
+import { has, t } from '../i18n/I18n.js';
 
 const MAX_CHAT_LINES = 50;
 
@@ -7,16 +7,16 @@ export function createChat({ onSend }) {
   const input = document.getElementById('chat-input');
   const messages = document.getElementById('chat-messages');
 
-  function add({ channel, from, text }) {
+  function add({ channel, from, text, key, params }) {
     const line = document.createElement('div');
     line.className = `chat-line chat-line-${channel}`;
 
     if (channel === 'system') {
-      line.textContent = text;
+      line.textContent = key && has(key) ? t(key, params) : text;
     } else {
       const name = document.createElement('span');
       name.className = 'chat-name';
-      name.textContent = `${channel === 'global' ? t('chat.global') : ''}${from}: `;
+      name.textContent = `${channel === 'global' ? t('chat.global') : channel === 'party' ? t('chat.party') : ''}${from}: `;
       line.appendChild(name);
       line.appendChild(document.createTextNode(text));
     }

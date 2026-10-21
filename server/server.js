@@ -1,4 +1,5 @@
 import { handleChat } from './chat.js';
+import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
@@ -65,6 +66,7 @@ const zoneEnemies = new Map(getZones().map((zone) => [zone.id, createEnemies(zon
 const TELEPORT_RANGE = 4.5;
 const ZONE_LOAD_TIMEOUT_MS = 15000;
 const lootContainers = createLootContainers();
+const groups = createGroups();
 
 function notify(playerId, message) {
   const socket = sockets.get(playerId);
@@ -112,6 +114,8 @@ function createInitialState(character) {
     openedChests: character.openedChests,
     questView: null,
     questViewKey: '',
+    groupId: null,
+    pendingInvite: null,
     ...createCombatState(character),
   };
 
@@ -224,6 +228,7 @@ function removePlayer(playerId) {
   if (!state) return null;
 
   removeLootOfPlayer(lootContainers, playerId);
+  leaveGroup(groups, players, playerId, notify);
   players.delete(playerId);
   sockets.delete(playerId);
   sendToZone(state.zoneId, { type: 'leave', id: playerId });
@@ -400,6 +405,16 @@ wss.on('connection', async (socket, request) => {
       }
     } else if (message.type === 'chat') {
       handleChat(players, id, message, notify);
+    } else if (message.type === 'group-invite') {
+      if (typeof message.playerId === 'string') invitePlayer(groups, players, id, message.playerId, notify);
+    } else if (message.type === 'group-answer') {
+      answerInvite(groups, players, id, message.accept === true, notify);
+    } else if (message.type === 'group-leave') {
+      leaveGroup(groups, players, id, notify);
+    } else if (message.type === 'group-kick') {
+      if (typeof message.playerId === 'string') kickMember(groups, players, id, message.playerId, notify);
+    } else if (message.type === 'group-promote') {
+      if (typeof message.playerId === 'string') promoteMember(groups, players, id, message.playerId, notify);
     } else if (message.type === 'target') {
       const state = players.get(id);
       if (!state || state.dead) return;
@@ -675,6 +690,7 @@ setInterval(() => {
   }
 
   updateLootContainers(lootContainers, TICK_DELTA, notify);
+  updateGroups(groups, players, notify);
   if (players.size === 0) return;
 
   for (const [id, state] of players) {

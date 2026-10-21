@@ -20,6 +20,9 @@ export const gameState = {
   inventory: [],
   equipment: {},
   target: null,
+  playerTarget: null,
+  playerTargetData: null,
+  canInviteTarget: false,
   zoneName: '',
   quests: [],
 };

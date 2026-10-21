@@ -1815,3 +1815,136 @@ textarea {
   -webkit-user-select: text;
   user-select: text;
 }
+
+#group-frames {
+  position: fixed;
+  top: 112px;
+  left: 16px;
+  width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: auto;
+  font-family: var(--nu-font-text);
+}
+
+#group-frames.hidden,
+#group-invite.hidden,
+.group-button.hidden {
+  display: none;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--nu-amber);
+  font-family: var(--nu-font-display);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.group-member {
+  box-sizing: border-box;
+  padding: 5px 7px;
+  background: var(--hud-bg-board), var(--nu-board);
+  background-blend-mode: multiply;
+  border: 2px solid var(--nu-line);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45);
+  color: var(--nu-text);
+  cursor: pointer;
+}
+
+.group-member:hover {
+  border-color: var(--nu-amber);
+}
+
+.group-member.dead {
+  opacity: 0.55;
+}
+
+.group-member-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.group-member-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.group-bar {
+  height: 8px;
+}
+
+.group-actions {
+  display: none;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.group-member:hover .group-actions {
+  display: flex;
+}
+
+.group-button {
+  padding: 1px 7px;
+  background: var(--nu-board-darker);
+  border: 2px solid var(--nu-line);
+  color: var(--nu-text);
+  font-size: 11px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.group-button:hover {
+  border-color: var(--nu-amber);
+  color: var(--nu-amber);
+}
+
+#group-invite {
+  position: fixed;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  background: var(--hud-bg-board), var(--nu-board);
+  background-blend-mode: multiply;
+  border: 2px solid var(--nu-amber);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.45);
+  color: var(--nu-text);
+  font-family: var(--nu-font-text);
+  text-align: center;
+  pointer-events: auto;
+  z-index: 20;
+}
+
+#group-invite p {
+  margin: 0 0 10px;
+}
+
+.group-invite-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.group-invite-buttons button {
+  padding: 4px 14px;
+  background: var(--nu-amber);
+  border: 2px solid var(--nu-line);
+  color: var(--nu-ink);
+  cursor: pointer;
+}
+
+.chat-line-party {
+  color: #8fd18f;
+}
+
+.chat-line-party .chat-name {
+  color: #8fd18f;
+}

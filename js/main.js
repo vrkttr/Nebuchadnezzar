@@ -28,6 +28,7 @@ const [
   { createVendorWindow },
   { createWindowManager },
   { createChat },
+  { createGroupFrames },
   { createViewCapture },
   { createMinimap },
   { createWorldMap },
@@ -75,6 +76,7 @@ const [
   import(v('./ui/VendorWindow.js')),
   import(v('./ui/WindowManager.js')),
   import(v('./ui/Chat.js')),
+  import(v('./ui/GroupFrames.js')),
   import(v('./core/ViewCapture.js')),
   import(v('./hud/Minimap.js')),
   import(v('./hud/WorldMap.js')),
@@ -124,6 +126,9 @@ function start(token) {
 
   const hud = createHud(gameState, {
     onAbility: (slot) => connection.send({ type: 'ability', slot }),
+    onInvite: () => {
+      if (gameState.playerTarget) connection.send({ type: 'group-invite', playerId: gameState.playerTarget });
+    },
     ui,
   });
 
@@ -221,7 +226,7 @@ function start(token) {
       marks: worldMap.getMarkers,
     },
   });
-  const portraits = createPortraits({ scene, renderer, viewCapture, player, enemies, gameState });
+  const portraits = createPortraits({ scene, renderer, viewCapture, player, enemies, remotePlayers, gameState });
   const damageNumbers = createDamageNumbers(camera, nameplateContainer);
   const chatBubbles = createChatBubbles(camera, nameplateContainer);
   const shotEffects = createShotEffects(scene);
@@ -231,6 +236,23 @@ function start(token) {
   });
   const chat = createChat({ onSend: (text) => connection.send({ type: 'chat', text }) });
 
+  function selectPlayer(id) {
+    if (!remotePlayers.getObject(id)) return;
+    gameState.target = null;
+    enemies.clearSelection();
+    connection.send({ type: 'target', enemyId: null });
+    gameState.playerTarget = id;
+    audio.play('target_select');
+  }
+
+  const groupFrames = createGroupFrames({
+    onSelect: selectPlayer,
+    onLeave: () => connection.send({ type: 'group-leave' }),
+    onKick: (playerId) => connection.send({ type: 'group-kick', playerId }),
+    onPromote: (playerId) => connection.send({ type: 'group-promote', playerId }),
+    onAnswer: (accept) => connection.send({ type: 'group-answer', accept }),
+  });
+
   let ownPlayerId = null;
   let questMarkers = {};
   let outdoorCameraDistance = null;
@@ -239,6 +261,7 @@ function start(token) {
 
   function resetZoneEntities() {
     gameState.target = null;
+    gameState.playerTarget = null;
     connection.send({ type: 'target', enemyId: null });
     enemies.clear();
     npcs.clear();
@@ -347,6 +370,10 @@ function start(token) {
         if (message.channel === 'say') {
           chatBubbles.show(message.fromId === ownPlayerId ? player.object : remotePlayers.getObject(message.fromId), message.text);
         }
+      } else if (message.type === 'group') {
+        groupFrames.setGroup(message, ownPlayerId);
+      } else if (message.type === 'group-invite') {
+        groupFrames.showInvite(message.fromName);
       } else if (message.type === 'quests') {
         hud.setQuests(message);
         questMarkers = message.markers ?? {};
@@ -493,6 +520,7 @@ function start(token) {
       current &&
       !current.userData.isNpc &&
       !current.userData.isEnemy &&
+      !current.userData.isPlayer &&
       !current.userData.isLoot &&
       !current.userData.isChest &&
       !current.userData.isTeleporter
@@ -529,10 +557,13 @@ function start(token) {
       connection.send({ type: 'chest-open', chestId: target.userData.chestId });
     } else if (target.userData.isLoot) {
       connection.send({ type: 'loot-open', lootId: target.userData.lootId });
+    } else if (target.userData.isPlayer) {
+      selectPlayer(target.userData.playerId);
     } else if (target.userData.isEnemy) {
       const data = enemies.findDataByObject(target);
       if (data) {
         gameState.target = data;
+        gameState.playerTarget = null;
         audio.play('target_select');
         enemies.select(data.id);
         connection.send({ type: 'target', enemyId: data.id });
@@ -587,6 +618,7 @@ function start(token) {
     if (!data) return;
 
     gameState.target = data;
+    gameState.playerTarget = null;
     audio.play('target_select');
     enemies.select(data.id);
     connection.send({ type: 'target', enemyId: data.id, tab: true });
@@ -625,6 +657,11 @@ function start(token) {
         inventory.hide();
         characterWindow.hide();
         worldMap.hide();
+        return;
+      }
+
+      if (gameState.playerTarget) {
+        gameState.playerTarget = null;
         return;
       }
 
@@ -732,6 +769,17 @@ function start(token) {
     footsteps.update(delta, player.object.position, [...enemies.getMarkers(), ...remotePlayers.getMarkers()]);
     audio.setNpcSources(npcs.getMarkers());
     audio.update(delta);
+    if (gameState.target) gameState.playerTarget = null;
+    gameState.playerTargetData = gameState.playerTarget ? remotePlayers.getData(gameState.playerTarget) : null;
+    if (gameState.playerTarget && !gameState.playerTargetData) gameState.playerTarget = null;
+    const ownGroup = groupFrames.getGroup();
+    gameState.canInviteTarget = Boolean(
+      gameState.playerTargetData &&
+        (!ownGroup ||
+          (ownGroup.leaderId === ownPlayerId &&
+            ownGroup.members.length < 5 &&
+            !ownGroup.members.some((member) => member.id === gameState.playerTarget)))
+    );
     hud.update();
 
     inputSendTimer += delta;

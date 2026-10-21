@@ -1,3 +1,3 @@
 <?php
 
-const GAME_VERSION = '0.45';
+const GAME_VERSION = '0.46';

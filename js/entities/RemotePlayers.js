@@ -23,6 +23,8 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
 
     if (!remote) {
       const created = createPlayer('remote', state.appearance);
+      created.object.userData.isPlayer = true;
+      created.object.userData.playerId = id;
       scene.add(created.object);
 
       remote = {
@@ -38,6 +40,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
         target: new THREE.Vector3(state.x, state.y, state.z),
         targetRotationY: state.rotationY ?? 0,
         nameplateEl: createNameplateElement(name),
+        data: state,
       };
 
       remote.setPosition(state.x, state.y, state.z);
@@ -50,6 +53,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
       return;
     }
 
+    remote.data = state;
     remote.target.set(state.x, state.y, state.z);
     remote.targetRotationY = state.rotationY ?? remote.targetRotationY;
     remote.setEquipment(state.equipment);
@@ -126,6 +130,10 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     return remotePlayers.get(id)?.object ?? null;
   }
 
+  function getData(id) {
+    return remotePlayers.get(id)?.data ?? null;
+  }
+
   function getMarkers() {
     return Array.from(remotePlayers, ([id, remote]) => ({
       key: `player-${id}`,
@@ -134,5 +142,5 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }));
   }
 
-  return { sync, clear, remove, playAttack, playHit, getObject, getMarkers, update };
+  return { sync, clear, remove, playAttack, playHit, getObject, getData, getMarkers, update };
 }
