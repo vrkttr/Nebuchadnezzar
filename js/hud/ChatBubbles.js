@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const BUBBLE_HEIGHT = 2.75;
+const BUBBLE_HEIGHT = 2.2;
 const MIN_LIFETIME = 4;
 const MAX_LIFETIME = 9;
 const FADE_TIME = 0.5;

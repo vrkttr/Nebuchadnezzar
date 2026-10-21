@@ -7612,26 +7612,6 @@
      ]
     },
     {
-     "id": 372,
-     "name": "",
-     "type": "npc",
-     "class": "npc",
-     "x": 2406.4,
-     "y": 2048,
-     "width": 0,
-     "height": 0,
-     "rotation": 89.954,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "npcId",
-       "type": "string",
-       "value": "gildenverwalter"
-      }
-     ]
-    },
-    {
      "id": 331,
      "name": "",
      "type": "",

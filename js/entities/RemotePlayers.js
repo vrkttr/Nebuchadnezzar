@@ -15,14 +15,16 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     el.dataset.key = key;
     el.replaceChildren();
 
+    const label = document.createElement('span');
+    label.textContent = name;
+    el.appendChild(label);
+
     if (guildName) {
       const guild = document.createElement('span');
       guild.className = 'nameplate-guild';
       guild.textContent = `<${guildName}>`;
       el.appendChild(guild);
     }
-
-    el.appendChild(document.createTextNode(name));
   }
 
   function createNameplateElement(name, guildName) {
@@ -144,6 +146,10 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     return remotePlayers.get(id)?.object ?? null;
   }
 
+  function getObjects() {
+    return Array.from(remotePlayers.values(), (remote) => remote.object);
+  }
+
   function getData(id) {
     return remotePlayers.get(id)?.data ?? null;
   }
@@ -156,5 +162,5 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }));
   }
 
-  return { sync, clear, remove, playAttack, playHit, getObject, getData, getMarkers, update };
+  return { sync, clear, remove, playAttack, playHit, getObject, getObjects, getData, getMarkers, update };
 }

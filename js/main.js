@@ -544,7 +544,7 @@ function start(token) {
 
     raycaster.setFromCamera(pointer, camera);
     const intersections = raycaster.intersectObjects(
-      [...npcs.getObjects(), ...enemies.getObjects(), ...lootMarkers.getObjects(), ...worldChests.getObjects(), ...(zone?.teleporters ?? [])],
+      [...npcs.getObjects(), ...enemies.getObjects(), ...remotePlayers.getObjects(), ...lootMarkers.getObjects(), ...worldChests.getObjects(), ...(zone?.teleporters ?? [])],
       true
     );
 

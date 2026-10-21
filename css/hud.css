@@ -40,6 +40,7 @@ button {
   color: #f1ead2;
   font-family: var(--nu-font-text);
   font-size: 14px;
+  text-align: center;
   text-shadow: 0 0 3px #000000, 0 0 3px #000000, 0 1px 0 #000000;
   white-space: nowrap;
 }
@@ -1461,7 +1462,7 @@ button {
   position: absolute;
   max-width: 240px;
   padding: 5px 10px;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, calc(-100% - 24px));
   background: var(--hud-bg-paper), var(--nu-paper);
   background-blend-mode: multiply;
   border: 2px solid var(--nu-line);
