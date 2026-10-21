@@ -1948,3 +1948,31 @@ textarea {
 .chat-line-party .chat-name {
   color: #8fd18f;
 }
+
+.nameplate-guild {
+  display: block;
+  font-size: 11px;
+  color: var(--nu-amber);
+  text-align: center;
+}
+
+.target-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.target-actions .group-button.hidden {
+  display: none;
+}
+
+.guild-input {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 8px 0;
+  padding: 6px 8px;
+  background: var(--nu-board-darker);
+  border: 2px solid var(--nu-line);
+  color: var(--nu-text);
+  font-family: var(--nu-font-text);
+  font-size: 14px;
+}

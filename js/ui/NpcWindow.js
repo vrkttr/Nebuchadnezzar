@@ -10,6 +10,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
 
   let data = null;
   let activeQuestId = null;
+  let guildForm = false;
 
   function isOpen() {
     return !windowEl.classList.contains('hidden');
@@ -20,6 +21,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
     ui.tooltip.hide();
     data = null;
     activeQuestId = null;
+    guildForm = false;
   }
 
   function element(tag, className, text) {
@@ -78,10 +80,68 @@ export function createNpcWindow(state, ui, handlers = {}) {
       options.appendChild(button(t('npc.trade'), 'npc-option', () => handlers.onVendor?.(data.npcId)));
     }
 
+    if (data.guild && !data.guildName) {
+      options.appendChild(
+        button(t('guild.found'), 'npc-option', () => {
+          guildForm = true;
+          render();
+        })
+      );
+    }
+
+    if (data.guild && data.guildName) {
+      options.appendChild(
+        button(t('guild.leave', { name: data.guildName }), 'npc-option', () => {
+          ui.confirmDialog.open(t('guild.leaveConfirm', { name: data.guildName }), t('guild.leaveYes'), () =>
+            handlers.onGuildLeave?.(data.npcId)
+          );
+        })
+      );
+    }
+
     options.appendChild(button(t('npc.leave'), 'npc-option npc-option-leave', hide));
     children.push(options);
 
     body.replaceChildren(...children);
+  }
+
+  function renderGuildForm() {
+    title.textContent = t('guild.found');
+
+    const input = element('input', 'guild-input');
+    input.type = 'text';
+    input.maxLength = 20;
+    input.autocomplete = 'off';
+    input.placeholder = t('guild.namePlaceholder');
+    input.addEventListener('keydown', (event) => {
+      if (event.code !== 'Escape') event.stopPropagation();
+    });
+    input.addEventListener('keyup', (event) => event.stopPropagation());
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/[^\p{L}]/gu, '');
+    });
+
+    const submit = () => {
+      const name = input.value.trim();
+      if (name.length < 3) return;
+      guildForm = false;
+      handlers.onGuildCreate?.(data.npcId, name);
+    };
+    input.addEventListener('keydown', (event) => {
+      if (event.code === 'Enter' || event.code === 'NumpadEnter') submit();
+    });
+
+    const buttons = element('div', 'npc-buttons');
+    buttons.appendChild(button(t('guild.create'), 'window-button', submit));
+    buttons.appendChild(
+      button(t('npc.back'), 'window-button', () => {
+        guildForm = false;
+        render();
+      })
+    );
+
+    body.replaceChildren(element('p', 'npc-text', t('guild.nameHint')), input, buttons);
+    setTimeout(() => input.focus(), 0);
   }
 
   function renderQuest(quest) {
@@ -136,6 +196,11 @@ export function createNpcWindow(state, ui, handlers = {}) {
   function render() {
     ui.tooltip.hide();
 
+    if (guildForm) {
+      renderGuildForm();
+      return;
+    }
+
     const quest = activeQuestId ? data.quests.find((candidate) => candidate.id === activeQuestId) : null;
 
     if (quest) {
@@ -150,6 +215,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
     if (!data || data.npcId !== message.npcId) activeQuestId = null;
 
     data = message;
+    if (message.guildName) guildForm = false;
     render();
     windowEl.classList.remove('hidden');
   }

@@ -27,8 +27,19 @@ function sendNpcWindow(player, playerId, npc, notify) {
     name: npc.name,
     greeting: npc.greeting,
     vendor: Boolean(npc.vendor),
+    guild: Boolean(npc.guild),
+    guildName: player.guildName ?? null,
     quests: questsForNpc(player, npc.id),
   });
+}
+
+export function resolveGuildNpc(player, playerId, npcId, notify) {
+  const npc = resolveNpc(player, playerId, npcId, notify);
+  return npc?.guild ? npc : null;
+}
+
+export function refreshNpcWindow(player, playerId, npc, notify) {
+  sendNpcWindow(player, playerId, npc, notify);
 }
 
 export function openNpc(player, playerId, npcId, notify) {

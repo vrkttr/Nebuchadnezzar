@@ -3,6 +3,13 @@ import { getZones } from './zoneLoader.js';
 export const NPC_INTERACT_RANGE = 4;
 
 const NPC_DEFINITIONS = {
+  gildenverwalter: {
+    id: 'gildenverwalter',
+    name: 'Gildenverwalter',
+    color: 0x6a4a3a,
+    greeting: 'Allein überlebt man ein paar Wochen. Wer Rückhalt will, gründet eine Gilde oder schließt sich einer an.',
+    guild: true,
+  },
   streuner: {
     id: 'streuner',
     name: 'Streuner',

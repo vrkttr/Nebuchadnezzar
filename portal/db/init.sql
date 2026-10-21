@@ -87,3 +87,11 @@ CREATE TABLE IF NOT EXISTS character_chests (
     PRIMARY KEY (character_id, zone, chest_id),
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS guilds (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(20) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS guild_id INT NULL;

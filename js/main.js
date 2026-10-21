@@ -126,6 +126,9 @@ function start(token) {
 
   const hud = createHud(gameState, {
     onAbility: (slot) => connection.send({ type: 'ability', slot }),
+    onGuildInvite: () => {
+      if (gameState.playerTarget) connection.send({ type: 'guild-invite', playerId: gameState.playerTarget });
+    },
     onInvite: () => {
       if (gameState.playerTarget) connection.send({ type: 'group-invite', playerId: gameState.playerTarget });
     },
@@ -136,6 +139,8 @@ function start(token) {
     onAccept: (npcId, questId) => connection.send({ type: 'quest-accept', npcId, questId }),
     onComplete: (npcId, questId) => connection.send({ type: 'quest-complete', npcId, questId }),
     onVendor: (npcId) => connection.send({ type: 'vendor-open', npcId }),
+    onGuildCreate: (npcId, name) => connection.send({ type: 'guild-create', npcId, name }),
+    onGuildLeave: (npcId) => connection.send({ type: 'guild-leave', npcId }),
   });
   const abilitiesWindow = createAbilitiesWindow(ui);
   const vendorWindow = createVendorWindow(gameState, ui, {
@@ -250,7 +255,7 @@ function start(token) {
     onLeave: () => connection.send({ type: 'group-leave' }),
     onKick: (playerId) => connection.send({ type: 'group-kick', playerId }),
     onPromote: (playerId) => connection.send({ type: 'group-promote', playerId }),
-    onAnswer: (accept) => connection.send({ type: 'group-answer', accept }),
+    onAnswer: (accept, kind) => connection.send({ type: kind === 'guild' ? 'guild-answer' : 'group-answer', accept }),
   });
 
   let ownPlayerId = null;
@@ -373,7 +378,9 @@ function start(token) {
       } else if (message.type === 'group') {
         groupFrames.setGroup(message, ownPlayerId);
       } else if (message.type === 'group-invite') {
-        groupFrames.showInvite(message.fromName);
+        groupFrames.showInvite(t('group.inviteText', { name: message.fromName }), 'group');
+      } else if (message.type === 'guild-invite') {
+        groupFrames.showInvite(t('guild.inviteText', { name: message.fromName, guild: message.guildName }), 'guild');
       } else if (message.type === 'quests') {
         hud.setQuests(message);
         questMarkers = message.markers ?? {};
@@ -475,6 +482,7 @@ function start(token) {
             player.object.position.copy(ownTargetPosition);
           }
           ownTargetRotationY = ownState.rotationY ?? ownTargetRotationY;
+          gameState.player.guildName = ownState.guildName ?? null;
           if (ownState.characterName) {
             gameState.player.name = ownState.characterName;
           }
@@ -780,6 +788,7 @@ function start(token) {
             ownGroup.members.length < 5 &&
             !ownGroup.members.some((member) => member.id === gameState.playerTarget)))
     );
+    gameState.canGuildInviteTarget = Boolean(gameState.playerTargetData && gameState.player.guildName && !gameState.playerTargetData.guildName);
     hud.update();
 
     inputSendTimer += delta;

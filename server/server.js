@@ -1,4 +1,5 @@
 import { handleChat } from './chat.js';
+import { answerGuildInvite, createGuild, inviteToGuild, leaveGuild } from './guilds.js';
 import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
 import { WebSocketServer } from 'ws';
@@ -21,6 +22,8 @@ import {
   completeNpcQuest,
   openNpc,
   openVendor,
+  refreshNpcWindow,
+  resolveGuildNpc,
   sellToVendor,
 } from './npcInteraction.js';
 import { diffQuestLog, loadQuests, questRows, recordKill, serializeQuestLog } from './quests.js';
@@ -115,6 +118,9 @@ function createInitialState(character) {
     questView: null,
     questViewKey: '',
     groupId: null,
+    guildId: character.guildId ?? null,
+    guildName: character.guildName ?? null,
+    pendingGuildInvite: null,
     pendingInvite: null,
     ...createCombatState(character),
   };
@@ -151,7 +157,7 @@ function parseActionLayout(raw) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, u.auto_fullscreen, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, u.auto_fullscreen, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -192,6 +198,8 @@ async function loadCharacter(characterId) {
     starterKit,
     introSeen: Boolean(row.intro_seen),
     classId: isValidClass(row.class_id) ? row.class_id : null,
+    guildId: row.guild_name ? row.guild_id : null,
+    guildName: row.guild_name ?? null,
     autoFullscreen: row.auto_fullscreen === undefined ? true : Boolean(row.auto_fullscreen),
     actionLayout: parseActionLayout(row.action_bar),
     zoneId,
@@ -405,6 +413,22 @@ wss.on('connection', async (socket, request) => {
       }
     } else if (message.type === 'chat') {
       handleChat(players, id, message, notify);
+    } else if (message.type === 'guild-create') {
+      const state = players.get(id);
+      const npc = state ? resolveGuildNpc(state, id, message.npcId, notify) : null;
+      if (npc) createGuild(dbPool, players, id, message.name, notify).then(() => refreshNpcWindow(state, id, npc, notify));
+    } else if (message.type === 'guild-leave') {
+      const state = players.get(id);
+      const npc = state ? resolveGuildNpc(state, id, message.npcId, notify) : null;
+      if (npc) {
+        leaveGuild(dbPool, players, id, notify)
+          .then(() => refreshNpcWindow(state, id, npc, notify))
+          .catch((error) => console.error('Fehler beim Verlassen der Gilde:', error));
+      }
+    } else if (message.type === 'guild-invite') {
+      if (typeof message.playerId === 'string') inviteToGuild(players, id, message.playerId, notify);
+    } else if (message.type === 'guild-answer') {
+      answerGuildInvite(dbPool, players, id, message.accept === true, notify).catch((error) => console.error('Fehler beim Gildenbeitritt:', error));
     } else if (message.type === 'group-invite') {
       if (typeof message.playerId === 'string') invitePlayer(groups, players, id, message.playerId, notify);
     } else if (message.type === 'group-answer') {
@@ -682,6 +706,7 @@ setInterval(() => {
         dead: state.dead,
         autoAttack: state.autoAttack,
         crouching: state.input.crouch,
+        guildName: state.guildName,
         equipment: state.equipment,
         appearance: state.appearance,
       };

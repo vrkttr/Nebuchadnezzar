@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 7,
- "nextobjectid": 372,
+ "nextobjectid": 373,
  "layers": [
   {
    "name": "Boden",
@@ -7608,6 +7608,26 @@
        "name": "npcId",
        "type": "string",
        "value": "haendler"
+      }
+     ]
+    },
+    {
+     "id": 372,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2406.4,
+     "y": 2048,
+     "width": 0,
+     "height": 0,
+     "rotation": 89.954,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "gildenverwalter"
       }
      ]
     },

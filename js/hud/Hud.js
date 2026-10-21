@@ -43,6 +43,8 @@ export function createHud(state, handlers = {}) {
   const targetHealthFill = document.getElementById('target-health-fill');
   const targetInvite = document.getElementById('target-invite');
   targetInvite.addEventListener('click', () => handlers.onInvite?.());
+  const targetGuildInvite = document.getElementById('target-guild-invite');
+  targetGuildInvite.addEventListener('click', () => handlers.onGuildInvite?.());
 
   function setAbilities(list) {
     abilitySlots.length = 0;
@@ -246,14 +248,17 @@ export function createHud(state, handlers = {}) {
       targetLevel.textContent = state.target.level;
       targetHealthFill.style.width = `${toPercent(state.target.health, state.target.healthMax)}%`;
       targetInvite.classList.add('hidden');
+      targetGuildInvite.classList.add('hidden');
     } else if (state.playerTargetData) {
       targetFrame.classList.remove('hidden');
       targetName.textContent = state.playerTargetData.characterName ?? '???';
       targetLevel.textContent = state.playerTargetData.level ?? '?';
       targetHealthFill.style.width = `${toPercent(state.playerTargetData.health, state.playerTargetData.healthMax)}%`;
       targetInvite.classList.toggle('hidden', !state.canInviteTarget);
+      targetGuildInvite.classList.toggle('hidden', !state.canGuildInviteTarget);
     } else {
       targetInvite.classList.add('hidden');
+      targetGuildInvite.classList.add('hidden');
       targetFrame.classList.add('hidden');
     }
   }

@@ -9,10 +9,26 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
   const remotePlayers = new Map();
   const projected = new THREE.Vector3();
 
-  function createNameplateElement(name) {
+  function setNameplateText(el, name, guildName) {
+    const key = `${name}|${guildName ?? ''}`;
+    if (el.dataset.key === key) return;
+    el.dataset.key = key;
+    el.replaceChildren();
+
+    if (guildName) {
+      const guild = document.createElement('span');
+      guild.className = 'nameplate-guild';
+      guild.textContent = `<${guildName}>`;
+      el.appendChild(guild);
+    }
+
+    el.appendChild(document.createTextNode(name));
+  }
+
+  function createNameplateElement(name, guildName) {
     const el = document.createElement('div');
     el.className = 'nameplate';
-    el.textContent = name;
+    setNameplateText(el, name, guildName);
     nameplateContainer.appendChild(el);
     return el;
   }
@@ -39,7 +55,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
         setAppearance: created.setAppearance,
         target: new THREE.Vector3(state.x, state.y, state.z),
         targetRotationY: state.rotationY ?? 0,
-        nameplateEl: createNameplateElement(name),
+        nameplateEl: createNameplateElement(name, state.guildName),
         data: state,
       };
 
@@ -61,9 +77,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     remote.setDead(state.dead);
     remote.setCrouch(state.crouching);
 
-    if (remote.nameplateEl.textContent !== name) {
-      remote.nameplateEl.textContent = name;
-    }
+    setNameplateText(remote.nameplateEl, name, state.guildName);
   }
 
   function remove(id) {

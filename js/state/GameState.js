@@ -2,6 +2,7 @@ export const gameState = {
   player: {
     name: '',
     classId: null,
+    guildName: null,
     level: 1,
     health: 100,
     healthMax: 100,
@@ -23,6 +24,7 @@ export const gameState = {
   playerTarget: null,
   playerTargetData: null,
   canInviteTarget: false,
+  canGuildInviteTarget: false,
   zoneName: '',
   quests: [],
 };

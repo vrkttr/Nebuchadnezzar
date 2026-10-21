@@ -7,6 +7,7 @@ export function createGroupFrames({ onSelect, onLeave, onKick, onPromote, onAnsw
   let ownId = null;
   let group = null;
   let inviteTimer = null;
+  let inviteKind = 'group';
 
   function percent(value, max) {
     return max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
@@ -105,8 +106,9 @@ export function createGroupFrames({ onSelect, onLeave, onKick, onPromote, onAnsw
     inviteTimer = null;
   }
 
-  function showInvite(fromName) {
-    inviteText.textContent = t('group.inviteText', { name: fromName });
+  function showInvite(text, kind = 'group') {
+    inviteKind = kind;
+    inviteText.textContent = text;
     invite.classList.remove('hidden');
     clearTimeout(inviteTimer);
     inviteTimer = setTimeout(hideInvite, 30000);
@@ -114,12 +116,12 @@ export function createGroupFrames({ onSelect, onLeave, onKick, onPromote, onAnsw
 
   document.getElementById('group-invite-yes').addEventListener('click', () => {
     hideInvite();
-    onAnswer(true);
+    onAnswer(true, inviteKind);
   });
 
   document.getElementById('group-invite-no').addEventListener('click', () => {
     hideInvite();
-    onAnswer(false);
+    onAnswer(false, inviteKind);
   });
 
   function clear() {
