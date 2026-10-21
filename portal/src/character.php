@@ -13,7 +13,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $pdo = getDatabaseConnection();
 $error = null;
-$saved = false;
 
 $stmt = $pdo->prepare('SELECT id, name, appear_skin, appear_hair_style, appear_hair_color, appear_top, appear_pants FROM characters WHERE user_id = :user_id');
 $stmt->execute(['user_id' => $_SESSION['user_id']]);
@@ -22,19 +21,13 @@ $character = $stmt->fetch();
 $appearance = readAppearance($_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : []);
 
 if ($character) {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $stmt = $pdo->prepare('UPDATE characters SET appear_skin = :skin, appear_hair_style = :hair_style, appear_hair_color = :hair_color, appear_top = :top, appear_pants = :pants WHERE id = :id');
-        $stmt->execute($appearance + ['id' => $character['id']]);
-        $saved = true;
-    } else {
-        $appearance = [
-            'skin' => (int) $character['appear_skin'],
-            'hair_style' => (int) $character['appear_hair_style'],
-            'hair_color' => (int) $character['appear_hair_color'],
-            'top' => (int) $character['appear_top'],
-            'pants' => (int) $character['appear_pants'],
-        ];
-    }
+    $appearance = [
+        'skin' => (int) $character['appear_skin'],
+        'hair_style' => (int) $character['appear_hair_style'],
+        'hair_color' => (int) $character['appear_hair_color'],
+        'top' => (int) $character['appear_top'],
+        'pants' => (int) $character['appear_pants'],
+    ];
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
 
@@ -72,27 +65,29 @@ renderPageStart(t('character.title'), 'character.php', true, true);
 <?php if ($error !== null): ?>
 <p class="nu-message"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
-<?php if ($saved): ?>
-<p class="nu-message is-ok"><?= th('character.saved') ?></p>
-<?php endif; ?>
 <div class="portal-editor">
-<form method="post" id="appearance-form" class="portal-form">
 <?php if ($character): ?>
+<div class="portal-form">
 <div class="nu-label"><?= th('character.yours') ?></div>
 <p class="portal-character"><?= htmlspecialchars($character['name']) ?></p>
-<?php else: ?>
-<label class="portal-field"><span class="nu-label"><?= th('character.name') ?></span><input class="nu-input" type="text" name="name" maxlength="32" required autofocus autocomplete="off" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></label>
-<?php endif; ?>
-<?php renderAppearanceFields($appearance); ?>
+<p class="portal-hint"><?= th('character.locked') ?></p>
 <div class="portal-actions">
-<button class="nu-button" type="submit"><?= th($character ? 'character.saveLook' : 'character.create') ?></button>
-<?php if ($character): ?>
 <a class="nu-button" href="play.php"><?= th('character.play') ?></a>
-<?php endif; ?>
+</div>
+</div>
+<?php else: ?>
+<form method="post" id="appearance-form" class="portal-form">
+<label class="portal-field"><span class="nu-label"><?= th('character.name') ?></span><input class="nu-input" type="text" name="name" maxlength="32" required autofocus autocomplete="off" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></label>
+<?php renderAppearanceFields($appearance); ?>
+<p class="portal-hint"><?= th('character.lockWarning') ?></p>
+<div class="portal-actions">
+<button class="nu-button" type="submit"><?= th('character.create') ?></button>
 </div>
 </form>
+<?php endif; ?>
 <iframe id="appearance-preview" class="portal-preview" title="<?= th('character.preview') ?>" src="<?= htmlspecialchars($previewUrl . '#' . $previewHash) ?>"></iframe>
 </div>
+<?php if (!$character): ?>
 <script>
 (function () {
     var form = document.getElementById('appearance-form');
@@ -111,4 +106,5 @@ renderPageStart(t('character.title'), 'character.php', true, true);
     form.addEventListener('change', update);
 })();
 </script>
+<?php endif; ?>
 <?php renderPageEnd();

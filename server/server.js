@@ -79,6 +79,7 @@ function createInitialState(character) {
   const state = {
     characterId: character.id,
     characterName: character.name,
+    introSeen: character.introSeen,
     zoneId: character.zoneId,
     loadingUntil: 0,
     appearance: character.appearance,
@@ -123,7 +124,7 @@ async function consumeLoginToken(token) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -162,6 +163,7 @@ async function loadCharacter(characterId) {
     id: row.id,
     name: row.name,
     starterKit,
+    introSeen: Boolean(row.intro_seen),
     zoneId,
     x: startPosition.x,
     y: startPosition.y,
@@ -314,6 +316,7 @@ wss.on('connection', async (socket, request) => {
       id,
       enemies: serializeEnemies(zoneEnemies.get(initialState.zoneId)),
       abilities: serializeAbilities(initialState.actionBar),
+      showIntro: !character.introSeen,
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),
@@ -350,6 +353,13 @@ wss.on('connection', async (socket, request) => {
       state.input.moveZ = moveZ;
       state.input.jump = Boolean(message.jump);
       state.input.run = Boolean(message.run);
+    } else if (message.type === 'intro-seen') {
+      const state = players.get(id);
+      if (!state || state.introSeen) return;
+      state.introSeen = true;
+      dbPool
+        .query('UPDATE characters SET intro_seen = 1 WHERE id = ?', [state.characterId])
+        .catch((error) => console.error('Fehler beim Speichern des Intros:', error));
     } else if (message.type === 'chat') {
       handleChat(players, id, message, notify);
     } else if (message.type === 'target') {

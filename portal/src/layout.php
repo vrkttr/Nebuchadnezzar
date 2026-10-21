@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/i18n.php';
+require_once __DIR__ . '/version.php';
 
 function portalMenuItems(): array
 {
@@ -84,6 +85,7 @@ function renderPageEnd(bool $panel = true): void
     ?>
 </main>
 </div>
+<div class="portal-version"><?= htmlspecialchars(t('portal.version', ['version' => GAME_VERSION])) ?></div>
 </body>
 </html>
 <?php

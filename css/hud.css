@@ -996,6 +996,27 @@ button {
   width: 380px;
 }
 
+#intro-window {
+  left: calc(50% - 250px);
+  top: 18%;
+  width: 500px;
+}
+
+#intro-body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.intro-text {
+  margin: 0;
+  min-height: 140px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
 #npc-body {
   padding: 12px 14px 16px;
 }

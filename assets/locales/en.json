@@ -307,5 +307,8 @@
   "item.duct_tape.name": "Duct Tape",
   "item.duct_tape.description": "Holds everything together.",
   "item.battery.name": "Battery",
-  "item.battery.description": "Still some charge left."
+  "item.battery.description": "Still some charge left.",
+  "intro.title": "Welcome to Sector Seven",
+  "intro.text": "To be continued…",
+  "intro.start": "Let's go"
 }

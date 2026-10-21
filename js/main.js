@@ -35,6 +35,8 @@ const [
   { createDamageNumbers },
   { createChatBubbles },
   { createShotEffects },
+  { createPlane },
+  { createIntroWindow },
   { createHud },
   { createLoadingScreen },
   { createAudio },
@@ -77,6 +79,8 @@ const [
   import(v('./hud/DamageNumbers.js')),
   import(v('./hud/ChatBubbles.js')),
   import(v('./effects/ShotEffects.js')),
+  import(v('./effects/Plane.js')),
+  import(v('./ui/IntroWindow.js')),
   import(v('./hud/Hud.js')),
   import(v('./ui/LoadingScreen.js')),
   import(v('./audio/Audio.js')),
@@ -148,7 +152,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -209,6 +213,10 @@ function start(token) {
   const damageNumbers = createDamageNumbers(camera, nameplateContainer);
   const chatBubbles = createChatBubbles(camera, nameplateContainer);
   const shotEffects = createShotEffects(scene);
+  const plane = createPlane(scene);
+  const introWindow = createIntroWindow({
+    onClose: () => connection.send({ type: 'intro-seen' }),
+  });
   const chat = createChat({ onSend: (text) => connection.send({ type: 'chat', text }) });
 
   let ownPlayerId = null;
@@ -249,6 +257,7 @@ function start(token) {
 
     zone = buildZone(scene, world);
     applyLighting(scene, world);
+    plane.setEnabled(world.id === 'startwelt');
     audio.setIndoor(Boolean(world.indoor));
     audio.setEmitters(zone.emitters);
     thirdPersonCamera.setBlockers(world.cameraBlockers ?? []);
@@ -304,7 +313,9 @@ function start(token) {
         ownPlayerId = message.id;
         audio.applySettings(message.audio);
         ownWeapon = message.equipment?.weapon ?? null;
-        enterZone(message, true);
+        enterZone(message, true).then(() => {
+          if (message.showIntro) introWindow.show();
+        });
         hud.setAbilities(message.abilities ?? []);
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
@@ -552,6 +563,11 @@ function start(token) {
         return;
       }
 
+      if (introWindow.isOpen()) {
+        introWindow.hide();
+        return;
+      }
+
       if (
         npcWindow.isOpen() ||
         vendorWindow.isOpen() ||
@@ -673,6 +689,7 @@ function start(token) {
     damageNumbers.update(delta);
     chatBubbles.update(delta);
     shotEffects.update(delta);
+    plane.update(delta);
     minimap.update(delta);
     worldMap.update(delta);
     portraits.update(delta);

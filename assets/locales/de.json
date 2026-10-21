@@ -307,5 +307,8 @@
   "item.duct_tape.name": "Panzerband",
   "item.duct_tape.description": "Hält alles zusammen.",
   "item.battery.name": "Batterie",
-  "item.battery.description": "Noch ein Rest Ladung drin."
+  "item.battery.description": "Noch ein Rest Ladung drin.",
+  "intro.title": "Willkommen in Sektor Sieben",
+  "intro.text": "Folgt…",
+  "intro.start": "Los geht's"
 }

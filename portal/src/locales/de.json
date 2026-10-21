@@ -43,10 +43,8 @@
   "character.error.length": "Der Name darf maximal {max} Zeichen lang sein.",
   "character.error.letters": "Der Name darf nur Buchstaben enthalten.",
   "character.error.taken": "Dieser Charaktername ist bereits vergeben.",
-  "character.saved": "Aussehen gespeichert.",
   "character.yours": "Dein Charakter",
   "character.name": "Charaktername",
-  "character.saveLook": "Aussehen speichern",
   "character.create": "Erstellen",
   "character.play": "Spielen",
   "character.preview": "Vorschau",
@@ -103,5 +101,8 @@
   "credits.license.mit": "MIT-Lizenz",
   "credits.and": "und",
   "settings.language": "Sprache",
-  "settings.languageLabel": "Anzeigesprache"
+  "settings.languageLabel": "Anzeigesprache",
+  "portal.version": "Spielversion: {version}",
+  "character.locked": "Das Aussehen deines Charakters steht fest. Eine Änderung ist später bei einem Barbier in der Spielwelt gegen Gold möglich.",
+  "character.lockWarning": "Achtung: Name und Aussehen lassen sich nach dem Erstellen nicht mehr ändern."
 }
