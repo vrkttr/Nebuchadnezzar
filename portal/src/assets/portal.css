@@ -364,3 +364,31 @@ body.portal {
     font-size: 12px;
     color: var(--nu-amber-dark);
 }
+
+.portal-scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+
+.portal-music {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 2.4rem;
+  z-index: 5;
+  padding: 0.25rem 0.7rem;
+  background: rgba(20, 18, 13, 0.7);
+  border: 1px solid rgba(241, 234, 210, 0.35);
+  color: var(--nu-text);
+  font-family: var(--nu-font-text);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.portal-music:hover {
+  border-color: var(--nu-amber);
+  color: var(--nu-amber);
+}

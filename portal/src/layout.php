@@ -40,6 +40,13 @@ function portalMenuItems(): array
     return $items;
 }
 
+function gameSceneUrl(): string
+{
+    $scheme = $_SERVER['REQUEST_SCHEME'] ?? 'http';
+
+    return $scheme . '://' . $_SERVER['SERVER_NAME'] . ':8082/menu.html';
+}
+
 function renderPageStart(string $title, string $active, bool $panel = true, bool $wide = false): void
 {
     $items = portalMenuItems();
@@ -59,6 +66,7 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 </head>
 <body class="portal">
 <div class="portal-bg"></div>
+<iframe class="portal-scene" src="<?= htmlspecialchars(gameSceneUrl()) ?>" tabindex="-1" aria-hidden="true" title=""></iframe>
 <div class="portal-scrim nu-scrim"></div>
 <div class="portal-layout">
 <nav class="portal-nav">
@@ -85,6 +93,8 @@ function renderPageEnd(bool $panel = true): void
     ?>
 </main>
 </div>
+<button type="button" id="music-toggle" class="portal-music" data-on="<?= htmlspecialchars(t('portal.music.on')) ?>" data-off="<?= htmlspecialchars(t('portal.music.off')) ?>"></button>
+<script src="assets/menu-music.js" data-src="assets/audio/menu_theme.ogg"></script>
 <div class="portal-version"><?= htmlspecialchars(t('portal.version', ['version' => GAME_VERSION])) ?></div>
 </body>
 </html>

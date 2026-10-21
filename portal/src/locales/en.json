@@ -126,5 +126,7 @@
   "class.medic.bonus": "+40% healing from Bandage up, bandages and medicine",
   "class.scout.name": "Scout",
   "class.scout.description": "You know the back routes and find what others overlook. You move faster, get noticed later and pick up more gold.",
-  "class.scout.bonus": "+10% movement speed, −20% enemy aggro range, +25% gold from loot"
+  "class.scout.bonus": "+10% movement speed, −20% enemy aggro range, +25% gold from loot",
+  "portal.music.on": "Music: on",
+  "portal.music.off": "Music: off"
 }

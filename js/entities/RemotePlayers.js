@@ -8,6 +8,7 @@ const NAMEPLATE_HEIGHT = 2.2;
 export function createRemotePlayers(scene, camera, nameplateContainer) {
   const remotePlayers = new Map();
   const projected = new THREE.Vector3();
+  let relationResolver = null;
 
   function setNameplateText(el, name, guildName) {
     const key = `${name}|${guildName ?? ''}`;
@@ -59,6 +60,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
         targetRotationY: state.rotationY ?? 0,
         nameplateEl: createNameplateElement(name, state.guildName),
         data: state,
+        id,
       };
 
       remote.setPosition(state.x, state.y, state.z);
@@ -131,6 +133,9 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
       remote.object.rotation.y = lerpAngle(remote.object.rotation.y, remote.targetRotationY, factor);
       remote.animate(delta);
       updateNameplatePosition(remote);
+      const relation = relationResolver && remote.data ? relationResolver(remote.id, remote.data) : null;
+      remote.nameplateEl.classList.toggle('nameplate-party', relation === 'party');
+      remote.nameplateEl.classList.toggle('nameplate-guildmate', relation === 'guild');
     }
   }
 
@@ -144,6 +149,14 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
 
   function getObject(id) {
     return remotePlayers.get(id)?.object ?? null;
+  }
+
+  function getNameplate(id) {
+    return remotePlayers.get(id)?.nameplateEl ?? null;
+  }
+
+  function setRelationResolver(resolver) {
+    relationResolver = resolver;
   }
 
   function getObjects() {
@@ -162,5 +175,5 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }));
   }
 
-  return { sync, clear, remove, playAttack, playHit, getObject, getObjects, getData, getMarkers, update };
+  return { sync, clear, remove, playAttack, playHit, getObject, getNameplate, setRelationResolver, getObjects, getData, getMarkers, update };
 }

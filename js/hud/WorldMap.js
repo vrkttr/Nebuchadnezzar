@@ -183,6 +183,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     zoneId = world.id;
     extent = Math.max(world.width, world.height);
     cssSize = Math.max(200, Math.min(MAX_MAP_SIZE, Math.floor(Math.min(window.innerWidth, window.innerHeight) - 160)));
+    windowEl.style.width = `${cssSize + 24}px`;
     markers = Array.isArray(store[zoneId]) ? store[zoneId].slice(0, MAX_MARKERS) : [];
 
     zoom = 1;

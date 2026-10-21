@@ -1462,7 +1462,7 @@ button {
   position: absolute;
   max-width: 240px;
   padding: 5px 10px;
-  transform: translate(-50%, calc(-100% - 24px));
+  transform: translate(-50%, -100%);
   background: var(--hud-bg-paper), var(--nu-paper);
   background-blend-mode: multiply;
   border: 2px solid var(--nu-line);
@@ -1654,6 +1654,7 @@ button {
 
 #map-footer .window-hint {
   flex: 1;
+  min-width: 0;
   margin: 0;
   padding: 0;
 }
@@ -1976,4 +1977,12 @@ textarea {
   color: var(--nu-text);
   font-family: var(--nu-font-text);
   font-size: 14px;
+}
+
+.nameplate.nameplate-guildmate {
+  color: #6fd36f;
+}
+
+.nameplate.nameplate-party {
+  color: #7fc8ff;
 }

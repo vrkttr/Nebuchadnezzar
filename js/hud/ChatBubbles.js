@@ -10,7 +10,7 @@ export function createChatBubbles(camera, container) {
   const bubbles = new Map();
   const projected = new THREE.Vector3();
 
-  function show(object, text) {
+  function show(object, text, plate = null) {
     if (!object) return;
 
     bubbles.get(object)?.element.remove();
@@ -22,6 +22,7 @@ export function createChatBubbles(camera, container) {
 
     bubbles.set(object, {
       element,
+      plate,
       age: 0,
       lifetime: Math.min(MAX_LIFETIME, MIN_LIFETIME + text.length * 0.05),
     });
@@ -48,6 +49,8 @@ export function createChatBubbles(camera, container) {
 
       const remaining = bubble.lifetime - bubble.age;
       bubble.element.style.display = 'block';
+      const plateHeight = bubble.plate?.offsetHeight ?? 0;
+      bubble.element.style.transform = `translate(-50%, calc(-100% - ${plateHeight + 8}px))`;
       bubble.element.style.opacity = String(Math.min(1, remaining / FADE_TIME));
       bubble.element.style.left = `${(projected.x * 0.5 + 0.5) * window.innerWidth}px`;
       bubble.element.style.top = `${(-projected.y * 0.5 + 0.5) * window.innerHeight}px`;

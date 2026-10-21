@@ -126,5 +126,7 @@
   "class.medic.bonus": "+40 % Heilung durch Verbinden, Verbandszeug und Medizin",
   "class.scout.name": "Kundschafter",
   "class.scout.description": "Du kennst Schleichwege und findest, was andere übersehen. Du bist schneller unterwegs, wirst später bemerkt und sammelst mehr Gold ein.",
-  "class.scout.bonus": "+10 % Lauftempo, −20 % Aggro-Radius der Gegner, +25 % Gold aus Beute"
+  "class.scout.bonus": "+10 % Lauftempo, −20 % Aggro-Radius der Gegner, +25 % Gold aus Beute",
+  "portal.music.on": "Musik: an",
+  "portal.music.off": "Musik: aus"
 }

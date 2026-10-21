@@ -258,6 +258,12 @@ function start(token) {
     onAnswer: (accept, kind) => connection.send({ type: kind === 'guild' ? 'guild-answer' : 'group-answer', accept }),
   });
 
+  remotePlayers.setRelationResolver((id, data) => {
+    if (groupFrames.getGroup()?.members.some((member) => member.id === id)) return 'party';
+    if (gameState.player.guildName && data.guildName === gameState.player.guildName) return 'guild';
+    return null;
+  });
+
   let ownPlayerId = null;
   let questMarkers = {};
   let outdoorCameraDistance = null;
@@ -373,7 +379,11 @@ function start(token) {
       } else if (message.type === 'chat') {
         chat.add(message);
         if (message.channel === 'say') {
-          chatBubbles.show(message.fromId === ownPlayerId ? player.object : remotePlayers.getObject(message.fromId), message.text);
+          chatBubbles.show(
+            message.fromId === ownPlayerId ? player.object : remotePlayers.getObject(message.fromId),
+            message.text,
+            message.fromId === ownPlayerId ? null : remotePlayers.getNameplate(message.fromId)
+          );
         }
       } else if (message.type === 'group') {
         groupFrames.setGroup(message, ownPlayerId);
