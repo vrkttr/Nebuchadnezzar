@@ -18,13 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ambient = max(0, min(100, (int) ($_POST['ambient'] ?? 100)));
     $muted = isset($_POST['muted']) ? 1 : 0;
     $autoFullscreen = isset($_POST['auto_fullscreen']) ? 1 : 0;
+    $touchControls = in_array($_POST['touch_controls'] ?? '', ['auto', 'on', 'off'], true) ? $_POST['touch_controls'] : 'auto';
 
-    $stmt = $pdo->prepare('UPDATE users SET audio_volume = :volume, audio_ambient = :ambient, audio_muted = :muted, auto_fullscreen = :auto_fullscreen WHERE id = :id');
-    $stmt->execute(['volume' => $volume, 'ambient' => $ambient, 'muted' => $muted, 'auto_fullscreen' => $autoFullscreen, 'id' => $_SESSION['user_id']]);
+    $stmt = $pdo->prepare('UPDATE users SET audio_volume = :volume, audio_ambient = :ambient, audio_muted = :muted, auto_fullscreen = :auto_fullscreen, touch_controls = :touch_controls WHERE id = :id');
+    $stmt->execute(['volume' => $volume, 'ambient' => $ambient, 'muted' => $muted, 'auto_fullscreen' => $autoFullscreen, 'touch_controls' => $touchControls, 'id' => $_SESSION['user_id']]);
     $saved = true;
 }
 
-$stmt = $pdo->prepare('SELECT audio_volume, audio_ambient, audio_muted, auto_fullscreen FROM users WHERE id = :id');
+$stmt = $pdo->prepare('SELECT audio_volume, audio_ambient, audio_muted, auto_fullscreen, touch_controls FROM users WHERE id = :id');
 $stmt->execute(['id' => $_SESSION['user_id']]);
 $settings = $stmt->fetch();
 
@@ -70,6 +71,13 @@ renderPageStart(t('settings.title'), 'settings.php', true);
 <input type="checkbox" name="auto_fullscreen" value="1" class="portal-checkbox"<?= $settings['auto_fullscreen'] ? ' checked' : '' ?>>
 </label>
 <p class="portal-hint"><?= th('settings.autoFullscreenHint') ?></p>
+<label class="portal-field"><span class="nu-label"><?= th('settings.touchControls') ?></span>
+<select class="nu-input" name="touch_controls">
+<?php foreach (['auto', 'on', 'off'] as $mode): ?>
+<option value="<?= $mode ?>"<?= ($settings['touch_controls'] ?? 'auto') === $mode ? ' selected' : '' ?>><?= th('settings.touchControls.' . $mode) ?></option>
+<?php endforeach; ?>
+</select></label>
+<p class="portal-hint"><?= th('settings.touchControlsHint') ?></p>
 </section>
 <div class="portal-actions">
 <button class="nu-button" type="submit"><?= th('settings.save') ?></button>

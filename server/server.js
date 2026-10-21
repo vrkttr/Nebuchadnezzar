@@ -157,7 +157,7 @@ function parseActionLayout(raw) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, u.auto_fullscreen, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -201,6 +201,7 @@ async function loadCharacter(characterId) {
     guildId: row.guild_name ? row.guild_id : null,
     guildName: row.guild_name ?? null,
     autoFullscreen: row.auto_fullscreen === undefined ? true : Boolean(row.auto_fullscreen),
+    touchControls: ['auto', 'on', 'off'].includes(row.touch_controls) ? row.touch_controls : 'auto',
     actionLayout: parseActionLayout(row.action_bar),
     zoneId,
     x: startPosition.x,
@@ -358,6 +359,7 @@ wss.on('connection', async (socket, request) => {
       showIntro: !character.introSeen,
       classId: initialState.classId,
       autoFullscreen: character.autoFullscreen,
+      touchControls: character.touchControls,
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),

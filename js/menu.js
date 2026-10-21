@@ -10,19 +10,20 @@ import { createRandom } from './world/Random.js';
 
 const params = new URLSearchParams(location.search);
 const STILL = params.has('still');
+const CAPTURE = params.has('capture');
 const VALLEY = -16;
 const FOG = 0xcdb593;
-const PIXEL_RATIO_LIMIT = 1.5;
+const PIXEL_RATIO_LIMIT = CAPTURE ? 1 : 1.5;
 
 document.body.style.margin = '0';
 document.body.style.background = 'transparent';
 document.body.style.overflow = 'hidden';
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: STILL });
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: STILL || CAPTURE });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, PIXEL_RATIO_LIMIT));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.domElement.style.display = 'block';
-if (!STILL) {
+if (!STILL && !CAPTURE) {
   renderer.domElement.style.opacity = '0';
   renderer.domElement.style.transition = 'opacity 0.9s ease-out';
 }
@@ -365,7 +366,10 @@ function frame(delta) {
   renderer.render(scene, camera);
 }
 
-if (STILL) {
+if (CAPTURE) {
+  window.step = (delta) => frame(delta);
+  window.captureReady = true;
+} else if (STILL) {
   window.renderDone = false;
   setTimeout(() => {
     frame(0.016);

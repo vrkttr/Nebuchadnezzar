@@ -1,5 +1,7 @@
-const STORAGE_KEY = 'touchControls';
-const STICK_RADIUS = 56;
+const STICK_RADIUS_RATIO = 56 / 132;
+const DESIGN_WIDTH = 1100;
+const TABLET_MIN_SHORT_SIDE = 600;
+const DEFAULT_VIEWPORT = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 const DEAD_ZONE = 0.12;
 const RUN_THRESHOLD = 0.85;
 const LOOK_SLOP = 6;
@@ -14,24 +16,32 @@ export const touchInput = {
   crouch: false,
 };
 
-function readPreference() {
-  try {
-    return localStorage.getItem(STORAGE_KEY);
-  } catch (error) {
-    return null;
-  }
-}
-
-function writePreference(value) {
-  try {
-    localStorage.setItem(STORAGE_KEY, value);
-  } catch (error) {
-    return;
-  }
-}
-
 function detectTouchDevice() {
   return navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches;
+}
+
+function updateViewport() {
+  const meta = document.querySelector('meta[name="viewport"]');
+  if (!meta) return;
+
+  let content = DEFAULT_VIEWPORT;
+  let scale = 1;
+
+  if (touchInput.active) {
+    const landscape = window.innerWidth >= window.innerHeight;
+    const long = Math.max(window.screen.width, window.screen.height);
+    const short = Math.min(window.screen.width, window.screen.height);
+    const deviceWidth = landscape ? long : short;
+    const deviceHeight = landscape ? short : long;
+
+    if (deviceHeight >= TABLET_MIN_SHORT_SIDE && deviceWidth < DESIGN_WIDTH) {
+      content = `width=${DESIGN_WIDTH}, user-scalable=no, viewport-fit=cover`;
+      scale = deviceWidth / DESIGN_WIDTH;
+    }
+  }
+
+  if (meta.content !== content) meta.content = content;
+  document.documentElement.style.setProperty('--touch-scale', String(1 / scale));
 }
 
 function createButton(className, label, title) {
@@ -63,6 +73,7 @@ export function createTouchControls({ canvas, labels, onRotate, onZoom, onCycleT
 
   let stickPointer = null;
   let stickCenter = { x: 0, y: 0 };
+  let stickRadius = 56;
   const lookPointers = new Map();
   let pinchDistance = 0;
 
@@ -78,14 +89,14 @@ export function createTouchControls({ canvas, labels, onRotate, onZoom, onCycleT
     let dx = event.clientX - stickCenter.x;
     let dy = event.clientY - stickCenter.y;
     const distance = Math.hypot(dx, dy);
-    if (distance > STICK_RADIUS) {
-      dx = (dx / distance) * STICK_RADIUS;
-      dy = (dy / distance) * STICK_RADIUS;
+    if (distance > stickRadius) {
+      dx = (dx / distance) * stickRadius;
+      dy = (dy / distance) * stickRadius;
     }
 
     knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
 
-    const strength = Math.min(1, distance / STICK_RADIUS);
+    const strength = Math.min(1, distance / stickRadius);
     if (strength < DEAD_ZONE) {
       touchInput.moveX = 0;
       touchInput.moveY = 0;
@@ -106,6 +117,7 @@ export function createTouchControls({ canvas, labels, onRotate, onZoom, onCycleT
     stick.setPointerCapture(event.pointerId);
     const rect = stick.getBoundingClientRect();
     stickCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    stickRadius = rect.width * STICK_RADIUS_RATIO;
     updateStick(event);
   });
 
@@ -195,6 +207,7 @@ export function createTouchControls({ canvas, labels, onRotate, onZoom, onCycleT
   function apply(enabled) {
     touchInput.active = enabled;
     document.documentElement.classList.toggle('touch-ui', enabled);
+    updateViewport();
     if (!enabled) {
       resetStick();
       touchInput.jump = false;
@@ -205,25 +218,21 @@ export function createTouchControls({ canvas, labels, onRotate, onZoom, onCycleT
     onToggle?.(enabled);
   }
 
-  function shouldEnable() {
-    const preference = readPreference();
-    if (preference === 'on') return true;
-    if (preference === 'off') return false;
-    return detectTouchDevice();
+  function setMode(mode) {
+    if (mode === 'on') apply(true);
+    else if (mode === 'off') apply(false);
+    else apply(detectTouchDevice());
   }
 
-  function toggle() {
-    const next = !touchInput.active;
-    writePreference(next ? 'on' : 'off');
-    apply(next);
-  }
+  window.addEventListener('resize', updateViewport);
+  window.addEventListener('orientationchange', updateViewport);
 
   window.addEventListener('blur', () => {
     resetStick();
     touchInput.jump = false;
   });
 
-  apply(shouldEnable());
+  setMode('auto');
 
-  return { toggle, isActive: () => touchInput.active };
+  return { setMode, isActive: () => touchInput.active };
 }

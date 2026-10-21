@@ -15,7 +15,7 @@ const REGEN_PER_SECOND = 3;
 const RESOURCE_REGEN_PER_SECOND = 2;
 const ARMOR_CONSTANT = 50;
 
-const ENEMY_RESPAWN_TIME = 15;
+const ENEMY_RESPAWN_TIME = 120;
 
 
 function randomInt(min, max) {

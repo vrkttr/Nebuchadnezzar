@@ -40,13 +40,6 @@ function portalMenuItems(): array
     return $items;
 }
 
-function gameSceneUrl(): string
-{
-    $scheme = $_SERVER['REQUEST_SCHEME'] ?? 'http';
-
-    return $scheme . '://' . $_SERVER['SERVER_NAME'] . ':8082/menu.html';
-}
-
 function renderPageStart(string $title, string $active, bool $panel = true, bool $wide = false): void
 {
     $items = portalMenuItems();
@@ -62,11 +55,12 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <link rel="stylesheet" href="assets/ui/nebu-ui.css">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="preload" as="image" href="assets/menu-scene.jpg">
 <link rel="stylesheet" href="assets/portal.css">
 </head>
 <body class="portal">
 <div class="portal-bg"></div>
-<iframe class="portal-scene" src="<?= htmlspecialchars(gameSceneUrl()) ?>" tabindex="-1" aria-hidden="true" title=""></iframe>
+<video class="portal-scene" autoplay muted loop playsinline preload="auto" poster="assets/menu-scene.jpg" tabindex="-1" aria-hidden="true"><source src="assets/menu-scene.webm" type="video/webm"></video>
 <div class="portal-scrim nu-scrim"></div>
 <div class="portal-layout">
 <nav class="portal-nav">

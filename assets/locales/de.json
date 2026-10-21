@@ -373,7 +373,6 @@
   "guild.memberJoined": "{name} ist der Gilde beigetreten.",
   "guild.left": "Du hast die Gilde {name} verlassen.",
   "guild.memberLeft": "{name} hat die Gilde verlassen.",
-  "hud.menu.touch": "Touch-Steuerung",
   "touch.jump": "Sprung",
   "touch.crouch": "Ducken",
   "touch.crouchTitle": "Ducken umschalten",

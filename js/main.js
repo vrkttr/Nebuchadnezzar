@@ -361,6 +361,7 @@ function start(token) {
         ownPlayerId = message.id;
         gameState.player.classId = message.classId ?? null;
         if (message.autoFullscreen) armAutoFullscreen();
+        touchControls.setMode(message.touchControls);
         audio.applySettings(message.audio);
         ownWeapon = message.equipment?.weapon ?? null;
         enterZone(message, true).then(() => {
@@ -604,7 +605,7 @@ function start(token) {
     }
   });
 
-  const touchToggleButton = document.getElementById('touch-toggle');
+  const TOUCH_PIXEL_RATIO_LIMIT = 1.25;
   const touchControls = createTouchControls({
     canvas: renderer.domElement,
     labels: {
@@ -618,9 +619,11 @@ function start(token) {
     onRotate: (dx, dy) => thirdPersonCamera.rotate(dx, dy),
     onZoom: (delta) => thirdPersonCamera.zoom(delta),
     onCycleTarget: () => cycleTarget(),
-    onToggle: (enabled) => touchToggleButton?.classList.toggle('is-on', enabled),
+    onToggle: (enabled) => {
+      renderer.setPixelRatio(enabled ? Math.min(window.devicePixelRatio || 1, TOUCH_PIXEL_RATIO_LIMIT) : window.devicePixelRatio || 1);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    },
   });
-  touchToggleButton?.addEventListener('click', () => touchControls.toggle());
 
   const ABILITY_SLOT_BY_KEY = {
     Digit1: 1,

@@ -11,6 +11,9 @@ renderPageStart(t('credits.title'), 'credits.php', true, true);
 ?>
 <p class="portal-lead"><?= th('credits.lead') ?></p>
 
+<h2 class="nu-title"><?= th('credits.own.heading') ?></h2>
+<p><?= th('credits.own.text') ?></p>
+
 <h2 class="nu-title"><?= th('credits.icons.heading') ?></h2>
 <p>
 <?= t('credits.icons.text', ['source' => $sourceLink, 'license' => $licenseLink]) ?>
@@ -38,5 +41,10 @@ renderPageStart(t('credits.title'), 'credits.php', true, true);
 <ul>
 <li><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a>, <?= th('credits.license.mit') ?>, &copy; three.js authors</li>
 <li><a href="https://howlerjs.com" target="_blank" rel="noopener">howler.js</a>, <?= th('credits.license.mit') ?>, &copy; 2013-2020 James Simpson <?= th('credits.and') ?> GoldFire Studios, Inc.</li>
+<li><a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>, <?= th('credits.license.mit') ?>, &copy; OpenJS Foundation <?= th('credits.and') ?> Node.js contributors</li>
+<li><a href="https://github.com/websockets/ws" target="_blank" rel="noopener">ws</a>, <?= th('credits.license.mit') ?>, &copy; Einar Otto Stangvik <?= th('credits.and') ?> contributors</li>
+<li><a href="https://github.com/sidorares/node-mysql2" target="_blank" rel="noopener">mysql2</a>, <?= th('credits.license.mit') ?>, &copy; Andrey Sidorov <?= th('credits.and') ?> contributors</li>
+<li><a href="https://mariadb.org" target="_blank" rel="noopener">MariaDB</a>, GPL v2, &copy; MariaDB Foundation</li>
+<li><a href="https://www.mapeditor.org" target="_blank" rel="noopener">Tiled</a> (<?= th('credits.tiled.note') ?>), &copy; Thorbj&oslash;rn Lindeijer</li>
 </ul>
 <?php renderPageEnd();

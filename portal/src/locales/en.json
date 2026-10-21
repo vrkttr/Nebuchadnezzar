@@ -128,5 +128,13 @@
   "class.scout.description": "You know the back routes and find what others overlook. You move faster, get noticed later and pick up more gold.",
   "class.scout.bonus": "+10% movement speed, −20% enemy aggro range, +25% gold from loot",
   "portal.music.on": "Music: on",
-  "portal.music.off": "Music: off"
+  "portal.music.off": "Music: off",
+  "settings.touchControls": "Touch controls",
+  "settings.touchControls.auto": "Automatic",
+  "settings.touchControls.on": "Always on",
+  "settings.touchControls.off": "Always off",
+  "settings.touchControlsHint": "Shows the control stick and the jump, crouch and target buttons. Automatic detects touch devices. The change applies the next time the game starts.",
+  "credits.own.heading": "Original content",
+  "credits.own.text": "The game world, 3D models, textures, logo, interface, sound effects, menu music and the menu background video are original works made for Sektor Sieben, unless credited otherwise below.",
+  "credits.tiled.note": "zone world definition"
 }

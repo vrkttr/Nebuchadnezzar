@@ -1987,24 +1987,6 @@ textarea {
   color: #7fc8ff;
 }
 
-#touch-toggle svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-  pointer-events: none;
-}
-
-#touch-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#touch-toggle.is-on {
-  border-color: var(--nu-amber);
-  color: var(--nu-amber);
-}
-
 #touch-controls {
   display: none;
 }
@@ -2026,10 +2008,10 @@ html.touch-ui body {
 
 .touch-stick {
   position: absolute;
-  left: calc(28px + env(safe-area-inset-left));
-  bottom: 28px;
-  width: 132px;
-  height: 132px;
+  left: calc(calc(28px * var(--touch-scale, 1)) + env(safe-area-inset-left));
+  bottom: calc(28px * var(--touch-scale, 1));
+  width: calc(132px * var(--touch-scale, 1));
+  height: calc(132px * var(--touch-scale, 1));
   box-sizing: border-box;
   border-radius: 50%;
   border: 3px solid rgba(255, 255, 255, 0.28);
@@ -2042,8 +2024,8 @@ html.touch-ui body {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 56px;
-  height: 56px;
+  width: calc(56px * var(--touch-scale, 1));
+  height: calc(56px * var(--touch-scale, 1));
   box-sizing: border-box;
   border-radius: 50%;
   transform: translate(-50%, -50%);
@@ -2061,7 +2043,7 @@ html.touch-ui body {
   background: rgba(20, 20, 18, 0.5);
   color: var(--nu-text);
   font-family: var(--nu-font-display);
-  font-size: 13px;
+  font-size: calc(13px * var(--touch-scale, 1));
   letter-spacing: 0.04em;
   padding: 0;
   pointer-events: auto;
@@ -2075,32 +2057,32 @@ html.touch-ui body {
 }
 
 .touch-jump {
-  right: calc(28px + env(safe-area-inset-right));
-  bottom: 28px;
-  width: 84px;
-  height: 84px;
+  right: calc(calc(28px * var(--touch-scale, 1)) + env(safe-area-inset-right));
+  bottom: calc(28px * var(--touch-scale, 1));
+  width: calc(84px * var(--touch-scale, 1));
+  height: calc(84px * var(--touch-scale, 1));
 }
 
 .touch-target {
-  right: calc(124px + env(safe-area-inset-right));
-  bottom: 96px;
-  width: 62px;
-  height: 62px;
+  right: calc(calc(124px * var(--touch-scale, 1)) + env(safe-area-inset-right));
+  bottom: calc(96px * var(--touch-scale, 1));
+  width: calc(62px * var(--touch-scale, 1));
+  height: calc(62px * var(--touch-scale, 1));
 }
 
 .touch-crouch {
-  right: calc(36px + env(safe-area-inset-right));
-  bottom: 124px;
-  width: 62px;
-  height: 62px;
+  right: calc(calc(36px * var(--touch-scale, 1)) + env(safe-area-inset-right));
+  bottom: calc(124px * var(--touch-scale, 1));
+  width: calc(62px * var(--touch-scale, 1));
+  height: calc(62px * var(--touch-scale, 1));
 }
 
 html.touch-ui #chat-window {
-  bottom: 176px;
+  bottom: calc(176px * var(--touch-scale, 1));
 }
 
 html.touch-ui #dock {
-  bottom: 204px;
+  bottom: calc(204px * var(--touch-scale, 1));
 }
 
 html.touch-ui .action-slot,
