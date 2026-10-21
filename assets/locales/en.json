@@ -372,5 +372,11 @@
   "guild.inviteSent": "Guild invitation sent to {name}.",
   "guild.memberJoined": "{name} joined the guild.",
   "guild.left": "You left the guild {name}.",
-  "guild.memberLeft": "{name} left the guild."
+  "guild.memberLeft": "{name} left the guild.",
+  "hud.menu.touch": "Touch controls",
+  "touch.jump": "Jump",
+  "touch.crouch": "Crouch",
+  "touch.crouchTitle": "Toggle crouch",
+  "touch.target": "Target",
+  "touch.targetTitle": "Next target"
 }

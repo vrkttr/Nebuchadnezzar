@@ -41,6 +41,7 @@ const [
   { createAbilitiesWindow },
   { createAbilityDrag },
   { allowLeave, armAutoFullscreen },
+  { createTouchControls },
   { createHud },
   { createLoadingScreen },
   { createAudio },
@@ -89,6 +90,7 @@ const [
   import(v('./ui/AbilitiesWindow.js')),
   import(v('./ui/AbilityDrag.js')),
   import(v('./input/Keyboard.js')),
+  import(v('./input/Touch.js')),
   import(v('./hud/Hud.js')),
   import(v('./ui/LoadingScreen.js')),
   import(v('./audio/Audio.js')),
@@ -601,6 +603,24 @@ function start(token) {
       renderer.domElement.style.cursor = 'pointer';
     }
   });
+
+  const touchToggleButton = document.getElementById('touch-toggle');
+  const touchControls = createTouchControls({
+    canvas: renderer.domElement,
+    labels: {
+      jump: t('touch.jump'),
+      jumpTitle: t('touch.jump'),
+      crouch: t('touch.crouch'),
+      crouchTitle: t('touch.crouchTitle'),
+      target: t('touch.target'),
+      targetTitle: t('touch.targetTitle'),
+    },
+    onRotate: (dx, dy) => thirdPersonCamera.rotate(dx, dy),
+    onZoom: (delta) => thirdPersonCamera.zoom(delta),
+    onCycleTarget: () => cycleTarget(),
+    onToggle: (enabled) => touchToggleButton?.classList.toggle('is-on', enabled),
+  });
+  touchToggleButton?.addEventListener('click', () => touchControls.toggle());
 
   const ABILITY_SLOT_BY_KEY = {
     Digit1: 1,

@@ -41,6 +41,7 @@ export function armAutoFullscreen() {
 
   window.addEventListener('mousedown', trigger, true);
   window.addEventListener('keydown', trigger, true);
+  window.addEventListener('touchend', trigger, true);
 }
 
 function shouldBlock(event) {

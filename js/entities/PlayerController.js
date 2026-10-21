@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { isKeyDown } from '../input/Keyboard.js';
+import { touchInput } from '../input/Touch.js';
 
 export function createPlayerController(camera) {
   const forward = new THREE.Vector3();
@@ -34,6 +35,11 @@ export function createPlayerController(camera) {
     if (isKeyDown('KeyD')) moveDirection.add(right);
     if (isKeyDown('KeyA')) moveDirection.sub(right);
 
+    if (touchInput.active && (touchInput.moveX !== 0 || touchInput.moveY !== 0)) {
+      moveDirection.addScaledVector(forward, touchInput.moveY);
+      moveDirection.addScaledVector(right, touchInput.moveX);
+    }
+
     if (moveDirection.lengthSq() > 0) {
       moveDirection.normalize();
     }
@@ -41,9 +47,9 @@ export function createPlayerController(camera) {
     return {
       moveX: moveDirection.x,
       moveZ: moveDirection.z,
-      jump: isKeyDown('Space'),
-      run: isKeyDown('ShiftLeft') || isKeyDown('ShiftRight'),
-      crouch: isKeyDown('ControlLeft') || isKeyDown('ControlRight'),
+      jump: isKeyDown('Space') || (touchInput.active && touchInput.jump),
+      run: isKeyDown('ShiftLeft') || isKeyDown('ShiftRight') || (touchInput.active && touchInput.run),
+      crouch: isKeyDown('ControlLeft') || isKeyDown('ControlRight') || (touchInput.active && touchInput.crouch),
     };
   }
 

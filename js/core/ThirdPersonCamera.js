@@ -155,5 +155,16 @@ export function createThirdPersonCamera(camera, domElement) {
     currentDistance = Math.min(currentDistance, distance);
   }
 
-  return { update, setBlockers, setYaw, getDistance, setDistance };
+  function rotate(deltaX, deltaY) {
+    const ROTATE_SPEED = 0.005;
+    yaw -= deltaX * ROTATE_SPEED;
+    pitch += deltaY * ROTATE_SPEED;
+    pitch = Math.max(MIN_PITCH, Math.min(MAX_PITCH, pitch));
+  }
+
+  function zoom(delta) {
+    distance = Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, distance + delta));
+  }
+
+  return { update, setBlockers, setYaw, getDistance, setDistance, rotate, zoom };
 }

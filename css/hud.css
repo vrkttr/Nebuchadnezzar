@@ -1986,3 +1986,305 @@ textarea {
 .nameplate.nameplate-party {
   color: #7fc8ff;
 }
+
+#touch-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  pointer-events: none;
+}
+
+#touch-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#touch-toggle.is-on {
+  border-color: var(--nu-amber);
+  color: var(--nu-amber);
+}
+
+#touch-controls {
+  display: none;
+}
+
+html.touch-ui #touch-controls {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html.touch-ui body {
+  touch-action: none;
+}
+
+.touch-stick {
+  position: absolute;
+  left: calc(28px + env(safe-area-inset-left));
+  bottom: 28px;
+  width: 132px;
+  height: 132px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.28);
+  background: rgba(20, 20, 18, 0.38);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.touch-stick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(200, 190, 160, 0.55);
+  border: 2px solid var(--nu-line);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.touch-button {
+  position: absolute;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.28);
+  background: rgba(20, 20, 18, 0.5);
+  color: var(--nu-text);
+  font-family: var(--nu-font-display);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 0;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.touch-button.is-down {
+  border-color: var(--nu-amber);
+  color: var(--nu-amber);
+  background: rgba(60, 44, 16, 0.65);
+}
+
+.touch-jump {
+  right: calc(28px + env(safe-area-inset-right));
+  bottom: 28px;
+  width: 84px;
+  height: 84px;
+}
+
+.touch-target {
+  right: calc(124px + env(safe-area-inset-right));
+  bottom: 96px;
+  width: 62px;
+  height: 62px;
+}
+
+.touch-crouch {
+  right: calc(36px + env(safe-area-inset-right));
+  bottom: 124px;
+  width: 62px;
+  height: 62px;
+}
+
+html.touch-ui #chat-window {
+  bottom: 176px;
+}
+
+html.touch-ui #dock {
+  bottom: 204px;
+}
+
+html.touch-ui .action-slot,
+html.touch-ui .bag-slot,
+html.touch-ui #minimap-buttons button {
+  touch-action: none;
+}
+
+@media (max-height: 560px) {
+  :root {
+    --action-slot: 40px;
+    --action-gap: 3px;
+  }
+
+  .frame {
+    top: 8px;
+    width: 170px;
+    padding: 5px;
+    gap: 6px;
+  }
+
+  #player-frame {
+    left: 8px;
+  }
+
+  #target-frame {
+    left: 186px;
+  }
+
+  .portrait {
+    width: 38px;
+    height: 38px;
+  }
+
+  #minimap {
+    top: 8px;
+    right: 8px;
+    width: 110px;
+  }
+
+  #minimap-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  #zone-name {
+    font-size: 10px;
+  }
+
+  #quest-tracker {
+    top: 128px;
+    right: 8px;
+    width: 150px;
+    max-height: 64px;
+    overflow: hidden;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  #group-frames {
+    top: 72px;
+    left: 8px;
+    width: 150px;
+  }
+
+  #dock {
+    display: contents;
+  }
+
+  #minimap-buttons {
+    position: fixed;
+    top: 8px;
+    right: 128px;
+    gap: 3px;
+    pointer-events: auto;
+  }
+
+  #minimap-buttons button {
+    width: 28px;
+    height: 28px;
+  }
+
+  #minimap-buttons button[data-i18n-title="hud.menu.perks"],
+  #minimap-buttons button[data-i18n-title="hud.menu.quests"],
+  #minimap-buttons button[data-i18n-title="hud.menu.achievements"],
+  #minimap-buttons button[data-i18n-title="hud.menu.group"] {
+    display: none;
+  }
+
+  #bag-bar {
+    position: fixed;
+    bottom: 56px;
+    left: calc(50% + 150px);
+    gap: 3px;
+  }
+
+  .bag-slot {
+    width: 30px;
+    height: 30px;
+  }
+
+  #bag-bar .bag-slot:not(:first-child) {
+    display: none;
+  }
+
+  #gold-display {
+    position: fixed;
+    bottom: 12px;
+    left: calc(50% + 150px);
+    font-size: 11px;
+  }
+
+  #action-bar {
+    bottom: 8px;
+    display: grid;
+    grid-template-columns: repeat(6, var(--action-slot));
+    padding: 5px;
+  }
+
+  #xp-bar {
+    bottom: 108px;
+    width: calc(6 * var(--action-slot) + 5 * var(--action-gap) + 10px);
+  }
+
+  #cast-bar {
+    bottom: 124px;
+  }
+
+  #crouch-indicator {
+    bottom: 128px;
+  }
+
+  #dialogue-box {
+    bottom: 120px;
+    max-width: min(480px, calc(100vw - 340px));
+    padding: 10px 14px;
+  }
+
+  #chat-window {
+    bottom: 8px;
+    left: 8px;
+    width: 230px;
+    max-height: 120px;
+  }
+
+  #chat-messages {
+    min-height: 70px;
+    font-size: 11px;
+  }
+
+  html.touch-ui #chat-window {
+    bottom: 176px;
+    max-height: 90px;
+  }
+
+  html.touch-ui #chat-messages {
+    min-height: 50px;
+  }
+
+  .window {
+    max-height: calc(100vh - 16px);
+    overflow: auto;
+  }
+
+  #inventory-window {
+    right: 8px;
+    bottom: 8px;
+  }
+
+  #abilities-window {
+    left: 8px;
+    top: 8px;
+  }
+
+  #npc-window,
+  #intro-window {
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(420px, calc(100vw - 16px));
+  }
+
+  #character-window {
+    left: 8px;
+    top: 8px;
+  }
+}
