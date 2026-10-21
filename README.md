@@ -1,4 +1,4 @@
-# Sektor Sieben
+# Sektor 7
 
 Browserbasiertes, serverautoritatives 3D-MMORPG (Aufbau von Grund auf).
 

@@ -7,7 +7,7 @@
   "portal.menu.createCharacter": "Charakter erstellen",
   "portal.menu.settings": "Einstellungen",
   "portal.menu.logout": "Abmelden",
-  "portal.pageTitle": "{heading} - Sektor Sieben",
+  "portal.pageTitle": "{heading} - Sektor 7",
   "login.title": "Anmeldung",
   "login.registered": "Registrierung erfolgreich, bitte einloggen.",
   "login.username": "Benutzername",
@@ -135,6 +135,6 @@
   "settings.touchControls.off": "Immer aus",
   "settings.touchControlsHint": "Blendet Steuerstick, Sprung-, Ducken- und Ziel-Button ein. Automatisch erkennt Touch-Geräte. Die Änderung gilt beim nächsten Start des Spiels.",
   "credits.own.heading": "Eigene Inhalte",
-  "credits.own.text": "Spielwelt, 3D-Modelle, Texturen, Logo, Oberfläche, Geräusche, Menümusik und Menü-Hintergrundvideo sind eigene Arbeiten für Sektor Sieben, soweit nicht unten anders genannt.",
+  "credits.own.text": "Spielwelt, 3D-Modelle, Texturen, Logo, Oberfläche, Geräusche, Menümusik und Menü-Hintergrundvideo sind eigene Arbeiten für Sektor 7, soweit nicht unten anders genannt.",
   "credits.tiled.note": "Weltdefinition der Zonen"
 }

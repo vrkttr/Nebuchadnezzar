@@ -7,7 +7,7 @@
   "portal.menu.createCharacter": "Create character",
   "portal.menu.settings": "Settings",
   "portal.menu.logout": "Log out",
-  "portal.pageTitle": "{heading} - Sektor Sieben",
+  "portal.pageTitle": "{heading} - Sektor 7",
   "login.title": "Log in",
   "login.registered": "Registration successful, please log in.",
   "login.username": "Username",
@@ -135,6 +135,6 @@
   "settings.touchControls.off": "Always off",
   "settings.touchControlsHint": "Shows the control stick and the jump, crouch and target buttons. Automatic detects touch devices. The change applies the next time the game starts.",
   "credits.own.heading": "Original content",
-  "credits.own.text": "The game world, 3D models, textures, logo, interface, sound effects, menu music and the menu background video are original works made for Sektor Sieben, unless credited otherwise below.",
+  "credits.own.text": "The game world, 3D models, textures, logo, interface, sound effects, menu music and the menu background video are original works made for Sektor 7, unless credited otherwise below.",
   "credits.tiled.note": "zone world definition"
 }

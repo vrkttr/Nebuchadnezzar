@@ -50,7 +50,7 @@ const dbPool = mysql.createPool({
   password: process.env.DB_PASSWORD,
 });
 
-console.log(`Sektor Sieben Game-Server läuft auf Port ${PORT}`);
+console.log(`Sektor 7 Game-Server läuft auf Port ${PORT}`);
 
 const WALK_SPEED = 2;
 const RUN_SPEED = 4;

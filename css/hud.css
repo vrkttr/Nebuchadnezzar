@@ -1484,7 +1484,9 @@ button {
   position: absolute;
   top: 24px;
   left: 50%;
-  height: clamp(90px, 15vh, 150px);
+  height: clamp(64px, 11vh, 112px);
+  max-width: 86vw;
+  object-fit: contain;
   transform: translateX(-50%);
   filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.7)) drop-shadow(0 0 14px rgba(0, 0, 0, 0.7));
 }

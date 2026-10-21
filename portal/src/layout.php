@@ -53,8 +53,8 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= htmlspecialchars(t('portal.pageTitle', ['heading' => $title])) ?></title>
 <link rel="stylesheet" href="assets/ui/nebu-ui.css">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=<?= GAME_VERSION ?>">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=<?= GAME_VERSION ?>">
 <link rel="preload" as="image" href="assets/menu-scene.jpg?v=<?= GAME_VERSION ?>">
 <link rel="stylesheet" href="assets/portal.css">
 </head>
@@ -64,7 +64,7 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <div class="portal-scrim nu-scrim"></div>
 <div class="portal-layout">
 <nav class="portal-nav">
-<a class="portal-logo" href="index.php"><img src="assets/logo.svg" alt="Sektor Sieben"></a>
+<a class="portal-logo" href="index.php"><img src="assets/logo.svg?v=<?= GAME_VERSION ?>" alt="Sektor 7"></a>
 <ul class="nu-menu">
 <?php foreach ($items as [$label, $href]): ?>
 <li><a class="nu-menu-item<?= $href === $active ? ' is-active' : '' ?>" href="<?= htmlspecialchars($href) ?>"><?= htmlspecialchars($label) ?></a></li>
