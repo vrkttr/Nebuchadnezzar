@@ -1,0 +1,8280 @@
+{
+ "compressionlevel": -1,
+ "height": 160,
+ "infinite": false,
+ "layers": [
+  {
+   "draworder": "topdown",
+   "id": 1,
+   "name": "Boden",
+   "objects": [
+    {
+     "id": 2,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 1088,
+     "y": 1088,
+     "width": 2944,
+     "height": 2944,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 608,
+     "y": 2432.0,
+     "width": 3904,
+     "height": 256,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.012
+      },
+      {
+       "name": "texturLaengs",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 608,
+     "y": 2384.0,
+     "width": 3904,
+     "height": 48.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.011
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 608,
+     "y": 2688.0,
+     "width": 3904,
+     "height": 48.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.011
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 2688.0,
+     "y": 608,
+     "width": 3904,
+     "height": 256,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.012
+      },
+      {
+       "name": "texturLaengs",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 2384.0,
+     "y": 608,
+     "width": 48.0,
+     "height": 3904,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.011
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 2688.0,
+     "y": 608,
+     "width": 48.0,
+     "height": 3904,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.011
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 1088,
+     "y": 1712.0,
+     "width": 2944,
+     "height": 160,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "asphalt"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.013
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 1088,
+     "y": 3248.0,
+     "width": 2944,
+     "height": 160,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "asphalt"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.013
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 2240,
+     "y": 2240,
+     "width": 640,
+     "height": 640,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.014
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a8a496"
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "name": "",
+     "type": "flecken",
+     "class": "flecken",
+     "x": 1152,
+     "y": 1984,
+     "width": 384,
+     "height": 256,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "grass"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c4c4a4"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "count",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "minRadius",
+       "type": "float",
+       "value": 0.4
+      },
+      {
+       "name": "maxRadius",
+       "type": "float",
+       "value": 0.9
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "name": "",
+     "type": "flecken",
+     "class": "flecken",
+     "x": 3008,
+     "y": 1408,
+     "width": 960,
+     "height": 192,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "grass"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c4c4a4"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 42
+      },
+      {
+       "name": "count",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "minRadius",
+       "type": "float",
+       "value": 0.4
+      },
+      {
+       "name": "maxRadius",
+       "type": "float",
+       "value": 0.9
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "name": "",
+     "type": "flecken",
+     "class": "flecken",
+     "x": 1152,
+     "y": 3456,
+     "width": 448,
+     "height": 320,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "grass"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c4c4a4"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 43
+      },
+      {
+       "name": "count",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "minRadius",
+       "type": "float",
+       "value": 0.4
+      },
+      {
+       "name": "maxRadius",
+       "type": "float",
+       "value": 0.9
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "name": "",
+     "type": "flecken",
+     "class": "flecken",
+     "x": 3072,
+     "y": 3456,
+     "width": 896,
+     "height": 320,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "grass"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c4c4a4"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 44
+      },
+      {
+       "name": "count",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "minRadius",
+       "type": "float",
+       "value": 0.4
+      },
+      {
+       "name": "maxRadius",
+       "type": "float",
+       "value": 0.9
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 1216,
+     "y": 3488,
+     "width": 960,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.012
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "",
+     "type": "flecken",
+     "class": "flecken",
+     "x": 1216,
+     "y": 3488,
+     "width": 960,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "grass"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c4c4a4"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 45
+      },
+      {
+       "name": "count",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "minRadius",
+       "type": "float",
+       "value": 0.5
+      },
+      {
+       "name": "maxRadius",
+       "type": "float",
+       "value": 1.0
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "type": "objectgroup",
+   "visible": true,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "draworder": "topdown",
+   "id": 2,
+   "name": "Gebaeude",
+   "objects": [
+    {
+     "id": 18,
+     "name": "",
+     "type": "plattenbau",
+     "class": "plattenbau",
+     "x": 1728,
+     "y": 2112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "cells",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "floors",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "depth",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "inhabited",
+       "type": "string",
+       "value": "2,6"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 101
+      },
+      {
+       "name": "ivyDensity",
+       "type": "float",
+       "value": 0.65
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "",
+     "type": "plattenbau",
+     "class": "plattenbau",
+     "x": 1728,
+     "y": 1472,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "cells",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "floors",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "depth",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "inhabited",
+       "type": "string",
+       "value": "4,8"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 102
+      },
+      {
+       "name": "ivyDensity",
+       "type": "float",
+       "value": 0.65
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "",
+     "type": "halle",
+     "class": "halle",
+     "x": 3392,
+     "y": 2112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 30
+      },
+      {
+       "name": "depth",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 103
+      },
+      {
+       "name": "door",
+       "type": "int",
+       "value": -8
+      },
+      {
+       "name": "gate",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#b8beb4"
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "",
+     "type": "garagen",
+     "class": "garagen",
+     "x": 3392,
+     "y": 1472,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "count",
+       "type": "int",
+       "value": 8
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 104
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "",
+     "type": "plattenbau",
+     "class": "plattenbau",
+     "x": 1728,
+     "y": 3008,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "cells",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "floors",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "depth",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "inhabited",
+       "type": "string",
+       "value": "3,7"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 105
+      },
+      {
+       "name": "ivyDensity",
+       "type": "float",
+       "value": 0.65
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "",
+     "type": "plattenbau",
+     "class": "plattenbau",
+     "x": 3392,
+     "y": 3008,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "cells",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "floors",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "depth",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "inhabited",
+       "type": "string",
+       "value": "1,5"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 106
+      },
+      {
+       "name": "ivyDensity",
+       "type": "float",
+       "value": 0.65
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "name": "",
+     "type": "wasserturm",
+     "class": "wasserturm",
+     "x": 3008,
+     "y": 3648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 107
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "name": "",
+     "type": "garagen",
+     "class": "garagen",
+     "x": 3584,
+     "y": 3648,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "count",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 108
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "type": "objectgroup",
+   "visible": true,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "draworder": "topdown",
+   "id": 3,
+   "name": "Objekte",
+   "objects": [
+    {
+     "id": 37,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 1744.0,
+     "y": 1088,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 10
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 1744.0,
+     "y": 4032,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 14
+      }
+     ]
+    },
+    {
+     "id": 41,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 1088,
+     "y": 1744.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 18
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 4032,
+     "y": 1744.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 22
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 3376.0,
+     "y": 1088,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 3376.0,
+     "y": 4032,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 16
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 1088,
+     "y": 3376.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 20
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "name": "",
+     "type": "zaun",
+     "class": "zaun",
+     "x": 4032,
+     "y": 3376.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 24
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2336.0,
+     "y": 1126.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 31
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2336.0,
+     "y": 3993.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 32
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 1126.4,
+     "y": 2336.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 33
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 3993.6,
+     "y": 2336.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 34
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2784.0,
+     "y": 1126.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 31
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 63,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2784.0,
+     "y": 3993.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 32
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 65,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 1126.4,
+     "y": 2784.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 33
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 67,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 3993.6,
+     "y": 2784.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 34
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 69,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2412.8,
+     "y": 1088.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 71,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2707.2,
+     "y": 1088.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 73,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2412.8,
+     "y": 4032.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 75,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2707.2,
+     "y": 4032.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 77,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1088.0,
+     "y": 2412.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 79,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1088.0,
+     "y": 2707.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 81,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 4032.0,
+     "y": 2412.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 83,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 4032.0,
+     "y": 2707.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 85,
+     "name": "",
+     "type": "marktstand",
+     "class": "marktstand",
+     "x": 2352.0,
+     "y": 2304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 89,
+     "name": "",
+     "type": "marktstand",
+     "class": "marktstand",
+     "x": 2768.0,
+     "y": 2304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 93,
+     "name": "",
+     "type": "marktstand",
+     "class": "marktstand",
+     "x": 2352.0,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 97,
+     "name": "",
+     "type": "marktstand",
+     "class": "marktstand",
+     "x": 2768.0,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 101,
+     "name": "",
+     "type": "marktstand",
+     "class": "marktstand",
+     "x": 2288.0,
+     "y": 2342.4,
+     "width": 0,
+     "height": 0,
+     "rotation": -90,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 106,
+     "name": "",
+     "type": "bank",
+     "class": "bank",
+     "x": 2854.4,
+     "y": 2265.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 107,
+     "name": "",
+     "type": "bank",
+     "class": "bank",
+     "x": 2480.0,
+     "y": 2265.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 108,
+     "name": "",
+     "type": "bank",
+     "class": "bank",
+     "x": 2640.0,
+     "y": 2854.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 109,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2256.0,
+     "y": 2256.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 111,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2864.0,
+     "y": 2256.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 113,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2256.0,
+     "y": 2864.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 115,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2864.0,
+     "y": 2864.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 117,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 2928.0,
+     "y": 2528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 201
+      },
+      {
+       "name": "burning",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 119,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 2950.4,
+     "y": 2796.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 20,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 202
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 121,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 2182.4,
+     "y": 2764.8,
+     "width": 0,
+     "height": 0,
+     "rotation": -15,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 203
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 123,
+     "name": "",
+     "type": "muelltonne",
+     "class": "muelltonne",
+     "x": 2201.6,
+     "y": 2252.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "open",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 125,
+     "name": "",
+     "type": "muelltonne",
+     "class": "muelltonne",
+     "x": 2166.4,
+     "y": 2252.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "open",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 127,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1280,
+     "y": 2387.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 129,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1408,
+     "y": 2732.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 131,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1664,
+     "y": 2387.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 133,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1792,
+     "y": 2732.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 135,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2048,
+     "y": 2387.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 137,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2176,
+     "y": 2732.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 139,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 3072,
+     "y": 2387.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 141,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 3200,
+     "y": 2732.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 143,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 3456,
+     "y": 2387.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 145,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 3584,
+     "y": 2732.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 147,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 3840,
+     "y": 2387.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 149,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 3968,
+     "y": 2732.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 151,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2732.8,
+     "y": 1280,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 153,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2387.2,
+     "y": 1408,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 155,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2732.8,
+     "y": 1600,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 157,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2387.2,
+     "y": 1728,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 159,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2732.8,
+     "y": 3520,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 161,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2387.2,
+     "y": 3648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 163,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2732.8,
+     "y": 3840,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 165,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 2387.2,
+     "y": 3968,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 167,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 1504,
+     "y": 2758.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 4,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 51
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#d9a58a"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 169,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 3648,
+     "y": 2368.0,
+     "width": 0,
+     "height": 0,
+     "rotation": -3,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 52
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#a9b890"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "tarped",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 171,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 2636.8,
+     "y": 3552,
+     "width": 0,
+     "height": 0,
+     "rotation": 88,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 53
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#c9c9c0"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 173,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 2489.6,
+     "y": 1568,
+     "width": 0,
+     "height": 0,
+     "rotation": 93,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 54
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#b0b8c4"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 175,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 2432.0,
+     "y": 4240.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 5,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 55
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#c9c9c0"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 177,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 1376,
+     "y": 1792,
+     "width": 0,
+     "height": 0,
+     "rotation": 2,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 56
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#b0b8c4"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 179,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 1920,
+     "y": 2672.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 6,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 61
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 181,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 3232,
+     "y": 2438.4,
+     "width": 0,
+     "height": 0,
+     "rotation": -8,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 62
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 183,
+     "name": "",
+     "type": "hochbeet",
+     "class": "hochbeet",
+     "x": 1376,
+     "y": 1856,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 71
+      },
+      {
+       "name": "length",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 184,
+     "name": "",
+     "type": "hochbeet",
+     "class": "hochbeet",
+     "x": 1376,
+     "y": 1900.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 72
+      },
+      {
+       "name": "length",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 185,
+     "name": "",
+     "type": "hochbeet",
+     "class": "hochbeet",
+     "x": 1488.0,
+     "y": 1856,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 73
+      },
+      {
+       "name": "length",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 186,
+     "name": "",
+     "type": "hochbeet",
+     "class": "hochbeet",
+     "x": 3680,
+     "y": 3280.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 74
+      },
+      {
+       "name": "length",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 187,
+     "name": "",
+     "type": "hochbeet",
+     "class": "hochbeet",
+     "x": 3680,
+     "y": 3328,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 75
+      },
+      {
+       "name": "length",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 188,
+     "name": "",
+     "type": "bank",
+     "class": "bank",
+     "x": 2112,
+     "y": 1824,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 189,
+     "name": "",
+     "type": "muelltonne",
+     "class": "muelltonne",
+     "x": 1286.4,
+     "y": 2793.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "open",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 191,
+     "name": "",
+     "type": "muelltonne",
+     "class": "muelltonne",
+     "x": 3795.2,
+     "y": 2323.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "open",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 193,
+     "name": "",
+     "type": "muelltonne",
+     "class": "muelltonne",
+     "x": 2000.0,
+     "y": 3251.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "open",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 195,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 3856.0,
+     "y": 1836.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 211
+      },
+      {
+       "name": "burning",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 197,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 3840.0,
+     "y": 1785.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 10,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 212
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 199,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 3840,
+     "y": 1216,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#b86a4a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 201,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 3616,
+     "y": 1216,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#5a7a6a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 203,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 3008,
+     "y": 1184,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#a8924a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 205,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 3264,
+     "y": 1184,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#6a7a8a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 207,
+     "name": "",
+     "type": "kanaldeckel",
+     "class": "kanaldeckel",
+     "x": 1696,
+     "y": 3667.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 211,
+     "name": "",
+     "type": "zelt",
+     "class": "zelt",
+     "x": 1264.0,
+     "y": 3632.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 213,
+     "name": "",
+     "type": "zelt",
+     "class": "zelt",
+     "x": 2096.0,
+     "y": 3616,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 215,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1408,
+     "y": 3788.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 221
+      },
+      {
+       "name": "burning",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 217,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1452.8,
+     "y": 3782.4,
+     "width": 0,
+     "height": 0,
+     "rotation": -12,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 222
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 219,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1491.2,
+     "y": 3788.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 15,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 223
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 221,
+     "name": "",
+     "type": "bank",
+     "class": "bank",
+     "x": 1856,
+     "y": 3795.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 222,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1760,
+     "y": 3568.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 224,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1584.0,
+     "y": 3801.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 226,
+     "name": "",
+     "type": "laterne",
+     "class": "laterne",
+     "x": 1984,
+     "y": 3795.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "lit",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 228,
+     "name": "",
+     "type": "mast",
+     "class": "mast",
+     "x": 1280,
+     "y": 2739.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.5
+      }
+     ]
+    },
+    {
+     "id": 230,
+     "name": "",
+     "type": "mast",
+     "class": "mast",
+     "x": 1696,
+     "y": 2739.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.5
+      }
+     ]
+    },
+    {
+     "id": 232,
+     "name": "",
+     "type": "mast",
+     "class": "mast",
+     "x": 2112,
+     "y": 2739.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.5
+      }
+     ]
+    },
+    {
+     "id": 234,
+     "name": "",
+     "type": "mast",
+     "class": "mast",
+     "x": 3008,
+     "y": 2739.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.5
+      }
+     ]
+    },
+    {
+     "id": 236,
+     "name": "",
+     "type": "mast",
+     "class": "mast",
+     "x": 3424,
+     "y": 2739.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.5
+      }
+     ]
+    },
+    {
+     "id": 238,
+     "name": "",
+     "type": "mast",
+     "class": "mast",
+     "x": 3840,
+     "y": 2739.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.5
+      }
+     ]
+    },
+    {
+     "id": 240,
+     "name": "",
+     "type": "leitung",
+     "class": "leitung",
+     "x": 1280,
+     "y": 2739.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "polyline": [
+      {
+       "x": 0,
+       "y": 0
+      },
+      {
+       "x": 416,
+       "y": 0
+      },
+      {
+       "x": 832,
+       "y": 0
+      },
+      {
+       "x": 1728,
+       "y": 0
+      },
+      {
+       "x": 2144,
+       "y": 0
+      },
+      {
+       "x": 2560,
+       "y": 0
+      }
+     ],
+     "properties": [
+      {
+       "name": "hoehen",
+       "type": "string",
+       "value": "7.1,6.4"
+      },
+      {
+       "name": "abstand",
+       "type": "float",
+       "value": 1.2
+      },
+      {
+       "name": "durchhang",
+       "type": "float",
+       "value": 0.9
+      }
+     ]
+    },
+    {
+     "id": 314,
+     "name": "",
+     "type": "zelt",
+     "class": "zelt",
+     "x": 832,
+     "y": 1856,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 316,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 883.2,
+     "y": 1900.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 231
+      },
+      {
+       "name": "burning",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 318,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 867.2,
+     "y": 1779.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 18,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 232
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 320,
+     "name": "",
+     "type": "zelt",
+     "class": "zelt",
+     "x": 4256,
+     "y": 3328,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 322,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 4211.2,
+     "y": 3372.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 233
+      },
+      {
+       "name": "burning",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 324,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 4236.8,
+     "y": 3251.2,
+     "width": 0,
+     "height": 0,
+     "rotation": -10,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 234
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 326,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 896,
+     "y": 3520,
+     "width": 0,
+     "height": 0,
+     "rotation": 70,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 57
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#c9c9c0"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 328,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 4256,
+     "y": 1344,
+     "width": 0,
+     "height": 0,
+     "rotation": -75,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 58
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#d9a58a"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 330,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 1600,
+     "y": 832,
+     "width": 0,
+     "height": 0,
+     "rotation": 3,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 59
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#b0b8c4"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 332,
+     "name": "",
+     "type": "auto",
+     "class": "auto",
+     "x": 3584,
+     "y": 4288,
+     "width": 0,
+     "height": 0,
+     "rotation": -4,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 60
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#a9b890"
+      },
+      {
+       "name": "wrecked",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "tarped",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 334,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 4224,
+     "y": 960,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#b86a4a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 336,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 4224,
+     "y": 4000,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#5a7a6a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 338,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 992,
+     "y": 2304,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 35
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 340,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 992,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 36
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 342,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 4128,
+     "y": 2304,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 37
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 344,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 4128,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 38
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 346,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2304,
+     "y": 992,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 39
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 348,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2816,
+     "y": 992,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 40
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 350,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2304,
+     "y": 4128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 41
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    },
+    {
+     "id": 352,
+     "name": "",
+     "type": "barrikade",
+     "class": "barrikade",
+     "x": 2816,
+     "y": 4128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 42
+      },
+      {
+       "name": "width",
+       "type": "float",
+       "value": 3.4
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "type": "objectgroup",
+   "visible": true,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "draworder": "topdown",
+   "id": 4,
+   "name": "Vegetation",
+   "objects": [
+    {
+     "id": 241,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 2347.446,
+     "y": 3480.416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.9
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 300
+      }
+     ]
+    },
+    {
+     "id": 243,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2793.719,
+     "y": 1326.204,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 301
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 244,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3912.172,
+     "y": 1484.473,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.5
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 302
+      }
+     ]
+    },
+    {
+     "id": 246,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 2765.641,
+     "y": 3617.346,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "conifer"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.1
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 303
+      }
+     ]
+    },
+    {
+     "id": 248,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2023.854,
+     "y": 2779.497,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 304
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.6
+      }
+     ]
+    },
+    {
+     "id": 249,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2321.475,
+     "y": 2162.3,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 305
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 250,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1891.894,
+     "y": 1163.528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.8
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 306
+      }
+     ]
+    },
+    {
+     "id": 252,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 3571.513,
+     "y": 3827.831,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 307
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 2.0
+      }
+     ]
+    },
+    {
+     "id": 253,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2275.524,
+     "y": 1443.56,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 308
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 254,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1688.756,
+     "y": 3924.824,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 309
+      }
+     ]
+    },
+    {
+     "id": 256,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1300.053,
+     "y": 1152.657,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.8
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 310
+      }
+     ]
+    },
+    {
+     "id": 258,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 2880.284,
+     "y": 1350.009,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.4
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 311
+      }
+     ]
+    },
+    {
+     "id": 260,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3542.606,
+     "y": 3948.577,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.9
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 312
+      }
+     ]
+    },
+    {
+     "id": 262,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1408.286,
+     "y": 3532.78,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.1
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 313
+      }
+     ]
+    },
+    {
+     "id": 264,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2856.072,
+     "y": 2121.495,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 314
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 2.0
+      }
+     ]
+    },
+    {
+     "id": 265,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3934.315,
+     "y": 3841.282,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 315
+      }
+     ]
+    },
+    {
+     "id": 267,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 2963.063,
+     "y": 3502.371,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.3
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 316
+      }
+     ]
+    },
+    {
+     "id": 269,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2282.305,
+     "y": 3818.18,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 317
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 270,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1544.13,
+     "y": 3930.123,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.1
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 318
+      }
+     ]
+    },
+    {
+     "id": 272,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3639.17,
+     "y": 1312.012,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.3
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 319
+      }
+     ]
+    },
+    {
+     "id": 274,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3620.324,
+     "y": 3805.181,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "conifer"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.7
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 320
+      }
+     ]
+    },
+    {
+     "id": 276,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 3339.842,
+     "y": 3797.645,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 321
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.6
+      }
+     ]
+    },
+    {
+     "id": 277,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3496.164,
+     "y": 1606.688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "conifer"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.2
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 322
+      }
+     ]
+    },
+    {
+     "id": 279,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 2338.315,
+     "y": 2156.227,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.1
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 323
+      }
+     ]
+    },
+    {
+     "id": 281,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 1333.043,
+     "y": 3925.994,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 324
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 282,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1184.514,
+     "y": 3951.965,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 7.9
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 325
+      }
+     ]
+    },
+    {
+     "id": 284,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3793.763,
+     "y": 3881.303,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.6
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 326
+      }
+     ]
+    },
+    {
+     "id": 286,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 2129.155,
+     "y": 1203.147,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 6.1
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 327
+      }
+     ]
+    },
+    {
+     "id": 288,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 3938.258,
+     "y": 3916.98,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 328
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 289,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1155.01,
+     "y": 2226.661,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "conifer"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.0
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 329
+      }
+     ]
+    },
+    {
+     "id": 291,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2261.444,
+     "y": 1995.803,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 330
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 292,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3168.238,
+     "y": 3627.519,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.2
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 331
+      }
+     ]
+    },
+    {
+     "id": 294,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 2894.279,
+     "y": 1559.622,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 332
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 2.0
+      }
+     ]
+    },
+    {
+     "id": 295,
+     "name": "",
+     "type": "busch",
+     "class": "busch",
+     "x": 3417.972,
+     "y": 3479.168,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 333
+      },
+      {
+       "name": "size",
+       "type": "float",
+       "value": 2.0
+      }
+     ]
+    },
+    {
+     "id": 296,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 1799.513,
+     "y": 1239.748,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.9
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 334
+      }
+     ]
+    },
+    {
+     "id": 298,
+     "name": "",
+     "type": "baum",
+     "class": "baum",
+     "x": 3312.35,
+     "y": 3949.134,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "kind",
+       "type": "string",
+       "value": "broadleaf"
+      },
+      {
+       "name": "height",
+       "type": "float",
+       "value": 8.9
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 335
+      }
+     ]
+    },
+    {
+     "id": 300,
+     "name": "",
+     "type": "grasbueschel",
+     "class": "grasbueschel",
+     "x": 1088,
+     "y": 1088,
+     "width": 2944,
+     "height": 2944,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 400
+      },
+      {
+       "name": "count",
+       "type": "int",
+       "value": 70
+      },
+      {
+       "name": "scale",
+       "type": "float",
+       "value": 0.6
+      }
+     ]
+    },
+    {
+     "id": 301,
+     "name": "",
+     "type": "grasbueschel",
+     "class": "grasbueschel",
+     "x": 608,
+     "y": 608,
+     "width": 3904,
+     "height": 480,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 401
+      },
+      {
+       "name": "count",
+       "type": "int",
+       "value": 30
+      },
+      {
+       "name": "scale",
+       "type": "float",
+       "value": 0.6
+      }
+     ]
+    },
+    {
+     "id": 302,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 352,
+     "y": 352,
+     "width": 4416,
+     "height": 256,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 501
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 11
+      }
+     ]
+    },
+    {
+     "id": 304,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 352,
+     "y": 4512,
+     "width": 4416,
+     "height": 256,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 502
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 11
+      }
+     ]
+    },
+    {
+     "id": 306,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 352,
+     "y": 608,
+     "width": 256,
+     "height": 3904,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 503
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 11
+      }
+     ]
+    },
+    {
+     "id": 308,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 4512,
+     "y": 608,
+     "width": 256,
+     "height": 3904,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 504
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 11
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "type": "objectgroup",
+   "visible": true,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "draworder": "topdown",
+   "id": 5,
+   "name": "Kollision",
+   "objects": [
+    {
+     "id": 19,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1244.8,
+     "y": 1932.8,
+     "width": 966.4,
+     "height": 358.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 15.5
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1244.8,
+     "y": 1292.8,
+     "width": 966.4,
+     "height": 358.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 12.5
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2908.8,
+     "y": 1932.8,
+     "width": 966.4,
+     "height": 358.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 10.5
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2979.2,
+     "y": 1382.4,
+     "width": 825.6,
+     "height": 179.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.2
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1244.8,
+     "y": 2828.8,
+     "width": 966.4,
+     "height": 358.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 15.5
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2908.8,
+     "y": 2828.8,
+     "width": 966.4,
+     "height": 358.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 12.5
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2926.4,
+     "y": 3566.4,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 32,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2926.4,
+     "y": 3700.8,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 33,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3060.8,
+     "y": 3566.4,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 34,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3060.8,
+     "y": 3700.8,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 36,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3324.8,
+     "y": 3558.4,
+     "width": 518.4,
+     "height": 179.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.2
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1088.0,
+     "y": 1081.6,
+     "width": 1312,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 40,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1088.0,
+     "y": 4025.6,
+     "width": 1312,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 42,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1081.6,
+     "y": 1088.0,
+     "width": 12.8,
+     "height": 1312,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 44,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4025.6,
+     "y": 1088.0,
+     "width": 12.8,
+     "height": 1312,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 46,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2720.0,
+     "y": 1081.6,
+     "width": 1312,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 48,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2720.0,
+     "y": 4025.6,
+     "width": 1312,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 50,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1081.6,
+     "y": 2720.0,
+     "width": 12.8,
+     "height": 1312,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 52,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4025.6,
+     "y": 2720.0,
+     "width": 12.8,
+     "height": 1312,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 54,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2288.0,
+     "y": 1107.2,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 56,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2288.0,
+     "y": 3974.4,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 58,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1145.6,
+     "y": 2288.0,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 60,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4012.8,
+     "y": 2288.0,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 62,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2736.0,
+     "y": 1107.2,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 64,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2736.0,
+     "y": 3974.4,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 66,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1145.6,
+     "y": 2736.0,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 68,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4012.8,
+     "y": 2736.0,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 70,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2408.0,
+     "y": 1083.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 72,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2702.4,
+     "y": 1083.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 74,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2408.0,
+     "y": 4027.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 76,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2702.4,
+     "y": 4027.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 78,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1083.2,
+     "y": 2408.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 80,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1083.2,
+     "y": 2702.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 82,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4027.2,
+     "y": 2408.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 84,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4027.2,
+     "y": 2702.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 86,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2291.2,
+     "y": 2260.8,
+     "width": 121.6,
+     "height": 28.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 87,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2291.2,
+     "y": 2337.6,
+     "width": 121.6,
+     "height": 9.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 90,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2707.2,
+     "y": 2260.8,
+     "width": 121.6,
+     "height": 28.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 91,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2707.2,
+     "y": 2337.6,
+     "width": 121.6,
+     "height": 9.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 94,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2412.8,
+     "y": 2859.2,
+     "width": 121.6,
+     "height": 28.8,
+     "rotation": 180,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 95,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2412.8,
+     "y": 2782.4,
+     "width": 121.6,
+     "height": 9.6,
+     "rotation": 180,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 98,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2828.8,
+     "y": 2859.2,
+     "width": 121.6,
+     "height": 28.8,
+     "rotation": 180,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 99,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2828.8,
+     "y": 2782.4,
+     "width": 121.6,
+     "height": 9.6,
+     "rotation": 180,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 102,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2244.8,
+     "y": 2403.2,
+     "width": 121.6,
+     "height": 28.8,
+     "rotation": -90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 103,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2321.6,
+     "y": 2403.2,
+     "width": 121.6,
+     "height": 9.6,
+     "rotation": -90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 110,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2251.2,
+     "y": 2251.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 112,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2859.2,
+     "y": 2251.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 114,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2251.2,
+     "y": 2859.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 116,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2859.2,
+     "y": 2859.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 118,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2913.6,
+     "y": 2513.6,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 120,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2940.837,
+     "y": 2776.293,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 20,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 122,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2162.804,
+     "y": 2753.486,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": -15,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 124,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2190.4,
+     "y": 2241.6,
+     "width": 22.4,
+     "height": 22.4,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 126,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2155.2,
+     "y": 2241.6,
+     "width": 22.4,
+     "height": 22.4,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 128,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1275.2,
+     "y": 2382.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 130,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1403.2,
+     "y": 2728.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 132,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1659.2,
+     "y": 2382.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 134,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1787.2,
+     "y": 2728.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 136,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2043.2,
+     "y": 2382.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 138,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2171.2,
+     "y": 2728.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 140,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3067.2,
+     "y": 2382.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 142,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3195.2,
+     "y": 2728.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 144,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3451.2,
+     "y": 2382.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 146,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3579.2,
+     "y": 2728.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 148,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3835.2,
+     "y": 2382.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 150,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3963.2,
+     "y": 2728.0,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 152,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2728.0,
+     "y": 1275.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 154,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2382.4,
+     "y": 1403.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 156,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2728.0,
+     "y": 1595.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 158,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2382.4,
+     "y": 1723.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 160,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2728.0,
+     "y": 3515.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 162,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2382.4,
+     "y": 3643.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 164,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2728.0,
+     "y": 3835.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 166,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2382.4,
+     "y": 3963.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 168,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1435.892,
+     "y": 2723.163,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": 4,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 170,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3576.105,
+     "y": 2341.326,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": -3,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 172,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2664.725,
+     "y": 3480.582,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": 88,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 174,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2523.643,
+     "y": 1499.287,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": 93,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 176,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2364.517,
+     "y": 4203.58,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": 5,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 178,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1306.704,
+     "y": 1759.162,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": 2,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 180,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1867.905,
+     "y": 2647.219,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 6,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 182,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3175.457,
+     "y": 2426.958,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": -8,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 190,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1275.2,
+     "y": 2782.4,
+     "width": 22.4,
+     "height": 22.4,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 192,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3784.0,
+     "y": 2312.0,
+     "width": 22.4,
+     "height": 22.4,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 194,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1988.8,
+     "y": 3240.0,
+     "width": 22.4,
+     "height": 22.4,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 196,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3841.6,
+     "y": 1822.4,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 198,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3827.021,
+     "y": 1767.065,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 10,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 200,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3740.8,
+     "y": 1176.0,
+     "width": 198.4,
+     "height": 80.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
+    },
+    {
+     "id": 202,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3516.8,
+     "y": 1176.0,
+     "width": 198.4,
+     "height": 80.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
+    },
+    {
+     "id": 204,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2908.8,
+     "y": 1144.0,
+     "width": 198.4,
+     "height": 80.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
+    },
+    {
+     "id": 206,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3164.8,
+     "y": 1144.0,
+     "width": 198.4,
+     "height": 80.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 5.2
+      }
+     ]
+    },
+    {
+     "id": 212,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1209.6,
+     "y": 3587.2,
+     "width": 108.8,
+     "height": 89.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 214,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2041.6,
+     "y": 3571.2,
+     "width": 108.8,
+     "height": 89.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 216,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1393.6,
+     "y": 3774.4,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 218,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1433.823,
+     "y": 3770.076,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": -12,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 220,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1479.886,
+     "y": 3769.204,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 15,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 223,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1755.2,
+     "y": 3563.2,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 225,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1579.2,
+     "y": 3796.8,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 227,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1979.2,
+     "y": 3790.4,
+     "width": 9.6,
+     "height": 9.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 229,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1270.4,
+     "y": 2729.6,
+     "width": 19.2,
+     "height": 19.2,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 231,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1686.4,
+     "y": 2729.6,
+     "width": 19.2,
+     "height": 19.2,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 233,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2102.4,
+     "y": 2729.6,
+     "width": 19.2,
+     "height": 19.2,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 235,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2998.4,
+     "y": 2729.6,
+     "width": 19.2,
+     "height": 19.2,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 237,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3414.4,
+     "y": 2729.6,
+     "width": 19.2,
+     "height": 19.2,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 239,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3830.4,
+     "y": 2729.6,
+     "width": 19.2,
+     "height": 19.2,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 242,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2334.646,
+     "y": 3467.616,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 245,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3899.372,
+     "y": 1471.673,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 247,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2752.841,
+     "y": 3604.546,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 251,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1879.094,
+     "y": 1150.728,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 255,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1675.956,
+     "y": 3912.024,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 257,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1287.253,
+     "y": 1139.857,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 259,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2867.484,
+     "y": 1337.209,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 261,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3529.806,
+     "y": 3935.777,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 263,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1395.486,
+     "y": 3519.98,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 266,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3921.515,
+     "y": 3828.482,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 268,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2950.263,
+     "y": 3489.571,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 271,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1531.33,
+     "y": 3917.323,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 273,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3626.37,
+     "y": 1299.212,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 275,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3607.524,
+     "y": 3792.381,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 278,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3483.364,
+     "y": 1593.888,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 280,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2325.515,
+     "y": 2143.427,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 283,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1171.714,
+     "y": 3939.165,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 285,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3780.963,
+     "y": 3868.503,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 287,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2116.355,
+     "y": 1190.347,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 290,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1142.21,
+     "y": 2213.861,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 293,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3155.438,
+     "y": 3614.719,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 297,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1786.713,
+     "y": 1226.948,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 299,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3299.55,
+     "y": 3936.334,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 303,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 352.0,
+     "y": 352.0,
+     "width": 4416,
+     "height": 256,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 305,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 352.0,
+     "y": 4512.0,
+     "width": 4416,
+     "height": 256,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 307,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 352.0,
+     "y": 608.0,
+     "width": 256,
+     "height": 3904,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 309,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4512.0,
+     "y": 608.0,
+     "width": 256,
+     "height": 3904,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 310,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 0.0,
+     "y": 0.0,
+     "width": 5120,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
+    },
+    {
+     "id": 311,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 0.0,
+     "y": 4768.0,
+     "width": 5120,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
+    },
+    {
+     "id": 312,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 0.0,
+     "y": 352.0,
+     "width": 352,
+     "height": 4416,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
+    },
+    {
+     "id": 313,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4768.0,
+     "y": 352.0,
+     "width": 352,
+     "height": 4416,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "int",
+       "value": 16
+      }
+     ]
+    },
+    {
+     "id": 315,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 777.6,
+     "y": 1811.2,
+     "width": 108.8,
+     "height": 89.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 317,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 868.8,
+     "y": 1886.4,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 319,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 856.927,
+     "y": 1759.039,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 18,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 321,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4201.6,
+     "y": 3283.2,
+     "width": 108.8,
+     "height": 89.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 323,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4196.8,
+     "y": 3358.4,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "ellipse": true,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 325,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4218.265,
+     "y": 3238.221,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": -10,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 327,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 900.488,
+     "y": 3443.448,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": 70,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 329,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4208.415,
+     "y": 1404.133,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": -75,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 331,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1531.287,
+     "y": 797.957,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": 3,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 333,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3511.651,
+     "y": 4262.585,
+     "width": 140.8,
+     "height": 60.8,
+     "rotation": -4,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 335,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4184.0,
+     "y": 860.8,
+     "width": 80.0,
+     "height": 198.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
+    },
+    {
+     "id": 337,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4184.0,
+     "y": 3900.8,
+     "width": 80.0,
+     "height": 198.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 2.7
+      }
+     ]
+    },
+    {
+     "id": 339,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1011.2,
+     "y": 2249.6,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 341,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1011.2,
+     "y": 2761.6,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 343,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4147.2,
+     "y": 2249.6,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 345,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4147.2,
+     "y": 2761.6,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 90,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 347,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2249.6,
+     "y": 972.8,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 349,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2761.6,
+     "y": 972.8,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 351,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2249.6,
+     "y": 4108.8,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 353,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2761.6,
+     "y": 4108.8,
+     "width": 108.8,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    }
+   ],
+   "opacity": 1,
+   "type": "objectgroup",
+   "visible": true,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "draworder": "topdown",
+   "id": 6,
+   "name": "Logik",
+   "objects": [
+    {
+     "id": 88,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2352.0,
+     "y": 2304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "waffenhaendler"
+      }
+     ]
+    },
+    {
+     "id": 92,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2768.0,
+     "y": 2304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "ruestungshaendler"
+      }
+     ]
+    },
+    {
+     "id": 96,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2352.0,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "apotheker"
+      }
+     ]
+    },
+    {
+     "id": 100,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2768.0,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "allgemeinhaendler"
+      }
+     ]
+    },
+    {
+     "id": 104,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2288.0,
+     "y": 2342.4,
+     "width": 0,
+     "height": 0,
+     "rotation": -90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "barbier"
+      }
+     ]
+    },
+    {
+     "id": 105,
+     "name": "",
+     "type": "npc",
+     "class": "npc",
+     "x": 2854.4,
+     "y": 2352.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 54.758,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "npcId",
+       "type": "string",
+       "value": "gildenverwalter"
+      }
+     ]
+    },
+    {
+     "id": 208,
+     "name": "",
+     "type": "teleporter",
+     "class": "teleporter",
+     "x": 1664.0,
+     "y": 3635.2,
+     "width": 64.0,
+     "height": 64.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kanalisation_eingang"
+      },
+      {
+       "name": "zone",
+       "type": "string",
+       "value": "kanalisation"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "babylos"
+      },
+      {
+       "name": "label",
+       "type": "string",
+       "value": "Kanalisation betreten"
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 0.5
+      }
+     ]
+    },
+    {
+     "id": 209,
+     "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 1696,
+     "y": 3760.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kanaldeckel"
+      }
+     ]
+    },
+    {
+     "id": 210,
+     "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 1696,
+     "y": 3760.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 180,
+     "visible": true,
+     "point": true,
+     "properties": []
+    },
+    {
+     "id": 354,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1856,
+     "y": 800,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 355,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1472,
+     "y": 896,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 356,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3840,
+     "y": 800,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 357,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3264,
+     "y": 4352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 358,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 896,
+     "y": 1280,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 359,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4320,
+     "y": 3712,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 360,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3776,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 361,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1280,
+     "y": 4320,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 362,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 768,
+     "y": 1984,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 363,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 960,
+     "y": 1952,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 364,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 800,
+     "y": 1728,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 365,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4320,
+     "y": 3200,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 366,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4224,
+     "y": 3424,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 367,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4352,
+     "y": 3328,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 368,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4160,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 369,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4320,
+     "y": 1120,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 370,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 960,
+     "y": 3776,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 371,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 768,
+     "y": 3712,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 372,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1024,
+     "y": 4224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 373,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4032,
+     "y": 4352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 374,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4352,
+     "y": 1664,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 9
+      }
+     ]
+    },
+    {
+     "id": 375,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1920,
+     "y": 4352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 376,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4352,
+     "y": 3776,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 9
+      }
+     ]
+    },
+    {
+     "id": 377,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 736,
+     "y": 1024,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 9
+      }
+     ]
+    },
+    {
+     "id": 378,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 3520,
+     "y": 800,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "raider"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 379,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1440,
+     "y": 800,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 380,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4352,
+     "y": 4160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "stray_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": 381,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2944,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "feral_dog"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 382,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 2176,
+     "y": 4352,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 8
+      }
+     ]
+    },
+    {
+     "id": 383,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 4320,
+     "y": 2240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 9
+      }
+     ]
+    },
+    {
+     "id": 384,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 768,
+     "y": 1120,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "umland_nordwest"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 385,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 4416,
+     "y": 2752,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "umland_ost"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 386,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 3008,
+     "y": 4416,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "umland_sued"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    },
+    {
+     "id": 387,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 704,
+     "y": 3264,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "umland_west"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_common"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Versteckte Kiste"
+      }
+     ]
+    }
+   ],
+   "opacity": 1,
+   "type": "objectgroup",
+   "visible": true,
+   "x": 0,
+   "y": 0
+  }
+ ],
+ "nextlayerid": 7,
+ "nextobjectid": 388,
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "tiledversion": "1.10.2",
+ "tileheight": 32,
+ "tilesets": [],
+ "tilewidth": 32,
+ "type": "map",
+ "version": "1.10",
+ "width": 160,
+ "properties": [
+  {
+   "name": "name",
+   "type": "string",
+   "value": "Babylos"
+  },
+  {
+   "name": "groundTexture",
+   "type": "string",
+   "value": "grass"
+  },
+  {
+   "name": "groundColor",
+   "type": "string",
+   "value": "#c8c8b4"
+  }
+ ]
+}

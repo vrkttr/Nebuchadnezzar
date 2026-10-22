@@ -146,6 +146,8 @@ function start(token) {
     onVendor: (npcId) => connection.send({ type: 'vendor-open', npcId }),
     onGuildCreate: (npcId, name) => connection.send({ type: 'guild-create', npcId, name }),
     onGuildLeave: (npcId) => connection.send({ type: 'guild-leave', npcId }),
+    onBarberPreview: (appearance) => player.setAppearance(appearance),
+    onBarberApply: (npcId, appearance) => connection.send({ type: 'barber-apply', npcId, appearance }),
   });
   const abilitiesWindow = createAbilitiesWindow(ui);
   const vendorWindow = createVendorWindow(gameState, ui, {
@@ -376,6 +378,8 @@ function start(token) {
         inventory.render(message.inventory ?? []);
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
+        player.setAppearance(message.appearance);
+      } else if (message.type === 'appearance') {
         player.setAppearance(message.appearance);
       } else if (message.type === 'abilities') {
         hud.setAbilities(message.abilities ?? []);

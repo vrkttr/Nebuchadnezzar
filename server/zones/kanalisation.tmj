@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 6,
- "nextobjectid": 813,
+ "nextobjectid": 816,
  "tilesets": [],
  "properties": [
   {
@@ -20437,6 +20437,30 @@
        "value": true
       }
      ]
+    },
+    {
+     "id": 813,
+     "name": "",
+     "type": "leiter",
+     "class": "leiter",
+     "x": 144.0,
+     "y": 102.4,
+     "width": 32,
+     "height": 38.4,
+     "rotation": 180,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      }
+     ]
     }
    ],
    "opacity": 1,
@@ -26007,6 +26031,65 @@
        "name": "name",
        "type": "string",
        "value": "Verrostete Kiste"
+      }
+     ]
+    },
+    {
+     "id": 814,
+     "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 128,
+     "y": 166.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "babylos"
+      }
+     ]
+    },
+    {
+     "id": 815,
+     "name": "",
+     "type": "teleporter",
+     "class": "teleporter",
+     "x": 76.8,
+     "y": 67.2,
+     "width": 102.4,
+     "height": 70.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kanalisation_ausgang_nord"
+      },
+      {
+       "name": "zone",
+       "type": "string",
+       "value": "babylos"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "kanaldeckel"
+      },
+      {
+       "name": "label",
+       "type": "string",
+       "value": "Leiter hinaufsteigen"
+      },
+      {
+       "name": "hoehe",
+       "type": "int",
+       "value": 3
       }
      ]
     }

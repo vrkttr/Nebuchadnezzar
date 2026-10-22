@@ -2,6 +2,7 @@ import { handleChat } from './chat.js';
 import { answerGuildInvite, createGuild, inviteToGuild, kickFromGuild, leaveGuild } from './guilds.js';
 import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
+import { applyBarber } from './barber.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
@@ -24,6 +25,7 @@ import {
   openVendor,
   refreshNpcWindow,
   resolveGuildNpc,
+  resolveBarberNpc,
   sellToVendor,
 } from './npcInteraction.js';
 import { diffQuestLog, loadQuests, questRows, recordKill, recordPosition, serializeQuestLog } from './quests.js';
@@ -441,6 +443,10 @@ wss.on('connection', async (socket, request) => {
       const state = players.get(id);
       const npc = state ? resolveGuildNpc(state, id, message.npcId, notify) : null;
       if (npc) createGuild(dbPool, players, id, message.name, notify).then(() => refreshNpcWindow(state, id, npc, notify));
+    } else if (message.type === 'barber-apply') {
+      const state = players.get(id);
+      const npc = state ? resolveBarberNpc(state, id, message.npcId, notify) : null;
+      if (npc) applyBarber(dbPool, state, id, message.appearance, notify).then(() => refreshNpcWindow(state, id, npc, notify));
     } else if (message.type === 'guild-leave') {
       const state = players.get(id);
       const npc = state ? resolveGuildNpc(state, id, message.npcId, notify) : null;

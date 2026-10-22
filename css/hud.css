@@ -1484,7 +1484,7 @@ button {
   position: absolute;
   top: 24px;
   left: 50%;
-  height: clamp(64px, 11vh, 112px);
+  height: clamp(110px, 22vh, 210px);
   max-width: 86vw;
   object-fit: contain;
   transform: translateX(-50%);
@@ -2239,4 +2239,48 @@ html.touch-ui #minimap-buttons button {
     left: 8px;
     top: 8px;
   }
+}
+
+.barber-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 12px;
+}
+
+.barber-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.barber-label {
+  flex: 0 0 96px;
+  font-size: 13px;
+  color: var(--nu-text-dim, var(--nu-text));
+}
+
+.barber-value {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+}
+
+.barber-step {
+  width: 28px;
+  padding: 4px 0;
+  background: var(--nu-board-darker);
+  border: 2px solid var(--nu-line);
+  color: var(--nu-text);
+  font-family: var(--nu-font-display);
+  cursor: pointer;
+}
+
+.barber-step:hover {
+  border-color: var(--nu-amber-dark);
+}
+
+.window-button:disabled {
+  opacity: 0.45;
+  cursor: default;
 }

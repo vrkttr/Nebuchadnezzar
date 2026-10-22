@@ -1,4 +1,7 @@
 import { t } from '../i18n/I18n.js';
+import { APPEARANCE_KEYS, APPEARANCE_OPTIONS } from '../entities/AppearanceOptions.js';
+
+const BARBER_GROUPS = ['skin', 'hair_style', 'hair_color', 'top', 'pants'];
 
 const OPTION_MARKERS = { available: '!', ready: '?', active: '…' };
 
@@ -11,12 +14,19 @@ export function createNpcWindow(state, ui, handlers = {}) {
   let data = null;
   let activeQuestId = null;
   let guildForm = false;
+  let barberDraft = null;
 
   function isOpen() {
     return !windowEl.classList.contains('hidden');
   }
 
+  function cancelBarber() {
+    if (barberDraft && data?.appearance) handlers.onBarberPreview?.(data.appearance);
+    barberDraft = null;
+  }
+
   function hide() {
+    cancelBarber();
     windowEl.classList.add('hidden');
     ui.tooltip.hide();
     data = null;
@@ -78,6 +88,15 @@ export function createNpcWindow(state, ui, handlers = {}) {
 
     if (data.vendor) {
       options.appendChild(button(t('npc.trade'), 'npc-option', () => handlers.onVendor?.(data.npcId)));
+    }
+
+    if (data.barber) {
+      options.appendChild(
+        button(t('barber.open'), 'npc-option', () => {
+          barberDraft = [...data.appearance];
+          render();
+        })
+      );
     }
 
     if (data.guild && !data.guildName) {
@@ -144,6 +163,52 @@ export function createNpcWindow(state, ui, handlers = {}) {
     setTimeout(() => input.focus(), 0);
   }
 
+  function renderBarber() {
+    title.textContent = t('barber.title');
+
+    const rows = element('div', 'barber-rows');
+    const limits = APPEARANCE_KEYS.map((key) => APPEARANCE_OPTIONS[key].length);
+
+    BARBER_GROUPS.forEach((group, index) => {
+      const row = element('div', 'barber-row');
+      const value = element('span', 'barber-value', t(`appearance.${group}.${barberDraft[index]}`));
+
+      const step = (direction) => {
+        barberDraft[index] = (barberDraft[index] + direction + limits[index]) % limits[index];
+        handlers.onBarberPreview?.(barberDraft);
+        render();
+      };
+
+      row.appendChild(element('span', 'barber-label', t(`appearance.group.${group}`)));
+      row.appendChild(button('<', 'barber-step', () => step(-1)));
+      row.appendChild(value);
+      row.appendChild(button('>', 'barber-step', () => step(1)));
+      rows.appendChild(row);
+    });
+
+    const changed = barberDraft.some((value, index) => value !== data.appearance[index]);
+    const affordable = (state.player.gold ?? 0) >= data.barberCost;
+
+    const buttons = element('div', 'npc-buttons');
+    const apply = button(t('barber.apply', { cost: data.barberCost }), 'window-button', () => {
+      handlers.onBarberApply?.(data.npcId, barberDraft);
+      barberDraft = null;
+      render();
+    });
+    apply.disabled = !changed || !affordable;
+    buttons.appendChild(apply);
+    buttons.appendChild(
+      button(t('npc.back'), 'window-button', () => {
+        cancelBarber();
+        render();
+      })
+    );
+
+    const children = [element('p', 'npc-text', t('barber.hint', { cost: data.barberCost })), rows, buttons];
+    if (changed && !affordable) children.push(element('p', 'npc-hint', t('barber.noGold', { cost: data.barberCost })));
+    body.replaceChildren(...children);
+  }
+
   function renderQuest(quest) {
     title.textContent = quest.name;
 
@@ -196,6 +261,11 @@ export function createNpcWindow(state, ui, handlers = {}) {
   function render() {
     ui.tooltip.hide();
 
+    if (barberDraft) {
+      renderBarber();
+      return;
+    }
+
     if (guildForm) {
       renderGuildForm();
       return;
@@ -213,6 +283,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
 
   function show(message) {
     if (!data || data.npcId !== message.npcId) activeQuestId = null;
+    if (barberDraft) barberDraft = null;
 
     data = message;
     if (message.guildName) guildForm = false;

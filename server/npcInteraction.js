@@ -1,6 +1,7 @@
 import { NPC_INTERACT_RANGE, getNpc } from './npcs.js';
 import { acceptQuest, completeQuest, questsForNpc } from './quests.js';
 import { GUILD_FOUNDING_COST } from './guilds.js';
+import { BARBER_COST } from './barber.js';
 import { buyItem, sellItem, serializeVendor } from './vendor.js';
 
 function resolveNpc(player, playerId, npcId, notify) {
@@ -31,6 +32,9 @@ function sendNpcWindow(player, playerId, npc, notify) {
     guild: Boolean(npc.guild),
     guildName: player.guildName ?? null,
     guildCost: GUILD_FOUNDING_COST,
+    barber: Boolean(npc.barber),
+    barberCost: BARBER_COST,
+    appearance: player.appearance,
     quests: questsForNpc(player, npc.id),
   });
 }
@@ -38,6 +42,11 @@ function sendNpcWindow(player, playerId, npc, notify) {
 export function resolveGuildNpc(player, playerId, npcId, notify) {
   const npc = resolveNpc(player, playerId, npcId, notify);
   return npc?.guild ? npc : null;
+}
+
+export function resolveBarberNpc(player, playerId, npcId, notify) {
+  const npc = resolveNpc(player, playerId, npcId, notify);
+  return npc?.barber ? npc : null;
 }
 
 export function refreshNpcWindow(player, playerId, npc, notify) {
