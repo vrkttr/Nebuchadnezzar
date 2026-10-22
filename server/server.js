@@ -3,13 +3,14 @@ import { answerGuildInvite, createGuild, inviteToGuild, kickFromGuild, leaveGuil
 import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
 import { applyBarber } from './barber.js';
+import { addFriend, announcePresence, loadFriends, removeFriend, requestSocial } from './friends.js';
 import { bindHome, serializeHome, updateHearth } from './inn.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
-import { serializeAbilities, setActionSlot, syncActionLayout } from './abilities.js';
+import { itemRefId, serializeAbilities, serializeActionItems, setActionSlot, syncActionLayout } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
 import { getClassModifiers, isValidClass } from './classes.js';
 import { serializeItems } from './items.js';
@@ -113,7 +114,7 @@ function onKill(recipients, lootOwner, enemy) {
 }
 
 function sendAbilities(playerId, state) {
-  notify(playerId, { type: 'abilities', abilities: serializeAbilities(state.level, state.actionBar) });
+  notify(playerId, { type: 'abilities', abilities: serializeAbilities(state.level, state.actionBar), actionItems: serializeActionItems(state.actionBar) });
 }
 
 function saveActionLayout(state) {
@@ -129,6 +130,9 @@ function createInitialState(character) {
     introSeen: character.introSeen,
     zoneId: character.zoneId,
     homeZone: character.homeZone,
+    friends: character.friends,
+    socialAt: 0,
+    friendBusy: false,
     hearthReadyAt: character.hearthReadyAt,
     hearth: null,
     loadingUntil: 0,
@@ -218,6 +222,7 @@ async function loadCharacter(characterId) {
     [characterId]
   );
 
+  const friends = await loadFriends(dbPool, characterId);
   const inventory = loadInventory(savedItemRows);
   const equipment = loadEquipment(savedEquipmentRows);
   const zoneId = getZone(row.zone) ? row.zone : DEFAULT_ZONE_ID;
@@ -238,6 +243,7 @@ async function loadCharacter(characterId) {
     touchControls: ['auto', 'on', 'off'].includes(row.touch_controls) ? row.touch_controls : 'auto',
     actionLayout: parseActionLayout(row.action_bar),
     zoneId,
+    friends,
     homeZone: getZone(row.home_zone) ? row.home_zone : null,
     hearthReadyAt: Number(row.hearth_ready_at) || 0,
     x: startPosition.x,
@@ -274,6 +280,7 @@ function removePlayer(playerId) {
 
   removeLootOfPlayer(lootContainers, playerId);
   leaveGroup(groups, players, playerId, notify);
+  announcePresence(players, playerId, false, notify);
   players.delete(playerId);
   sockets.delete(playerId);
   sendToZone(state.zoneId, { type: 'leave', id: playerId });
@@ -385,6 +392,7 @@ wss.on('connection', async (socket, request) => {
   initialState.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
   players.set(id, initialState);
   sockets.set(id, socket);
+  announcePresence(players, id, true, notify);
 
   console.log(`Neuer Client verbunden (${id}, Charakter: ${character.name})`);
   socket.send(
@@ -393,6 +401,7 @@ wss.on('connection', async (socket, request) => {
       id,
       enemies: initialEnemies(initialState),
       abilities: serializeAbilities(initialState.level, initialState.actionBar),
+      actionItems: serializeActionItems(initialState.actionBar),
       showIntro: !character.introSeen,
       classId: initialState.classId,
       autoFullscreen: character.autoFullscreen,
@@ -447,7 +456,8 @@ wss.on('connection', async (socket, request) => {
       if (!state) return;
 
       const abilityId = typeof message.abilityId === 'string' ? message.abilityId : null;
-      if (setActionSlot(state.actionLayout, state.level, Number(message.slot), abilityId)) {
+      const fromSlot = Number.isInteger(message.fromSlot) ? message.fromSlot : null;
+      if (setActionSlot(state.actionLayout, state.level, Number(message.slot), abilityId, fromSlot)) {
         sendAbilities(id, state);
         saveActionLayout(state);
       }
@@ -461,6 +471,12 @@ wss.on('connection', async (socket, request) => {
       const state = players.get(id);
       const npc = state ? resolveBarberNpc(state, id, message.npcId, notify) : null;
       if (npc) applyBarber(dbPool, state, id, message.appearance, notify).then(() => refreshNpcWindow(state, id, npc, notify));
+    } else if (message.type === 'social-request') {
+      requestSocial(players, id, notify);
+    } else if (message.type === 'friend-add') {
+      addFriend(dbPool, players, id, message.name, notify);
+    } else if (message.type === 'friend-remove') {
+      removeFriend(dbPool, players, id, message.name, notify);
     } else if (message.type === 'inn-bind') {
       const state = players.get(id);
       const npc = state ? resolveInnNpc(state, id, message.npcId, notify) : null;
@@ -520,6 +536,15 @@ wss.on('connection', async (socket, request) => {
       if (!Number.isInteger(slot)) return;
 
       if (isLoading(state)) return;
+
+      const barItemId = itemRefId(state.actionBar[slot]);
+      if (barItemId !== null) {
+        const index = state.inventory.findIndex((stack) => stack && stack.itemId === barItemId);
+        if (index === -1) notify(id, { type: 'event', kind: 'item-failed', reason: 'missing' });
+        else useInventoryItem(id, state, index, notify);
+        return;
+      }
+
       useAbility(id, state, zoneEnemies.get(state.zoneId), slot, (payload) => sendToZone(state.zoneId, payload), notify, onKill);
     } else if (message.type === 'chest-open') {
       const state = players.get(id);

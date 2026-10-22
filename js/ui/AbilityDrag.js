@@ -49,7 +49,7 @@ export function createAbilityDrag(handlers = {}) {
         const slot = target ? Number(target.dataset.slot) : null;
 
         if (slot) {
-          if (slot !== payload.fromSlot) handlers.onDrop?.(slot, payload.abilityId);
+          if (slot !== payload.fromSlot) handlers.onDrop?.(slot, payload.abilityId, payload.fromSlot);
         } else if (payload.fromSlot) {
           handlers.onRemove?.(payload.fromSlot);
         }

@@ -100,3 +100,12 @@ ALTER TABLE guilds ADD COLUMN IF NOT EXISTS leader_id INT NULL;
 UPDATE guilds g SET g.leader_id = (SELECT MIN(c.id) FROM characters c WHERE c.guild_id = g.id) WHERE g.leader_id IS NULL;
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS home_zone VARCHAR(32) NULL DEFAULT NULL;
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS hearth_ready_at BIGINT NOT NULL DEFAULT 0;
+CREATE TABLE IF NOT EXISTS character_friends (
+  character_id INT NOT NULL,
+  friend_id INT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (character_id, friend_id),
+  KEY idx_friend (friend_id),
+  FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE,
+  FOREIGN KEY (friend_id) REFERENCES characters(id) ON DELETE CASCADE
+) ENGINE=InnoDB;

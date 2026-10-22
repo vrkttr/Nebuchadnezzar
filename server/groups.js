@@ -94,8 +94,6 @@ export function invitePlayer(groups, players, inviterId, targetId, notify, now =
   const target = players.get(targetId);
   if (!inviter || !target || inviterId === targetId) return;
 
-  if (target.zoneId !== inviter.zoneId) return;
-
   if (inviter.groupId) {
     const group = groups.groups.get(inviter.groupId);
     if (!group || group.leaderId !== inviterId) {

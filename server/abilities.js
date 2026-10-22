@@ -1,3 +1,5 @@
+import { ITEMS } from './items.js';
+
 export const ABILITIES = {
   power_strike: {
     id: 'power_strike',
@@ -89,13 +91,26 @@ export const ABILITIES = {
 
 export const ACTION_BAR_SLOTS = 12;
 
+const ITEM_PREFIX = 'item:';
+
+export function itemRefId(ref) {
+  return typeof ref === 'string' && ref.startsWith(ITEM_PREFIX) ? ref.slice(ITEM_PREFIX.length) : null;
+}
+
+function isValidBarEntry(ref) {
+  if (typeof ref !== 'string') return false;
+  const itemId = itemRefId(ref);
+  if (itemId !== null) return Boolean(ITEMS[itemId]?.use);
+  return Boolean(ABILITIES[ref]);
+}
+
 export function createActionLayout(saved) {
   const layout = { bar: {}, seen: [] };
 
   if (saved && typeof saved === 'object') {
     for (const [slot, abilityId] of Object.entries(saved.bar ?? {})) {
       const index = Number(slot);
-      if (Number.isInteger(index) && index >= 1 && index <= ACTION_BAR_SLOTS && ABILITIES[abilityId]) {
+      if (Number.isInteger(index) && index >= 1 && index <= ACTION_BAR_SLOTS && isValidBarEntry(abilityId)) {
         layout.bar[index] = abilityId;
       }
     }
@@ -118,6 +133,7 @@ export function syncActionLayout(layout, level) {
   let changed = false;
 
   for (const [slot, abilityId] of Object.entries(layout.bar)) {
+    if (itemRefId(abilityId) !== null) continue;
     if (!ABILITIES[abilityId] || level < ABILITIES[abilityId].unlockLevel) {
       delete layout.bar[slot];
       changed = true;
@@ -142,12 +158,29 @@ export function syncActionLayout(layout, level) {
   return changed;
 }
 
-export function setActionSlot(layout, level, slot, abilityId) {
+export function setActionSlot(layout, level, slot, abilityId, fromSlot = null) {
   if (!Number.isInteger(slot) || slot < 1 || slot > ACTION_BAR_SLOTS) return false;
 
   if (abilityId === null) {
     if (!layout.bar[slot]) return false;
     delete layout.bar[slot];
+    return true;
+  }
+
+  const itemId = itemRefId(abilityId);
+  if (itemId !== null) {
+    const item = ITEMS[itemId];
+    if (!item?.use || level < item.level) return false;
+    if (layout.bar[slot] === abilityId) return false;
+
+    const displaced = layout.bar[slot];
+    layout.bar[slot] = abilityId;
+
+    if (Number.isInteger(fromSlot) && fromSlot !== slot && fromSlot >= 1 && fromSlot <= ACTION_BAR_SLOTS && layout.bar[fromSlot] === abilityId) {
+      if (displaced) layout.bar[fromSlot] = displaced;
+      else delete layout.bar[fromSlot];
+    }
+
     return true;
   }
 
@@ -176,7 +209,9 @@ export function createCooldownState() {
 
 export function serializeAbilities(level, actionBar) {
   const slotById = {};
-  for (const [slot, abilityId] of Object.entries(actionBar)) slotById[abilityId] = Number(slot);
+  for (const [slot, abilityId] of Object.entries(actionBar)) {
+    if (ABILITIES[abilityId]) slotById[abilityId] = Number(slot);
+  }
 
   return Object.values(ABILITIES).map((ability) => ({
     slot: slotById[ability.id] ?? null,
@@ -198,4 +233,15 @@ export function serializeAbilities(level, actionBar) {
     unlockLevel: ability.unlockLevel,
     unlocked: level >= ability.unlockLevel,
   }));
+}
+
+export function serializeActionItems(actionBar) {
+  const entries = [];
+
+  for (const [slot, ref] of Object.entries(actionBar)) {
+    const itemId = itemRefId(ref);
+    if (itemId !== null && ITEMS[itemId]) entries.push({ slot: Number(slot), itemId });
+  }
+
+  return entries;
 }

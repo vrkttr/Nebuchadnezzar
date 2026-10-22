@@ -29,15 +29,35 @@ export function createHud(state, handlers = {}) {
   const questList = document.getElementById('quest-list');
   const slotElements = Array.from(document.querySelectorAll('#action-bar .action-slot'));
   const abilitySlots = [];
+  const itemSlots = [];
 
   slotElements.forEach((element, index) => {
     element.dataset.slot = String(index + 1);
     handlers.ui?.abilityDrag.attach(element, () => {
       const entry = abilitySlots.find((slot) => slot.element === element);
-      if (!entry) return null;
+      const itemEntry = itemSlots.find((slot) => slot.element === element);
+      if (!entry && !itemEntry) return null;
 
       handlers.ui.tooltip.hide();
+      if (itemEntry) {
+        return { abilityId: `item:${itemEntry.itemId}`, fromSlot: index + 1, icon: element.querySelector('.slot-icon'), label: itemEntry.label };
+      }
       return { abilityId: entry.ability.id, fromSlot: index + 1, icon: element.querySelector('.slot-icon'), label: entry.ability.shortName };
+    });
+
+    element.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+      element.classList.add('drop-target');
+    });
+    element.addEventListener('dragleave', () => element.classList.remove('drop-target'));
+    element.addEventListener('drop', (event) => {
+      event.preventDefault();
+      element.classList.remove('drop-target');
+      const from = Number.parseInt(event.dataTransfer.getData('text/plain'), 10);
+      const stack = Number.isInteger(from) ? state.inventory[from] : null;
+      const item = stack ? state.items[stack.itemId] : null;
+      if (item?.use) handlers.onItemDrop?.(index + 1, item.id);
     });
   });
 
@@ -52,11 +72,12 @@ export function createHud(state, handlers = {}) {
   const targetGuildInvite = document.getElementById('target-guild-invite');
   targetGuildInvite.addEventListener('click', () => handlers.onGuildInvite?.());
 
-  function setAbilities(list) {
+  function setAbilities(list, actionItems = []) {
     abilitySlots.length = 0;
+    itemSlots.length = 0;
 
     for (const element of slotElements) {
-      element.querySelectorAll('.slot-name, .slot-cooldown').forEach((child) => child.remove());
+      element.querySelectorAll('.slot-name, .slot-cooldown, .slot-count').forEach((child) => child.remove());
       element.onclick = null;
       element.onmouseenter = null;
       element.onmousemove = null;
@@ -95,6 +116,48 @@ export function createHud(state, handlers = {}) {
       }
 
       abilitySlots.push({ ability, element, cooldownEl, cooldownTextEl });
+    }
+
+    for (const entry of actionItems) {
+      const element = slotElements[entry.slot - 1];
+      const item = state.items[entry.itemId];
+      if (!element || !item) continue;
+
+      const nameEl = document.createElement('span');
+      nameEl.className = 'slot-name';
+
+      if (item.icon && handlers.ui) {
+        nameEl.appendChild(handlers.ui.createIcon(item.icon, 'slot-icon'));
+      } else {
+        nameEl.textContent = item.shortName;
+      }
+
+      const countEl = document.createElement('span');
+      countEl.className = 'slot-count';
+
+      element.appendChild(nameEl);
+      element.appendChild(countEl);
+      element.onclick = () => handlers.onAbility?.(entry.slot);
+
+      if (handlers.ui) {
+        element.onmouseenter = (event) => handlers.ui.tooltip.showItem(entry.itemId, 0, event);
+        element.onmousemove = (event) => handlers.ui.tooltip.move(event);
+        element.onmouseleave = () => handlers.ui.tooltip.hide();
+      }
+
+      itemSlots.push({ itemId: entry.itemId, element, countEl, label: item.shortName });
+    }
+    updateItemSlots();
+  }
+
+  function updateItemSlots() {
+    for (const slot of itemSlots) {
+      let total = 0;
+      for (const stack of state.inventory) {
+        if (stack && stack.itemId === slot.itemId) total += stack.quantity;
+      }
+      slot.countEl.textContent = total > 1 || state.items[slot.itemId]?.stackSize > 1 ? String(total) : '';
+      slot.element.classList.toggle('slot-unaffordable', total === 0);
     }
   }
 
@@ -279,6 +342,7 @@ export function createHud(state, handlers = {}) {
     zoneName.textContent = state.zoneName;
 
     updateAbilitySlots();
+    updateItemSlots();
     updateCast();
 
     if (state.target) {

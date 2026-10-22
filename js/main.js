@@ -42,6 +42,7 @@ const [
   { createIntroWindow },
   { createAbilitiesWindow },
   { createQuestWindow },
+  { createSocialWindow },
   { createAbilityDrag },
   { allowLeave, armAutoFullscreen },
   { createTouchControls },
@@ -96,6 +97,7 @@ const [
   import(v('./ui/IntroWindow.js')),
   import(v('./ui/AbilitiesWindow.js')),
   import(v('./ui/QuestWindow.js')),
+  import(v('./ui/SocialWindow.js')),
   import(v('./ui/AbilityDrag.js')),
   import(v('./input/Keyboard.js')),
   import(v('./input/Touch.js')),
@@ -133,12 +135,13 @@ function start(token) {
     itemMenu: createItemMenu(),
     confirmDialog: createConfirmDialog(),
     abilityDrag: createAbilityDrag({
-      onDrop: (slot, abilityId) => connection.send({ type: 'actionbar-set', slot, abilityId }),
+      onDrop: (slot, abilityId, fromSlot) => connection.send({ type: 'actionbar-set', slot, abilityId, fromSlot }),
       onRemove: (slot) => connection.send({ type: 'actionbar-set', slot, abilityId: null }),
     }),
   };
 
   const hud = createHud(gameState, {
+    onItemDrop: (slot, itemId) => connection.send({ type: 'actionbar-set', slot, abilityId: `item:${itemId}` }),
     onAbility: (slot) => connection.send({ type: 'ability', slot }),
     onGuildInvite: () => {
       if (gameState.playerTarget) connection.send({ type: 'guild-invite', playerId: gameState.playerTarget });
@@ -166,6 +169,12 @@ function start(token) {
   const questWindow = createQuestWindow({
     confirmDialog: ui.confirmDialog,
     onAbandon: (questId) => connection.send({ type: 'quest-abandon', questId }),
+  });
+  const socialWindow = createSocialWindow({
+    onRequest: () => connection.send({ type: 'social-request' }),
+    onAddFriend: (name) => connection.send({ type: 'friend-add', name }),
+    onRemoveFriend: (name) => connection.send({ type: 'friend-remove', name }),
+    onInvite: (playerId) => connection.send({ type: 'group-invite', playerId }),
   });
   const vendorWindow = createVendorWindow(gameState, ui, {
     onBuy: (npcId, itemId, quantity) =>
@@ -199,7 +208,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'quests']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'quests', 'social']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -427,7 +436,7 @@ function start(token) {
         enterZone(message, true).then(() => {
           if (message.showIntro) introWindow.show();
         });
-        hud.setAbilities(message.abilities ?? []);
+        hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
         abilitiesWindow.render(message.abilities ?? []);
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
@@ -437,7 +446,7 @@ function start(token) {
       } else if (message.type === 'appearance') {
         player.setAppearance(message.appearance);
       } else if (message.type === 'abilities') {
-        hud.setAbilities(message.abilities ?? []);
+        hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
         abilitiesWindow.render(message.abilities ?? []);
       } else if (message.type === 'zone') {
         enterZone(message, false);
@@ -458,6 +467,8 @@ function start(token) {
         groupFrames.showInvite(t('group.inviteText', { name: message.fromName }), 'group');
       } else if (message.type === 'guild-invite') {
         groupFrames.showInvite(t('guild.inviteText', { name: message.fromName, guild: message.guildName }), 'guild');
+      } else if (message.type === 'social') {
+        socialWindow.setData(message);
       } else if (message.type === 'quests') {
         hud.setQuests(message);
         questWindow.setQuests(message);
@@ -769,10 +780,12 @@ function start(token) {
         characterWindow.isOpen() ||
         abilitiesWindow.isOpen() ||
         questWindow.isOpen() ||
+        socialWindow.isOpen() ||
         worldMap.isOpen()
       ) {
         abilitiesWindow.hide();
         questWindow.hide();
+        socialWindow.hide();
         npcWindow.hide();
         vendorWindow.hide();
         lootWindow.hide();
@@ -805,6 +818,11 @@ function start(token) {
 
     if (event.code === 'KeyB' && !event.repeat) {
       inventory.toggle();
+      return;
+    }
+
+    if (event.code === 'KeyO' && !event.repeat) {
+      socialWindow.toggle();
       return;
     }
 
