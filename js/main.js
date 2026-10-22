@@ -474,6 +474,8 @@ function start(token) {
         questWindow.setQuests(message);
         questMarkers = message.markers ?? {};
         npcs.setMarkers(questMarkers);
+      } else if (message.type === 'ambient') {
+        ambient.applyServer(message);
       } else if (message.type === 'home') {
         gameState.home = { zoneId: message.zoneId, readyAt: message.readyAt };
       } else if (message.type === 'hearth') {

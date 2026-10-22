@@ -8,6 +8,7 @@ import { bindHome, serializeHome, updateHearth } from './inn.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
+import { collectAmbient, updateAmbient } from './ambient.js';
 import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
 import { itemRefId, serializeAbilities, serializeActionItems, setActionSlot, syncActionLayout } from './abilities.js';
@@ -769,6 +770,7 @@ function changeZone(playerId, state, zoneId, spawnId) {
   state.autoAttack = false;
   state.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
   state.knownEnemies = null;
+  state.knownAmbient = null;
   state.dataVersion += 1;
 
   sendToZone(previousZoneId, { type: 'leave', id: playerId });
@@ -819,7 +821,10 @@ function simulate() {
   }
 }
 
+let tickCount = 0;
+
 setInterval(() => {
+  tickCount += 1;
   simulate();
 
   for (const zone of getZones()) {
@@ -841,6 +846,13 @@ setInterval(() => {
     }
 
     if (zonePlayers.size === 0) continue;
+
+    updateAmbient(zone.id, true);
+    for (const [id, state] of zonePlayers) {
+      const ambientMessage = collectAmbient(zone.id, state, tickCount);
+      const socket = sockets.get(id);
+      if (ambientMessage && socket && socket.readyState === socket.OPEN) socket.send(JSON.stringify(ambientMessage));
+    }
 
     const snapshot = {};
     for (const [id, state] of zonePlayers) {

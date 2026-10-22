@@ -3,18 +3,16 @@ import { createHumanoid } from './Humanoid.js';
 import { createAnimal } from './Animal.js';
 import { resolveAppearance } from './Appearances.js';
 import { getColorMaterial } from '../world/Textures.js';
+import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
 
 const LOOKS = ['streuner', 'haendler', 'pumpenwart', 'funkerin', 'kanalwaerter'];
 const TOPS = [0x5a5240, 0x4a5a3a, 0x6a4a3a, 0x3a4a5a, 0x7a6a4a, 0x5a3a3a, 0x4a4a4a, 0x6a6a52];
 const PANTS = [0x3a382e, 0x3a4a5a, 0x4a4234, 0x2e2e2e, 0x4a4a32];
 const SKINS = [0xd1ab8c, 0xcaa488, 0xb88a68, 0x9a6e4e, 0xe0bc9c];
 const HAIRS = [0x2a2018, 0x4a3a2a, 0x6a5a40, 0x8a7a5a, 0x1a1a1a, 0x7a6a62];
-const CITIZEN_SPACING = 34;
-const DOG_SPACING = 92;
-const CHICKEN_SPACING = 80;
 const BIRD_SPACING = 140;
-const ACTIVE_RADIUS = 110;
 const BIRD_RADIUS = 170;
+const SERVER_SMOOTHING = 8;
 
 function hash(value) {
   let h = 2166136261;
@@ -123,7 +121,7 @@ function humanAppearance(random) {
 export function createAmbient(scene) {
   const paths = new Map();
   const entities = [];
-  const dummy = new THREE.Vector3();
+  const remote = new Map();
 
   function buildPath(points) {
     const lengths = [0];
@@ -157,34 +155,24 @@ export function createAmbient(scene) {
     paths.set(object.id, record);
 
     const random = seeded(hash(object.id));
-    const make = (kind, count, extra = {}) => {
-      for (let n = 0; n < count; n += 1) {
-        const entity = {
-          kind,
-          record,
-          s0: random() * path.total * 2,
-          speed: 0.9 + random() * 0.7,
-          lateral: (random() * 2 - 1) * Math.max(0.5, width / 2 - 0.7),
-          ph: random() * 6.28,
-          ph2: random() * 6.28,
-          seed: random(),
-          object: null,
-          animate: null,
-          lastX: 0,
-          lastZ: 0,
-          sample: { x: 0, z: 0, tx: 0, tz: 1 },
-          ...extra,
-        };
-        record.entities.push(entity);
-        entities.push(entity);
-      }
-    };
-
-    const count = (spacing) => Math.max(1, Math.round(path.total / spacing));
-    make('citizen', count(CITIZEN_SPACING));
-    make('dog', Math.max(0, Math.round(path.total / DOG_SPACING)), { speed: 1.6 + random() * 0.6 });
-    make('chicken', Math.max(1, Math.round(path.total / CHICKEN_SPACING)) * 3, { speed: 0.5, lateral: (random() < 0.5 ? -1 : 1) * (width / 2 + 0.2 + random() * 0.8) });
-    make('bird', Math.max(1, Math.round(path.total / BIRD_SPACING)), { speed: 3.5 + random() * 2 });
+    const count = Math.max(1, Math.round(path.total / BIRD_SPACING));
+    for (let n = 0; n < count; n += 1) {
+      const entity = {
+        kind: 'bird',
+        record,
+        s0: random() * path.total * 2,
+        speed: 3.5 + random() * 2,
+        ph: random() * 6.28,
+        ph2: random() * 6.28,
+        seed: random(),
+        object: null,
+        animate: null,
+        chicken: null,
+        sample: { x: 0, z: 0, tx: 0, tz: 1 },
+      };
+      record.entities.push(entity);
+      entities.push(entity);
+    }
   }
 
   function removePath(id) {
@@ -200,77 +188,92 @@ export function createAmbient(scene) {
 
   function clear() {
     for (const id of Array.from(paths.keys())) removePath(id);
+    for (const id of Array.from(remote.keys())) removeRemote(id);
   }
 
   function spawn(entity) {
     const random = seeded(entity.seed);
-    if (entity.kind === 'citizen') {
-      const humanoid = createHumanoid('streuner', { appearance: humanAppearance(random) });
-      entity.object = humanoid.object;
-      entity.animate = humanoid.update;
-    } else if (entity.kind === 'dog') {
-      const animal = createAnimal(random() < 0.5 ? 'stray_dog' : 'feral_dog');
-      entity.object = animal.object;
-      entity.animate = animal.update;
-    } else if (entity.kind === 'chicken') {
-      const chicken = buildChicken(random);
-      entity.object = chicken.object;
-      entity.chicken = chicken;
-    } else {
-      const bird = buildBird(random);
-      entity.object = bird.object;
-      entity.chicken = bird;
-    }
+    const bird = buildBird(random);
+    entity.object = bird.object;
+    entity.chicken = bird;
     entity.object.userData.ambient = true;
     scene.add(entity.object);
   }
 
   function place(entity, time) {
-    const { path } = entity.record;
     const out = entity.sample;
+    const { path } = entity.record;
+    const anchorS = (entity.s0 % path.total + path.total) % path.total;
+    sample(path, anchorS, out);
+    const radius = 14 + entity.seed * 10;
+    const w = entity.speed / radius;
+    const angle = entity.ph + w * time;
+    const x = out.x + Math.cos(angle) * radius;
+    const z = out.z + Math.sin(angle) * radius;
+    entity.object.position.set(x, 9 + entity.seed * 6 + Math.sin(time * 0.6 + entity.ph2) * 1.5, z);
+    entity.object.rotation.y = Math.atan2(-Math.sin(angle), Math.cos(angle));
+  }
 
-    if (entity.kind === 'citizen' || entity.kind === 'dog') {
-      const span = path.total * 2;
-      const u = (entity.s0 + entity.speed * time) % span;
-      const forward = u < path.total;
-      sample(path, forward ? u : span - u, out);
-      const direction = forward ? 1 : -1;
-      const wobble = entity.kind === 'dog' ? Math.sin(time * 0.9 + entity.ph) * 1.2 : 0;
-      const nx = -out.tz * direction;
-      const nz = out.tx * direction;
-      const lateral = entity.lateral + wobble;
-      entity.object.position.set(out.x + nx * lateral, 0, out.z + nz * lateral);
-      entity.object.rotation.y = Math.atan2(out.tx * direction, out.tz * direction);
-    } else if (entity.kind === 'chicken') {
-      const anchorS = (entity.s0 % path.total + path.total) % path.total;
-      sample(path, anchorS, out);
-      const nx = -out.tz;
-      const nz = out.tx;
-      const wx = Math.sin(time * 0.31 + entity.ph) * 1.8 + Math.sin(time * 0.77 + entity.ph2) * 0.6;
-      const wz = Math.cos(time * 0.27 + entity.ph2) * 1.8;
-      const x = out.x + nx * entity.lateral + wx;
-      const z = out.z + nz * entity.lateral + wz;
-      const dx = x - entity.lastX;
-      const dz = z - entity.lastZ;
-      entity.object.position.set(x, 0, z);
-      if (Math.hypot(dx, dz) > 1e-4) entity.object.rotation.y = Math.atan2(dx, dz);
-      entity.moving = Math.hypot(dx, dz);
-      entity.lastX = x;
-      entity.lastZ = z;
+  function createRemote(data) {
+    const random = seeded(data.seed / 1e6);
+    const record = { id: data.id, kind: data.kind, object: null, animate: null, chicken: null, target: new THREE.Vector3(data.x, 0, data.z), targetRotationY: data.r ?? 0, ph: random() * 6.28, moving: 0 };
+    if (data.kind === 'citizen') {
+      const humanoid = createHumanoid('streuner', { appearance: humanAppearance(random) });
+      record.object = humanoid.object;
+      record.animate = humanoid.update;
+    } else if (data.kind === 'dog') {
+      const animal = createAnimal(random() < 0.5 ? 'stray_dog' : 'feral_dog');
+      record.object = animal.object;
+      record.animate = animal.update;
     } else {
-      const anchorS = (entity.s0 % path.total + path.total) % path.total;
-      sample(path, anchorS, out);
-      const radius = 14 + entity.seed * 10;
-      const w = entity.speed / radius;
-      const angle = entity.ph + w * time;
-      const x = out.x + Math.cos(angle) * radius;
-      const z = out.z + Math.sin(angle) * radius;
-      entity.object.position.set(x, 9 + entity.seed * 6 + Math.sin(time * 0.6 + entity.ph2) * 1.5, z);
-      entity.object.rotation.y = Math.atan2(-Math.sin(angle), Math.cos(angle));
+      const chicken = buildChicken(random);
+      record.object = chicken.object;
+      record.chicken = chicken;
+    }
+    record.object.userData.ambient = true;
+    record.object.position.copy(record.target);
+    record.object.rotation.y = record.targetRotationY;
+    scene.add(record.object);
+    remote.set(data.id, record);
+  }
+
+  function removeRemote(id) {
+    const record = remote.get(id);
+    if (!record) return;
+    scene.remove(record.object);
+    remote.delete(id);
+  }
+
+  function applyServer(message) {
+    for (const id of message.removes ?? []) removeRemote(id);
+    for (const data of message.adds ?? []) {
+      if (remote.has(data.id)) continue;
+      createRemote(data);
+    }
+    for (const [id, x, z, r] of message.states ?? []) {
+      const record = remote.get(id);
+      if (!record) continue;
+      record.target.set(x, 0, z);
+      record.targetRotationY = r;
+    }
+  }
+
+  function updateRemote(delta) {
+    const factor = dampFactor(SERVER_SMOOTHING, delta);
+    const time = performance.now() / 1000;
+    for (const record of remote.values()) {
+      const { object } = record;
+      const lastX = object.position.x;
+      const lastZ = object.position.z;
+      object.position.lerp(record.target, factor);
+      object.rotation.y = lerpAngle(object.rotation.y, record.targetRotationY, factor);
+      if (record.animate) record.animate(delta);
+      else record.chicken.animate(time + record.ph, Math.hypot(object.position.x - lastX, object.position.z - lastZ) / Math.max(delta, 1e-3));
     }
   }
 
   function update(delta, playerPosition) {
+    updateRemote(delta);
     if (entities.length === 0) return;
     const time = performance.now() / 1000;
 
@@ -278,18 +281,14 @@ export function createAmbient(scene) {
       if (!entity.object && !spawnIfNear(entity, playerPosition, time)) continue;
       place(entity, time);
 
-      const limit = entity.kind === 'bird' ? BIRD_RADIUS : ACTIVE_RADIUS;
-      dummy.copy(entity.object.position);
-      if (Math.hypot(dummy.x - playerPosition.x, dummy.z - playerPosition.z) > limit + 25) {
+      if (Math.hypot(entity.object.position.x - playerPosition.x, entity.object.position.z - playerPosition.z) > BIRD_RADIUS + 25) {
         scene.remove(entity.object);
         entity.object = null;
-        entity.animate = null;
         entity.chicken = null;
         continue;
       }
 
-      if (entity.animate) entity.animate(delta);
-      else if (entity.chicken) entity.chicken.animate(time + entity.ph, entity.kind === 'chicken' ? (entity.moving ?? 0) / Math.max(delta, 1e-3) : 1);
+      entity.chicken.animate(time + entity.ph, 1);
     }
   }
 
@@ -300,13 +299,10 @@ export function createAmbient(scene) {
     const x = entity.object.position.x;
     const z = entity.object.position.z;
     entity.object = saved;
-    const limit = entity.kind === 'bird' ? BIRD_RADIUS : ACTIVE_RADIUS;
-    if (Math.hypot(x - playerPosition.x, z - playerPosition.z) > limit) return false;
+    if (Math.hypot(x - playerPosition.x, z - playerPosition.z) > BIRD_RADIUS) return false;
     spawn(entity);
-    entity.lastX = x;
-    entity.lastZ = z;
     return true;
   }
 
-  return { addPath, removePath, clear, update };
+  return { addPath, removePath, applyServer, clear, update };
 }
