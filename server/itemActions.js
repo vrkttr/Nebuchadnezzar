@@ -2,6 +2,7 @@ import { getClassModifiers } from './classes.js';
 import { getItem } from './items.js';
 import { addItem, serializeInventory } from './inventory.js';
 import { EQUIPMENT_SLOTS, applyEquipmentStats, serializeEquipment } from './equipment.js';
+import { startHearth } from './inn.js';
 
 const CONSUMABLE_COOLDOWN_MS = 6000;
 
@@ -63,6 +64,7 @@ export function useInventoryItem(playerId, player, slotIndex, notify) {
   if (!item) return;
 
   if (item.slot) return equipItem(notify, playerId, player, slotIndex, item);
+  if (item.use?.hearth) return startHearth(player, playerId, notify);
   if (item.use) return consumeItem(notify, playerId, player, slotIndex, item);
 
   fail(notify, playerId, 'not-usable');

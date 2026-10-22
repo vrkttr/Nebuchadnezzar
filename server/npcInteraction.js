@@ -32,6 +32,8 @@ function sendNpcWindow(player, playerId, npc, notify) {
     guild: Boolean(npc.guild),
     guildName: player.guildName ?? null,
     guildCost: GUILD_FOUNDING_COST,
+    inn: Boolean(npc.inn),
+    innBound: player.homeZone === player.zoneId,
     barber: Boolean(npc.barber),
     barberCost: BARBER_COST,
     appearance: player.appearance,
@@ -47,6 +49,11 @@ export function resolveGuildNpc(player, playerId, npcId, notify) {
 export function resolveBarberNpc(player, playerId, npcId, notify) {
   const npc = resolveNpc(player, playerId, npcId, notify);
   return npc?.barber ? npc : null;
+}
+
+export function resolveInnNpc(player, playerId, npcId, notify) {
+  const npc = resolveNpc(player, playerId, npcId, notify);
+  return npc?.inn ? npc : null;
 }
 
 export function refreshNpcWindow(player, playerId, npc, notify) {

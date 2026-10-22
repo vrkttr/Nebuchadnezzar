@@ -92,6 +92,20 @@ const NPC_DEFINITIONS = {
     greeting: 'Setz dich. Eine neue Frisur macht aus einem Verlierer keinen Gewinner, aber man sieht dem Tod besser ins Gesicht.',
     barber: true,
   },
+  gastwirt: {
+    id: 'gastwirt',
+    name: 'Gastwirt',
+    color: 0x6a4a34,
+    greeting: 'Setz dich, ruh dich aus. Wenn du bei mir Rast machst, findet dich dein Heimstein von überall wieder hierher.',
+    inn: true,
+    vendor: {
+      stock: [
+        { itemId: 'hearthstone', price: 20 },
+        { itemId: 'canned_food', price: 8 },
+        { itemId: 'bandage', price: 6 },
+      ],
+    },
+  },
   pumpenwart: {
     id: 'pumpenwart',
     name: 'Pumpenwart',

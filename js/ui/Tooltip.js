@@ -78,6 +78,16 @@ export function createTooltip(state) {
       lines.push([t('tooltip.useHeal', { heal: item.use.heal }), 'tooltip-use']);
     }
 
+    if (item.use?.hearth) {
+      lines.push([t('tooltip.useHearth'), 'tooltip-use']);
+      lines.push([
+        state.home?.zoneId
+          ? t('tooltip.homeBound', { zone: tOr([`zone.${state.home.zoneId}.name`], state.home.zoneId) })
+          : t('tooltip.homeUnbound'),
+        'tooltip-dim',
+      ]);
+    }
+
     if (item.description) {
       lines.push([item.description, 'tooltip-desc']);
     }

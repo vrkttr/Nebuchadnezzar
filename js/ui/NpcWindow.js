@@ -90,6 +90,10 @@ export function createNpcWindow(state, ui, handlers = {}) {
       options.appendChild(button(t('npc.trade'), 'npc-option', () => handlers.onVendor?.(data.npcId)));
     }
 
+    if (data.inn && !data.innBound) {
+      options.appendChild(button(t('inn.bind'), 'npc-option', () => handlers.onInnBind?.(data.npcId)));
+    }
+
     if (data.barber) {
       options.appendChild(
         button(t('barber.open'), 'npc-option', () => {
@@ -119,6 +123,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
     }
 
     options.appendChild(button(t('npc.leave'), 'npc-option npc-option-leave', hide));
+    if (data.inn && data.innBound) children.push(element('p', 'npc-hint', t('inn.bound')));
     children.push(options);
 
     body.replaceChildren(...children);

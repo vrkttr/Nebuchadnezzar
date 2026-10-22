@@ -95,6 +95,11 @@ function buildExterior(batch, kind, width, depth, height, theme) {
     const banner = getColorMaterial(0x7a3a4a, { side: THREE.DoubleSide });
     batch.box(banner, 0.8, 1.5, 0.04, { x: flagX, y: flagY - 0.2, z: flagZ + 0.2, tile: 1 });
     batch.box(getColorMaterial(0xc8a850), 0.3, 0.3, 0.06, { x: flagX, y: flagY, z: flagZ + 0.24, ry: 0, rz: Math.PI / 4, tile: 1 });
+  } else if (kind === 'taverne') {
+    const glass = getColorMaterial(0xc8a050);
+    batch.cylinder(glass, 0.2, 0.17, 0.4, 8, { x: flagX, y: flagY - 0.1, z: flagZ + 0.25 });
+    batch.box(trim, 0.06, 0.06, 0.4, { x: flagX, y: flagY + 0.28, z: flagZ + 0.1, tile: 1 });
+    batch.box(getColorMaterial(0xe8e0c8), 0.34, 0.1, 0.34, { x: flagX, y: flagY + 0.12, z: flagZ + 0.25, tile: 1 });
   } else {
     batch.box(wood, 0.9, 0.7, 0.08, { x: flagX, y: flagY, z: flagZ + 0.2, tile: 1 });
     batch.cylinder(rust, 0.2, 0.2, 0.1, 8, { x: flagX, y: flagY, z: flagZ + 0.27, rx: Math.PI / 2 });
@@ -173,6 +178,18 @@ function buildInterior(batch, kind, width, depth) {
       batch.box(cloth, 1.0, 0.1, 1.0, { x, y: 1.25, z: back + 3.4, tile: 1 });
     }
     batch.box(getColorMaterial(0x7a3a4a, { side: THREE.DoubleSide }), 3, 2.2, 0.04, { x: 0, y: 2, z: back + 0.1, tile: 1 });
+  } else if (kind === 'taverne') {
+    shelves(0, back + depth * 0.25, -1);
+    for (const [x, z] of [[-width * 0.28, back + depth * 0.62], [width * 0.28, back + depth * 0.62], [-width * 0.28, back + depth * 0.84], [width * 0.28, back + depth * 0.84]]) {
+      batch.cylinder(wood, 0.55, 0.55, 0.08, 10, { x, y: 0.78, z });
+      batch.cylinder(steel, 0.07, 0.07, 0.75, 6, { x, y: 0.38, z });
+      for (const [sx, sz] of [[-0.85, 0], [0.85, 0], [0, -0.85], [0, 0.85]]) {
+        batch.cylinder(boards, 0.22, 0.22, 0.45, 8, { x: x + sx, y: 0.22, z: z + sz });
+      }
+    }
+    batch.box(wood, 0.9, 1.1, 0.9, { x: inner - 0.6, y: 0.55, z: back + 1.0, tile: 1 });
+    batch.cylinder(rust, 0.45, 0.45, 0.9, 10, { x: inner - 0.6, y: 1.55, z: back + 1.0 });
+    batch.box(getColorMaterial(0xa04a32), 1.6, 0.9, 0.12, { x: -width * 0.28, y: 1.7, z: back + 0.12, tile: 1 });
   } else {
     shelves(0, back + depth * 0.25, 1);
     shelves(0, back + depth * 0.25, -1);

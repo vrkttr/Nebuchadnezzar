@@ -158,6 +158,7 @@ function start(token) {
     onVendor: (npcId) => connection.send({ type: 'vendor-open', npcId }),
     onGuildCreate: (npcId, name) => connection.send({ type: 'guild-create', npcId, name }),
     onGuildLeave: (npcId) => connection.send({ type: 'guild-leave', npcId }),
+    onInnBind: (npcId) => connection.send({ type: 'inn-bind', npcId }),
     onBarberPreview: (appearance) => player.setAppearance(appearance),
     onBarberApply: (npcId, appearance) => connection.send({ type: 'barber-apply', npcId, appearance }),
   });
@@ -418,6 +419,7 @@ function start(token) {
       if (message.type === 'init') {
         ownPlayerId = message.id;
         gameState.player.classId = message.classId ?? null;
+        if (message.home) gameState.home = { zoneId: message.home.zoneId, readyAt: message.home.readyAt };
         if (message.autoFullscreen) armAutoFullscreen();
         touchControls.setMode(message.touchControls);
         audio.applySettings(message.audio);
@@ -461,6 +463,17 @@ function start(token) {
         questWindow.setQuests(message);
         questMarkers = message.markers ?? {};
         npcs.setMarkers(questMarkers);
+      } else if (message.type === 'home') {
+        gameState.home = { zoneId: message.zoneId, readyAt: message.readyAt };
+      } else if (message.type === 'hearth') {
+        if (message.state === 'start') {
+          hud.startCast(t('hearth.cast'), message.duration);
+        } else {
+          hud.stopCast();
+          if (message.reason === 'moved' || message.reason === 'damaged' || message.reason === 'cancelled') {
+            hud.addEvent({ kind: 'hearth-cancelled' });
+          }
+        }
       } else if (message.type === 'npc-window') {
         audio.play(`npc_${message.npcId}_greet`);
         npcWindow.show(message);

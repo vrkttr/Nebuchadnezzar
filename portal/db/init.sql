@@ -98,3 +98,5 @@ CREATE TABLE IF NOT EXISTS guilds (
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS guild_id INT NULL;
 ALTER TABLE guilds ADD COLUMN IF NOT EXISTS leader_id INT NULL;
 UPDATE guilds g SET g.leader_id = (SELECT MIN(c.id) FROM characters c WHERE c.guild_id = g.id) WHERE g.leader_id IS NULL;
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS home_zone VARCHAR(32) NULL DEFAULT NULL;
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS hearth_ready_at BIGINT NOT NULL DEFAULT 0;

@@ -12,6 +12,10 @@ function failureText(group, reason, fallbackKey = 'failure.default') {
 }
 
 export function createHud(state, handlers = {}) {
+  const castBar = document.getElementById('cast-bar');
+  const castFill = document.getElementById('cast-bar-fill');
+  const castLabel = document.getElementById('cast-bar-label');
+  let cast = null;
   const playerName = document.getElementById('player-name');
   const playerLevel = document.getElementById('player-level');
   const playerHealthFill = document.getElementById('player-health-fill');
@@ -154,6 +158,28 @@ export function createHud(state, handlers = {}) {
     );
   }
 
+  function startCast(label, durationMs) {
+    cast = { label, startedAt: performance.now(), duration: durationMs };
+    castLabel.textContent = label;
+    castFill.style.width = '0%';
+    castBar.classList.remove('hidden');
+  }
+
+  function stopCast() {
+    cast = null;
+    castBar.classList.add('hidden');
+  }
+
+  function updateCast() {
+    if (!cast) return;
+    const ratio = Math.min(1, (performance.now() - cast.startedAt) / cast.duration);
+    castFill.style.width = `${ratio * 100}%`;
+  }
+
+  function zoneLabel(zoneId) {
+    return tOr([`zone.${zoneId}.name`], zoneId);
+  }
+
   function itemName(itemId) {
     return state.items[itemId]?.name ?? itemId;
   }
@@ -184,6 +210,14 @@ export function createHud(state, handlers = {}) {
       addMessage(t('event.buff', { seconds: event.seconds }));
     } else if (event.kind === 'item-failed') {
       addMessage(failureText('item', event.reason));
+    } else if (event.kind === 'home-bound') {
+      addMessage(t('event.homeBound', { zone: zoneLabel(event.zoneId) }));
+    } else if (event.kind === 'home-already') {
+      addMessage(t('event.homeAlready', { zone: zoneLabel(event.zoneId) }));
+    } else if (event.kind === 'hearth-cancelled') {
+      addMessage(t('event.hearthCancelled'));
+    } else if (event.kind === 'hearth-failed') {
+      addMessage(t(`failure.hearth.${event.reason}`, { seconds: event.seconds ?? 0 }));
     } else if (event.kind === 'quest-accepted') {
       addMessage(t('event.questAccepted', { name: event.name }));
     } else if (event.kind === 'quest-progress') {
@@ -245,6 +279,7 @@ export function createHud(state, handlers = {}) {
     zoneName.textContent = state.zoneName;
 
     updateAbilitySlots();
+    updateCast();
 
     if (state.target) {
       targetFrame.classList.remove('hidden');
@@ -268,5 +303,5 @@ export function createHud(state, handlers = {}) {
     }
   }
 
-  return { update, setAbilities, setCrouch, setQuests, addEvent };
+  return { update, setAbilities, setCrouch, setQuests, addEvent, startCast, stopCast };
 }

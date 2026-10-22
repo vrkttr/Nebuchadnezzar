@@ -3,6 +3,7 @@ import { answerGuildInvite, createGuild, inviteToGuild, kickFromGuild, leaveGuil
 import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
 import { applyBarber } from './barber.js';
+import { bindHome, serializeHome, updateHearth } from './inn.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
@@ -26,6 +27,7 @@ import {
   refreshNpcWindow,
   resolveGuildNpc,
   resolveBarberNpc,
+  resolveInnNpc,
   sellToVendor,
 } from './npcInteraction.js';
 import { abandonQuest, diffQuestLog, loadQuests, questRows, recordKill, recordPosition, serializeQuestLog } from './quests.js';
@@ -126,6 +128,9 @@ function createInitialState(character) {
     characterName: character.name,
     introSeen: character.introSeen,
     zoneId: character.zoneId,
+    homeZone: character.homeZone,
+    hearthReadyAt: character.hearthReadyAt,
+    hearth: null,
     loadingUntil: 0,
     appearance: character.appearance,
     x: character.x,
@@ -185,7 +190,7 @@ function parseActionLayout(raw) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, c.home_zone, c.hearth_ready_at, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -233,6 +238,8 @@ async function loadCharacter(characterId) {
     touchControls: ['auto', 'on', 'off'].includes(row.touch_controls) ? row.touch_controls : 'auto',
     actionLayout: parseActionLayout(row.action_bar),
     zoneId,
+    homeZone: getZone(row.home_zone) ? row.home_zone : null,
+    hearthReadyAt: Number(row.hearth_ready_at) || 0,
     x: startPosition.x,
     y: startPosition.y,
     z: startPosition.z,
@@ -280,7 +287,7 @@ async function writeState(state) {
   const quests = questRows(state.quests);
 
   const characterQuery =
-    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ?, starter_kit = 1, zone = ? WHERE id = ?';
+    'UPDATE characters SET pos_x = ?, pos_y = ?, pos_z = ?, rotation_y = ?, level = ?, xp = ?, gold = ?, starter_kit = 1, zone = ?, hearth_ready_at = ? WHERE id = ?';
   const characterParams = [
     state.x,
     state.y,
@@ -290,6 +297,7 @@ async function writeState(state) {
     Math.floor(state.xp),
     state.gold,
     state.zoneId,
+    state.hearthReadyAt,
     state.characterId,
   ];
 
@@ -398,6 +406,7 @@ wss.on('connection', async (socket, request) => {
       world: serializeZone(getZone(initialState.zoneId)),
       position: { x: initialState.x, y: initialState.y, z: initialState.z, rotationY: initialState.rotationY },
       audio: character.audio,
+      home: serializeHome(initialState),
     })
   );
 
@@ -452,6 +461,10 @@ wss.on('connection', async (socket, request) => {
       const state = players.get(id);
       const npc = state ? resolveBarberNpc(state, id, message.npcId, notify) : null;
       if (npc) applyBarber(dbPool, state, id, message.appearance, notify).then(() => refreshNpcWindow(state, id, npc, notify));
+    } else if (message.type === 'inn-bind') {
+      const state = players.get(id);
+      const npc = state ? resolveInnNpc(state, id, message.npcId, notify) : null;
+      if (npc) bindHome(dbPool, state, id, state.zoneId, notify).then(() => refreshNpcWindow(state, id, npc, notify));
     } else if (message.type === 'guild-leave') {
       const state = players.get(id);
       const npc = state ? resolveGuildNpc(state, id, message.npcId, notify) : null;
@@ -716,6 +729,7 @@ function changeZone(playerId, state, zoneId, spawnId) {
   const previousZoneId = state.zoneId;
   removeLootOfPlayer(lootContainers, playerId);
 
+  state.hearth = null;
   state.zoneId = zoneId;
   state.x = spawn.x;
   state.y = spawn.y;
@@ -827,6 +841,12 @@ setInterval(() => {
     else sendToZone(zone.id, { type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
   }
 
+  updateHearth(
+    players,
+    notify,
+    (playerId, state, zoneId, spawnId) => changeZone(playerId, state, zoneId, spawnId),
+    (state) => persistState(state).catch((error) => console.error('Fehler beim Speichern des Heimsteins:', error))
+  );
   updateLootContainers(lootContainers, TICK_DELTA, notify);
   updateGroups(groups, players, notify);
   if (players.size === 0) return;

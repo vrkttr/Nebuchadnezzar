@@ -27,5 +27,6 @@ export const gameState = {
   canGuildInviteTarget: false,
   canGuildKickTarget: false,
   zoneName: '',
+  home: { zoneId: null, readyAt: 0 },
   quests: [],
 };

@@ -23,6 +23,8 @@ export function buyItem(player, playerId, npc, itemId, quantity, notify) {
     return fail(notify, playerId, 'invalid');
   }
 
+  if (item.unique && player.inventory.some((stack) => stack && stack.itemId === item.id)) return fail(notify, playerId, 'owned');
+
   const cost = entry.price * quantity;
   if (player.gold < cost) return fail(notify, playerId, 'no-gold');
 
