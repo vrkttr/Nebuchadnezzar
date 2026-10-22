@@ -68,6 +68,7 @@ function loadZone(id, file) {
     teleporters: [],
     chests: [],
     colliders: [],
+    waters: [],
     npcs: [],
     enemies: [],
     visuals: [],
@@ -159,6 +160,10 @@ function loadZone(id, file) {
         zone.enemies.push({ type: props.type, level: Number(props.level), healthMax: props.healthMax, x: center.x, z: center.z, props });
       }
       continue;
+    }
+
+    if (kind === 'wasser' && shape === 'rect' && !props.rinne) {
+      zone.waters.push({ x0: center.x - objectWidth / 2, x1: center.x + objectWidth / 2, z0: center.z - objectHeight / 2, z1: center.z + objectHeight / 2, depth: Number(props.tiefe) || 0.3 });
     }
 
     zone.visuals.push({
@@ -263,6 +268,14 @@ for (const zone of ZONES.values()) {
     if (!target) throw new Error(`Zonendatei ${zone.id}: Teleporter "${teleporter.id}" verweist auf die unbekannte Zone "${teleporter.zone}".`);
     if (!target.spawns[teleporter.spawn]) throw new Error(`Zonendatei ${zone.id}: Teleporter "${teleporter.id}" verweist auf den unbekannten Spawnpunkt "${teleporter.spawn}".`);
   }
+}
+
+export function waterDepthAt(zone, x, z) {
+  let depth = 0;
+  for (const water of zone.waters) {
+    if (x >= water.x0 && x <= water.x1 && z >= water.z0 && z <= water.z1) depth = Math.max(depth, water.depth);
+  }
+  return depth;
 }
 
 export function getZone(zoneId) {

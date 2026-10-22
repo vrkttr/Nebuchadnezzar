@@ -56,6 +56,11 @@ const SOUND_DEFINITIONS = {
   npc_streuner_greet: { volume: 0.43, variation: 0.03 },
   npc_haendler_idle: { volume: 0.31, variation: 0.05 },
   npc_haendler_greet: { volume: 0.43, variation: 0.03 },
+  drip_1: { volume: 0.3, variation: 0.12 },
+  drip_2: { volume: 0.3, variation: 0.12 },
+  drip_3: { volume: 0.3, variation: 0.12 },
+  splash_1: { volume: 0.3, variation: 0.1 },
+  splash_2: { volume: 0.3, variation: 0.1 },
   distant_creak: { volume: 0.14, variation: 0.1 },
   distant_clang: { volume: 0.12, variation: 0.1 },
   ambient_wind: { volume: AMBIENT_LOOPS.ambient_wind, loop: true },
@@ -66,6 +71,8 @@ const SOUND_DEFINITIONS = {
 const SOUND_GROUPS = {
   step: ['step_1', 'step_2', 'step_3', 'step_4', 'step_5', 'step_6'],
   far: ['distant_creak', 'distant_clang'],
+  drip: ['drip_1', 'drip_2', 'drip_3'],
+  splash: ['splash_1', 'splash_2'],
   npc_streuner_idle: ['npc_streuner_idle', 'npc_streuner_cough'],
   npc_haendler_idle: ['npc_haendler_idle'],
 };

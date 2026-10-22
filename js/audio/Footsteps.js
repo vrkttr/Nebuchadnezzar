@@ -5,7 +5,7 @@ const MIN_SPEED = 0.35;
 const TELEPORT_DISTANCE = 4;
 const GROUND_HEIGHT = 0.12;
 
-export function createFootsteps(audio) {
+export function createFootsteps(audio, isInWater = () => false) {
   const tracked = new Map();
   let ownAirborne = false;
 
@@ -54,11 +54,11 @@ export function createFootsteps(audio) {
       audio.play('land');
     }
 
-    if (ownStep && grounded) audio.play('step', { volume: ownStep.running ? 1 : 0.65 });
+    if (ownStep && grounded) audio.play(isInWater(own.x, own.z) ? 'splash' : 'step', { volume: ownStep.running ? 1 : 0.65 });
 
     for (const other of others) {
       const result = advance(other.key, other.x, other.z, delta);
-      if (result) audio.playAt('step', other.x, other.z, result.running ? 0.9 : 0.6);
+      if (result) audio.playAt(isInWater(other.x, other.z) ? 'splash' : 'step', other.x, other.z, result.running ? 0.9 : 0.6);
     }
 
     for (const [key, entry] of tracked) {

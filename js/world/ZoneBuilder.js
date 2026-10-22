@@ -5,6 +5,7 @@ import { createHall } from './builders/Hall.js';
 import { INTERIOR_BUILDERS } from './builders/Interior.js';
 import { addTree } from './builders/Vegetation.js';
 import { createRandom } from './Random.js';
+import { buildWater, createMossBatch, resetSewer } from './builders/Sewer.js';
 import { getMaterial, OVERLAY, OVERLAY_TOP } from './Textures.js';
 
 const LAYERS = { overlay: OVERLAY, top: OVERLAY_TOP, none: {} };
@@ -281,11 +282,11 @@ export function createBuildContext() {
   const assets = createAssetLibrary();
   assets.register('halle', createHall);
   for (const [kind, factory] of Object.entries(INTERIOR_BUILDERS)) assets.register(kind, factory);
-  return { assets, trees: [], bushes: [], emitters: [], wallGroups: new Map() };
+  return { assets, trees: [], bushes: [], emitters: [], drips: [], moss: createMossBatch(), wallGroups: new Map() };
 }
 
 export function addObject(target, context, object, clip = null) {
-  const { assets, trees, bushes, emitters, wallGroups } = context;
+  const { assets, trees, bushes, emitters, drips, moss, wallGroups } = context;
   const props = coerceProps(object.props);
 
   if (object.kind === 'wand' && props.buendeln) {
@@ -296,6 +297,12 @@ export function addObject(target, context, object, clip = null) {
     target.add(buildSurface(object, props));
   } else if (object.kind === 'strasse') {
     target.add(buildRoad(object, props));
+  } else if (object.kind === 'wasser') {
+    target.add(buildWater(object, props));
+  } else if (object.kind === 'moos') {
+    moss.add(object, props);
+  } else if (object.kind === 'tropfen') {
+    drips.push({ x: object.x, z: object.z, y: props.y ?? 0.1, hoehe: props.hoehe ?? 3, intervall: props.intervall ?? 2, laut: props.laut ?? 1 });
   } else if (object.kind === 'fleck') {
     target.add(buildPatch(object.width / 2, object.x, object.z, object.rotation, props));
   } else if (object.kind === 'flecken') {
@@ -327,11 +334,13 @@ export function addObject(target, context, object, clip = null) {
 export function finishObjects(target, context) {
   for (const { props, walls } of context.wallGroups.values()) target.add(buildWallBatch(props, walls));
   target.add(buildForests(context.trees, context.bushes));
+  target.add(context.moss.build());
 }
 
 export function buildZone(scene, world) {
   const zone = new THREE.Group();
   zone.name = world.name ?? 'Zone';
+  resetSewer();
   const context = createBuildContext();
 
   const groundWidth = world.indoor || world.chunked ? world.width : GROUND_SIZE;
@@ -348,7 +357,7 @@ export function buildZone(scene, world) {
   const teleporters = (world.teleporters ?? []).map(buildTeleporter);
   for (const proxy of teleporters) zone.add(proxy);
 
-  return { zone, emitters: context.emitters, teleporters };
+  return { zone, emitters: context.emitters, drips: context.drips, teleporters };
 }
 
 function buildWallBatch(props, walls) {

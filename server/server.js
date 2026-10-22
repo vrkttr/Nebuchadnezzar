@@ -31,7 +31,7 @@ import {
 import { diffQuestLog, loadQuests, questRows, recordKill, recordPosition, serializeQuestLog } from './quests.js';
 import { PLAYER_RADIUS, resolveCollisions } from './world.js';
 import { chestKey, openChest, serializeChests } from './worldChests.js';
-import { DEFAULT_ZONE_ID, getZone, getZones, serializeChunk, serializeZone } from './zoneLoader.js';
+import { DEFAULT_ZONE_ID, getZone, getZones, serializeChunk, serializeZone, waterDepthAt } from './zoneLoader.js';
 import {
   createLootContainers,
   openLoot,
@@ -60,6 +60,7 @@ const CROUCH_SPEED = 1;
 const TAB_TARGET_RANGE = 40;
 const JUMP_SPEED = 5.5;
 const GRAVITY = 14;
+const SHALLOW_WATER_SPEED = 0.7;
 const GROUND_Y = 0;
 const TICK_INTERVAL_MS = 50;
 const TICK_DELTA = TICK_INTERVAL_MS / 1000;
@@ -748,7 +749,9 @@ function simulate() {
 
     const { input } = state;
 
-    const speed = (input.crouch ? CROUCH_SPEED : input.run ? RUN_SPEED : WALK_SPEED) * getClassModifiers(state.classId).moveSpeedMult;
+    const zone = getZone(state.zoneId);
+    const waterFactor = zone && waterDepthAt(zone, state.x, state.z) > 0 ? SHALLOW_WATER_SPEED : 1;
+    const speed = (input.crouch ? CROUCH_SPEED : input.run ? RUN_SPEED : WALK_SPEED) * getClassModifiers(state.classId).moveSpeedMult * waterFactor;
     state.x += input.moveX * speed * TICK_DELTA;
     state.z += input.moveZ * speed * TICK_DELTA;
 

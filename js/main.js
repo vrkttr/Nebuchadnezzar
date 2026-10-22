@@ -48,6 +48,8 @@ const [
   { createLoadingScreen },
   { createAudio },
   { createFootsteps },
+  { createDrips },
+  { updateSewer, isInWater },
   { gameState },
   { buildServerUrl, getPortalUrl },
   { initI18n, t, applyDom },
@@ -99,6 +101,8 @@ const [
   import(v('./ui/LoadingScreen.js')),
   import(v('./audio/Audio.js')),
   import(v('./audio/Footsteps.js')),
+  import(v('./effects/Drips.js')),
+  import(v('./world/builders/Sewer.js')),
   import(v('./state/GameState.js')),
   import(v('./config.js')),
   import(v('./i18n/I18n.js')),
@@ -160,7 +164,8 @@ function start(token) {
     onBuy: (npcId, itemId, quantity) =>
       connection.send({ type: 'vendor-buy', npcId, itemId, quantity }),
   });
-  const footsteps = createFootsteps(audio);
+  const footsteps = createFootsteps(audio, isInWater);
+  const drips = createDrips(scene, audio);
   audio.bindUi(document);
   let ownWeapon = null;
   let zoneEmitters = [];
@@ -339,6 +344,7 @@ function start(token) {
     plane.setEnabled(world.id === 'startwelt');
     audio.setIndoor(Boolean(world.indoor));
     audio.setEmitters(zone.emitters);
+    drips.setSources(zone.drips);
     thirdPersonCamera.setBlockers(world.cameraBlockers ?? []);
     enemies.setBlockers(world.cameraBlockers ?? []);
     if (world.indoor && !wasIndoor) outdoorCameraDistance = thirdPersonCamera.getDistance();
@@ -830,6 +836,8 @@ function start(token) {
     player.update(delta);
     streamer?.update(player.object.position.x, player.object.position.z);
     ambient.update(delta, player.object.position);
+    updateSewer(delta);
+    drips.update(delta, player.object.position);
     remotePlayers.update(delta);
     enemies.update(delta);
     lootMarkers.update(delta);

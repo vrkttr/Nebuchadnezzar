@@ -79,19 +79,19 @@ export function createWindow({ breite = 1.6, hoehe = 1.2, hoch = 1.0, zugenagelt
   return finish(batch, 'Fenster');
 }
 
-export function createCeilingLamp({ licht = false, intensitaet = 16, distanz = 10, farbe = '#ffd9a0', laenge = 1.2 }) {
+export function createCeilingLamp({ licht = false, intensitaet = 16, distanz = 10, farbe = '#ffd9a0', laenge = 1.2, hoehe = 3 }) {
   const batch = createBatch();
   const housing = getMaterial('steel', { color: 0xb8b8a8 });
   const glow = getColorMaterial(0xfff0cc, { unlit: true });
 
-  batch.box(housing, laenge + 0.08, 0.05, 0.22, { y: 2.95, tile: 1 });
-  batch.box(glow, laenge, 0.03, 0.16, { y: 2.915, tile: 1 });
+  batch.box(housing, laenge + 0.08, 0.05, 0.22, { y: hoehe - 0.05, tile: 1 });
+  batch.box(glow, laenge, 0.03, 0.16, { y: hoehe - 0.085, tile: 1 });
 
   const group = finish(batch, 'Lampe');
 
   if (licht) {
     const light = new THREE.PointLight(farbe, intensitaet, distanz, 1.6);
-    light.position.y = 2.5;
+    light.position.y = hoehe - 0.5;
     group.add(light);
   }
 
