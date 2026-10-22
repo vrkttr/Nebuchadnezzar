@@ -41,6 +41,7 @@ const [
   { createPlane },
   { createIntroWindow },
   { createAbilitiesWindow },
+  { createQuestWindow },
   { createAbilityDrag },
   { allowLeave, armAutoFullscreen },
   { createTouchControls },
@@ -94,6 +95,7 @@ const [
   import(v('./effects/Plane.js')),
   import(v('./ui/IntroWindow.js')),
   import(v('./ui/AbilitiesWindow.js')),
+  import(v('./ui/QuestWindow.js')),
   import(v('./ui/AbilityDrag.js')),
   import(v('./input/Keyboard.js')),
   import(v('./input/Touch.js')),
@@ -160,6 +162,10 @@ function start(token) {
     onBarberApply: (npcId, appearance) => connection.send({ type: 'barber-apply', npcId, appearance }),
   });
   const abilitiesWindow = createAbilitiesWindow(ui);
+  const questWindow = createQuestWindow({
+    confirmDialog: ui.confirmDialog,
+    onAbandon: (questId) => connection.send({ type: 'quest-abandon', questId }),
+  });
   const vendorWindow = createVendorWindow(gameState, ui, {
     onBuy: (npcId, itemId, quantity) =>
       connection.send({ type: 'vendor-buy', npcId, itemId, quantity }),
@@ -192,7 +198,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'quests']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -369,11 +375,12 @@ function start(token) {
       const activeStreamer = streamer;
       activeStreamer.setBudget(20);
       let finished = false;
-      const ready = activeStreamer.whenReady(position.x, position.z, 120).then(() => {
+      const loadRadius = Math.hypot(world.width, world.height);
+      const ready = activeStreamer.whenReady(position.x, position.z, loadRadius).then(() => {
         finished = true;
       });
       while (!finished && streamer === activeStreamer) {
-        loadingScreen.setProgress(0.4 + 0.4 * activeStreamer.progress(position.x, position.z, 120), t('loading.status.world'));
+        loadingScreen.setProgress(0.4 + 0.4 * activeStreamer.progress(position.x, position.z, loadRadius), t('loading.status.world'));
         await Promise.race([ready, nextFrame()]);
       }
       activeStreamer.setBudget(5);
@@ -451,6 +458,7 @@ function start(token) {
         groupFrames.showInvite(t('guild.inviteText', { name: message.fromName, guild: message.guildName }), 'guild');
       } else if (message.type === 'quests') {
         hud.setQuests(message);
+        questWindow.setQuests(message);
         questMarkers = message.markers ?? {};
         npcs.setMarkers(questMarkers);
       } else if (message.type === 'npc-window') {
@@ -747,9 +755,11 @@ function start(token) {
         inventory.isOpen() ||
         characterWindow.isOpen() ||
         abilitiesWindow.isOpen() ||
+        questWindow.isOpen() ||
         worldMap.isOpen()
       ) {
         abilitiesWindow.hide();
+        questWindow.hide();
         npcWindow.hide();
         vendorWindow.hide();
         lootWindow.hide();
@@ -782,6 +792,11 @@ function start(token) {
 
     if (event.code === 'KeyB' && !event.repeat) {
       inventory.toggle();
+      return;
+    }
+
+    if (event.code === 'KeyQ' && !event.repeat) {
+      questWindow.toggle();
       return;
     }
 

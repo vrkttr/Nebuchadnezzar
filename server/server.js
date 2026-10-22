@@ -28,7 +28,7 @@ import {
   resolveBarberNpc,
   sellToVendor,
 } from './npcInteraction.js';
-import { diffQuestLog, loadQuests, questRows, recordKill, recordPosition, serializeQuestLog } from './quests.js';
+import { abandonQuest, diffQuestLog, loadQuests, questRows, recordKill, recordPosition, serializeQuestLog } from './quests.js';
 import { PLAYER_RADIUS, resolveCollisions } from './world.js';
 import { chestKey, openChest, serializeChests } from './worldChests.js';
 import { DEFAULT_ZONE_ID, getZone, getZones, serializeChunk, serializeZone, waterDepthAt } from './zoneLoader.js';
@@ -592,6 +592,9 @@ wss.on('connection', async (socket, request) => {
       if (state && typeof message.questId === 'string') {
         completeNpcQuest(state, id, message.npcId, message.questId, notify);
       }
+    } else if (message.type === 'quest-abandon') {
+      const state = players.get(id);
+      if (state && typeof message.questId === 'string') abandonQuest(state, id, message.questId, notify);
     } else if (message.type === 'vendor-open') {
       const state = players.get(id);
       if (state) openVendor(state, id, message.npcId, notify);

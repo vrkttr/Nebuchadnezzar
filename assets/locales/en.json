@@ -514,5 +514,21 @@
   "barber.apply": "Apply ({cost} gold)",
   "barber.noGold": "The barber charges {cost} gold.",
   "barber.unchanged": "Your appearance is already like this.",
-  "barber.done": "The barber did a fine job."
+  "barber.done": "The barber did a fine job.",
+  "questlog.title": "Missions",
+  "questlog.empty": "You have no active missions.",
+  "questlog.select": "Select a mission on the left.",
+  "questlog.level": "Level {level}",
+  "questlog.ready": "Ready to turn in",
+  "questlog.objectives": "Objectives",
+  "questlog.rewards": "Reward",
+  "questlog.xp": "{amount} experience",
+  "questlog.gold": "{amount} gold",
+  "questlog.turnIn": "Turn in at {name}",
+  "questlog.giver": "Accepted from {name}",
+  "questlog.abandon": "Abandon mission",
+  "questlog.abandonConfirm": "Really abandon “{name}”? Your progress will be lost.",
+  "questlog.abandonYes": "Abandon",
+  "event.questAbandoned": "Mission abandoned: {name}",
+  "failure.quest.abandon": "This mission cannot be abandoned."
 }

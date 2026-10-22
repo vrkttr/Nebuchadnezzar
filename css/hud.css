@@ -1678,6 +1678,115 @@ button {
   width: 300px;
 }
 
+#quests-window {
+  left: calc(50% - 360px);
+  top: 12%;
+  width: 720px;
+  max-width: calc(100vw - 16px);
+}
+
+#quests-layout {
+  display: flex;
+  gap: 12px;
+  padding: 10px 14px 14px;
+  min-height: 320px;
+}
+
+#quests-list {
+  flex: none;
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.quest-row {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--nu-ink);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.quest-row:hover {
+  border-color: var(--nu-line);
+}
+
+.quest-row.selected {
+  background: rgba(0, 0, 0, 0.12);
+  border-color: var(--nu-line);
+}
+
+.quest-row-name {
+  font-family: var(--nu-font-display);
+  font-size: 14px;
+}
+
+.quest-row-meta {
+  font-size: 12px;
+  color: var(--nu-ink-soft);
+}
+
+.quest-row-meta.ready {
+  color: var(--nu-amber);
+}
+
+#quests-detail {
+  flex: 1;
+  min-width: 0;
+  padding-left: 12px;
+  border-left: 1px solid var(--nu-line);
+  font-size: 13px;
+  line-height: 1.45;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.quest-detail-name {
+  font-family: var(--nu-font-display);
+  font-size: 18px;
+}
+
+.quest-detail-meta {
+  font-size: 12px;
+  color: var(--nu-ink-soft);
+}
+
+.quest-detail-text {
+  margin: 8px 0;
+  white-space: pre-wrap;
+}
+
+.quest-detail-heading {
+  margin-top: 10px;
+  font-family: var(--nu-font-display);
+  font-size: 13px;
+  color: var(--nu-ink-soft);
+}
+
+.quest-detail-empty {
+  color: var(--nu-ink-soft);
+  font-style: italic;
+}
+
+#quests-detail .quest-objective.done {
+  color: #4f6f2c;
+}
+
+#quests-detail .quest-ready {
+  color: #8a5a10;
+}
+
+.quest-abandon {
+  margin-top: 14px;
+}
+
 #abilities-hint {
   margin: 0;
   padding: 10px 14px 0;
@@ -2222,7 +2331,8 @@ html.touch-ui #minimap-buttons button {
     bottom: 8px;
   }
 
-  #abilities-window {
+  #abilities-window,
+  #quests-window {
     left: 8px;
     top: 8px;
   }

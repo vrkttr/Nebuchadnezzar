@@ -192,6 +192,8 @@ export function createHud(state, handlers = {}) {
       addMessage(t('event.questReady', { name: event.name }));
     } else if (event.kind === 'quest-completed') {
       addMessage(t('event.questCompleted', { name: event.name }));
+    } else if (event.kind === 'quest-abandoned') {
+      addMessage(t('event.questAbandoned', { name: event.name }));
     } else if (event.kind === 'quest-failed') {
       addMessage(failureText('quest', event.reason));
     } else if (event.kind === 'npc-failed') {

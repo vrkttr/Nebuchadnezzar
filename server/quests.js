@@ -271,6 +271,11 @@ function serializeRewards(quest) {
   };
 }
 
+function serializeLogRewards(quest) {
+  const rewards = serializeRewards(quest);
+  return { ...rewards, items: rewards.items.map((item) => ({ ...item, name: getItem(item.itemId)?.name ?? item.itemId })) };
+}
+
 export function questsForNpc(player, npcId) {
   const list = [];
 
@@ -337,6 +342,11 @@ export function serializeQuestLog(player) {
       ready: isReady(player, quest, entry),
       turnInNpc: quest.turnInNpc,
       turnInName: getNpcDefinition(quest.turnInNpc)?.name ?? '',
+      giverName: getNpcDefinition(quest.giverNpc)?.name ?? '',
+      level: quest.level,
+      description: quest.offerText ?? '',
+      progressText: quest.progressText ?? '',
+      rewards: serializeLogRewards(quest),
       objectives: serializeObjectives(player, quest, entry),
     });
   }
@@ -485,6 +495,18 @@ export function completeQuest(player, playerId, npcId, questId, notify) {
 
   sendInventory(notify, playerId, player);
   notify(playerId, { type: 'event', kind: 'quest-completed', questId: quest.id, name: quest.name });
+
+  return true;
+}
+
+export function abandonQuest(player, playerId, questId, notify) {
+  const quest = getQuest(questId);
+  if (!quest || player.quests[quest.id]?.status !== 'active') return fail(notify, playerId, 'invalid');
+
+  delete player.quests[quest.id];
+  player.dataVersion += 1;
+
+  notify(playerId, { type: 'event', kind: 'quest-abandoned', questId: quest.id, name: quest.name });
 
   return true;
 }

@@ -514,5 +514,21 @@
   "barber.apply": "Übernehmen ({cost} Gold)",
   "barber.noGold": "Der Barbier verlangt {cost} Gold.",
   "barber.unchanged": "Dein Aussehen ist bereits so.",
-  "barber.done": "Der Barbier hat ganze Arbeit geleistet."
+  "barber.done": "Der Barbier hat ganze Arbeit geleistet.",
+  "questlog.title": "Missionen",
+  "questlog.empty": "Du hast keine aktiven Missionen.",
+  "questlog.select": "Wähle links eine Mission aus.",
+  "questlog.level": "Stufe {level}",
+  "questlog.ready": "Bereit zur Abgabe",
+  "questlog.objectives": "Ziele",
+  "questlog.rewards": "Belohnung",
+  "questlog.xp": "{amount} Erfahrung",
+  "questlog.gold": "{amount} Gold",
+  "questlog.turnIn": "Abgabe bei {name}",
+  "questlog.giver": "Angenommen bei {name}",
+  "questlog.abandon": "Mission abbrechen",
+  "questlog.abandonConfirm": "Mission „{name}“ wirklich abbrechen? Der Fortschritt geht verloren.",
+  "questlog.abandonYes": "Abbrechen",
+  "event.questAbandoned": "Mission abgebrochen: {name}",
+  "failure.quest.abandon": "Diese Mission kann nicht abgebrochen werden."
 }
