@@ -72,6 +72,7 @@ function buildRoad(object, props) {
   const points = object.points;
   const width = props.breite ?? 6;
   const tile = props.tile ?? 4;
+  const across = props.texturLaengs ? 1 : width / tile;
   const count = points.length;
   const positions = new Float32Array(count * 6);
   const uvs = new Float32Array(count * 4);
@@ -88,7 +89,7 @@ function buildRoad(object, props) {
     if (i > 0) along += Math.hypot(x - points[i - 1][0], z - points[i - 1][1]);
     const half = width / 2;
     positions.set([x + nx * half, 0, z + nz * half, x - nx * half, 0, z - nz * half], i * 6);
-    uvs.set([0, along / tile, width / tile, along / tile], i * 4);
+    uvs.set([0, along / tile, across, along / tile], i * 4);
     if (i < count - 1) indices.push(i * 2, i * 2 + 2, i * 2 + 1, i * 2 + 1, i * 2 + 2, i * 2 + 3);
   }
 

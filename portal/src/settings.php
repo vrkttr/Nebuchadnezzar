@@ -18,15 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ambient = max(0, min(100, (int) ($_POST['ambient'] ?? 100)));
     $muted = isset($_POST['muted']) ? 1 : 0;
     $autoFullscreen = isset($_POST['auto_fullscreen']) ? 1 : 0;
-    $viewDistance = max(1, min(6, (int) ($_POST['view_distance'] ?? 3)));
     $touchControls = in_array($_POST['touch_controls'] ?? '', ['auto', 'on', 'off'], true) ? $_POST['touch_controls'] : 'auto';
 
-    $stmt = $pdo->prepare('UPDATE users SET audio_volume = :volume, audio_ambient = :ambient, audio_muted = :muted, auto_fullscreen = :auto_fullscreen, touch_controls = :touch_controls, view_distance = :view_distance WHERE id = :id');
-    $stmt->execute(['volume' => $volume, 'ambient' => $ambient, 'muted' => $muted, 'auto_fullscreen' => $autoFullscreen, 'touch_controls' => $touchControls, 'view_distance' => $viewDistance, 'id' => $_SESSION['user_id']]);
+    $stmt = $pdo->prepare('UPDATE users SET audio_volume = :volume, audio_ambient = :ambient, audio_muted = :muted, auto_fullscreen = :auto_fullscreen, touch_controls = :touch_controls WHERE id = :id');
+    $stmt->execute(['volume' => $volume, 'ambient' => $ambient, 'muted' => $muted, 'auto_fullscreen' => $autoFullscreen, 'touch_controls' => $touchControls, 'id' => $_SESSION['user_id']]);
     $saved = true;
 }
 
-$stmt = $pdo->prepare('SELECT audio_volume, audio_ambient, audio_muted, auto_fullscreen, touch_controls, view_distance FROM users WHERE id = :id');
+$stmt = $pdo->prepare('SELECT audio_volume, audio_ambient, audio_muted, auto_fullscreen, touch_controls FROM users WHERE id = :id');
 $stmt->execute(['id' => $_SESSION['user_id']]);
 $settings = $stmt->fetch();
 
@@ -68,11 +67,6 @@ renderPageStart(t('settings.title'), 'settings.php', true);
 <section class="portal-group">
 <h2 class="portal-group-title"><?= th('settings.display') ?></h2>
 <label class="portal-field">
-<span class="nu-label portal-field-value"><?= th('settings.viewDistance') ?> <output id="view-value"></output></span>
-<input type="range" name="view_distance" min="1" max="6" step="1" value="<?= (int) $settings['view_distance'] ?>" data-output="view-value" data-steps="<?= th('settings.viewSteps') ?>" class="portal-range">
-</label>
-<p class="portal-hint"><?= th('settings.viewDistanceHint') ?></p>
-<label class="portal-field">
 <span class="nu-label"><?= th('settings.autoFullscreen') ?></span>
 <input type="checkbox" name="auto_fullscreen" value="1" class="portal-checkbox"<?= $settings['auto_fullscreen'] ? ' checked' : '' ?>>
 </label>
@@ -94,12 +88,9 @@ renderPageStart(t('settings.title'), 'settings.php', true);
 </form>
 <script>
 document.querySelectorAll('input[type="range"]').forEach(function (input) {
-    var steps = input.dataset.steps ? input.dataset.steps.split('|') : null;
-    var update = function () {
-        document.getElementById(input.dataset.output).textContent = steps ? steps[Number(input.value) - 1] : input.value + ' %';
-    };
-    input.addEventListener('input', update);
-    update();
+    input.addEventListener('input', function () {
+        document.getElementById(input.dataset.output).textContent = input.value + ' %';
+    });
 });
 document.getElementById('language-select').addEventListener('change', function (event) {
     var target = 'language.php?lang=' + encodeURIComponent(event.target.value);

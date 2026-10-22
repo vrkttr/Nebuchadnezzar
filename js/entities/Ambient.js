@@ -9,10 +9,10 @@ const TOPS = [0x5a5240, 0x4a5a3a, 0x6a4a3a, 0x3a4a5a, 0x7a6a4a, 0x5a3a3a, 0x4a4a
 const PANTS = [0x3a382e, 0x3a4a5a, 0x4a4234, 0x2e2e2e, 0x4a4a32];
 const SKINS = [0xd1ab8c, 0xcaa488, 0xb88a68, 0x9a6e4e, 0xe0bc9c];
 const HAIRS = [0x2a2018, 0x4a3a2a, 0x6a5a40, 0x8a7a5a, 0x1a1a1a, 0x7a6a62];
-const CITIZEN_SPACING = 17;
-const DOG_SPACING = 46;
-const CHICKEN_SPACING = 40;
-const BIRD_SPACING = 70;
+const CITIZEN_SPACING = 34;
+const DOG_SPACING = 92;
+const CHICKEN_SPACING = 80;
+const BIRD_SPACING = 140;
 const ACTIVE_RADIUS = 110;
 const BIRD_RADIUS = 170;
 

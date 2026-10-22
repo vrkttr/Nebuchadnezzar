@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { addObject, createBuildContext, finishObjects } from './ZoneBuilder.js';
 
+const LOAD_RADIUS = 600;
+const UNLOAD_RADIUS = 700;
 const MAX_REQUEST = 16;
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'flecken', 'weg', 'strasse']);
 const READY_TIMEOUT_MS = 25000;
@@ -12,9 +14,7 @@ function disposeNode(root) {
   });
 }
 
-export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, onEmitters, onPath, onPathRemoved, getRadius }) {
-  const loadRadius = () => getRadius();
-  const unloadRadius = () => getRadius() * 1.25 + 40;
+export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, onEmitters, onPath, onPathRemoved }) {
   const size = world.chunkSize;
   const halfWidth = world.width / 2;
   const halfHeight = world.height / 2;
@@ -146,7 +146,7 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
 
   function requestMissing(px, pz) {
     const wanted = [];
-    const reach = Math.ceil(loadRadius() / size) + 1;
+    const reach = Math.ceil(LOAD_RADIUS / size) + 1;
     const pcx = Math.floor((px + halfWidth) / size);
     const pcz = Math.floor((pz + halfHeight) / size);
 
@@ -157,7 +157,7 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
         if (existing && !(existing.state === 'requested' && performance.now() - existing.requestedAt > RETRY_MS)) continue;
         const [x, z] = centerOf(cx, cz);
         const distance = Math.hypot(x - px, z - pz);
-        if (distance <= loadRadius() + size * 0.5) wanted.push({ cx, cz, key, distance });
+        if (distance <= LOAD_RADIUS + size * 0.5) wanted.push({ cx, cz, key, distance });
       }
     }
 
@@ -174,7 +174,7 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
   function unloadFar(px, pz) {
     for (const [key, chunk] of Array.from(chunks)) {
       const [x, z] = centerOf(chunk.cx, chunk.cz);
-      if (Math.hypot(x - px, z - pz) > unloadRadius() + size * 0.5) unload(key);
+      if (Math.hypot(x - px, z - pz) > UNLOAD_RADIUS + size * 0.5) unload(key);
     }
   }
 

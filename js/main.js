@@ -8,7 +8,6 @@ const [
   { createThirdPersonCamera },
   { buildZone, disposeZone },
   { createZoneStreamer },
-  { updateShopRoofs },
   { createAmbient },
   { createPlayer },
   { createPlayerController },
@@ -60,7 +59,6 @@ const [
   import(v('./core/ThirdPersonCamera.js')),
   import(v('./world/ZoneBuilder.js')),
   import(v('./world/ZoneStreamer.js')),
-  import(v('./world/builders/Shop.js')),
   import(v('./entities/Ambient.js')),
   import(v('./entities/Characters.js')),
   import(v('./entities/PlayerController.js')),
@@ -216,13 +214,6 @@ function start(token) {
     0.1,
     1000
   );
-  let viewRadius = 176;
-
-  function applyViewRadius(radius) {
-    viewRadius = radius;
-    camera.far = Math.max(300, radius * 1.1 + 60);
-    camera.updateProjectionMatrix();
-  }
 
   const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
   const playerController = createPlayerController(camera);
@@ -342,10 +333,9 @@ function start(token) {
         onEmitters: (list) => audio.setEmitters(list),
         onPath: (object) => ambient.addPath(object),
         onPathRemoved: (id) => ambient.removePath(id),
-        getRadius: () => viewRadius,
       });
     }
-    applyLighting(scene, world, viewRadius);
+    applyLighting(scene, world);
     plane.setEnabled(world.id === 'startwelt');
     audio.setIndoor(Boolean(world.indoor));
     audio.setEmitters(zone.emitters);
@@ -418,7 +408,6 @@ function start(token) {
         if (message.autoFullscreen) armAutoFullscreen();
         touchControls.setMode(message.touchControls);
         audio.applySettings(message.audio);
-        if (message.view) applyViewRadius(message.view.radius);
         ownWeapon = message.equipment?.weapon ?? null;
         enterZone(message, true).then(() => {
           if (message.showIntro) introWindow.show();
@@ -840,7 +829,6 @@ function start(token) {
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     player.update(delta);
     streamer?.update(player.object.position.x, player.object.position.z);
-    updateShopRoofs(player.object.position);
     ambient.update(delta, player.object.position);
     remotePlayers.update(delta);
     enemies.update(delta);

@@ -7,7 +7,6 @@ const WALL = 0.4;
 const DOOR_WIDTH = 2.4;
 const DOOR_HEIGHT = 2.7;
 const signMaterials = new Map();
-const shops = new Set();
 
 const THEMES = {
   barbier: { wall: '#b9a98a', trim: 0x4a3a2c, board: '#2f4a52', ink: '#f0e6c8' },
@@ -254,24 +253,5 @@ export function createLaden(params = {}) {
   const roofGroup = roof.build('Dach');
   group.add(roofGroup);
 
-  shops.add({ group, roof: roofGroup, halfWidth: width / 2 - WALL, halfDepth: depth / 2 - WALL });
   return group;
-}
-
-const probe = new THREE.Vector3();
-
-export function updateShopRoofs(position) {
-  for (const shop of shops) {
-    let root = shop.group;
-    while (root.parent) root = root.parent;
-    if (!root.isScene) {
-      shops.delete(shop);
-      continue;
-    }
-    shop.group.updateWorldMatrix(true, false);
-    probe.copy(position);
-    shop.group.worldToLocal(probe);
-    const inside = Math.abs(probe.x) < shop.halfWidth && Math.abs(probe.z) < shop.halfDepth;
-    if (shop.roof.visible === inside) shop.roof.visible = !inside;
-  }
 }
