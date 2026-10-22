@@ -6,6 +6,8 @@ const MAX_MARKERS = 12;
 const MAX_MAP_SIZE = 600;
 const TILES = 3;
 const MAX_ZOOM = 4;
+const CHUNKED_MAX_ZOOM = 12;
+const CHUNKED_BASE_SIZE = 4096;
 const ZOOM_STEP = 1.25;
 const DRAG_THRESHOLD = 4;
 const CAMERA_HEIGHT = 80;
@@ -58,6 +60,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
   let markers = [];
   let timer = REDRAW_INTERVAL;
   let zoom = 1;
+  let maxZoom = MAX_ZOOM;
   let centerX = 0;
   let centerZ = 0;
   let drag = null;
@@ -93,7 +96,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
   }
 
   function setZoom(next, anchorX, anchorY) {
-    const clamped = Math.max(1, Math.min(MAX_ZOOM, next));
+    const clamped = Math.max(1, Math.min(maxZoom, next));
     if (clamped === zoom) return;
 
     const [worldX, worldZ] = toWorld(anchorX, anchorY);
@@ -179,6 +182,45 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     drawPlayer();
   }
 
+  function drawOverview(world) {
+    const overview = document.createElement('canvas');
+    overview.width = CHUNKED_BASE_SIZE;
+    overview.height = CHUNKED_BASE_SIZE;
+    const overviewContext = overview.getContext('2d');
+    const scale = CHUNKED_BASE_SIZE / extent;
+    overviewContext.fillStyle = '#0f0e0a';
+    overviewContext.fillRect(0, 0, CHUNKED_BASE_SIZE, CHUNKED_BASE_SIZE);
+    overviewContext.fillStyle = '#4a5030';
+    overviewContext.fillRect((extent / 2 - world.width / 2) * scale, (extent / 2 - world.height / 2) * scale, world.width * scale, world.height * scale);
+
+    for (const shape of world.overview ?? []) {
+      overviewContext.save();
+      overviewContext.translate((shape.x + extent / 2) * scale, (shape.z + extent / 2) * scale);
+      overviewContext.rotate(-shape.rotation);
+      overviewContext.fillStyle = shape.color;
+      overviewContext.fillRect((-shape.width / 2) * scale, (-shape.height / 2) * scale, shape.width * scale, shape.height * scale);
+      overviewContext.restore();
+    }
+
+    overviewContext.textAlign = 'center';
+    overviewContext.textBaseline = 'middle';
+    overviewContext.lineJoin = 'round';
+    overviewContext.lineWidth = 5;
+    overviewContext.strokeStyle = '#0f0e0a';
+    overviewContext.fillStyle = '#f1ead0';
+    overviewContext.font = "bold 26px 'Allerta Stencil', sans-serif";
+    for (const shape of world.overview ?? []) {
+      if (!shape.label) continue;
+      const text = t(`map.${world.id}.${shape.label}`);
+      const x = (shape.x + extent / 2) * scale;
+      const y = (shape.z + extent / 2) * scale;
+      overviewContext.strokeText(text, x, y);
+      overviewContext.fillText(text, x, y);
+    }
+
+    return overview;
+  }
+
   function captureZone(world, hiddenObjects) {
     zoneId = world.id;
     extent = Math.max(world.width, world.height);
@@ -189,6 +231,18 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     zoom = 1;
     centerX = 0;
     centerZ = 0;
+
+    maxZoom = world.chunked ? CHUNKED_MAX_ZOOM : MAX_ZOOM;
+
+    if (world.chunked) {
+      base = drawOverview(world);
+      canvas.width = Math.round(cssSize * pixelRatio);
+      canvas.height = Math.round(cssSize * pixelRatio);
+      canvas.style.width = `${cssSize}px`;
+      canvas.style.height = `${cssSize}px`;
+      titleEl.textContent = world.name;
+      return;
+    }
 
     const tilePixels = Math.round(cssSize * pixelRatio);
     base = document.createElement('canvas');

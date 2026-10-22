@@ -253,5 +253,5 @@ export function createEnemies(scene, camera, nameplateContainer, player) {
     return [...front, ...back].map((entry) => entry.id);
   }
 
-  return { getData: (id) => enemies.get(id)?.data ?? null, getTargetCandidates, setBlockers: occlusion.setBlockers, sync, clear, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
+  return { getData: (id) => enemies.get(id)?.data ?? null, getTargetCandidates, setBlockers: occlusion.setBlockers, has: (id) => enemies.has(id), add, remove, sync, clear, applyStates, getObjects, findDataByObject, select, clearSelection, playAttack, getObject, getMarkers, getType, playHit, update };
 }

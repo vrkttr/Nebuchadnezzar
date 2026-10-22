@@ -17,6 +17,8 @@ function createSkyTexture() {
   return texture;
 }
 
+const HORIZON_COLOR = '#d4cdb6';
+const UNLIMITED_RADIUS = 900;
 const HEMISPHERE_INTENSITY = 2.1;
 const SUN_INTENSITY = 1.7;
 
@@ -39,14 +41,20 @@ export function createScene() {
   return scene;
 }
 
-export function applyLighting(scene, world) {
+export function applyLighting(scene, world, viewRadius = 176) {
   const { sky, hemisphere, sun } = scene.userData.environment;
-  const lighting = world.indoor ? world.lighting ?? {} : {};
+  const lighting = world.indoor || world.chunked ? world.lighting ?? {} : {};
 
   scene.background = world.indoor ? new THREE.Color(lighting.background ?? '#070706') : sky;
   hemisphere.intensity = HEMISPHERE_INTENSITY * (lighting.ambient ?? 1);
   sun.intensity = SUN_INTENSITY * (lighting.sun ?? 1);
 
   const [fogColor, fogNear, fogFar] = String(lighting.fog ?? '').split(':');
-  scene.fog = world.indoor && fogColor && Number(fogFar) > 0 ? new THREE.Fog(fogColor, Number(fogNear), Number(fogFar)) : null;
+  if (world.indoor) {
+    scene.fog = fogColor && Number(fogFar) > 0 ? new THREE.Fog(fogColor, Math.min(Number(fogNear), viewRadius * 0.5), Math.min(Number(fogFar), viewRadius)) : null;
+  } else if (viewRadius >= UNLIMITED_RADIUS) {
+    scene.fog = null;
+  } else {
+    scene.fog = new THREE.Fog(fogColor && world.chunked ? fogColor : HORIZON_COLOR, viewRadius * 0.55, viewRadius);
+  }
 }

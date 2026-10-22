@@ -4,7 +4,11 @@ import { fileURLToPath } from 'node:url';
 
 const ZONE_DIRECTORY = join(dirname(fileURLToPath(import.meta.url)), 'zones');
 const COLLISION_LAYER = 'Kollision';
+const OVERVIEW_LAYER = 'Karte';
 const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste']);
+const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'wald', 'flecken']);
+export const CHUNK_SIZE = 64;
+const CHUNK_LIMIT = 4096;
 
 export const DEFAULT_ZONE_ID = 'startwelt';
 
@@ -55,6 +59,10 @@ function loadZone(id, file) {
     halfHeight,
     groundTexture: mapProperties.groundTexture ?? 'grass',
     groundColor: mapProperties.groundColor ?? '#ffffff',
+    chunked: Boolean(mapProperties.chunked),
+    fog: mapProperties.nebel ?? null,
+    overview: [],
+    chunks: new Map(),
     spawn: null,
     spawns: {},
     teleporters: [],
@@ -96,6 +104,12 @@ function loadZone(id, file) {
     }
 
     const rotationY = -rotation;
+
+    if (layer === OVERVIEW_LAYER) {
+      if (shape !== 'rect') throw new Error(`Zonendatei ${id}: Kartenobjekt ${object.id} muss ein Rechteck sein.`);
+      zone.overview.push({ x: center.x, z: center.z, width: objectWidth, height: objectHeight, rotation: rotationY, color: String(props.color ?? '#6b6558'), label: props.label ? String(props.label) : null });
+      continue;
+    }
 
     if (layer === COLLISION_LAYER) {
       if (shape === 'rect') {
@@ -161,7 +175,77 @@ function loadZone(id, file) {
   }
 
   if (!zone.spawn) throw new Error('Zonendatei: Es fehlt ein Objekt der Klasse "spawn".');
+  if (zone.chunked) buildChunks(zone);
   return zone;
+}
+
+function chunkIndex(value, half) {
+  return Math.floor((value + half) / CHUNK_SIZE);
+}
+
+function chunkKey(cx, cz) {
+  return cx * CHUNK_LIMIT + cz;
+}
+
+function visualBounds(visual) {
+  if (visual.points?.length) {
+    const xs = visual.points.map((point) => point[0]);
+    const zs = visual.points.map((point) => point[1]);
+    return [Math.min(...xs), Math.min(...zs), Math.max(...xs), Math.max(...zs)];
+  }
+
+  const cos = Math.abs(Math.cos(visual.rotation));
+  const sin = Math.abs(Math.sin(visual.rotation));
+  const halfX = (cos * visual.width + sin * visual.height) / 2;
+  const halfZ = (sin * visual.width + cos * visual.height) / 2;
+  return [visual.x - halfX, visual.z - halfZ, visual.x + halfX, visual.z + halfZ];
+}
+
+function chunkAt(zone, cx, cz) {
+  const key = chunkKey(cx, cz);
+  let chunk = zone.chunks.get(key);
+  if (!chunk) {
+    chunk = { cx, cz, objects: [], blockers: [] };
+    zone.chunks.set(key, chunk);
+  }
+  return chunk;
+}
+
+function forEachChunk(zone, bounds, callback) {
+  const minX = Math.max(0, chunkIndex(bounds[0], zone.halfWidth));
+  const maxX = Math.min(Math.ceil(zone.width / CHUNK_SIZE) - 1, chunkIndex(bounds[2], zone.halfWidth));
+  const minZ = Math.max(0, chunkIndex(bounds[1], zone.halfHeight));
+  const maxZ = Math.min(Math.ceil(zone.height / CHUNK_SIZE) - 1, chunkIndex(bounds[3], zone.halfHeight));
+
+  for (let cx = minX; cx <= maxX; cx += 1) {
+    for (let cz = minZ; cz <= maxZ; cz += 1) callback(chunkAt(zone, cx, cz));
+  }
+}
+
+function buildChunks(zone) {
+  if (zone.width / CHUNK_SIZE > CHUNK_LIMIT || zone.height / CHUNK_SIZE > CHUNK_LIMIT) throw new Error(`Zonendatei ${zone.id}: Zone ist zu groß für das Chunk-Raster.`);
+
+  zone.visuals.forEach((visual, index) => {
+    visual.id = index;
+    if (SPANNING_KINDS.has(visual.kind)) {
+      forEachChunk(zone, visualBounds(visual), (chunk) => chunk.objects.push(visual));
+    } else {
+      forEachChunk(zone, [visual.x, visual.z, visual.x, visual.z], (chunk) => chunk.objects.push(visual));
+    }
+  });
+
+  let blockerId = 0;
+  for (const collider of zone.colliders) {
+    if (!(collider.cameraHeight > 0)) continue;
+    const blocker = collider.shape === 'circle' ? null : { id: blockerId, x: collider.x, z: collider.z, halfX: collider.halfX, halfZ: collider.halfZ, rotation: collider.rotation, height: collider.cameraHeight };
+    blockerId += 1;
+    if (!blocker) continue;
+    const cos = Math.abs(Math.cos(blocker.rotation));
+    const sin = Math.abs(Math.sin(blocker.rotation));
+    const halfX = cos * blocker.halfX + sin * blocker.halfZ;
+    const halfZ = sin * blocker.halfX + cos * blocker.halfZ;
+    forEachChunk(zone, [blocker.x - halfX, blocker.z - halfZ, blocker.x + halfX, blocker.z + halfZ], (chunk) => chunk.blockers.push(blocker));
+  }
 }
 
 const ZONES = new Map();
@@ -189,7 +273,37 @@ export function getZones() {
   return Array.from(ZONES.values());
 }
 
+export function serializeChunk(zone, cx, cz) {
+  const chunk = zone.chunks.get(chunkKey(cx, cz));
+  return {
+    cx,
+    cz,
+    objects: chunk ? chunk.objects.map(({ id: objectId, kind, x, z, rotation, width, height, shape, points, props }) => ({ id: objectId, kind, x, z, rotation, width, height, shape, points, props })) : [],
+    blockers: chunk ? chunk.blockers : [],
+  };
+}
+
 export function serializeZone(zone) {
+  if (zone.chunked) {
+    return {
+      id: zone.id,
+      name: zone.name,
+      indoor: zone.indoor,
+      lighting: { ...zone.lighting, fog: zone.fog },
+      width: zone.width,
+      height: zone.height,
+      groundTexture: zone.groundTexture,
+      groundColor: zone.groundColor,
+      spawn: zone.spawn,
+      chunked: true,
+      chunkSize: CHUNK_SIZE,
+      objects: [],
+      overview: zone.overview,
+      teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
+      cameraBlockers: [],
+    };
+  }
+
   return {
     id: zone.id,
     name: zone.name,

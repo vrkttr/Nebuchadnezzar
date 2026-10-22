@@ -37,9 +37,11 @@ function swapUv(geometry, across, along) {
   }
 }
 
+const SURFACE_SEGMENT = 16;
+
 function buildSurface(object, props) {
   const tile = props.tile ?? 4;
-  const geometry = new THREE.PlaneGeometry(object.width, object.height);
+  const geometry = new THREE.PlaneGeometry(object.width, object.height, Math.max(1, Math.ceil(object.width / SURFACE_SEGMENT)), Math.max(1, Math.ceil(object.height / SURFACE_SEGMENT)));
   geometry.rotateX(-Math.PI / 2);
   if (props.texturLaengs) swapUv(geometry, 1, object.width / tile);
   else scaleUv(geometry, object.width / tile, object.height / tile);
@@ -66,6 +68,55 @@ function toWorld(object, localX, localZ) {
   return { x: object.x + localX * cos + localZ * sin, z: object.z - localX * sin + localZ * cos };
 }
 
+function buildRoad(object, props) {
+  const points = object.points;
+  const width = props.breite ?? 6;
+  const tile = props.tile ?? 4;
+  const count = points.length;
+  const positions = new Float32Array(count * 6);
+  const uvs = new Float32Array(count * 4);
+  const indices = [];
+  let along = 0;
+
+  for (let i = 0; i < count; i += 1) {
+    const [x, z] = points[i];
+    const [ax, az] = points[Math.max(0, i - 1)];
+    const [bx, bz] = points[Math.min(count - 1, i + 1)];
+    const length = Math.hypot(bx - ax, bz - az) || 1;
+    const nx = -(bz - az) / length;
+    const nz = (bx - ax) / length;
+    if (i > 0) along += Math.hypot(x - points[i - 1][0], z - points[i - 1][1]);
+    const half = width / 2;
+    positions.set([x + nx * half, 0, z + nz * half, x - nx * half, 0, z - nz * half], i * 6);
+    uvs.set([0, along / tile, width / tile, along / tile], i * 4);
+    if (i < count - 1) indices.push(i * 2, i * 2 + 2, i * 2 + 1, i * 2 + 1, i * 2 + 2, i * 2 + 3);
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  const normals = geometry.attributes.normal;
+  for (let i = 0; i < normals.count; i += 1) normals.setXYZ(i, 0, 1, 0);
+
+  const group = new THREE.Group();
+  const material = surfaceMaterial(props);
+  const strip = new THREE.Mesh(geometry, material);
+  strip.position.y = props.y ?? 0.012;
+  group.add(strip);
+
+  for (const [x, z] of [points[0], points[count - 1]]) {
+    const cap = new THREE.CircleGeometry(width / 2, 14);
+    cap.rotateX(-Math.PI / 2);
+    scaleUv(cap, width / tile, width / tile);
+    const mesh = new THREE.Mesh(cap, material);
+    mesh.position.set(x, props.y ?? 0.012, z);
+    group.add(mesh);
+  }
+  return group;
+}
+
 function buildPatchField(object, props) {
   const random = createRandom(props.seed ?? 1);
   const group = new THREE.Group();
@@ -78,40 +129,86 @@ function buildPatchField(object, props) {
   return group;
 }
 
-function stratified(object, density, margin, random, callback) {
+function cellSeed(seed, i, j, salt) {
+  return (Math.imul(seed | 0, 73856093) ^ Math.imul(i, 19349663) ^ Math.imul(j, 83492791) ^ salt) >>> 0;
+}
+
+function stratified(object, density, margin, random, callback, clip = null, seed = 1, salt = 0) {
   const spacing = Math.sqrt(100 / density);
   const halfWidth = object.width / 2 - margin;
   const halfDepth = object.height / 2 - margin;
-  for (let ix = -halfWidth; ix < halfWidth; ix += spacing) {
-    for (let iz = -halfDepth; iz < halfDepth; iz += spacing) {
-      const localX = Math.min(halfWidth, ix + random.range(0, spacing));
-      const localZ = Math.min(halfDepth, iz + random.range(0, spacing));
-      callback(toWorld(object, localX, localZ));
+
+  if (!clip) {
+    for (let ix = -halfWidth; ix < halfWidth; ix += spacing) {
+      for (let iz = -halfDepth; iz < halfDepth; iz += spacing) {
+        const localX = Math.min(halfWidth, ix + random.range(0, spacing));
+        const localZ = Math.min(halfDepth, iz + random.range(0, spacing));
+        callback(toWorld(object, localX, localZ), random);
+      }
+    }
+    return;
+  }
+
+  const cos = Math.cos(object.rotation);
+  const sin = Math.sin(object.rotation);
+  let minLocalX = Infinity;
+  let maxLocalX = -Infinity;
+  let minLocalZ = Infinity;
+  let maxLocalZ = -Infinity;
+  for (const [cx, cz] of [[clip[0], clip[1]], [clip[2], clip[1]], [clip[0], clip[3]], [clip[2], clip[3]]]) {
+    const dx = cx - object.x;
+    const dz = cz - object.z;
+    const lx = dx * cos - dz * sin;
+    const lz = dx * sin + dz * cos;
+    minLocalX = Math.min(minLocalX, lx);
+    maxLocalX = Math.max(maxLocalX, lx);
+    minLocalZ = Math.min(minLocalZ, lz);
+    maxLocalZ = Math.max(maxLocalZ, lz);
+  }
+
+  const firstX = Math.max(0, Math.floor((minLocalX + halfWidth) / spacing) - 1);
+  const lastX = Math.floor((maxLocalX + halfWidth) / spacing) + 1;
+  const firstZ = Math.max(0, Math.floor((minLocalZ + halfDepth) / spacing) - 1);
+  const lastZ = Math.floor((maxLocalZ + halfDepth) / spacing) + 1;
+
+  for (let i = firstX; i <= lastX; i += 1) {
+    const ix = -halfWidth + i * spacing;
+    if (ix >= halfWidth) break;
+    for (let j = firstZ; j <= lastZ; j += 1) {
+      const iz = -halfDepth + j * spacing;
+      if (iz >= halfDepth) break;
+      const cell = createRandom(cellSeed(seed, i, j, salt));
+      const localX = Math.min(halfWidth, ix + cell.range(0, spacing));
+      const localZ = Math.min(halfDepth, iz + cell.range(0, spacing));
+      const position = toWorld(object, localX, localZ);
+      if (position.x < clip[0] || position.x >= clip[2] || position.z < clip[1] || position.z >= clip[3]) continue;
+      callback(position, cell);
     }
   }
 }
 
-function expandForest(object, props, trees, bushes) {
-  const random = createRandom(props.seed ?? 1);
+function expandForest(object, props, trees, bushes, clip = null) {
+  const seed = props.seed ?? 1;
+  const random = createRandom(seed);
   const margin = props.rand ?? 0.8;
   const minHeight = props.minHeight ?? 7;
   const maxHeight = props.maxHeight ?? 11;
   const conifers = props.nadelanteil ?? 0.45;
 
-  stratified(object, props.dichte ?? 12, margin, random, ({ x, z }) => {
+  stratified(object, props.dichte ?? 12, margin, random, ({ x, z }, cell) => {
     trees.push({
       x,
       z,
-      kind: random.next() < conifers ? 'conifer' : 'broadleaf',
-      height: random.range(minHeight, maxHeight),
-      seed: Math.floor(random.next() * 1e6),
+      kind: cell.next() < conifers ? 'conifer' : 'broadleaf',
+      height: cell.range(minHeight, maxHeight),
+      seed: Math.floor(cell.next() * 1e6),
     });
-  });
+  }, clip, seed, 0);
 
   if (!props.unterholz) return;
-  stratified(object, props.unterholz, margin, random, ({ x, z }) => {
-    bushes.push({ x, z, size: random.range(1.4, 2.6), seed: Math.floor(random.next() * 1e6) });
-  });
+  stratified(object, props.unterholz, margin, random, ({ x, z }, cell) => {
+    bushes.push({ x, z, size: cell.range(1.4, 2.6), seed: Math.floor(cell.next() * 1e6) });
+  }, clip, seed, 0x9e3779b9);
 }
 
 function addUndergrowth(batch, bush) {
@@ -179,71 +276,78 @@ function buildPowerLine(object, props) {
   return group;
 }
 
-export function buildZone(scene, world) {
-  const zone = new THREE.Group();
-  zone.name = world.name ?? 'Zone';
+export function createBuildContext() {
   const assets = createAssetLibrary();
   assets.register('halle', createHall);
   for (const [kind, factory] of Object.entries(INTERIOR_BUILDERS)) assets.register(kind, factory);
+  return { assets, trees: [], bushes: [], emitters: [], wallGroups: new Map() };
+}
 
-  const groundWidth = world.indoor ? world.width : GROUND_SIZE;
-  const groundDepth = world.indoor ? world.height : GROUND_SIZE;
-  const ground = new THREE.PlaneGeometry(groundWidth, groundDepth);
+export function addObject(target, context, object, clip = null) {
+  const { assets, trees, bushes, emitters, wallGroups } = context;
+  const props = coerceProps(object.props);
+
+  if (object.kind === 'wand' && props.buendeln) {
+    const key = [props.material ?? 'concrete_panel', props.color ?? '', props.hoehe ?? 3, props.y0 ?? 0, props.tile ?? 3].join('|');
+    if (!wallGroups.has(key)) wallGroups.set(key, { props, walls: [] });
+    wallGroups.get(key).walls.push(object);
+  } else if (object.kind === 'flaeche') {
+    target.add(buildSurface(object, props));
+  } else if (object.kind === 'strasse') {
+    target.add(buildRoad(object, props));
+  } else if (object.kind === 'fleck') {
+    target.add(buildPatch(object.width / 2, object.x, object.z, object.rotation, props));
+  } else if (object.kind === 'flecken') {
+    target.add(buildPatchField(object, props));
+  } else if (object.kind === 'wald') {
+    expandForest(object, props, trees, bushes, clip);
+  } else if (object.kind === 'baum') {
+    trees.push({ x: object.x, z: object.z, kind: props.kind ?? 'broadleaf', height: props.height ?? 7, seed: props.seed ?? 1 });
+  } else if (object.kind === 'leitung') {
+    target.add(buildPowerLine(object, props));
+  } else if (object.kind === 'grasbueschel') {
+    const area = { x: object.x, z: object.z, width: object.width, depth: object.height };
+    target.add(assets.create(object.kind, { ...props, area }));
+  } else {
+    let instance;
+    try {
+      instance = assets.create(object.kind, { ...props, footprint: { width: object.width, depth: object.height } });
+    } catch {
+      console.warn(`Unbekannter Objekttyp in der Zonendefinition: ${object.kind}`);
+      return;
+    }
+    if (object.kind === 'fass' && props.burning) emitters.push({ x: object.x, z: object.z });
+    instance.position.set(object.x, props.y ?? 0, object.z);
+    instance.rotation.y = object.rotation;
+    target.add(instance);
+  }
+}
+
+export function finishObjects(target, context) {
+  for (const { props, walls } of context.wallGroups.values()) target.add(buildWallBatch(props, walls));
+  target.add(buildForests(context.trees, context.bushes));
+}
+
+export function buildZone(scene, world) {
+  const zone = new THREE.Group();
+  zone.name = world.name ?? 'Zone';
+  const context = createBuildContext();
+
+  const groundWidth = world.indoor || world.chunked ? world.width : GROUND_SIZE;
+  const groundDepth = world.indoor || world.chunked ? world.height : GROUND_SIZE;
+  const ground = new THREE.PlaneGeometry(groundWidth, groundDepth, Math.max(1, Math.ceil(groundWidth / 32)), Math.max(1, Math.ceil(groundDepth / 32)));
   ground.rotateX(-Math.PI / 2);
   scaleUv(ground, groundWidth / 4, groundDepth / 4);
   zone.add(new THREE.Mesh(ground, getMaterial(world.groundTexture ?? 'grass', { color: coerceValue(world.groundColor ?? '#c8c8b4') })));
 
-  const trees = [];
-  const bushes = [];
-  const emitters = [];
-  const wallGroups = new Map();
-
-  for (const object of world.objects ?? []) {
-    const props = coerceProps(object.props);
-
-    if (object.kind === 'wand' && props.buendeln) {
-      const key = [props.material ?? 'concrete_panel', props.color ?? '', props.hoehe ?? 3, props.y0 ?? 0, props.tile ?? 3].join('|');
-      if (!wallGroups.has(key)) wallGroups.set(key, { props, walls: [] });
-      wallGroups.get(key).walls.push(object);
-    } else if (object.kind === 'flaeche') {
-      zone.add(buildSurface(object, props));
-    } else if (object.kind === 'fleck') {
-      zone.add(buildPatch(object.width / 2, object.x, object.z, object.rotation, props));
-    } else if (object.kind === 'flecken') {
-      zone.add(buildPatchField(object, props));
-    } else if (object.kind === 'wald') {
-      expandForest(object, props, trees, bushes);
-    } else if (object.kind === 'baum') {
-      trees.push({ x: object.x, z: object.z, kind: props.kind ?? 'broadleaf', height: props.height ?? 7, seed: props.seed ?? 1 });
-    } else if (object.kind === 'leitung') {
-      zone.add(buildPowerLine(object, props));
-    } else if (object.kind === 'grasbueschel') {
-      const area = { x: object.x, z: object.z, width: object.width, depth: object.height };
-      zone.add(assets.create(object.kind, { ...props, area }));
-    } else {
-      let instance;
-      try {
-        instance = assets.create(object.kind, { ...props, footprint: { width: object.width, depth: object.height } });
-      } catch {
-        console.warn(`Unbekannter Objekttyp in der Zonendefinition: ${object.kind}`);
-        continue;
-      }
-      if (object.kind === 'fass' && props.burning) emitters.push({ x: object.x, z: object.z });
-      instance.position.set(object.x, props.y ?? 0, object.z);
-      instance.rotation.y = object.rotation;
-      zone.add(instance);
-    }
-  }
-
-  for (const { props, walls } of wallGroups.values()) zone.add(buildWallBatch(props, walls));
-
-  zone.add(buildForests(trees, bushes));
+  for (const object of world.objects ?? []) addObject(zone, context, object);
+  finishObjects(zone, context);
   scene.add(zone);
 
   const teleporters = (world.teleporters ?? []).map(buildTeleporter);
   for (const proxy of teleporters) zone.add(proxy);
 
-  return { zone, emitters, teleporters };
+  return { zone, emitters: context.emitters, teleporters };
 }
 
 function buildWallBatch(props, walls) {

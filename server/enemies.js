@@ -106,8 +106,8 @@ export function createEnemies(zoneId) {
   return enemies;
 }
 
-export function serializeEnemies(enemies) {
-  return Array.from(enemies.values()).map((enemy) => ({
+export function serializeEnemy(enemy) {
+  return {
     id: enemy.id,
     type: enemy.type,
     name: enemy.name,
@@ -119,11 +119,11 @@ export function serializeEnemies(enemies) {
     health: enemy.health,
     healthMax: enemy.healthMax,
     dead: enemy.dead,
-  }));
+  };
 }
 
-export function serializeEnemyStates(enemies) {
-  return Array.from(enemies.values()).map((enemy) => ({
+export function serializeEnemyState(enemy) {
+  return {
     id: enemy.id,
     x: enemy.x,
     y: enemy.y,
@@ -132,7 +132,15 @@ export function serializeEnemyStates(enemies) {
     health: enemy.health,
     healthMax: enemy.healthMax,
     dead: enemy.dead,
-  }));
+  };
+}
+
+export function serializeEnemies(enemies) {
+  return Array.from(enemies.values(), serializeEnemy);
+}
+
+export function serializeEnemyStates(enemies) {
+  return Array.from(enemies.values(), serializeEnemyState);
 }
 
 function horizontalDistance(ax, az, bx, bz) {
@@ -231,10 +239,20 @@ function updateWander(enemy, delta) {
   }
 }
 
+const SIMULATION_RANGE = 260;
+
+function hasPlayerNearby(enemy, players) {
+  for (const player of players.values()) {
+    if (Math.abs(player.x - enemy.x) <= SIMULATION_RANGE && Math.abs(player.z - enemy.z) <= SIMULATION_RANGE) return true;
+  }
+  return false;
+}
+
 export function updateEnemies(enemies, players, delta) {
   for (const enemy of enemies.values()) {
     if (enemy.dead) continue;
     if (enemy.stunTimer > 0) continue;
+    if (enemy.state === 'idle' && !hasPlayerNearby(enemy, players)) continue;
 
     if (enemy.state === 'idle') {
       const targetId = findNearestPlayerInRange(enemy, players, enemy.aggroRange);

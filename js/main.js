@@ -7,6 +7,9 @@ const [
   { createScene, applyLighting },
   { createThirdPersonCamera },
   { buildZone, disposeZone },
+  { createZoneStreamer },
+  { updateShopRoofs },
+  { createAmbient },
   { createPlayer },
   { createPlayerController },
   { createServerConnection },
@@ -56,6 +59,9 @@ const [
   import(v('./core/Scene.js')),
   import(v('./core/ThirdPersonCamera.js')),
   import(v('./world/ZoneBuilder.js')),
+  import(v('./world/ZoneStreamer.js')),
+  import(v('./world/builders/Shop.js')),
+  import(v('./entities/Ambient.js')),
   import(v('./entities/Characters.js')),
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
@@ -108,8 +114,10 @@ function start(token) {
   const loadingScreen = createLoadingScreen();
   const renderer = createRenderer();
   const scene = createScene();
+  const ambient = createAmbient(scene);
   const spawnPoint = new THREE.Vector3();
   let zone = null;
+  let streamer = null;
 
   const dialogue = createDialogue();
   const audio = createAudio();
@@ -208,6 +216,13 @@ function start(token) {
     0.1,
     1000
   );
+  let viewRadius = 176;
+
+  function applyViewRadius(radius) {
+    viewRadius = radius;
+    camera.far = Math.max(300, radius * 1.1 + 60);
+    camera.updateProjectionMatrix();
+  }
 
   const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
   const playerController = createPlayerController(camera);
@@ -302,6 +317,11 @@ function start(token) {
     loadingScreen.show(world.name, Boolean(world.indoor));
     loadingScreen.setProgress(0.08, firstLoad ? t('loading.status.world') : t('loading.status.zone'));
 
+    if (streamer) {
+      streamer.dispose();
+      streamer = null;
+    }
+    ambient.clear();
     if (zone) {
       disposeZone(scene, zone);
       zone = null;
@@ -309,7 +329,23 @@ function start(token) {
     if (!firstLoad) resetZoneEntities();
 
     zone = buildZone(scene, world);
-    applyLighting(scene, world);
+    if (world.chunked) {
+      streamer = createZoneStreamer({
+        scene,
+        zoneGroup: zone.zone,
+        world,
+        send: (payload) => connection.send(payload),
+        onBlockers: (list) => {
+          thirdPersonCamera.setBlockers(list);
+          enemies.setBlockers(list);
+        },
+        onEmitters: (list) => audio.setEmitters(list),
+        onPath: (object) => ambient.addPath(object),
+        onPathRemoved: (id) => ambient.removePath(id),
+        getRadius: () => viewRadius,
+      });
+    }
+    applyLighting(scene, world, viewRadius);
     plane.setEnabled(world.id === 'startwelt');
     audio.setIndoor(Boolean(world.indoor));
     audio.setEmitters(zone.emitters);
@@ -332,6 +368,20 @@ function start(token) {
     worldChests.sync(message.chests ?? []);
     npcs.setMarkers(questMarkers);
     loadingScreen.setProgress(0.4, t('loading.status.textures'));
+
+    if (streamer) {
+      const activeStreamer = streamer;
+      activeStreamer.setBudget(20);
+      let finished = false;
+      const ready = activeStreamer.whenReady(position.x, position.z, 120).then(() => {
+        finished = true;
+      });
+      while (!finished && streamer === activeStreamer) {
+        loadingScreen.setProgress(0.4 + 0.4 * activeStreamer.progress(position.x, position.z, 120), t('loading.status.world'));
+        await Promise.race([ready, nextFrame()]);
+      }
+      activeStreamer.setBudget(5);
+    }
 
     await nextFrame();
     await loadingScreen.assetsIdle();
@@ -368,6 +418,7 @@ function start(token) {
         if (message.autoFullscreen) armAutoFullscreen();
         touchControls.setMode(message.touchControls);
         audio.applySettings(message.audio);
+        if (message.view) applyViewRadius(message.view.radius);
         ownWeapon = message.equipment?.weapon ?? null;
         enterZone(message, true).then(() => {
           if (message.showIntro) introWindow.show();
@@ -386,6 +437,8 @@ function start(token) {
         abilitiesWindow.render(message.abilities ?? []);
       } else if (message.type === 'zone') {
         enterZone(message, false);
+      } else if (message.type === 'chunks') {
+        streamer?.receive(message);
       } else if (message.type === 'chat') {
         chat.add(message);
         if (message.channel === 'say') {
@@ -509,6 +562,8 @@ function start(token) {
           }
         }
         remotePlayers.sync(message.players, ownPlayerId);
+        for (const enemyId of message.enemyRemoves ?? []) enemies.remove(enemyId);
+        for (const data of message.enemyAdds ?? []) if (!enemies.has(data.id)) enemies.add(data);
         if (message.enemies) {
           enemies.applyStates(message.enemies);
         }
@@ -784,6 +839,9 @@ function start(token) {
     player.object.position.lerp(ownTargetPosition, factor);
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     player.update(delta);
+    streamer?.update(player.object.position.x, player.object.position.z);
+    updateShopRoofs(player.object.position);
+    ambient.update(delta, player.object.position);
     remotePlayers.update(delta);
     enemies.update(delta);
     lootMarkers.update(delta);

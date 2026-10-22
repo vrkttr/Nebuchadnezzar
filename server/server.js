@@ -6,7 +6,7 @@ import { applyBarber } from './barber.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
-import { createEnemies, serializeEnemies, serializeEnemyStates, updateEnemies } from './enemies.js';
+import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
 import { serializeAbilities, setActionSlot, syncActionLayout } from './abilities.js';
 import { xpToNextLevel } from './progression.js';
@@ -31,7 +31,7 @@ import {
 import { diffQuestLog, loadQuests, questRows, recordKill, recordPosition, serializeQuestLog } from './quests.js';
 import { PLAYER_RADIUS, resolveCollisions } from './world.js';
 import { chestKey, openChest, serializeChests } from './worldChests.js';
-import { DEFAULT_ZONE_ID, getZone, getZones, serializeZone } from './zoneLoader.js';
+import { DEFAULT_ZONE_ID, getZone, getZones, serializeChunk, serializeZone, CHUNK_SIZE } from './zoneLoader.js';
 import {
   createLootContainers,
   openLoot,
@@ -70,6 +70,18 @@ const sockets = new Map();
 const zoneEnemies = new Map(getZones().map((zone) => [zone.id, createEnemies(zone.id)]));
 const TELEPORT_RANGE = 4.5;
 const ZONE_LOAD_TIMEOUT_MS = 15000;
+const VIEW_RADII = [80, 120, 176, 260, 400, 900];
+const DEFAULT_VIEW_LEVEL = 3;
+
+function viewRadiusOf(state) {
+  return VIEW_RADII[(state.viewLevel ?? DEFAULT_VIEW_LEVEL) - 1] ?? VIEW_RADII[DEFAULT_VIEW_LEVEL - 1];
+}
+
+function clampViewLevel(value) {
+  const level = Number.parseInt(value, 10);
+  return Number.isInteger(level) ? Math.max(1, Math.min(VIEW_RADII.length, level)) : DEFAULT_VIEW_LEVEL;
+}
+const MAX_CHUNKS_PER_REQUEST = 16;
 const lootContainers = createLootContainers();
 const groups = createGroups();
 
@@ -180,7 +192,7 @@ function parseActionLayout(raw) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, u.audio_volume, u.audio_ambient, u.audio_muted, u.view_distance FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -236,6 +248,7 @@ async function loadCharacter(characterId) {
     xp: row.xp,
     gold: row.gold,
     appearance: loadAppearance(row),
+    viewLevel: clampViewLevel(row.view_distance),
     audio: { volume: row.audio_volume / 100, ambient: row.audio_ambient / 100, muted: Boolean(row.audio_muted) },
     inventory,
     equipment,
@@ -378,7 +391,7 @@ wss.on('connection', async (socket, request) => {
     JSON.stringify({
       type: 'init',
       id,
-      enemies: serializeEnemies(zoneEnemies.get(initialState.zoneId)),
+      enemies: initialEnemies(initialState),
       abilities: serializeAbilities(initialState.level, initialState.actionBar),
       showIntro: !character.introSeen,
       classId: initialState.classId,
@@ -393,6 +406,7 @@ wss.on('connection', async (socket, request) => {
       world: serializeZone(getZone(initialState.zoneId)),
       position: { x: initialState.x, y: initialState.y, z: initialState.z, rotationY: initialState.rotationY },
       audio: character.audio,
+      view: { level: initialState.viewLevel, radius: viewRadiusOf(initialState) },
     })
   );
 
@@ -559,6 +573,22 @@ wss.on('connection', async (socket, request) => {
     } else if (message.type === 'zone-enter') {
       const state = players.get(id);
       if (state && typeof message.teleporterId === 'string') enterTeleporter(id, state, message.teleporterId);
+    } else if (message.type === 'chunk-request') {
+      const state = players.get(id);
+      const zone = state ? getZone(state.zoneId) : null;
+      if (!zone?.chunked || !Array.isArray(message.keys)) return;
+
+      const chunks = [];
+      for (const key of message.keys.slice(0, MAX_CHUNKS_PER_REQUEST)) {
+        const cx = Number.parseInt(key?.[0], 10);
+        const cz = Number.parseInt(key?.[1], 10);
+        if (!Number.isInteger(cx) || !Number.isInteger(cz) || cx < 0 || cz < 0) continue;
+        const centerX = -zone.width / 2 + (cx + 0.5) * CHUNK_SIZE;
+        const centerZ = -zone.height / 2 + (cz + 0.5) * CHUNK_SIZE;
+        if (Math.hypot(centerX - state.x, centerZ - state.z) > viewRadiusOf(state) + CHUNK_SIZE * 2 + 96) continue;
+        chunks.push(serializeChunk(zone, cx, cz));
+      }
+      notify(id, { type: 'chunks', zoneId: zone.id, chunks });
     } else if (message.type === 'zone-ready') {
       const state = players.get(id);
       if (state) state.loadingUntil = 0;
@@ -611,6 +641,61 @@ function isLoading(state) {
   return Date.now() < state.loadingUntil;
 }
 
+function initialEnemies(state) {
+  const enemies = zoneEnemies.get(state.zoneId);
+  if (!getZone(state.zoneId).chunked) return serializeEnemies(enemies);
+
+  state.knownEnemies = new Set();
+  const list = [];
+  for (const enemy of enemies.values()) {
+    if (Math.hypot(enemy.x - state.x, enemy.z - state.z) > viewRadiusOf(state) + 24) continue;
+    state.knownEnemies.add(enemy.id);
+    list.push(serializeEnemy(enemy));
+  }
+  return list;
+}
+
+function sendChunkedState(zonePlayers, enemies, snapshot) {
+  const enemyList = Array.from(enemies.values());
+
+  for (const [id, state] of zonePlayers) {
+    const socket = sockets.get(id);
+    if (!socket || socket.readyState !== socket.OPEN) continue;
+
+    const radius = viewRadiusOf(state);
+    const players = {};
+    for (const [otherId, other] of zonePlayers) {
+      if (otherId === id || (Math.abs(other.x - state.x) <= radius + 50 && Math.abs(other.z - state.z) <= radius + 50)) players[otherId] = snapshot[otherId];
+    }
+
+    if (!state.knownEnemies) state.knownEnemies = new Set();
+    const known = state.knownEnemies;
+    const states = [];
+    const adds = [];
+    const removes = [];
+
+    for (const enemy of enemyList) {
+      const distance = Math.hypot(enemy.x - state.x, enemy.z - state.z);
+      if (known.has(enemy.id)) {
+        if (distance > radius + 64) {
+          known.delete(enemy.id);
+          removes.push(enemy.id);
+        } else {
+          states.push(serializeEnemyState(enemy));
+        }
+      } else if (distance <= radius + 24) {
+        known.add(enemy.id);
+        adds.push(serializeEnemy(enemy));
+      }
+    }
+
+    const message = { type: 'state', players, enemies: states };
+    if (adds.length > 0) message.enemyAdds = adds;
+    if (removes.length > 0) message.enemyRemoves = removes;
+    socket.send(JSON.stringify(message));
+  }
+}
+
 function sendToZone(zoneId, message) {
   const data = JSON.stringify(message);
   for (const [playerId, state] of players) {
@@ -655,6 +740,7 @@ function changeZone(playerId, state, zoneId, spawnId) {
   state.targetEnemyId = null;
   state.autoAttack = false;
   state.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
+  state.knownEnemies = null;
   state.dataVersion += 1;
 
   sendToZone(previousZoneId, { type: 'leave', id: playerId });
@@ -662,7 +748,7 @@ function changeZone(playerId, state, zoneId, spawnId) {
   notify(playerId, {
     type: 'zone',
     world: serializeZone(target),
-    enemies: serializeEnemies(zoneEnemies.get(zoneId)),
+    enemies: initialEnemies(state),
     npcs: serializeNpcs(zoneId),
     chests: serializeChests(zoneId, state.openedChests),
     position: { x: spawn.x, y: spawn.y, z: spawn.z, rotationY: spawn.rotationY },
@@ -746,7 +832,8 @@ setInterval(() => {
         appearance: state.appearance,
       };
     }
-    sendToZone(zone.id, { type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
+    if (zone.chunked) sendChunkedState(zonePlayers, enemies, snapshot);
+    else sendToZone(zone.id, { type: 'state', players: snapshot, enemies: serializeEnemyStates(enemies) });
   }
 
   updateLootContainers(lootContainers, TICK_DELTA, notify);

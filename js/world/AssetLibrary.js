@@ -1,3 +1,6 @@
+import { createFountain, createBanner } from './builders/CityProps.js';
+import { createAltbau } from './builders/Altbau.js';
+import { createLaden } from './builders/Shop.js';
 import { createPlattenbau } from './builders/Plattenbau.js';
 import { createWaterTower } from './builders/Tower.js';
 import { createGarages } from './builders/Garages.js';
@@ -57,6 +60,10 @@ export function createAssetLibrary() {
   register('zelt', createTent);
   register('mast', createPole);
   register('container', createContainer);
+  register('laden', createLaden);
+  register('altbau', createAltbau);
+  register('brunnen', createFountain);
+  register('fahne', createBanner);
 
   return { register, create };
 }

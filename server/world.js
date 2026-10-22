@@ -15,17 +15,67 @@ function circle(x, z, radius) {
   return { type: 'circle', x, z, radius };
 }
 
-const COLLIDERS_BY_ZONE = new Map();
+const GRID_CELL = 16;
+const GRID_MARGIN = 2;
+const GRID_OFFSET = 2048;
+const GRID_STRIDE = 4096;
+const NO_COLLIDERS = [];
+const GRIDS_BY_ZONE = new Map();
+
+function cellOf(value) {
+  return Math.floor(value / GRID_CELL) + GRID_OFFSET;
+}
+
+function cellKey(ix, iz) {
+  return ix * GRID_STRIDE + iz;
+}
+
+function colliderBounds(collider) {
+  if (collider.type === 'circle') {
+    return [collider.x - collider.radius, collider.z - collider.radius, collider.x + collider.radius, collider.z + collider.radius];
+  }
+
+  const cos = Math.abs(collider.cos);
+  const sin = Math.abs(collider.sin);
+  const halfX = cos * collider.halfX + sin * collider.halfZ;
+  const halfZ = sin * collider.halfX + cos * collider.halfZ;
+  return [collider.x - halfX, collider.z - halfZ, collider.x + halfX, collider.z + halfZ];
+}
+
+function buildGrid(colliders) {
+  const grid = new Map();
+
+  for (const collider of colliders) {
+    const [minX, minZ, maxX, maxZ] = colliderBounds(collider);
+    for (let ix = cellOf(minX - GRID_MARGIN); ix <= cellOf(maxX + GRID_MARGIN); ix += 1) {
+      for (let iz = cellOf(minZ - GRID_MARGIN); iz <= cellOf(maxZ + GRID_MARGIN); iz += 1) {
+        const key = cellKey(ix, iz);
+        const list = grid.get(key);
+        if (list) list.push(collider);
+        else grid.set(key, [collider]);
+      }
+    }
+  }
+
+  return grid;
+}
 
 for (const zone of getZones()) {
-  COLLIDERS_BY_ZONE.set(zone.id, [
-    ...zone.colliders.map((collider) =>
-      collider.shape === 'circle'
-        ? circle(collider.x, collider.z, collider.radius)
-        : box(collider.x, collider.z, collider.halfX, collider.halfZ, collider.rotation)
-    ),
-    ...getNpcsOfZone(zone.id).map((npc) => circle(npc.x, npc.z, NPC_RADIUS)),
-  ]);
+  GRIDS_BY_ZONE.set(
+    zone.id,
+    buildGrid([
+      ...zone.colliders.map((collider) =>
+        collider.shape === 'circle'
+          ? circle(collider.x, collider.z, collider.radius)
+          : box(collider.x, collider.z, collider.halfX, collider.halfZ, collider.rotation)
+      ),
+      ...getNpcsOfZone(zone.id).map((npc) => circle(npc.x, npc.z, NPC_RADIUS)),
+    ])
+  );
+}
+
+function collidersAt(zoneId, x, z) {
+  return GRIDS_BY_ZONE.get(zoneId)?.get(cellKey(cellOf(x), cellOf(z))) ?? NO_COLLIDERS;
 }
 
 function clamp(value, min, max) {
@@ -94,14 +144,13 @@ function pushOutOfBox(entity, radius, collider) {
 
 export function resolveCollisions(entity, radius) {
   const zone = getZone(entity.zoneId);
-  const colliders = COLLIDERS_BY_ZONE.get(entity.zoneId);
   const limitX = zone.halfWidth - radius;
   const limitZ = zone.halfHeight - radius;
 
   for (let iteration = 0; iteration < MAX_ITERATIONS; iteration += 1) {
     let moved = false;
 
-    for (const collider of colliders) {
+    for (const collider of collidersAt(entity.zoneId, entity.x, entity.z)) {
       const pushed =
         collider.type === 'circle'
           ? pushOutOfCircle(entity, radius, collider)
@@ -163,9 +212,19 @@ function segmentHitsBox(ax, az, bx, bz, boxCollider) {
 }
 
 export function hasLineOfSight(zoneId, ax, az, bx, bz) {
-  for (const collider of COLLIDERS_BY_ZONE.get(zoneId)) {
-    const hit = collider.type === 'circle' ? segmentHitsCircle(ax, az, bx, bz, collider) : segmentHitsBox(ax, az, bx, bz, collider);
-    if (hit) return false;
+  const length = Math.hypot(bx - ax, bz - az);
+  const steps = Math.max(1, Math.ceil(length / (GRID_CELL / 2)));
+  const checked = new Set();
+
+  for (let step = 0; step <= steps; step += 1) {
+    const t = step / steps;
+    for (const collider of collidersAt(zoneId, ax + (bx - ax) * t, az + (bz - az) * t)) {
+      if (checked.has(collider)) continue;
+      checked.add(collider);
+      const hit = collider.type === 'circle' ? segmentHitsCircle(ax, az, bx, bz, collider) : segmentHitsBox(ax, az, bx, bz, collider);
+      if (hit) return false;
+    }
   }
+
   return true;
 }
