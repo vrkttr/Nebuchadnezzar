@@ -90,7 +90,7 @@ export function createCeilingLamp({ licht = false, intensitaet = 16, distanz = 1
   const group = finish(batch, 'Lampe');
 
   if (licht) {
-    const light = new THREE.PointLight(farbe, intensitaet, distanz, 1.6);
+    const light = new THREE.PointLight(farbe, intensitaet * 1.3, distanz, 1.6);
     light.position.y = hoehe - 0.5;
     group.add(light);
   }
@@ -398,7 +398,7 @@ export function createLadder({ hoehe = 3, licht = false }) {
   const group = finish(batch, 'Leiter');
 
   if (licht) {
-    const light = new THREE.PointLight(0xcfe0e8, 14, 12, 1.6);
+    const light = new THREE.PointLight(0xcfe0e8, 18, 12, 1.6);
     light.position.set(0, hoehe - 0.6, wallZ - 0.5);
     group.add(light);
   }

@@ -4,7 +4,7 @@ const v = (path) => (VERSION ? `${path}?v=${VERSION}` : path);
 const [
   THREE,
   { createRenderer },
-  { createScene, applyLighting },
+  { createScene, applyLighting, followSun, flagShadows },
   { createThirdPersonCamera },
   { buildZone, disposeZone },
   { createZoneStreamer },
@@ -937,6 +937,7 @@ function start(token) {
 
   const INPUT_SEND_INTERVAL = 0.05;
   let inputSendTimer = 0;
+  let shadowTimer = 0;
 
   function animate() {
     requestAnimationFrame(animate);
@@ -949,6 +950,12 @@ function start(token) {
     streamer?.update(player.object.position.x, player.object.position.z);
     ambient.update(delta, player.object.position);
     train.update(delta);
+    followSun(scene, player.object.position.x, player.object.position.z);
+    shadowTimer += delta;
+    if (shadowTimer > 0.5) {
+      shadowTimer = 0;
+      flagShadows(scene);
+    }
     const rideVelocity = train.rideVelocity();
     const supportHeight = Math.max(terrain.heightAt(player.object.position.x, player.object.position.z), riding ? train.deckHeight : 0);
     player.setGroundHeight(supportHeight);
