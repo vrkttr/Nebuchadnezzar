@@ -880,7 +880,7 @@ button {
 #inventory-window {
   right: 16px;
   bottom: 160px;
-  width: 296px;
+  width: 314px;
 }
 
 #inventory-grid .inventory-section {
@@ -899,6 +899,7 @@ button {
 #inventory-grid {
   max-height: 62vh;
   overflow-y: auto;
+  overflow-x: hidden;
   display: grid;
   grid-template-columns: repeat(6, 42px);
   gap: 4px;
