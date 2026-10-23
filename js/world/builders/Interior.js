@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { createBatch, tiledBox, scaleUv } from '../Batch.js';
 import { createRandom } from '../Random.js';
 import { getMaterial, getColorMaterial, OVERLAY_TOP } from '../Textures.js';
+import { fxMarker } from '../../effects/Markers.js';
 
 const PLASTER = '#c9bb9a';
 
@@ -93,6 +94,7 @@ export function createCeilingLamp({ licht = false, intensitaet = 16, distanz = 1
     const light = new THREE.PointLight(farbe, intensitaet * 1.3, distanz, 1.6);
     light.position.y = hoehe - 0.5;
     group.add(light);
+    group.add(fxMarker('flicker', { light }, { y: hoehe - 0.5 }));
   }
 
   return group;

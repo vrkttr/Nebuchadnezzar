@@ -20,6 +20,10 @@ function createSkyTexture() {
 const HEMISPHERE_INTENSITY = 1.8;
 const SUN_INTENSITY = 2.5;
 const SUN_OFFSET = new THREE.Vector3(-18, 30, 14);
+
+export function setSunOffset(x, y, z) {
+  SUN_OFFSET.set(x, y, z);
+}
 const SHADOW_RANGE = 48;
 const SHADOW_MAP_SIZE = 2048;
 

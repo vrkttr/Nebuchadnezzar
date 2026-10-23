@@ -7,6 +7,7 @@ import { addTree } from './builders/Vegetation.js';
 import { createRandom } from './Random.js';
 import { buildWater, createMossBatch, resetSewer } from './builders/Sewer.js';
 import { getMaterial, OVERLAY, OVERLAY_TOP } from './Textures.js';
+import { buildPuddles } from './builders/Puddles.js';
 
 const LAYERS = { overlay: OVERLAY, top: OVERLAY_TOP, none: {} };
 const BUSH_TINTS = [0xc8d890, 0xb0c878, 0xd8d08a, 0xa8b870, 0xbccc84];
@@ -119,6 +120,11 @@ function buildRoad(object, props) {
     mesh.position.set(x, props.y ?? 0.012, z);
     if (props.reihenfolge !== undefined) mesh.renderOrder = props.reihenfolge;
     group.add(mesh);
+  }
+
+  if (props.pfuetzen !== false) {
+    const puddles = buildPuddles(points, width, (props.y ?? 0.012) + 0.014);
+    if (puddles) group.add(puddles);
   }
   return group;
 }

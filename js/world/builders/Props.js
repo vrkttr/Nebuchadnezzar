@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { createBatch } from '../Batch.js';
 import { createRandom } from '../Random.js';
 import { getMaterial, getColorMaterial, OVERLAY } from '../Textures.js';
+import { fxMarker } from '../../effects/Markers.js';
 
 const BARREL_TINTS = [0xffffff, 0xb86a4a, 0x6f8aa0, 0x8a9a62];
 
@@ -20,11 +21,12 @@ export function createBarrel(params = {}) {
     batch.cylinder(steel, 0.42, 0.42, 0.06, 10, { y: 0.7 });
     if (burning) {
       batch.cylinder(getColorMaterial(0xff9a3c, { unlit: true }), 0.34, 0.34, 0.04, 10, { y: 0.92 });
-      batch.cylinder(getColorMaterial(0xffd070, { unlit: true }), 0.18, 0.1, 0.4, 5, { y: 1.14 });
     }
   }
 
-  return batch.build('Barrel');
+  const barrel = batch.build('Barrel');
+  if (burning && !lying) barrel.add(fxMarker('fire', {}, { y: 0.95 }));
+  return barrel;
 }
 
 export function createCrate(params = {}) {
@@ -156,12 +158,10 @@ export function createLamp(params = {}) {
   const steel = getMaterial('steel');
   batch.cylinder(steel, 0.07, 0.1, 5.2, 6, { y: 2.6 });
   batch.box(steel, 0.9, 0.08, 0.08, { x: 0.4, y: 5.2, tile: 1 });
-  batch.box(lit ? getColorMaterial(0xffd890, { unlit: true }) : getColorMaterial(0x39352d), 0.5, 0.12, 0.22, {
-    x: 0.8,
-    y: 5.12,
-    tile: 1,
-  });
-  return batch.build('Lamp');
+  if (!lit) batch.box(getColorMaterial(0x39352d), 0.5, 0.12, 0.22, { x: 0.8, y: 5.12, tile: 1 });
+  const lamp = batch.build('Lamp');
+  if (lit) lamp.add(fxMarker('lamp', {}, { x: 0.8, y: 5.12 }));
+  return lamp;
 }
 
 export function createFence(params = {}) {

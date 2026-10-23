@@ -54,6 +54,9 @@ const [
   { createAudio },
   { createFootsteps },
   { createDrips },
+  { createAtmosphere },
+  { setPuddleExclusions },
+  { applyGraphics },
   { updateSewer, isInWater },
   { gameState },
   { buildServerUrl, getPortalUrl },
@@ -112,6 +115,9 @@ const [
   import(v('./audio/Audio.js')),
   import(v('./audio/Footsteps.js')),
   import(v('./effects/Drips.js')),
+  import(v('./effects/Atmosphere.js')),
+  import(v('./world/builders/Puddles.js')),
+  import(v('./effects/Graphics.js')),
   import(v('./world/builders/Sewer.js')),
   import(v('./state/GameState.js')),
   import(v('./config.js')),
@@ -253,6 +259,7 @@ function start(token) {
     1000
   );
 
+  const atmosphere = createAtmosphere({ scene, camera, renderer });
   const thirdPersonCamera = createThirdPersonCamera(camera, renderer.domElement);
   const playerController = createPlayerController(camera);
   const nameplateContainer = document.getElementById('nameplates');
@@ -361,6 +368,7 @@ function start(token) {
     }
     if (!firstLoad) resetZoneEntities();
 
+    setPuddleExclusions(world.train?.crossings);
     zone = buildZone(scene, world);
     terrain.setZone(world);
     train.setRoute(world.train);
@@ -380,6 +388,7 @@ function start(token) {
       });
     }
     applyLighting(scene, world);
+    atmosphere.setWorld(world);
     plane.setEnabled(world.id === 'startwelt');
     audio.setIndoor(Boolean(world.indoor));
     audio.setEmitters(zone.emitters);
@@ -494,6 +503,7 @@ function start(token) {
         if (message.autoFullscreen) armAutoFullscreen();
         touchControls.setMode(message.touchControls);
         audio.applySettings(message.audio);
+        applyGraphics(message.graphics);
         ownWeapon = message.equipment?.weapon ?? null;
         enterZone(message, true).then(() => {
           if (message.showIntro) introWindow.show();
@@ -950,11 +960,13 @@ function start(token) {
     streamer?.update(player.object.position.x, player.object.position.z);
     ambient.update(delta, player.object.position);
     train.update(delta);
+    atmosphere.update(delta, player.object.position);
     followSun(scene, player.object.position.x, player.object.position.z);
     shadowTimer += delta;
     if (shadowTimer > 0.5) {
       shadowTimer = 0;
       flagShadows(scene);
+      atmosphere.scan();
     }
     const rideVelocity = train.rideVelocity();
     const supportHeight = Math.max(terrain.heightAt(player.object.position.x, player.object.position.z), riding ? train.deckHeight : 0);

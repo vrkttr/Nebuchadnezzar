@@ -63,6 +63,8 @@ console.log(`Sektor 7 Game-Server läuft auf Port ${PORT}`);
 
 const WALK_SPEED = 2;
 const RUN_SPEED = 4;
+const RUN_RESOURCE_DRAIN = 8;
+const RUN_RECOVER_SHARE = 0.3;
 const CROUCH_SPEED = 1;
 const TAB_TARGET_RANGE = 40;
 const JUMP_SPEED = 5.5;
@@ -196,9 +198,19 @@ function parseActionLayout(raw) {
   }
 }
 
+function parseGraphics(text) {
+  try {
+    const parsed = JSON.parse(text ?? '');
+    if (!parsed || typeof parsed !== 'object') return {};
+    return Object.fromEntries(Object.entries(parsed).filter(([, value]) => typeof value === 'boolean'));
+  } catch {
+    return {};
+  }
+}
+
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, c.home_zone, c.hearth_ready_at, u.audio_volume, u.audio_ambient, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, c.home_zone, c.hearth_ready_at, u.audio_volume, u.audio_ambient, u.audio_music, u.graphics, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -258,7 +270,8 @@ async function loadCharacter(characterId) {
     xp: row.xp,
     gold: row.gold,
     appearance: loadAppearance(row),
-    audio: { volume: row.audio_volume / 100, ambient: row.audio_ambient / 100, muted: Boolean(row.audio_muted) },
+    audio: { volume: row.audio_volume / 100, ambient: row.audio_ambient / 100, music: (row.audio_music ?? 40) / 100, muted: Boolean(row.audio_muted) },
+    graphics: parseGraphics(row.graphics),
     inventory,
     equipment,
     quests: loadQuests(savedQuestRows),
@@ -419,6 +432,7 @@ wss.on('connection', async (socket, request) => {
       world: serializeZone(getZone(initialState.zoneId)),
       position: { x: initialState.x, y: initialState.y, z: initialState.z, rotationY: initialState.rotationY },
       audio: character.audio,
+      graphics: character.graphics,
       home: serializeHome(initialState),
     })
   );
@@ -803,7 +817,14 @@ function simulate() {
 
     const zone = getZone(state.zoneId);
     const waterFactor = zone && waterDepthAt(zone, state.x, state.z) > 0 ? SHALLOW_WATER_SPEED : 1;
-    const speed = (input.crouch ? CROUCH_SPEED : input.run ? RUN_SPEED : WALK_SPEED) * getClassModifiers(state.classId).moveSpeedMult * waterFactor;
+    const moving = input.moveX !== 0 || input.moveZ !== 0;
+    if (state.exhausted && state.resource >= state.resourceMax * RUN_RECOVER_SHARE) state.exhausted = false;
+    const running = input.run && !input.crouch && moving && !state.exhausted && state.resource > 0;
+    if (running) {
+      state.resource = Math.max(0, state.resource - RUN_RESOURCE_DRAIN * TICK_DELTA);
+      if (state.resource === 0) state.exhausted = true;
+    }
+    const speed = (input.crouch ? CROUCH_SPEED : running ? RUN_SPEED : WALK_SPEED) * getClassModifiers(state.classId).moveSpeedMult * waterFactor;
     state.x += input.moveX * speed * TICK_DELTA;
     state.z += input.moveZ * speed * TICK_DELTA;
 

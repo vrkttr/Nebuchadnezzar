@@ -1,9 +1,12 @@
 import * as THREE from 'three';
+import { applyWind } from '../effects/Wind.js';
 
 const TEXTURE_PATH = 'assets/textures/';
 const loader = new THREE.TextureLoader();
 const textures = new Map();
 const materials = new Map();
+
+export const windowMaterials = [];
 
 export function getTexture(name) {
   if (textures.has(name)) return textures.get(name);
@@ -24,6 +27,9 @@ export function getMaterial(name, options = {}) {
   const { unlit = false, ...rest } = options;
   const Material = unlit ? THREE.MeshBasicMaterial : THREE.MeshLambertMaterial;
   const material = new Material({ map: getTexture(name), ...rest });
+  if (name === 'leaves') applyWind(material, 'crown');
+  else if (name === 'foliage') applyWind(material, 'grass');
+  else if (name === 'window_lit') windowMaterials.push(material);
   materials.set(key, material);
   return material;
 }

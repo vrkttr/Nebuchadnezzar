@@ -40,6 +40,23 @@ function portalMenuItems(): array
     return $items;
 }
 
+function portalMusicVolume(): ?int
+{
+    if (!isset($_SESSION['user_id'])) {
+        return null;
+    }
+
+    try {
+        $stmt = getDatabaseConnection()->prepare('SELECT audio_music FROM users WHERE id = :id');
+        $stmt->execute(['id' => $_SESSION['user_id']]);
+        $value = $stmt->fetchColumn();
+
+        return $value === false || $value === null ? null : max(0, min(100, (int) $value));
+    } catch (Throwable $e) {
+        return null;
+    }
+}
+
 function renderPageStart(string $title, string $active, bool $panel = true, bool $wide = false): void
 {
     $items = portalMenuItems();
@@ -76,20 +93,21 @@ function renderPageStart(string $title, string $active, bool $panel = true, bool
 <section class="<?= $panelClass ?>">
 <h1 class="nu-title"><?= $heading ?></h1>
 <hr class="nu-divider">
+<div class="portal-scroll">
 <?php endif;
 }
 
 function renderPageEnd(bool $panel = true): void
 {
     if ($panel) {
-        echo "</section>\n";
+        echo "</div>\n</section>\n";
     }
     ?>
 </main>
 </div>
 <button type="button" id="music-toggle" class="portal-music" data-on="<?= htmlspecialchars(t('portal.music.on')) ?>" data-off="<?= htmlspecialchars(t('portal.music.off')) ?>"></button>
 <script src="assets/portal-nav.js"></script>
-<script src="assets/menu-music.js" data-src="assets/audio/menu_theme.ogg"></script>
+<script src="assets/menu-music.js" data-src="assets/audio/menu_theme.ogg"<?= ($musicVolume = portalMusicVolume()) === null ? '' : ' data-volume="' . $musicVolume . '"' ?>></script>
 <div class="portal-version"><?= htmlspecialchars(t('portal.version', ['version' => GAME_VERSION])) ?></div>
 </body>
 </html>

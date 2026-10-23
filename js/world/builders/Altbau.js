@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { createBatch, tiledBox } from '../Batch.js';
 import { createRandom } from '../Random.js';
 import { addDoor } from './Door.js';
+import { fxMarker } from '../../effects/Markers.js';
 import { getMaterial, getColorMaterial, OVERLAY } from '../Textures.js';
 
 const CELL = 3;
@@ -49,6 +50,7 @@ export function createAltbau(params = {}) {
   const foliage = [0xffffff, 0xd6e0a0, 0xb8c98a].map((color) => getMaterial('foliage', { alphaTest: 0.5, side: THREE.DoubleSide, color, ...OVERLAY }));
   const leaves = getMaterial('leaves', { color: 0xb0c878 });
 
+  let smokeAt = null;
   const cellX = (index) => -length / 2 + CELL / 2 + index * CELL;
 
   batch.box(brick, length + 0.16, 0.9, depth + 0.16, { y: 0.45, tile: CELL });
@@ -60,7 +62,14 @@ export function createAltbau(params = {}) {
   if (dach === 'walm') {
     const rise = random.range(2.2, 3.6);
     batch.cone(roofMaterial, 1, rise, 4, { y: height + 0.28 + rise / 2, ry: Math.PI / 4, sx: (length + 0.9) / SQRT2, sy: 1, sz: (depth + 0.9) / SQRT2 });
-    if (random.next() < 0.6) batch.box(brick, 0.7, 2.2, 0.7, { x: random.range(-length / 3, length / 3), y: height + 1.4, z: random.range(-1, 1), tile: 1 });
+    if (random.next() < 0.6) {
+      const chimneyX = random.range(-length / 3, length / 3);
+      const chimneyZ = random.range(-1, 1);
+      const roofY = height + 0.28 + rise * (1 - Math.max(Math.abs(chimneyX) / (length / 2 + 0.45), Math.abs(chimneyZ) / (depth / 2 + 0.45)));
+      const chimneyTop = Math.max(height + 2.5, roofY + 0.7);
+      batch.box(brick, 0.7, chimneyTop - height - 0.3, 0.7, { x: chimneyX, y: (height + 0.3 + chimneyTop) / 2, z: chimneyZ, tile: 1 });
+      if (lit >= 0.15) smokeAt = { x: chimneyX, y: chimneyTop + 0.1, z: chimneyZ };
+    }
   } else if (dach === 'flach') {
     const parapet = 0.5;
     batch.box(trim, length, parapet, 0.25, { y: height + 0.3 + parapet / 2, z: depth / 2 - 0.125, tile: CELL });
@@ -127,5 +136,6 @@ export function createAltbau(params = {}) {
   }
 
   group.add(batch.build('AltbauDetails'));
+  if (smokeAt) group.add(fxMarker('smoke', {}, smokeAt));
   return group;
 }

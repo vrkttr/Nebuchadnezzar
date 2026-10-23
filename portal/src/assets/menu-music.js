@@ -1,12 +1,40 @@
 (function () {
   var script = document.currentScript;
   var button = document.getElementById('music-toggle');
-  var VOLUME = 0.4;
   var enabled = true;
   var audio = new Audio(script.dataset.src);
   audio.loop = true;
-  audio.volume = VOLUME;
+  audio.volume = initialVolume();
   audio.preload = 'auto';
+
+  function clamp(value) {
+    return Math.max(0, Math.min(1, value));
+  }
+
+  function initialVolume() {
+    var fromServer = parseFloat(script.dataset.volume);
+    if (!isNaN(fromServer)) {
+      var scaled = clamp(fromServer / 100);
+      try {
+        localStorage.setItem('menuMusicVolume', String(scaled));
+      } catch (error) {}
+      return scaled;
+    }
+    try {
+      var stored = parseFloat(localStorage.getItem('menuMusicVolume'));
+      if (!isNaN(stored)) return clamp(stored);
+    } catch (error) {}
+    return 0.4;
+  }
+
+  window.portalMusic = {
+    setVolume: function (value) {
+      audio.volume = clamp(value);
+      try {
+        localStorage.setItem('menuMusicVolume', String(audio.volume));
+      } catch (error) {}
+    },
+  };
 
   function read(key, fallback) {
     try {
