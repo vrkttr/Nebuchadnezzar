@@ -574,5 +574,14 @@
   "friends.removed": "{name} was removed from your friends list.",
   "friends.cameOnline": "{name} is now online.",
   "friends.wentOffline": "{name} is now offline.",
-  "failure.item.missing": "You no longer have that item."
+  "failure.item.missing": "You no longer have that item.",
+  "event.questInspect": "Examined: {name}",
+  "failure.inspect.too-far": "You are too far away.",
+  "failure.inspect.default": "You cannot examine that.",
+  "npc.greta.name": "Greta",
+  "npc.greta.greeting": "If you have time, if you could look for someone who did not come back ... Sorry. I do not know who else to ask.",
+  "npc.kolja.name": "Kolja",
+  "npc.kolja.greeting": "What do you want? I am busy.",
+  "npc.hubert.name": "Hubert",
+  "npc.hubert.greeting": "If this is about the garden bed: it is mine. Anything else is none of your business."
 }

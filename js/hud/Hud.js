@@ -291,6 +291,10 @@ export function createHud(state, handlers = {}) {
       addMessage(t('event.questCompleted', { name: event.name }));
     } else if (event.kind === 'quest-abandoned') {
       addMessage(t('event.questAbandoned', { name: event.name }));
+    } else if (event.kind === 'quest-inspect') {
+      addMessage(t('event.questInspect', { name: event.name }));
+    } else if (event.kind === 'inspect-failed') {
+      addMessage(failureText('inspect', event.reason));
     } else if (event.kind === 'quest-failed') {
       addMessage(failureText('quest', event.reason));
     } else if (event.kind === 'npc-failed') {

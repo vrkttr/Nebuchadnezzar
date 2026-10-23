@@ -25,6 +25,7 @@ const [
   { createLootWindow },
   { createLootMarkers },
   { createWorldChests },
+  { createQuestObjects },
   { createNpcs },
   { createNpcWindow },
   { createVendorWindow },
@@ -80,6 +81,7 @@ const [
   import(v('./ui/LootWindow.js')),
   import(v('./entities/LootMarkers.js')),
   import(v('./entities/WorldChests.js')),
+  import(v('./entities/QuestObjects.js')),
   import(v('./entities/Npcs.js')),
   import(v('./ui/NpcWindow.js')),
   import(v('./ui/VendorWindow.js')),
@@ -214,6 +216,7 @@ function start(token) {
 
   const lootMarkers = createLootMarkers(scene);
   const worldChests = createWorldChests(scene);
+  const questObjects = createQuestObjects(scene);
   const lootWindow = createLootWindow(gameState, ui, {
     onTake: (lootId, entryId) => connection.send({ type: 'loot-take', lootId, entryId }),
     onTakeAll: (lootId) => connection.send({ type: 'loot-take-all', lootId }),
@@ -313,6 +316,7 @@ function start(token) {
     remotePlayers.clear();
     lootMarkers.clear();
     worldChests.clear();
+    questObjects.clear();
     lootWindow.hide();
     npcWindow.hide();
     vendorWindow.hide();
@@ -473,6 +477,7 @@ function start(token) {
         hud.setQuests(message);
         questWindow.setQuests(message);
         questMarkers = message.markers ?? {};
+        questObjects.sync(message.objects ?? []);
         npcs.setMarkers(questMarkers);
       } else if (message.type === 'ambient') {
         ambient.applyServer(message);
@@ -523,6 +528,7 @@ function start(token) {
       } else if (message.type === 'event') {
         hud.addEvent(message);
         audio.playEvent(message);
+        if (message.kind === 'quest-inspect' && message.text) dialogue.show(message.text);
       } else if (message.type === 'damage') {
         audio.playDamage(message, ownPlayerId);
         const isEnemyTarget = message.targetType === 'enemy';
@@ -636,6 +642,7 @@ function start(token) {
       !current.userData.isPlayer &&
       !current.userData.isLoot &&
       !current.userData.isChest &&
+      !current.userData.isQuestObject &&
       !current.userData.isTeleporter
     ) {
       current = current.parent;
@@ -649,7 +656,7 @@ function start(token) {
 
     raycaster.setFromCamera(pointer, camera);
     const intersections = raycaster.intersectObjects(
-      [...npcs.getObjects(), ...enemies.getObjects(), ...remotePlayers.getObjects(), ...lootMarkers.getObjects(), ...worldChests.getObjects(), ...(zone?.teleporters ?? [])],
+      [...npcs.getObjects(), ...enemies.getObjects(), ...remotePlayers.getObjects(), ...lootMarkers.getObjects(), ...worldChests.getObjects(), ...questObjects.getObjects(), ...(zone?.teleporters ?? [])],
       true
     );
 
@@ -666,6 +673,8 @@ function start(token) {
       connection.send({ type: 'npc-interact', npcId: target.userData.npcId });
     } else if (target.userData.isTeleporter) {
       connection.send({ type: 'zone-enter', teleporterId: target.userData.teleporterId });
+    } else if (target.userData.isQuestObject) {
+      connection.send({ type: 'quest-inspect', objectId: target.userData.questObjectId });
     } else if (target.userData.isChest) {
       connection.send({ type: 'chest-open', chestId: target.userData.chestId });
     } else if (target.userData.isLoot) {
@@ -888,6 +897,7 @@ function start(token) {
     drips.update(delta, player.object.position);
     remotePlayers.update(delta);
     enemies.update(delta);
+    questObjects.update(delta);
     lootMarkers.update(delta);
 
     npcs.update(delta);

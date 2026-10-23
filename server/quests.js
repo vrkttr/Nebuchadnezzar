@@ -3,10 +3,11 @@ import { addItem, cloneInventory, countItem, removeItem, sendInventory } from '.
 import { addGold } from './loot.js';
 import { getNpcDefinition } from './npcs.js';
 import { grantXp } from './progression.js';
+import { MORDFALL_QUESTS } from './questsMordfall.js';
 
 export const MAX_ACTIVE_QUESTS = 10;
 
-export const QUESTS = {
+const BASE_QUESTS = {
   clear_raiders: {
     id: 'clear_raiders',
     name: 'Plünderer vertreiben',
@@ -184,6 +185,8 @@ export const QUESTS = {
   },
 };
 
+export const QUESTS = { ...BASE_QUESTS, ...MORDFALL_QUESTS };
+
 export function getQuest(questId) {
   return typeof questId === 'string' && Object.hasOwn(QUESTS, questId) ? QUESTS[questId] : null;
 }
@@ -232,7 +235,7 @@ function objectiveLabel(objective) {
 }
 
 function objectiveCurrent(player, entry, objective, index) {
-  if (objective.type === 'kill' || objective.type === 'reach') return Math.min(objective.count, entry.progress[index] ?? 0);
+  if (objective.type !== 'collect') return Math.min(objective.count, entry.progress[index] ?? 0);
   return Math.min(objective.count, countItem(player.inventory, objective.itemId));
 }
 
@@ -259,6 +262,7 @@ function isAvailable(player, quest) {
   if (player.quests[quest.id]) return false;
   if (player.level < quest.level) return false;
   if (quest.requires && player.quests[quest.requires]?.status !== 'completed') return false;
+  if (quest.excludes?.some((questId) => player.quests[questId])) return false;
 
   return true;
 }
@@ -276,6 +280,10 @@ function serializeLogRewards(quest) {
   return { ...rewards, items: rewards.items.map((item) => ({ ...item, name: getItem(item.itemId)?.name ?? item.itemId })) };
 }
 
+function talkObjective(quest, npcId) {
+  return quest.objectives.find((objective) => objective.type === 'talk' && objective.npcId === npcId) ?? null;
+}
+
 export function questsForNpc(player, npcId) {
   const list = [];
 
@@ -283,7 +291,8 @@ export function questsForNpc(player, npcId) {
     const entry = player.quests[quest.id];
     if (entry?.status === 'completed') continue;
 
-    const involved = quest.giverNpc === npcId || quest.turnInNpc === npcId;
+    const talk = entry ? talkObjective(quest, npcId) : null;
+    const involved = quest.giverNpc === npcId || quest.turnInNpc === npcId || Boolean(talk);
     let state = null;
 
     if (entry) {
@@ -296,7 +305,7 @@ export function questsForNpc(player, npcId) {
     if (!state) continue;
 
     const text =
-      state === 'available' ? quest.offerText : state === 'ready' ? quest.completeText : quest.progressText;
+      state === 'available' ? quest.offerText : state === 'ready' ? quest.completeText : talk && quest.turnInNpc !== npcId ? talk.text : quest.progressText;
 
     list.push({
       id: quest.id,
@@ -423,6 +432,59 @@ export function recordPosition(player) {
       }
     });
   }
+}
+
+export function recordTalk(player, npcId) {
+  for (const quest of Object.values(QUESTS)) {
+    const entry = player.quests[quest.id];
+    if (entry?.status !== 'active') continue;
+
+    quest.objectives.forEach((objective, index) => {
+      if (objective.type === 'talk' && objective.npcId === npcId && entry.progress[index] < objective.count) {
+        entry.progress[index] = objective.count;
+        player.dataVersion += 1;
+      }
+    });
+  }
+}
+
+function pendingInspect(player, quest, entry, ref) {
+  return quest.objectives.findIndex(
+    (objective, index) => objective.type === 'inspect' && objective.ref === ref && entry.progress[index] < objective.count
+  );
+}
+
+export function visibleQuestObjectRefs(player) {
+  const refs = new Set();
+
+  for (const quest of Object.values(QUESTS)) {
+    const entry = player.quests[quest.id];
+    if (entry?.status !== 'active') continue;
+
+    quest.objectives.forEach((objective, index) => {
+      if (objective.type === 'inspect' && entry.progress[index] < objective.count) refs.add(objective.ref);
+    });
+  }
+
+  return refs;
+}
+
+export function recordInspect(player, ref) {
+  const texts = [];
+
+  for (const quest of Object.values(QUESTS)) {
+    const entry = player.quests[quest.id];
+    if (entry?.status !== 'active') continue;
+
+    const index = pendingInspect(player, quest, entry, ref);
+    if (index < 0) continue;
+
+    entry.progress[index] = quest.objectives[index].count;
+    player.dataVersion += 1;
+    if (quest.objectives[index].text) texts.push(quest.objectives[index].text);
+  }
+
+  return texts;
 }
 
 function fail(notify, playerId, reason) {

@@ -8,6 +8,7 @@ import { bindHome, serializeHome, updateHearth } from './inn.js';
 import { WebSocketServer } from 'ws';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
+import { inspectQuestObject, serializeQuestObjects } from './questObjects.js';
 import { collectAmbient, updateAmbient } from './ambient.js';
 import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
@@ -547,6 +548,10 @@ wss.on('connection', async (socket, request) => {
       }
 
       useAbility(id, state, zoneEnemies.get(state.zoneId), slot, (payload) => sendToZone(state.zoneId, payload), notify, onKill);
+    } else if (message.type === 'quest-inspect') {
+      const state = players.get(id);
+      if (!state || isLoading(state) || typeof message.objectId !== 'string') return;
+      inspectQuestObject(state, id, message.objectId, notify);
     } else if (message.type === 'chest-open') {
       const state = players.get(id);
       if (!state || isLoading(state) || typeof message.chestId !== 'string') return;
@@ -891,7 +896,8 @@ setInterval(() => {
   for (const [id, state] of players) {
     if (!isLoading(state)) recordPosition(state);
     const questView = serializeQuestLog(state);
-    const questViewKey = JSON.stringify(questView);
+    const questObjects = serializeQuestObjects(state);
+    const questViewKey = JSON.stringify([questView, questObjects]);
 
     if (questViewKey !== state.questViewKey) {
       for (const event of diffQuestLog(state.questView, questView)) {
@@ -900,7 +906,7 @@ setInterval(() => {
 
       state.questView = questView;
       state.questViewKey = questViewKey;
-      notify(id, { type: 'quests', ...questView });
+      notify(id, { type: 'quests', ...questView, objects: questObjects });
     }
 
     if (state.abilityLevel !== state.level) {

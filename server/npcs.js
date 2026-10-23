@@ -106,6 +106,24 @@ const NPC_DEFINITIONS = {
       ],
     },
   },
+  greta: {
+    id: 'greta',
+    name: 'Greta',
+    color: 0x5a4a5a,
+    greeting: 'Wenn du Zeit hast, wenn du jemanden suchen kannst, der nicht zurückgekommen ist ... Entschuldige. Ich weiß nicht, wen ich sonst fragen soll.',
+  },
+  kolja: {
+    id: 'kolja',
+    name: 'Kolja',
+    color: 0x4a4a3a,
+    greeting: 'Was willst du? Ich habe zu tun.',
+  },
+  hubert: {
+    id: 'hubert',
+    name: 'Hubert',
+    color: 0x5a5a3a,
+    greeting: 'Wenn es um das Beet geht: Es gehört mir. Alles andere geht dich nichts an.',
+  },
   pumpenwart: {
     id: 'pumpenwart',
     name: 'Pumpenwart',

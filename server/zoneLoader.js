@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const ZONE_DIRECTORY = join(dirname(fileURLToPath(import.meta.url)), 'zones');
 const COLLISION_LAYER = 'Kollision';
 const OVERVIEW_LAYER = 'Karte';
-const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste']);
+const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt']);
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'wald', 'flecken']);
 export const CHUNK_SIZE = 64;
 const CHUNK_LIMIT = 4096;
@@ -67,6 +67,7 @@ function loadZone(id, file) {
     spawns: {},
     teleporters: [],
     chests: [],
+    questObjects: [],
     colliders: [],
     waters: [],
     npcs: [],
@@ -153,6 +154,17 @@ function loadZone(id, file) {
           rotationY,
           lootTable: String(props.loot ?? 'chest_common'),
           name: props.name ?? 'Versteckte Kiste',
+        });
+      } else if (kind === 'questobjekt') {
+        if (!props.id) throw new Error(`Zonendatei ${id}: Questobjekt ${object.id} braucht die Eigenschaft "id".`);
+        if (zone.questObjects.some((entry) => entry.id === String(props.id))) throw new Error(`Zonendatei ${id}: Questobjekt "${props.id}" ist doppelt vergeben.`);
+        zone.questObjects.push({
+          id: String(props.id),
+          x: center.x,
+          z: center.z,
+          rotationY,
+          model: String(props.modell ?? 'dokument'),
+          name: String(props.name ?? 'Fundstück'),
         });
       } else if (kind === 'npc') {
         zone.npcs.push({ npcId: props.npcId, x: center.x, z: center.z, rotationY, props });

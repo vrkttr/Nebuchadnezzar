@@ -574,5 +574,14 @@
   "friends.removed": "{name} wurde aus deiner Freundesliste entfernt.",
   "friends.cameOnline": "{name} ist jetzt online.",
   "friends.wentOffline": "{name} ist jetzt offline.",
-  "failure.item.missing": "Du hast keinen solchen Gegenstand mehr."
+  "failure.item.missing": "Du hast keinen solchen Gegenstand mehr.",
+  "event.questInspect": "Untersucht: {name}",
+  "failure.inspect.too-far": "Du bist zu weit entfernt.",
+  "failure.inspect.default": "Das lässt sich nicht untersuchen.",
+  "npc.greta.name": "Greta",
+  "npc.greta.greeting": "Wenn du Zeit hast, wenn du jemanden suchen kannst, der nicht zurückgekommen ist ... Entschuldige. Ich weiß nicht, wen ich sonst fragen soll.",
+  "npc.kolja.name": "Kolja",
+  "npc.kolja.greeting": "Was willst du? Ich habe zu tun.",
+  "npc.hubert.name": "Hubert",
+  "npc.hubert.greeting": "Wenn es um das Beet geht: Es gehört mir. Alles andere geht dich nichts an."
 }
