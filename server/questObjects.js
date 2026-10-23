@@ -26,6 +26,6 @@ export function inspectQuestObject(player, playerId, objectId, notify) {
   }
 
   const texts = recordInspect(player, entry.id);
-  notify(playerId, { type: 'event', kind: 'quest-inspect', name: entry.name, text: texts.join('\n\n') });
+  notify(playerId, { type: 'event', kind: 'quest-inspect', objectId: entry.id, name: entry.name, text: texts.map((item) => item.text).join('\n\n'), textRefs: texts.map((item) => ({ questId: item.questId, index: item.index })) });
 }
 

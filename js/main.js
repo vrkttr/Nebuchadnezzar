@@ -381,6 +381,8 @@ function start(token) {
         onBlockers: (list) => {
           thirdPersonCamera.setBlockers(list);
           enemies.setBlockers(list);
+          npcs.setBlockers(list);
+          remotePlayers.setBlockers(list);
         },
         onEmitters: (list) => audio.setEmitters(list),
         onPath: (object) => ambient.addPath(object),
@@ -395,6 +397,8 @@ function start(token) {
     drips.setSources(zone.drips);
     thirdPersonCamera.setBlockers(world.cameraBlockers ?? []);
     enemies.setBlockers(world.cameraBlockers ?? []);
+    npcs.setBlockers(world.cameraBlockers ?? []);
+    remotePlayers.setBlockers(world.cameraBlockers ?? []);
     if (world.indoor && !wasIndoor) outdoorCameraDistance = thirdPersonCamera.getDistance();
     thirdPersonCamera.setDistance(world.indoor ? INDOOR_CAMERA_DISTANCE : outdoorCameraDistance ?? thirdPersonCamera.getDistance());
     wasIndoor = Boolean(world.indoor);

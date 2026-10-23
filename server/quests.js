@@ -183,6 +183,25 @@ const BASE_QUESTS = {
     ],
     rewards: { xp: 130, gold: 60, items: [{ itemId: 'motorcycle_helmet', quantity: 1 }] },
   },
+  sewer_passage: {
+    id: 'sewer_passage',
+    name: 'Der Weg unter der Erde',
+    level: 5,
+    giverNpc: 'kanalwaerter',
+    turnInNpc: 'barbier',
+    requires: 'radio_containers',
+    offerText:
+      'Du hast dich hier bewiesen. Der Deckel hinter mir führt in einen Schacht, der weit unter Sektor 7 hindurchläuft. Ich war nie ganz unten, und wer von unten zurückkam, redet nicht gern darüber. Geh durch die Pumpenhalle, räum den Rattenkönig aus dem Weg und such den Ausgang am anderen Ende. Am Ende soll es eine Stadt geben, heißt es. Ich weiß nicht, was stimmt. Nimm Licht mit, und lass dich nicht von den Wasserstellen überraschen.',
+    progressText: 'Pumpenhalle, Rattenkönig, Ausgang. Der Weg liegt unter dem Deckel.',
+    completeText:
+      'Aus der Kanalisation? Und noch alle Finger dran? Setz dich, bevor du mir vom Stuhl kippst. Eine Rasur geht aufs Haus, so viel Mut belohne ich. Willkommen in Babylos.',
+    objectives: [
+      { type: 'reach', zone: 'kanalisation', x: 0, z: -5, radius: 9, count: 1, label: 'Pumpenhalle in der Kanalisation erreichen' },
+      { type: 'kill', enemyType: 'rat_king', count: 1, label: 'Rattenkönig getötet' },
+      { type: 'reach', zone: 'kanalisation', x: 0, z: -116, radius: 7, count: 1, label: 'Ausgang am Ende der Kanalisation erreichen' },
+    ],
+    rewards: { xp: 900, gold: 150, items: [{ itemId: 'medkit', quantity: 2 }] },
+  },
 };
 
 export const QUESTS = { ...BASE_QUESTS, ...MORDFALL_QUESTS };
@@ -312,6 +331,7 @@ export function questsForNpc(player, npcId) {
       name: quest.name,
       state,
       text,
+      textIndex: state === 'active' && talk && quest.turnInNpc !== npcId ? quest.objectives.indexOf(talk) : null,
       objectives: serializeObjectives(player, quest, entry),
       rewards: serializeRewards(quest),
       turnInNpc: quest.turnInNpc,
@@ -481,7 +501,7 @@ export function recordInspect(player, ref) {
 
     entry.progress[index] = quest.objectives[index].count;
     player.dataVersion += 1;
-    if (quest.objectives[index].text) texts.push(quest.objectives[index].text);
+    if (quest.objectives[index].text) texts.push({ questId: quest.id, index, text: quest.objectives[index].text });
   }
 
   return texts;

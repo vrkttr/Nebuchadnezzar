@@ -1,3 +1,4 @@
+import { treeColliders } from './forest.js';
 import { getNpcsOfZone } from './npcs.js';
 import { getZone, getZones } from './zoneLoader.js';
 
@@ -69,6 +70,7 @@ for (const zone of getZones()) {
           ? circle(collider.x, collider.z, collider.radius)
           : box(collider.x, collider.z, collider.halfX, collider.halfZ, collider.rotation)
       ),
+      ...treeColliders(zone).map((tree) => circle(tree.x, tree.z, tree.radius)),
       ...getNpcsOfZone(zone.id).map((npc) => circle(npc.x, npc.z, NPC_RADIUS)),
     ])
   );

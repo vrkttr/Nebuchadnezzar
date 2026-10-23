@@ -1,13 +1,17 @@
 import * as THREE from 'three';
 import { createPlayer } from './Characters.js';
 import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
+import { createOcclusion } from '../utils/Occlusion.js';
 
 const SMOOTHING = 12;
 const NAMEPLATE_HEIGHT = 2.2;
+const NAMEPLATE_RANGE = 45;
 
 export function createRemotePlayers(scene, camera, nameplateContainer) {
   const remotePlayers = new Map();
   const projected = new THREE.Vector3();
+  const anchor = new THREE.Vector3();
+  const occlusion = createOcclusion();
   let relationResolver = null;
 
   function setNameplateText(el, name, guildName) {
@@ -113,10 +117,11 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
   }
 
   function updateNameplatePosition(remote) {
-    projected.set(remote.object.position.x, remote.object.position.y + NAMEPLATE_HEIGHT, remote.object.position.z);
-    projected.project(camera);
+    anchor.set(remote.object.position.x, remote.object.position.y + NAMEPLATE_HEIGHT, remote.object.position.z);
+    const hidden = anchor.distanceTo(camera.position) > NAMEPLATE_RANGE || occlusion.isBlocked(camera.position, anchor);
+    projected.copy(anchor).project(camera);
 
-    if (projected.z > 1) {
+    if (hidden || projected.z > 1) {
       remote.nameplateEl.style.display = 'none';
       return;
     }
@@ -190,5 +195,5 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }
   }
 
-  return { setEnvironment, sync, clear, remove, playAttack, playHit, getObject, getNameplate, setRelationResolver, getObjects, getData, getMarkers, update };
+  return { setEnvironment, sync, clear, remove, playAttack, playHit, getObject, getNameplate, setRelationResolver, getObjects, getData, getMarkers, setBlockers: occlusion.setBlockers, update };
 }

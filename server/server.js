@@ -564,7 +564,7 @@ wss.on('connection', async (socket, request) => {
         return;
       }
 
-      useAbility(id, state, zoneEnemies.get(state.zoneId), slot, (payload) => sendToZone(state.zoneId, payload), notify, onKill);
+      useAbility(id, state, zoneEnemies.get(state.zoneId), slot, (payload) => sendNearTarget(state.zoneId, payload), notify, onKill);
     } else if (message.type === 'quest-inspect') {
       const state = players.get(id);
       if (!state || isLoading(state) || typeof message.objectId !== 'string') return;
@@ -755,6 +755,27 @@ function sendToZone(zoneId, message) {
   }
 }
 
+const EVENT_RANGE = 90;
+
+function sendNearTarget(zoneId, message) {
+  const enemies = zoneEnemies.get(zoneId);
+  const targetState = message.targetType === 'player' ? players.get(message.targetId) : null;
+  const target = message.targetType === 'enemy' ? enemies?.get(message.targetId) : targetState;
+  if (!target) {
+    sendToZone(zoneId, message);
+    return;
+  }
+
+  const data = JSON.stringify(message);
+  for (const [playerId, state] of players) {
+    if (state.zoneId !== zoneId || isLoading(state)) continue;
+    const involved = playerId === message.targetId || playerId === message.attackerId;
+    if (!involved && Math.hypot(state.x - target.x, state.z - target.z) > EVENT_RANGE) continue;
+    const socket = sockets.get(playerId);
+    if (socket && socket.readyState === socket.OPEN) socket.send(data);
+  }
+}
+
 function enterTeleporter(playerId, state, teleporterId) {
   if (state.dead || isLoading(state)) return;
 
@@ -869,7 +890,7 @@ setInterval(() => {
     if (trainInfo && zonePlayers.size > 0 && tickCount % 2 === 0) sendToZone(zone.id, serializeTrainState(trainInfo));
 
     updateEnemies(enemies, zonePlayers, TICK_DELTA);
-    updateCombat(zonePlayers, enemies, TICK_DELTA, (payload) => sendToZone(zone.id, payload), notify, onKill);
+    updateCombat(zonePlayers, enemies, TICK_DELTA, (payload) => sendNearTarget(zone.id, payload), notify, onKill);
 
     for (const [id, state] of zonePlayers) {
       if (!state.pendingZone) continue;

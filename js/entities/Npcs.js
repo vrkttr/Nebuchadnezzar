@@ -1,12 +1,16 @@
 import * as THREE from 'three';
 import { createNpc } from './Characters.js';
+import { createOcclusion } from '../utils/Occlusion.js';
 
 const PLATE_HEIGHT = 2.2;
+const PLATE_RANGE = 45;
 const MARKER_SYMBOLS = { available: '!', ready: '?' };
 
 export function createNpcs(scene, camera, nameplateContainer) {
   const npcs = new Map();
   const projected = new THREE.Vector3();
+  const anchor = new THREE.Vector3();
+  const occlusion = createOcclusion();
 
   function sync(list) {
     for (const data of list) {
@@ -70,10 +74,11 @@ export function createNpcs(scene, camera, nameplateContainer) {
   function update(delta) {
     for (const npc of npcs.values()) {
       npc.animate(delta);
-      projected.set(npc.object.position.x, npc.object.position.y + PLATE_HEIGHT, npc.object.position.z);
-      projected.project(camera);
+      anchor.set(npc.object.position.x, npc.object.position.y + PLATE_HEIGHT, npc.object.position.z);
+      const hidden = anchor.distanceTo(camera.position) > PLATE_RANGE || occlusion.isBlocked(camera.position, anchor);
+      projected.copy(anchor).project(camera);
 
-      if (projected.z > 1) {
+      if (hidden || projected.z > 1) {
         npc.plate.style.display = 'none';
         continue;
       }
@@ -88,5 +93,5 @@ export function createNpcs(scene, camera, nameplateContainer) {
     return Array.from(npcs, ([id, npc]) => ({ npcId: id, x: npc.object.position.x, z: npc.object.position.z }));
   }
 
-  return { sync, clear, setMarkers, getObjects, getPosition, getObject, getPlate, getMarkers, update };
+  return { sync, clear, setMarkers, getObjects, getPosition, getObject, getPlate, getMarkers, setBlockers: occlusion.setBlockers, update };
 }

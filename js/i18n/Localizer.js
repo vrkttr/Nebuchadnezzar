@@ -49,7 +49,9 @@ function localizeObjectives(questId, objectives) {
 
 function localizeQuest(quest) {
   quest.name = pick([`quest.${quest.id}.name`], quest.name);
-  if (quest.text !== undefined) {
+  if (quest.text !== undefined && quest.textIndex !== null && quest.textIndex !== undefined) {
+    quest.text = pick([`quest.${quest.id}.objective.${quest.textIndex}.text`], quest.text);
+  } else if (quest.text !== undefined) {
     const kind = { available: 'offer', ready: 'complete', active: 'progress' }[quest.state];
     quest.text = pick([`quest.${quest.id}.${kind}`], quest.text);
   }
@@ -62,6 +64,11 @@ function localizeEvent(event) {
   if (event.questId && event.kind === 'xp') event.enemyName = pick([`quest.${event.questId}.name`], event.enemyName);
   if (event.questId && event.kind !== 'xp' && event.name !== undefined) {
     event.name = pick([`quest.${event.questId}.name`], event.name);
+  }
+  if (event.kind === 'quest-inspect' && event.objectId) event.name = pick([`questobject.${event.objectId}`], event.name);
+  if (event.kind === 'quest-inspect' && Array.isArray(event.textRefs) && event.textRefs.length > 0) {
+    const parts = event.text.split('\n\n');
+    event.text = event.textRefs.map((ref, position) => pick([`quest.${ref.questId}.objective.${ref.index}.text`], parts[position] ?? '')).join('\n\n');
   }
   if (event.kind === 'quest-progress') {
     event.label = pick([`quest.${event.questId}.objective.${event.index}`], event.itemId ? itemName(event.itemId, event.label) : event.label);
@@ -96,6 +103,7 @@ export function localizeMessage(message) {
       break;
     case 'quests':
       (message.quests ?? []).forEach(localizeQuest);
+      (message.objects ?? []).forEach((object) => { object.name = pick([`questobject.${object.id}`], object.name); });
       break;
     case 'loot-spawn':
     case 'loot-window':
