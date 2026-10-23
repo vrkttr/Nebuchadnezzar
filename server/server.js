@@ -22,6 +22,7 @@ import { getPlayerModifiers, parseSkills, resetSkills, serializeSkills, spendSki
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
 import { inventorySize } from './bags.js';
+import { handleAdmin, isAdminName } from './admin.js';
 import { grantStarterKit } from './starterKit.js';
 import { applyEquipmentStats, equipmentRows, loadEquipment, loadEquipmentPerks, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
@@ -431,6 +432,7 @@ wss.on('connection', async (socket, request) => {
 
   const id = randomUUID();
   const initialState = createInitialState(character);
+  initialState.isAdmin = isAdminName(character.name);
   initialState.abilityLevel = initialState.level;
   initialState.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
   players.set(id, initialState);
@@ -454,6 +456,7 @@ wss.on('connection', async (socket, request) => {
       equipment: serializeEquipment(initialState.equipment),
       equipmentPerks: serializeEquipmentPerks(initialState.equipmentPerks),
       skills: serializeSkills(initialState),
+      admin: initialState.isAdmin,
       appearance: initialState.appearance,
       npcs: serializeNpcs(initialState.zoneId),
       chests: serializeChests(initialState.zoneId, initialState.openedChests),
@@ -715,6 +718,8 @@ wss.on('connection', async (socket, request) => {
       if (!state || typeof message.itemId !== 'string') return;
 
       buyFromVendor(state, id, message.npcId, message.itemId, Number(message.quantity), notify);
+    } else if (typeof message.type === 'string' && message.type.startsWith('admin-')) {
+      handleAdmin(adminContext, id, players.get(id), message);
     } else if (message.type === 'vendor-sell') {
       const state = players.get(id);
       if (!state || typeof message.itemId !== 'string') return;
@@ -738,6 +743,17 @@ wss.on('connection', async (socket, request) => {
     console.error('Socket-Fehler:', error);
   });
 });
+
+const adminContext = {
+  players,
+  notify,
+  changeZone: (playerId, state, zoneId, spawnId, override) => changeZone(playerId, state, zoneId, spawnId, override),
+  groundHeight: (zoneId, x, z) => groundHeight(zoneId, x, z),
+  kick: (playerId) => {
+    const socket = sockets.get(playerId);
+    if (socket) socket.close(4003, 'kicked');
+  },
+};
 
 function isLoading(state) {
   return Date.now() < state.loadingUntil;
@@ -841,9 +857,9 @@ function enterTeleporter(playerId, state, teleporterId) {
   changeZone(playerId, state, teleporter.zone, teleporter.spawn);
 }
 
-function changeZone(playerId, state, zoneId, spawnId) {
+function changeZone(playerId, state, zoneId, spawnId, override = null) {
   const target = getZone(zoneId);
-  const spawn = spawnId ? target?.spawns[spawnId] : target?.spawn;
+  const spawn = override ?? (spawnId ? target?.spawns[spawnId] : target?.spawn);
   if (!spawn) return;
 
   const previousZoneId = state.zoneId;

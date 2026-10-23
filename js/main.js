@@ -45,6 +45,7 @@ const [
   { createIntroWindow },
   { createAbilitiesWindow },
   { createSkillsWindow },
+  { createAdminWindow },
   { createQuestWindow },
   { createSocialWindow },
   { createAbilityDrag },
@@ -107,6 +108,7 @@ const [
   import(v('./ui/IntroWindow.js')),
   import(v('./ui/AbilitiesWindow.js')),
   import(v('./ui/SkillsWindow.js')),
+  import(v('./ui/AdminWindow.js')),
   import(v('./ui/QuestWindow.js')),
   import(v('./ui/SocialWindow.js')),
   import(v('./ui/AbilityDrag.js')),
@@ -194,6 +196,9 @@ function start(token) {
     onSpend: (skillId) => connection.send({ type: 'skill-spend', skillId }),
     onReset: () => connection.send({ type: 'skill-reset' }),
   });
+  const adminWindow = createAdminWindow(gameState, {
+    onSend: (payload) => connection.send(payload),
+  });
   const questWindow = createQuestWindow({
     confirmDialog: ui.confirmDialog,
     onAbandon: (questId) => connection.send({ type: 'quest-abandon', questId }),
@@ -237,7 +242,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'quests', 'social']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'quests', 'social']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -504,12 +509,18 @@ function start(token) {
     button.focus();
   }
 
+  let kicked = false;
+
   const connection = createServerConnection(buildServerUrl(token), {
     onOpen() {
       connectionOpened = true;
     },
     onClose(event) {
       if (leavingPage) return;
+      if (event?.code === 4003 || kicked) {
+        showConnectionLost('connection.lost.kicked');
+        return;
+      }
       if (event?.code === 4001 || event?.code === 4002) {
         allowLeave();
         window.location.replace(getPortalUrl());
@@ -539,11 +550,16 @@ function start(token) {
         hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
         abilitiesWindow.render(message.abilities ?? []);
         if (message.skills) skillsWindow.render(message.skills);
+        if (message.admin) adminWindow.enable();
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
         player.setAppearance(message.appearance);
       } else if (message.type === 'appearance') {
         player.setAppearance(message.appearance);
+      } else if (message.type === 'admin-overview') {
+        adminWindow.setOverview(message);
+      } else if (message.type === 'kicked') {
+        kicked = true;
       } else if (message.type === 'skills') {
         skillsWindow.render(message);
       } else if (message.type === 'abilities') {
@@ -895,12 +911,14 @@ function start(token) {
         characterWindow.isOpen() ||
         abilitiesWindow.isOpen() ||
         skillsWindow.isOpen() ||
+        adminWindow.isOpen() ||
         questWindow.isOpen() ||
         socialWindow.isOpen() ||
         worldMap.isOpen()
       ) {
         abilitiesWindow.hide();
         skillsWindow.hide();
+        adminWindow.hide();
         questWindow.hide();
         socialWindow.hide();
         npcWindow.hide();

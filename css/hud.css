@@ -2767,3 +2767,95 @@ html.touch-ui #confirm-dialog {
     top: 8px;
   }
 }
+
+#admin-window {
+  right: 340px;
+  top: 10%;
+  width: 420px;
+}
+
+#admin-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 14px 14px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-title {
+  font-family: var(--nu-font-display);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--nu-line);
+  padding-bottom: 2px;
+}
+
+.admin-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.admin-input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 5px 6px;
+  background: var(--nu-board-darker);
+  border: 2px solid var(--nu-line);
+  color: var(--nu-text);
+  font-family: var(--nu-font-text);
+  font-size: 13px;
+}
+
+.admin-button {
+  flex: 0 0 auto;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.admin-mini {
+  font-size: 11px;
+  padding: 2px 6px;
+}
+
+.admin-players {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.admin-player {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.admin-player-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-player-zone {
+  font-size: 11px;
+  color: var(--nu-ink-soft);
+}
+
+@media (max-width: 880px), (max-height: 560px) {
+  #admin-window {
+    right: 8px;
+    top: 8px;
+    width: calc(100vw - 16px);
+    max-width: 420px;
+  }
+}
