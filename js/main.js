@@ -9,6 +9,7 @@ const [
   { buildZone, disposeZone },
   { createZoneStreamer },
   { createAmbient },
+  { createTrain },
   { createPlayer },
   { createPlayerController },
   { createServerConnection },
@@ -55,7 +56,7 @@ const [
   { updateSewer, isInWater },
   { gameState },
   { buildServerUrl, getPortalUrl },
-  { initI18n, t, applyDom },
+  { initI18n, t, has, applyDom },
   { localizeMessage },
 ] = await Promise.all([
   import('three'),
@@ -65,6 +66,7 @@ const [
   import(v('./world/ZoneBuilder.js')),
   import(v('./world/ZoneStreamer.js')),
   import(v('./entities/Ambient.js')),
+  import(v('./entities/Train.js')),
   import(v('./entities/Characters.js')),
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
@@ -123,6 +125,11 @@ function start(token) {
   const renderer = createRenderer();
   const scene = createScene();
   const ambient = createAmbient(scene);
+  const train = createTrain({
+    scene,
+    label: (id, fallback) => (has(`train.stop.${id}`) ? t(`train.stop.${id}`) : fallback),
+    onHorn: (x, z) => audio.playAt('train_horn', x, z, 1, TRAIN_HORN_RANGE),
+  });
   const spawnPoint = new THREE.Vector3();
   let zone = null;
   let streamer = null;
@@ -229,6 +236,9 @@ function start(token) {
   const ownTargetPosition = new THREE.Vector3(spawnPoint.x, spawnPoint.y, spawnPoint.z);
   let ownTargetRotationY = 0;
   const SMOOTHING = 12;
+  const RIDING_SMOOTHING = 40;
+  const TRAIN_HORN_RANGE = 160;
+  let riding = false;
   const LOOT_CLOSE_RANGE = 6;
   const NPC_CLOSE_RANGE = 6;
 
@@ -338,6 +348,8 @@ function start(token) {
       streamer = null;
     }
     ambient.clear();
+    train.clear();
+    riding = false;
     if (zone) {
       disposeZone(scene, zone);
       zone = null;
@@ -345,6 +357,7 @@ function start(token) {
     if (!firstLoad) resetZoneEntities();
 
     zone = buildZone(scene, world);
+    train.setRoute(world.train);
     if (world.chunked) {
       streamer = createZoneStreamer({
         scene,
@@ -479,6 +492,8 @@ function start(token) {
         questMarkers = message.markers ?? {};
         questObjects.sync(message.objects ?? []);
         npcs.setMarkers(questMarkers);
+      } else if (message.type === 'train') {
+        train.receive(message);
       } else if (message.type === 'ambient') {
         ambient.applyServer(message);
       } else if (message.type === 'home') {
@@ -525,6 +540,7 @@ function start(token) {
         gameState.player.resource = message.resource;
         gameState.player.resourceMax = message.resourceMax;
         gameState.player.cooldowns = message.cooldowns ?? {};
+        riding = Boolean(message.riding);
       } else if (message.type === 'event') {
         hud.addEvent(message);
         audio.playEvent(message);
@@ -887,12 +903,13 @@ function start(token) {
     requestAnimationFrame(animate);
     const delta = clock.getDelta();
 
-    const factor = dampFactor(SMOOTHING, delta);
+    const factor = dampFactor(riding ? RIDING_SMOOTHING : SMOOTHING, delta);
     player.object.position.lerp(ownTargetPosition, factor);
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     player.update(delta);
     streamer?.update(player.object.position.x, player.object.position.z);
     ambient.update(delta, player.object.position);
+    train.update(delta);
     updateSewer(delta);
     drips.update(delta, player.object.position);
     remotePlayers.update(delta);

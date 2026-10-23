@@ -10,6 +10,7 @@ import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { inspectQuestObject, serializeQuestObjects } from './questObjects.js';
 import { collectAmbient, updateAmbient } from './ambient.js';
+import { initTrains, serializeTrainState, updateTrain } from './train.js';
 import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
 import { itemRefId, serializeAbilities, serializeActionItems, setActionSlot, syncActionLayout } from './abilities.js';
@@ -73,6 +74,7 @@ const SAVE_INTERVAL_MS = 2000;
 
 const players = new Map();
 const sockets = new Map();
+initTrains();
 const zoneEnemies = new Map(getZones().map((zone) => [zone.id, createEnemies(zone.id)]));
 const TELEPORT_RANGE = 4.5;
 const ZONE_LOAD_TIMEOUT_MS = 15000;
@@ -776,6 +778,7 @@ function changeZone(playerId, state, zoneId, spawnId) {
   state.loadingUntil = Date.now() + ZONE_LOAD_TIMEOUT_MS;
   state.knownEnemies = null;
   state.knownAmbient = null;
+  state.trainRide = null;
   state.dataVersion += 1;
 
   sendToZone(previousZoneId, { type: 'leave', id: playerId });
@@ -838,6 +841,9 @@ setInterval(() => {
     for (const [id, state] of players) {
       if (state.zoneId === zone.id && !isLoading(state)) zonePlayers.set(id, state);
     }
+
+    const trainInfo = updateTrain(zone.id, zonePlayers, Date.now() / 1000);
+    if (trainInfo && zonePlayers.size > 0 && tickCount % 2 === 0) sendToZone(zone.id, serializeTrainState(trainInfo));
 
     updateEnemies(enemies, zonePlayers, TICK_DELTA);
     updateCombat(zonePlayers, enemies, TICK_DELTA, (payload) => sendToZone(zone.id, payload), notify, onKill);
@@ -928,6 +934,7 @@ setInterval(() => {
       resource: state.resource,
       resourceMax: state.resourceMax,
       cooldowns: state.cooldowns,
+      riding: Boolean(state.trainRide),
     });
   }
 }, TICK_INTERVAL_MS);

@@ -583,5 +583,13 @@
   "npc.kolja.name": "Kolja",
   "npc.kolja.greeting": "What do you want? I am busy.",
   "npc.hubert.name": "Hubert",
-  "npc.hubert.greeting": "If this is about the garden bed: it is mine. Anything else is none of your business."
+  "npc.hubert.greeting": "If this is about the garden bed: it is mine. Anything else is none of your business.",
+  "train.stop.westwald": "Westwald",
+  "train.stop.suedwest": "Southwest",
+  "train.stop.marktplatz": "Market square",
+  "train.stop.nordmarkt": "North market",
+  "train.stop.nordost": "Northeast",
+  "train.stop.ostwald": "Eastwald",
+  "train.stop.suedost": "Southeast",
+  "train.stop.nordwest": "Northwest"
 }

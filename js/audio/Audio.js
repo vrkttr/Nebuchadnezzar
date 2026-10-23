@@ -56,6 +56,7 @@ const SOUND_DEFINITIONS = {
   npc_streuner_greet: { volume: 0.43, variation: 0.03 },
   npc_haendler_idle: { volume: 0.31, variation: 0.05 },
   npc_haendler_greet: { volume: 0.43, variation: 0.03 },
+  train_horn: { volume: 0.5 },
   drip_1: { volume: 0.3, variation: 0.12 },
   drip_2: { volume: 0.3, variation: 0.12 },
   drip_3: { volume: 0.3, variation: 0.12 },
@@ -214,19 +215,19 @@ export function createAudio() {
     if (options.pan !== undefined) sound.stereo(options.pan, id);
   }
 
-  function spatial(x, z) {
+  function spatial(x, z, range = MAX_HEARING_DISTANCE) {
     const dx = x - listener.x;
     const dz = z - listener.z;
     const distance = Math.hypot(dx, dz);
-    if (distance > MAX_HEARING_DISTANCE) return null;
+    if (distance > range) return null;
 
-    const falloff = (1 - distance / MAX_HEARING_DISTANCE) ** 1.6;
+    const falloff = (1 - distance / range) ** 1.6;
     const right = distance > 0.01 ? (-dx * listener.forwardZ + dz * listener.forwardX) / distance : 0;
     return { volume: falloff, pan: Math.max(-0.9, Math.min(0.9, right * 0.8)) };
   }
 
-  function playAt(name, x, z, volume = 1) {
-    const placement = spatial(x, z);
+  function playAt(name, x, z, volume = 1, range = MAX_HEARING_DISTANCE) {
+    const placement = spatial(x, z, range);
     if (placement) play(name, { volume: placement.volume * volume, pan: placement.pan });
   }
 

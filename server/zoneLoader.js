@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const ZONE_DIRECTORY = join(dirname(fileURLToPath(import.meta.url)), 'zones');
 const COLLISION_LAYER = 'Kollision';
 const OVERVIEW_LAYER = 'Karte';
-const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt']);
+const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt', 'zugstrecke', 'haltestelle']);
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'wald', 'flecken']);
 export const CHUNK_SIZE = 64;
 const CHUNK_LIMIT = 4096;
@@ -68,6 +68,8 @@ function loadZone(id, file) {
     teleporters: [],
     chests: [],
     questObjects: [],
+    train: null,
+    trainStops: [],
     colliders: [],
     waters: [],
     npcs: [],
@@ -155,6 +157,20 @@ function loadZone(id, file) {
           lootTable: String(props.loot ?? 'chest_common'),
           name: props.name ?? 'Versteckte Kiste',
         });
+      } else if (kind === 'zugstrecke') {
+        if (shape !== 'polyline' || !points || points.length < 2) throw new Error(`Zonendatei ${id}: Zugstrecke ${object.id} muss eine Linie sein.`);
+        if (zone.train) throw new Error(`Zonendatei ${id}: Es ist nur eine Zugstrecke je Zone möglich.`);
+        zone.train = {
+          id: String(props.id ?? 'zug'),
+          points,
+          speed: Number(props.geschwindigkeit) || 8,
+          dwell: Number(props.haltezeit) || 10,
+          honk: Number(props.hupzeit) || 5,
+          wagons: Number.isInteger(props.waggons) ? props.waggons : 3,
+        };
+      } else if (kind === 'haltestelle') {
+        if (!props.id) throw new Error(`Zonendatei ${id}: Haltestelle ${object.id} braucht die Eigenschaft "id".`);
+        zone.trainStops.push({ id: String(props.id), name: String(props.name ?? props.id), x: center.x, z: center.z });
       } else if (kind === 'questobjekt') {
         if (!props.id) throw new Error(`Zonendatei ${id}: Questobjekt ${object.id} braucht die Eigenschaft "id".`);
         if (zone.questObjects.some((entry) => entry.id === String(props.id))) throw new Error(`Zonendatei ${id}: Questobjekt "${props.id}" ist doppelt vergeben.`);
@@ -191,6 +207,7 @@ function loadZone(id, file) {
     });
   }
 
+  if (zone.trainStops.length > 0 && !zone.train) throw new Error(`Zonendatei ${id}: Haltestellen ohne Zugstrecke.`);
   if (!zone.spawn) throw new Error('Zonendatei: Es fehlt ein Objekt der Klasse "spawn".');
   if (zone.chunked) buildChunks(zone);
   return zone;
@@ -324,6 +341,7 @@ export function serializeZone(zone) {
       chunkSize: CHUNK_SIZE,
       objects: [],
       overview: zone.overview,
+      train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops } : null,
       teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
       cameraBlockers: [],
     };
@@ -340,6 +358,7 @@ export function serializeZone(zone) {
     groundColor: zone.groundColor,
     spawn: zone.spawn,
     objects: zone.visuals,
+    train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops } : null,
     teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
     cameraBlockers: zone.colliders
       .filter((collider) => collider.cameraHeight > 0)
