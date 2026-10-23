@@ -5,6 +5,10 @@ import { fileURLToPath } from 'node:url';
 const ZONE_DIRECTORY = join(dirname(fileURLToPath(import.meta.url)), 'zones');
 const COLLISION_LAYER = 'Kollision';
 const OVERVIEW_LAYER = 'Karte';
+const HEIGHT_LAYER = 'Hoehe';
+export const HEIGHT_UNIT = 0.05;
+export const STEP_UP = 0.4;
+const CLIFF_HALF_THICKNESS = 0.08;
 const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt', 'zugstrecke', 'haltestelle', 'eingang']);
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'wald', 'flecken']);
 export const CHUNK_SIZE = 64;
@@ -24,6 +28,47 @@ function collectObjects(layers, result = []) {
     }
   }
   return result;
+}
+
+function findTileLayer(layers, name) {
+  for (const layer of layers ?? []) {
+    if (layer.type === 'group') {
+      const found = findTileLayer(layer.layers, name);
+      if (found) return found;
+    } else if (layer.type === 'tilelayer' && layer.name === name) return layer;
+  }
+  return null;
+}
+
+function loadHeights(zone, map, layer) {
+  if (!Array.isArray(layer.data)) throw new Error(`Zonendatei ${zone.id}: Die Ebene "${HEIGHT_LAYER}" muss als CSV oder Array gespeichert sein.`);
+  if (layer.width !== zone.width || layer.height !== zone.height) throw new Error(`Zonendatei ${zone.id}: Die Ebene "${HEIGHT_LAYER}" muss so groß wie die Karte sein.`);
+
+  const firstGid = map.tilesets?.[0]?.firstgid ?? 1;
+  const cells = new Int16Array(zone.width * zone.height);
+  const list = [];
+  for (let index = 0; index < cells.length; index += 1) {
+    const gid = layer.data[index] & 0x1fffffff;
+    const value = gid > 0 ? Math.max(0, gid - firstGid) : 0;
+    cells[index] = value;
+    if (value > 0) list.push([index % zone.width, Math.floor(index / zone.width), value]);
+  }
+
+  zone.heights = { cells, unit: HEIGHT_UNIT, list };
+
+  const at = (ix, iz) => (ix < 0 || iz < 0 || ix >= zone.width || iz >= zone.height ? 0 : cells[iz * zone.width + ix]);
+  const limit = STEP_UP / HEIGHT_UNIT;
+  for (let iz = 0; iz < zone.height; iz += 1) {
+    for (let ix = 0; ix < zone.width; ix += 1) {
+      const here = at(ix, iz);
+      if (Math.abs(here - at(ix + 1, iz)) > limit) {
+        zone.colliders.push({ shape: 'box', x: ix + 1 - zone.halfWidth, z: iz + 0.5 - zone.halfHeight, halfX: CLIFF_HALF_THICKNESS, halfZ: 0.5 + CLIFF_HALF_THICKNESS, rotation: 0, cameraHeight: 0 });
+      }
+      if (Math.abs(here - at(ix, iz + 1)) > limit) {
+        zone.colliders.push({ shape: 'box', x: ix + 0.5 - zone.halfWidth, z: iz + 1 - zone.halfHeight, halfX: 0.5 + CLIFF_HALF_THICKNESS, halfZ: CLIFF_HALF_THICKNESS, rotation: 0, cameraHeight: 0 });
+      }
+    }
+  }
 }
 
 function loadZone(id, file) {
@@ -71,6 +116,7 @@ function loadZone(id, file) {
     train: null,
     trainStops: [],
     entrances: [],
+    heights: null,
     colliders: [],
     waters: [],
     npcs: [],
@@ -210,6 +256,8 @@ function loadZone(id, file) {
     });
   }
 
+  const heightLayer = findTileLayer(map.layers, HEIGHT_LAYER);
+  if (heightLayer) loadHeights(zone, map, heightLayer);
   if (zone.trainStops.length > 0 && !zone.train) throw new Error(`Zonendatei ${id}: Haltestellen ohne Zugstrecke.`);
   if (!zone.spawn) throw new Error('Zonendatei: Es fehlt ein Objekt der Klasse "spawn".');
   if (zone.chunked) buildChunks(zone);
@@ -328,6 +376,10 @@ export function serializeChunk(zone, cx, cz) {
   };
 }
 
+function serializeHeights(zone) {
+  return zone.heights ? { unit: zone.heights.unit, cells: zone.heights.list } : null;
+}
+
 export function serializeZone(zone) {
   if (zone.chunked) {
     return {
@@ -344,6 +396,7 @@ export function serializeZone(zone) {
       chunkSize: CHUNK_SIZE,
       objects: [],
       overview: zone.overview,
+      heights: serializeHeights(zone),
       train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops } : null,
       teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
       cameraBlockers: [],
@@ -361,6 +414,7 @@ export function serializeZone(zone) {
     groundColor: zone.groundColor,
     spawn: zone.spawn,
     objects: zone.visuals,
+    heights: serializeHeights(zone),
     train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops } : null,
     teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
     cameraBlockers: zone.colliders

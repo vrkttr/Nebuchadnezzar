@@ -584,12 +584,12 @@
   "npc.kolja.greeting": "Was willst du? Ich habe zu tun.",
   "npc.hubert.name": "Hubert",
   "npc.hubert.greeting": "Wenn es um das Beet geht: Es gehört mir. Alles andere geht dich nichts an.",
-  "train.stop.westwald": "Westwald",
-  "train.stop.suedwest": "Südwest",
-  "train.stop.marktplatz": "Marktplatz",
-  "train.stop.nordmarkt": "Nordmarkt",
+  "train.stop.nordwest": "Nordwest",
   "train.stop.nordost": "Nordost",
-  "train.stop.ostwald": "Ostwald",
+  "train.stop.ostnord": "Ost-Nord",
+  "train.stop.ostsued": "Ost-Süd",
   "train.stop.suedost": "Südost",
-  "train.stop.nordwest": "Nordwest"
+  "train.stop.suedwest": "Südwest",
+  "train.stop.westsued": "West-Süd",
+  "train.stop.westnord": "West-Nord"
 }

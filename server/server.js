@@ -10,7 +10,8 @@ import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { inspectQuestObject, serializeQuestObjects } from './questObjects.js';
 import { collectAmbient, updateAmbient } from './ambient.js';
-import { initTrains, serializeTrainState, updateTrain } from './train.js';
+import { DECK_HEIGHT, initTrains, serializeTrainState, updateTrain } from './train.js';
+import { groundHeight } from './terrain.js';
 import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
 import { itemRefId, serializeAbilities, serializeActionItems, setActionSlot, syncActionLayout } from './abilities.js';
@@ -67,7 +68,6 @@ const TAB_TARGET_RANGE = 40;
 const JUMP_SPEED = 5.5;
 const GRAVITY = 14;
 const SHALLOW_WATER_SPEED = 0.7;
-const GROUND_Y = 0;
 const TICK_INTERVAL_MS = 50;
 const TICK_DELTA = TICK_INTERVAL_MS / 1000;
 const SAVE_INTERVAL_MS = 2000;
@@ -821,8 +821,9 @@ function simulate() {
 
     resolveCollisions(state, PLAYER_RADIUS);
 
-    if (state.y <= GROUND_Y) {
-      state.y = GROUND_Y;
+    const floor = state.trainRide ? Math.max(DECK_HEIGHT, groundHeight(state.zoneId, state.x, state.z)) : groundHeight(state.zoneId, state.x, state.z);
+    if (state.y <= floor) {
+      state.y = floor;
       state.velocityY = 0;
       state.isGrounded = true;
     }

@@ -55,6 +55,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
         setDead: created.setDead,
         setCrouch: created.setCrouch,
         setGroundVelocity: created.setGroundVelocity,
+        setGroundHeight: created.setGroundHeight,
         setEquipment: created.setEquipment,
         setAppearance: created.setAppearance,
         target: new THREE.Vector3(state.x, state.y, state.z),
@@ -176,12 +177,18 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }));
   }
 
-  function setTrainVelocity(x, z) {
+  function setEnvironment(velocityX, velocityZ, heightAt, deckHeight) {
     for (const remote of remotePlayers.values()) {
-      if (remote.data.onTrain) remote.setGroundVelocity(x, z);
-      else remote.setGroundVelocity(0, 0);
+      const ground = heightAt(remote.object.position.x, remote.object.position.z);
+      if (remote.data.onTrain) {
+        remote.setGroundVelocity(velocityX, velocityZ);
+        remote.setGroundHeight(Math.max(ground, deckHeight));
+      } else {
+        remote.setGroundVelocity(0, 0);
+        remote.setGroundHeight(ground);
+      }
     }
   }
 
-  return { setTrainVelocity, sync, clear, remove, playAttack, playHit, getObject, getNameplate, setRelationResolver, getObjects, getData, getMarkers, update };
+  return { setEnvironment, sync, clear, remove, playAttack, playHit, getObject, getNameplate, setRelationResolver, getObjects, getData, getMarkers, update };
 }

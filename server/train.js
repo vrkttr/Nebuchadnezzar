@@ -6,9 +6,10 @@ export const LOCO_LENGTH = 6;
 export const WAGON_LENGTH = 8;
 export const WAGON_WIDTH = 3.2;
 export const COUPLING_GAP = 1.5;
+export const DECK_HEIGHT = 0.5;
 const BOARD_MAX_SPEED = 2.5;
-const BOARD_MAX_HEIGHT = 1.2;
-const RIDE_MAX_HEIGHT = 3;
+const BOARD_MAX_HEIGHT = DECK_HEIGHT + 0.7;
+const RIDE_MAX_HEIGHT = DECK_HEIGHT + 3;
 const STOP_MATCH_DISTANCE = 2;
 const SAMPLE_STEP = 0.5;
 

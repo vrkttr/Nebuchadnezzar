@@ -47,11 +47,11 @@ export function createFootsteps(audio, isInWater = () => false) {
     return { running };
   }
 
-  function update(delta, own, others) {
+  function update(delta, own, others, groundY = 0) {
     for (const entry of tracked.values()) entry.seen = false;
 
     const ownStep = advance('own', own.x, own.z, delta, groundX, groundZ);
-    const grounded = own.y < GROUND_HEIGHT;
+    const grounded = own.y - groundY < GROUND_HEIGHT;
 
     if (!grounded && !ownAirborne) {
       ownAirborne = true;

@@ -26,6 +26,7 @@ export function createPlayer(appearanceName = 'player', indices = null) {
     setDead: humanoid.setDead,
     setCrouch: humanoid.setCrouch,
     setGroundVelocity: humanoid.setGroundVelocity,
+    setGroundHeight: humanoid.setGroundHeight,
     setEquipment: humanoid.setEquipment,
     setAppearance(next) {
       const key = Array.isArray(next) ? next.join(',') : '';

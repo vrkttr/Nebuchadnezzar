@@ -1,5 +1,6 @@
 import { getClassModifiers } from './classes.js';
 import { ENEMY_RADIUS, isBlocked, resolveCollisions } from './world.js';
+import { groundHeight } from './terrain.js';
 import { getZone, getZones } from './zoneLoader.js';
 
 const CROUCH_AGGRO_FACTOR = 0.5;
@@ -251,6 +252,7 @@ function hasPlayerNearby(enemy, players) {
 export function updateEnemies(enemies, players, delta) {
   for (const enemy of enemies.values()) {
     if (enemy.dead) continue;
+    enemy.y = groundHeight(enemy.zoneId, enemy.x, enemy.z);
     if (enemy.stunTimer > 0) continue;
     if (enemy.state === 'idle' && !hasPlayerNearby(enemy, players)) continue;
 

@@ -465,6 +465,7 @@ export function createHumanoid(name, options = {}) {
   let hasLastPosition = false;
   let groundX = 0;
   let groundZ = 0;
+  let groundY = 0;
   let speed = 0;
   let phase = 0;
   let idleTime = Math.random() * 10;
@@ -591,7 +592,7 @@ export function createHumanoid(name, options = {}) {
     lastPosition.copy(position);
     hasLastPosition = true;
 
-    const airborne = position.y > AIRBORNE_HEIGHT;
+    const airborne = position.y - groundY > AIRBORNE_HEIGHT;
     const moving = speed > MOVE_THRESHOLD;
     const running = speed > RUN_THRESHOLD;
 
@@ -676,6 +677,10 @@ export function createHumanoid(name, options = {}) {
     crouching = Boolean(value);
   }
 
+  function setGroundHeight(value) {
+    groundY = value;
+  }
+
   function setGroundVelocity(x, z) {
     groundX = x;
     groundZ = z;
@@ -692,5 +697,5 @@ export function createHumanoid(name, options = {}) {
   setEquipment(options.equipment ?? appearance.equipment ?? {});
   enablePortraitLayer(object);
 
-  return { object, update, playAttack, playHit, setDead, setCrouch, setSeated, setGroundVelocity, isDown, setEquipment, setAppearance: applyLook };
+  return { object, update, playAttack, playHit, setDead, setCrouch, setSeated, setGroundVelocity, setGroundHeight, isDown, setEquipment, setAppearance: applyLook };
 }

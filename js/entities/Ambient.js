@@ -120,7 +120,7 @@ function humanAppearance(random) {
   };
 }
 
-export function createAmbient(scene) {
+export function createAmbient(scene, heightAt = () => 0) {
   const paths = new Map();
   const entities = [];
   const remote = new Map();
@@ -218,7 +218,7 @@ export function createAmbient(scene) {
 
   function createRemote(data) {
     const random = seeded(data.seed / 1e6);
-    const record = { id: data.id, kind: data.kind, rig: null, pose: -1, object: null, animate: null, chicken: null, target: new THREE.Vector3(data.x, 0, data.z), targetRotationY: data.r ?? 0, ph: random() * 6.28, moving: 0 };
+    const record = { id: data.id, kind: data.kind, rig: null, pose: -1, object: null, animate: null, chicken: null, target: new THREE.Vector3(data.x, heightAt(data.x, data.z), data.z), targetRotationY: data.r ?? 0, ph: random() * 6.28, moving: 0 };
     if (data.kind === 'citizen') {
       const humanoid = createHumanoid('streuner', { appearance: humanAppearance(random) });
       record.object = humanoid.object;
@@ -265,7 +265,7 @@ export function createAmbient(scene) {
     for (const [id, x, z, r, pose] of message.states ?? []) {
       const record = remote.get(id);
       if (!record) continue;
-      record.target.set(x, 0, z);
+      record.target.set(x, heightAt(x, z), z);
       record.targetRotationY = r;
       applyPose(record, pose ?? 0);
     }
@@ -280,6 +280,7 @@ export function createAmbient(scene) {
       const lastZ = object.position.z;
       object.position.lerp(record.target, factor);
       object.rotation.y = lerpAngle(object.rotation.y, record.targetRotationY, factor);
+      record.rig?.setGroundHeight?.(heightAt(object.position.x, object.position.z));
       if (record.animate) record.animate(delta);
       else record.chicken.animate(time + record.ph, Math.hypot(object.position.x - lastX, object.position.z - lastZ) / Math.max(delta, 1e-3));
     }

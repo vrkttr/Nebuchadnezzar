@@ -10,6 +10,7 @@ const [
   { createZoneStreamer },
   { createAmbient },
   { createTrain },
+  { createTerrain },
   { createPlayer },
   { createPlayerController },
   { createServerConnection },
@@ -67,6 +68,7 @@ const [
   import(v('./world/ZoneStreamer.js')),
   import(v('./entities/Ambient.js')),
   import(v('./entities/Train.js')),
+  import(v('./world/Terrain.js')),
   import(v('./entities/Characters.js')),
   import(v('./entities/PlayerController.js')),
   import(v('./network/ServerConnection.js')),
@@ -124,8 +126,10 @@ function start(token) {
   const loadingScreen = createLoadingScreen();
   const renderer = createRenderer();
   const scene = createScene();
-  const ambient = createAmbient(scene);
+  const terrain = createTerrain(scene);
+  const ambient = createAmbient(scene, terrain.heightAt);
   const train = createTrain({
+    heightAt: terrain.heightAt,
     scene,
     label: (id, fallback) => (has(`train.stop.${id}`) ? t(`train.stop.${id}`) : fallback),
     onHorn: (x, z) => audio.playAt('train_horn', x, z, 1, TRAIN_HORN_RANGE),
@@ -349,6 +353,7 @@ function start(token) {
     }
     ambient.clear();
     train.clear();
+    terrain.clear();
     riding = false;
     if (zone) {
       disposeZone(scene, zone);
@@ -357,6 +362,7 @@ function start(token) {
     if (!firstLoad) resetZoneEntities();
 
     zone = buildZone(scene, world);
+    terrain.setZone(world);
     train.setRoute(world.train);
     if (world.chunked) {
       streamer = createZoneStreamer({
@@ -911,9 +917,11 @@ function start(token) {
     ambient.update(delta, player.object.position);
     train.update(delta);
     const rideVelocity = train.rideVelocity();
+    const supportHeight = Math.max(terrain.heightAt(player.object.position.x, player.object.position.z), riding ? train.deckHeight : 0);
+    player.setGroundHeight(supportHeight);
     player.setGroundVelocity(riding ? rideVelocity.x : 0, riding ? rideVelocity.z : 0);
     footsteps.setGroundVelocity(riding ? rideVelocity.x : 0, riding ? rideVelocity.z : 0);
-    remotePlayers.setTrainVelocity(rideVelocity.x, rideVelocity.z);
+    remotePlayers.setEnvironment(rideVelocity.x, rideVelocity.z, terrain.heightAt, train.deckHeight);
     updateSewer(delta);
     drips.update(delta, player.object.position);
     remotePlayers.update(delta);
@@ -948,7 +956,7 @@ function start(token) {
     setPlayerHiddenFromCamera(camera.position.distanceTo(cameraFocus) < CAMERA_HIDE_DISTANCE);
     camera.getWorldDirection(listenerForward);
     audio.setListener(player.object.position.x, player.object.position.z, listenerForward.x, listenerForward.z);
-    footsteps.update(delta, player.object.position, [...enemies.getMarkers(), ...remotePlayers.getMarkers()]);
+    footsteps.update(delta, player.object.position, [...enemies.getMarkers(), ...remotePlayers.getMarkers()], supportHeight);
     audio.setNpcSources(npcs.getMarkers());
     audio.update(delta);
     if (gameState.target) gameState.playerTarget = null;
