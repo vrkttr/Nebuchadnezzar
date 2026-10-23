@@ -161,7 +161,7 @@ export function createFx({ scene, sparks, smoke, env }) {
     }
   }
 
-  function createLamp(marker) {
+  function createLamp(marker, options = {}) {
     const position = worldPosition(marker);
     const roll = hash(position.x, position.z, 3.1);
     const bulb = new THREE.Mesh(bulbGeometry, bulbOff);
@@ -178,8 +178,8 @@ export function createFx({ scene, sparks, smoke, env }) {
       position,
       bulb,
       glow,
-      mode: roll < 0.12 ? 'dead' : roll < 0.42 ? 'flicker' : 'steady',
-      threshold: 0.45 + (hash(position.z, position.x, 7.7) - 0.5) * 0.2,
+      mode: options.steady ? 'steady' : roll < 0.12 ? 'dead' : roll < 0.42 ? 'flicker' : 'steady',
+      threshold: options.steady ? 0.12 : 0.45 + (hash(position.z, position.x, 7.7) - 0.5) * 0.2,
       level: 0,
       effective: 0,
       stutterUntil: 0,
@@ -188,8 +188,8 @@ export function createFx({ scene, sparks, smoke, env }) {
     instance.source = {
       position: position.clone().add(new THREE.Vector3(0, -0.3, 0)),
       color: new THREE.Color(0xffd9a0),
-      distance: 20,
-      intensity: () => 30 * instance.effective,
+      distance: options.distance ?? 20,
+      intensity: () => (options.power ?? 30) * instance.effective,
     };
     return instance;
   }

@@ -291,7 +291,7 @@ export const BARON_QUESTS = {
     completeText:
       'Sie lebt. Sie lebt, und sie hat Wasser und Konserven. Ich sitze hier und halte die Hände still, damit man nicht sieht, wie sie zittern. Danke. Sag nichts davon dem Baron, noch nicht. Sie muss selbst entscheiden, wann sie zurückkommt. Nimm das hier, es ist das Wenige, das wir haben.',
     objectives: [
-      { type: 'reach', zone: 'babylos', x: 195, z: -140, radius: 6, count: 1, label: 'Den Höhleneingang im Nordosten erreichen' },
+      { type: 'reach', zone: 'babylos', x: 186, z: -141, radius: 7, count: 1, label: 'Den Höhleneingang im Nordosten erreichen' },
       {
         type: 'inspect',
         ref: 'hoehle_kanne',

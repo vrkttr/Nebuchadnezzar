@@ -179,5 +179,11 @@
   "settings.graphics.fire": "Fire",
   "settings.graphics.fire.hint": "Animated flames and sparks on fire barrels.",
   "settings.graphics.smoke": "Smoke",
-  "settings.graphics.smoke.hint": "Smoke from chimneys and fire barrels."
+  "settings.graphics.smoke.hint": "Smoke from chimneys and fire barrels.",
+  "settings.graphics.viewDistance": "View distance",
+  "settings.graphics.viewDistance.0": "Short",
+  "settings.graphics.viewDistance.1": "Medium",
+  "settings.graphics.viewDistance.2": "Far",
+  "settings.graphics.viewDistance.3": "Maximum",
+  "settings.graphics.viewDistance.hint": "How far you can see into the distance. Works through haze; with haze switched off the view is unlimited. Larger distances cost performance."
 }

@@ -7,12 +7,10 @@ import { createBirds } from './Birds.js';
 import { setSunOffset } from '../core/Scene.js';
 import { windowMaterials } from '../world/Textures.js';
 import { puddleMaterial } from '../world/builders/Puddles.js';
-import { graphics } from './Graphics.js';
+import { graphics, VIEW_DISTANCES } from './Graphics.js';
 
 const SUN_DISTANCE = 40;
 const SKY_INTERVAL = 0.5;
-const FOG_NEAR = 170;
-const FOG_FAR = 620;
 const BOX = { dust: 14, leaves: 28, fireflies: 18 };
 const COUNT = { dust: 80, leaves: 26, papers: 10, fireflies: 22 };
 const CLOUD_SIZE = 2200;
@@ -222,7 +220,7 @@ export function createAtmosphere({ scene, camera, renderer }) {
     base = { hemisphere: hemisphere.intensity, sun: sunLight.intensity };
     ownsFog = false;
     if (active && !scene.fog) {
-      hazeFog = new THREE.Fog(0xd4cdb6, FOG_NEAR, FOG_FAR);
+      hazeFog = new THREE.Fog(0xd4cdb6, VIEW_DISTANCES[2].near, VIEW_DISTANCES[2].far);
       scene.fog = hazeFog;
       ownsFog = true;
     }
@@ -245,7 +243,14 @@ export function createAtmosphere({ scene, camera, renderer }) {
     sunLight.castShadow = graphics.shadows;
     setSunOffset(day.lightDirection.x * SUN_DISTANCE, day.lightDirection.y * SUN_DISTANCE, day.lightDirection.z * SUN_DISTANCE);
 
+    const view = VIEW_DISTANCES[graphics.viewDistance] ?? VIEW_DISTANCES[2];
+    if (camera.far !== view.cameraFar) {
+      camera.far = view.cameraFar;
+      camera.updateProjectionMatrix();
+    }
     if (ownsFog) {
+      hazeFog.near = view.near;
+      hazeFog.far = view.far;
       const wanted = graphics.haze ? hazeFog : null;
       if (scene.fog !== wanted) scene.fog = wanted;
       hazeFog.color.copy(day.bottom);

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { fxMarker } from '../../effects/Markers.js';
 import { createBatch } from '../Batch.js';
 import { getMaterial, getColorMaterial } from '../Textures.js';
 import { t } from '../../i18n/I18n.js';
@@ -200,6 +201,7 @@ function buildInterior(batch, kind, width, depth) {
 
   batch.box(getColorMaterial(0xffe2a0, { unlit: true }), 0.5, 0.1, 0.5, { x: 0, y: 3.15, z: 0, tile: 1 });
   batch.box(getColorMaterial(0xffe2a0, { unlit: true }), 0.5, 0.1, 0.5, { x: 0, y: 3.15, z: -depth * 0.3, tile: 1 });
+  return [0, -depth * 0.3];
 }
 
 export function createLaden(params = {}) {
@@ -242,11 +244,13 @@ export function createLaden(params = {}) {
   }
 
   buildExterior(batch, typ, width, depth, hoehe, theme);
-  buildInterior(batch, typ, width, depth);
+  const lampPositions = buildInterior(batch, typ, width, depth);
 
   const group = new THREE.Group();
   group.name = `Laden_${typ}`;
   group.add(batch.build('Huelle'));
+
+  for (const z of lampPositions) group.add(fxMarker('lamp', { steady: true, power: 55, distance: 18 }, { y: hoehe - 0.45, z }));
 
   const text = schild ? t(schild) : '';
   if (text) {

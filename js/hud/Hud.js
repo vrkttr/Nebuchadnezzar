@@ -247,7 +247,32 @@ export function createHud(state, handlers = {}) {
     return state.items[itemId]?.name ?? itemId;
   }
 
+  const buffBar = document.getElementById('buff-bar');
+  let statusEffects = [];
+
+  function renderStatus() {
+    const now = performance.now();
+    statusEffects = statusEffects.filter((effect) => effect.until > now);
+    buffBar.replaceChildren(
+      ...statusEffects.map((effect) => {
+        const chip = document.createElement('div');
+        chip.className = `status-chip status-${effect.kind}`;
+        chip.title = t(`status.${effect.kind}`);
+        chip.textContent = `${t(`status.${effect.kind}.short`)} ${Math.ceil((effect.until - now) / 1000)}`;
+        return chip;
+      })
+    );
+  }
+
+  setInterval(renderStatus, 250);
+
   function addEvent(event) {
+    if (event.kind === 'status') {
+      const now = performance.now();
+      statusEffects = event.effects.map((effect) => ({ kind: effect.kind, until: now + effect.seconds * 1000 }));
+      renderStatus();
+      return;
+    }
     if (event.kind === 'xp') {
       addMessage(t('event.xp', { amount: event.amount, source: event.enemyName }));
     } else if (event.kind === 'gold') {

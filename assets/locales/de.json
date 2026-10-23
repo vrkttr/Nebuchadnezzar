@@ -664,5 +664,15 @@
   "npc.tamara.name": "Tamara",
   "npc.tamara.greeting": "Leise! Sie hören alles hier unten. Wer hat dich geschickt?",
   "questobject.hoehle_kanne": "Umgestürzte Wasserkanne",
-  "questobject.hoehle_kreide": "Kreidezeichen"
+  "questobject.hoehle_kreide": "Kreidezeichen",
+  "status.poison": "Vergiftet",
+  "status.poison.short": "Gift",
+  "status.burn": "Brennend",
+  "status.burn.short": "Brand",
+  "status.bleed": "Blutend",
+  "status.bleed.short": "Blut",
+  "npc.jaeger.name": "Ruprecht",
+  "npc.jaeger.greeting": "Leise. Was du hier hörst, ist selten der Wind. Wenn du Wild jagen oder etwas Größeres loswerden willst, bist du bei mir richtig.",
+  "npc.karawanenfuehrerin.name": "Isolde",
+  "npc.karawanenfuehrerin.greeting": "Wenn du etwas transportiert haben willst, kommst du zu spät. Wenn du dir einen Namen machen willst, kommst du genau richtig."
 }

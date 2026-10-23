@@ -203,7 +203,7 @@ function parseGraphics(text) {
   try {
     const parsed = JSON.parse(text ?? '');
     if (!parsed || typeof parsed !== 'object') return {};
-    return Object.fromEntries(Object.entries(parsed).filter(([, value]) => typeof value === 'boolean'));
+    return Object.fromEntries(Object.entries(parsed).filter(([key, value]) => (key === 'viewDistance' ? Number.isInteger(value) && value >= 0 && value <= 3 : typeof value === 'boolean')));
   } catch {
     return {};
   }
@@ -895,8 +895,10 @@ setInterval(() => {
     for (const [id, state] of zonePlayers) {
       if (!state.pendingZone) continue;
       const target = state.pendingZone;
+      const spawnId = state.pendingSpawn ?? null;
       state.pendingZone = null;
-      changeZone(id, state, target, null);
+      state.pendingSpawn = null;
+      changeZone(id, state, target, spawnId);
       zonePlayers.delete(id);
     }
 

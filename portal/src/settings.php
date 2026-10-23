@@ -44,6 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    $graphics['viewDistance'] = max(0, min(3, (int) ($_POST['graphics_view_distance'] ?? 2)));
+
     $stmt = $pdo->prepare('UPDATE users SET audio_volume = :volume, audio_ambient = :ambient, audio_music = :music, audio_muted = :muted, auto_fullscreen = :auto_fullscreen, touch_controls = :touch_controls, graphics = :graphics WHERE id = :id');
     $stmt->execute(['volume' => $volume, 'ambient' => $ambient, 'music' => $music, 'muted' => $muted, 'auto_fullscreen' => $autoFullscreen, 'touch_controls' => $touchControls, 'graphics' => json_encode($graphics), 'id' => $_SESSION['user_id']]);
     $saved = true;
@@ -134,6 +136,12 @@ sliderField('music', t('settings.music'), (int) ($settings['audio_music'] ?? 40)
 <?php endforeach; ?>
 </select></label>
 <p class="portal-hint"><?= th('settings.graphics.hint') ?></p>
+<label class="portal-field"><span class="nu-label"><?= th('settings.graphics.viewDistance') ?></span>
+<select class="nu-input" name="graphics_view_distance">
+<?php foreach ([0, 1, 2, 3] as $level): ?>
+<option value="<?= $level ?>"<?= ((int) ($graphics['viewDistance'] ?? 2)) === $level ? ' selected' : '' ?>><?= th('settings.graphics.viewDistance.' . $level) ?></option>
+<?php endforeach; ?>
+</select><span class="portal-hint"><?= th('settings.graphics.viewDistance.hint') ?></span></label>
 <?php foreach (GRAPHICS_GROUPS as $group => $keys): ?>
 <section class="portal-group">
 <h2 class="portal-group-title"><?= th('settings.graphics.group.' . $group) ?></h2>

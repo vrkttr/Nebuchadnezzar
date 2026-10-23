@@ -11,9 +11,11 @@ export function createShotEffects(scene) {
   const tracerMaterial = new THREE.MeshBasicMaterial({ color: 0xffe9b0 });
   const flashGeometry = new THREE.IcosahedronGeometry(0.13, 0);
   const flashMaterial = new THREE.MeshBasicMaterial({ color: 0xfff2c8 });
+  const fireTracerMaterial = new THREE.MeshBasicMaterial({ color: 0xff8a2a });
+  const fireFlashMaterial = new THREE.MeshBasicMaterial({ color: 0xffb24a });
   const effects = [];
 
-  function spawn(from, to) {
+  function spawn(from, to, style = 'bullet') {
     const start = new THREE.Vector3(from.x, from.y + MUZZLE_HEIGHT, from.z);
     const end = new THREE.Vector3(to.x, to.y + TARGET_HEIGHT, to.z);
     const direction = end.clone().sub(start);
@@ -24,14 +26,15 @@ export function createShotEffects(scene) {
     start.addScaledVector(direction, Math.min(MUZZLE_FORWARD, length));
     const tracerLength = Math.max(0.01, length - MUZZLE_FORWARD);
 
-    const tracer = new THREE.Mesh(tracerGeometry, tracerMaterial);
+    const fire = style === 'fire';
+    const tracer = new THREE.Mesh(tracerGeometry, fire ? fireTracerMaterial : tracerMaterial);
     tracer.position.copy(start).addScaledVector(direction, tracerLength / 2);
     tracer.lookAt(end);
-    tracer.scale.z = tracerLength;
+    tracer.scale.set(fire ? 4 : 1, fire ? 4 : 1, tracerLength);
     scene.add(tracer);
-    effects.push({ object: tracer, age: 0, lifetime: TRACER_LIFETIME });
+    effects.push({ object: tracer, age: 0, lifetime: fire ? TRACER_LIFETIME * 3 : TRACER_LIFETIME });
 
-    const flash = new THREE.Mesh(flashGeometry, flashMaterial);
+    const flash = new THREE.Mesh(flashGeometry, fire ? fireFlashMaterial : flashMaterial);
     flash.position.copy(start);
     flash.scale.setScalar(0.7 + Math.random() * 0.6);
     scene.add(flash);

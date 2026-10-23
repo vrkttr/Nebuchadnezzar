@@ -273,7 +273,18 @@ function start(token) {
     renderer,
     viewCapture,
     player,
-    sources: { npcs: npcs.getMarkers, players: remotePlayers.getMarkers },
+    sources: {
+      npcs: npcs.getMarkers,
+      players: remotePlayers.getMarkers,
+      complete: () => !streamer || streamer.progress(0, 0, 100000) >= 1,
+      hidden: () => [
+        player.object,
+        ...enemies.getObjects(),
+        ...npcs.getObjects(),
+        ...worldChests.getObjects(),
+        ...lootMarkers.getObjects(),
+      ],
+    },
   });
   document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.map"]')?.addEventListener('click', () => worldMap.toggle());
   const minimap = createMinimap({
@@ -446,13 +457,7 @@ function start(token) {
     await nextFrame();
     await nextFrame();
 
-    worldMap.captureZone(world, [
-      player.object,
-      ...enemies.getObjects(),
-      ...npcs.getObjects(),
-      ...worldChests.getObjects(),
-      ...lootMarkers.getObjects(),
-    ]);
+    worldMap.captureZone(world);
     loadingScreen.setProgress(1, t('loading.status.ready'));
     connection.send({ type: 'zone-ready' });
     await loadingScreen.hide();
@@ -647,6 +652,7 @@ function start(token) {
         } else if (isOwnTarget) {
           const attackerObject = enemies.getObject(message.attackerId);
           if (attackerObject) audio.playAt('enemy_attack', attackerObject.position.x, attackerObject.position.z);
+          if (attackerObject && message.shot) shotEffects.spawn(attackerObject.position, player.object.position, message.shot);
         }
 
         if (isEnemyTarget) enemies.playHit(message.targetId);

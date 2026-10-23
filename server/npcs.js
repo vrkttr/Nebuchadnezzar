@@ -148,6 +148,18 @@ const NPC_DEFINITIONS = {
     color: 0x3a4a5a,
     greeting: 'Solange der Turm Wasser hält, hält die Siedlung. Ich sorge dafür, dass das so bleibt. Und bete, dass nichts kaputtgeht.',
   },
+  jaeger: {
+    id: 'jaeger',
+    name: 'Ruprecht',
+    color: 0x4a5a34,
+    greeting: 'Leise. Was du hier hörst, ist selten der Wind. Wenn du Wild jagen oder etwas Größeres loswerden willst, bist du bei mir richtig.',
+  },
+  karawanenfuehrerin: {
+    id: 'karawanenfuehrerin',
+    name: 'Isolde',
+    color: 0x6a4a3a,
+    greeting: 'Wenn du etwas transportiert haben willst, kommst du zu spät. Wenn du dir einen Namen machen willst, kommst du genau richtig.',
+  },
   funkerin: {
     id: 'funkerin',
     name: 'Funkerin',

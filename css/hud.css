@@ -485,6 +485,28 @@ button {
   min-height: 28px;
 }
 
+.status-chip {
+  padding: 3px 7px;
+  border: 2px solid #0f0e0a;
+  color: #0f0e0a;
+  font-family: var(--nu-font-display);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.status-poison {
+  background: #7fa63a;
+}
+
+.status-burn {
+  background: #d9792a;
+}
+
+.status-bleed {
+  background: #b23a30;
+}
+
 #quest-tracker {
   position: fixed;
   top: 246px;

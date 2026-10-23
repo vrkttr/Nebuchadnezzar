@@ -179,5 +179,11 @@
   "settings.graphics.fire": "Feuer",
   "settings.graphics.fire.hint": "Animierte Flammen und Funken an Feuertonnen.",
   "settings.graphics.smoke": "Rauch",
-  "settings.graphics.smoke.hint": "Rauch an Schornsteinen und Feuertonnen."
+  "settings.graphics.smoke.hint": "Rauch an Schornsteinen und Feuertonnen.",
+  "settings.graphics.viewDistance": "Sichtweite",
+  "settings.graphics.viewDistance.0": "Kurz",
+  "settings.graphics.viewDistance.1": "Mittel",
+  "settings.graphics.viewDistance.2": "Weit",
+  "settings.graphics.viewDistance.3": "Maximal",
+  "settings.graphics.viewDistance.hint": "Wie weit man in die Ferne sieht. Wirkt über den Dunst, ist der Dunst ausgeschaltet, bleibt die Sicht unbegrenzt. Größere Sichtweite kostet Leistung."
 }

@@ -19,6 +19,13 @@ const DAY_HEMISPHERE_GROUND = 0x7b7660;
 const DAY_HEMISPHERE_INTENSITY = 2.1;
 const DAY_SUN = 0xfff0d2;
 const DAY_SUN_INTENSITY = 2.5;
+const MIN_LIGHT = 0.42;
+const DAY_LIGHT = (() => {
+  const sky = new THREE.Color(DAY_HEMISPHERE_SKY);
+  const sun = new THREE.Color(DAY_SUN);
+  const mix = (a, b) => a * DAY_HEMISPHERE_INTENSITY * 0.6 + b * DAY_SUN_INTENSITY * 0.4;
+  return { r: mix(sky.r, sun.r), g: mix(sky.g, sun.g), b: mix(sky.b, sun.b) };
+})();
 
 function readStore() {
   try {
@@ -72,6 +79,9 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
   let centerX = 0;
   let centerZ = 0;
   let drag = null;
+  let lastWorld = null;
+  let outdoor = false;
+  let complete = true;
 
   function isOpen() {
     return !windowEl.classList.contains('hidden');
@@ -152,6 +162,23 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     context.restore();
   }
 
+  function channel(live, reference) {
+    return Math.max(MIN_LIGHT, Math.min(1, live / reference));
+  }
+
+  function applyLighting() {
+    if (!outdoor) return;
+    const { hemisphere, sun } = scene.userData.environment;
+    const red = channel(hemisphere.color.r * hemisphere.intensity * 0.6 + sun.color.r * sun.intensity * 0.4, DAY_LIGHT.r);
+    const green = channel(hemisphere.color.g * hemisphere.intensity * 0.6 + sun.color.g * sun.intensity * 0.4, DAY_LIGHT.g);
+    const blue = channel(hemisphere.color.b * hemisphere.intensity * 0.6 + sun.color.b * sun.intensity * 0.4, DAY_LIGHT.b);
+    if (red > 0.97 && green > 0.97 && blue > 0.97) return;
+    context.globalCompositeOperation = 'multiply';
+    context.fillStyle = `rgb(${Math.round(red * 255)},${Math.round(green * 255)},${Math.round(blue * 255)})`;
+    context.fillRect(0, 0, cssSize, cssSize);
+    context.globalCompositeOperation = 'source-over';
+  }
+
   function draw() {
     if (!base) return;
 
@@ -159,6 +186,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     context.clearRect(0, 0, cssSize, cssSize);
     const half = halfView();
     const scale = base.width / extent;
+    context.globalCompositeOperation = 'source-over';
     context.drawImage(
       base,
       (centerX - half + extent / 2) * scale,
@@ -170,6 +198,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
       cssSize,
       cssSize
     );
+    applyLighting();
 
     context.fillStyle = '#e8b84a';
     context.strokeStyle = '#0f0e0a';
@@ -199,7 +228,11 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     drawPlayer();
   }
 
-  function captureZone(world, hiddenObjects) {
+  function captureZone(world) {
+    lastWorld = world;
+    outdoor = !world.indoor;
+    complete = sources.complete();
+    const hiddenObjects = sources.hidden();
     zoneId = world.id;
     extent = Math.max(world.width, world.height);
     cssSize = Math.max(200, Math.min(MAX_MAP_SIZE, Math.floor(Math.min(window.innerWidth, window.innerHeight) - (window.innerHeight < 560 ? 120 : 160))));
@@ -393,6 +426,16 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
 
   function show() {
     if (!base) return;
+    if (!complete && lastWorld && sources.complete()) {
+      const keepZoom = zoom;
+      const keepX = centerX;
+      const keepZ = centerZ;
+      captureZone(lastWorld);
+      zoom = keepZoom;
+      centerX = keepX;
+      centerZ = keepZ;
+      clampView();
+    }
     windowEl.classList.remove('hidden');
     draw();
   }

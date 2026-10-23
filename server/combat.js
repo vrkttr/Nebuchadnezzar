@@ -6,6 +6,7 @@ import { addGold, goldForKill } from './loot.js';
 import { applyLevelStats, grantXp, xpForKill } from './progression.js';
 import { DEFAULT_ZONE_ID, getZone } from './zoneLoader.js';
 import { hasLineOfSight } from './world.js';
+import { HEARTH_SPAWN_ID } from './inn.js';
 
 const PLAYER_ATTACK_RANGE = 3;
 const PLAYER_ATTACK_INTERVAL = 1.5;
@@ -121,13 +122,19 @@ function killPlayer(player) {
 }
 
 function respawnPlayer(player) {
-  if (player.zoneId !== DEFAULT_ZONE_ID) {
-    player.pendingZone = DEFAULT_ZONE_ID;
+  const homeZone = player.homeZone && getZone(player.homeZone) ? player.homeZone : null;
+  const targetZone = homeZone ?? DEFAULT_ZONE_ID;
+  const spawnId = homeZone && getZone(targetZone).spawns[HEARTH_SPAWN_ID] ? HEARTH_SPAWN_ID : null;
+
+  if (player.zoneId !== targetZone) {
+    player.pendingZone = targetZone;
+    player.pendingSpawn = spawnId;
   } else {
-    const spawn = getZone(player.zoneId).spawn;
+    const spawn = spawnId ? getZone(targetZone).spawns[spawnId] : getZone(targetZone).spawn;
     player.x = spawn.x;
     player.y = spawn.y;
     player.z = spawn.z;
+    player.rotationY = spawn.rotationY ?? player.rotationY;
   }
   player.velocityY = 0;
   player.isGrounded = true;
@@ -189,16 +196,21 @@ function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, 
   }
 }
 
-function damagePlayer(player, playerId, enemy, emit) {
+function dotStatus(notify, playerId, player) {
+  notify(playerId, { type: 'event', kind: 'status', effects: (player.dots ?? []).map((dot) => ({ kind: dot.kind, seconds: Math.ceil(dot.remaining) })) });
+}
+
+function damagePlayer(player, playerId, enemy, emit, notify) {
   const rawAmount = Math.round(randomInt(3 + enemy.level * 2, 6 + enemy.level * 3) * enemy.damageFactor);
   const reduction = player.buffs?.brace > 0 ? ABILITIES.brace.damageReduction : 0;
   const amount = Math.max(1, Math.round(((rawAmount * ARMOR_CONSTANT) / (ARMOR_CONSTANT + player.armor)) * (1 - reduction)));
   player.health = Math.max(0, player.health - amount);
   player.combatTimer = 0;
-  emit({ type: 'damage', targetType: 'player', targetId: playerId, amount, attackerId: enemy.id });
+  emit({ type: 'damage', targetType: 'player', targetId: playerId, amount, attackerId: enemy.id, shot: enemy.meleeRange > 4 ? (enemy.dot?.kind === 'burn' ? 'fire' : 'bullet') : undefined });
 
   if (player.health === 0) {
     killPlayer(player);
+    dotStatus(notify, playerId, player);
     return;
   }
 
@@ -206,10 +218,11 @@ function damagePlayer(player, playerId, enemy, emit) {
     const tick = Math.max(1, Math.round(amount * enemy.dot.factor * 3));
     player.dots = (player.dots ?? []).filter((dot) => dot.kind !== enemy.dot.kind);
     player.dots.push({ kind: enemy.dot.kind, remaining: enemy.dot.duration, timer: 1, tick, attackerId: enemy.id });
+    dotStatus(notify, playerId, player);
   }
 }
 
-function updateDots(player, playerId, delta, emit) {
+function updateDots(player, playerId, delta, emit, notify) {
   if (!player.dots?.length) return;
 
   for (const dot of player.dots) {
@@ -222,11 +235,14 @@ function updateDots(player, playerId, delta, emit) {
     emit({ type: 'damage', targetType: 'player', targetId: playerId, amount: dot.tick, attackerId: dot.attackerId });
     if (player.health === 0) {
       killPlayer(player);
+      dotStatus(notify, playerId, player);
       return;
     }
   }
 
+  const before = player.dots.length;
   player.dots = player.dots.filter((dot) => dot.remaining > 0);
+  if (player.dots.length !== before) dotStatus(notify, playerId, player);
 }
 
 function fireRanged(player, playerId, enemy, weapon, emit, notify, onKill, multiplier = 1, abilityId = null) {
@@ -262,7 +278,7 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
       player.cooldowns[abilityId] = Math.max(0, player.cooldowns[abilityId] - delta);
     }
 
-    updateDots(player, playerId, delta, emit);
+    updateDots(player, playerId, delta, emit, notify);
     if (player.dead) continue;
 
     for (const buffId of Object.keys(player.buffs)) {
@@ -306,7 +322,7 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
   }
 }
 
-function updateEnemyAttacks(players, enemies, delta, emit) {
+function updateEnemyAttacks(players, enemies, delta, emit, notify) {
   for (const enemy of enemies.values()) {
     if (enemy.dead) {
       enemy.respawnTimer -= delta;
@@ -341,7 +357,7 @@ function updateEnemyAttacks(players, enemies, delta, emit) {
 
     if (enemy.attackTimer >= enemy.attackInterval) {
       enemy.attackTimer = 0;
-      damagePlayer(target, enemy.targetPlayerId, enemy, emit);
+      damagePlayer(target, enemy.targetPlayerId, enemy, emit, notify);
     }
   }
 }
@@ -411,5 +427,5 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
 
 export function updateCombat(players, enemies, delta, emit, notify, onKill) {
   updatePlayers(players, enemies, delta, emit, notify, onKill);
-  updateEnemyAttacks(players, enemies, delta, emit);
+  updateEnemyAttacks(players, enemies, delta, emit, notify);
 }

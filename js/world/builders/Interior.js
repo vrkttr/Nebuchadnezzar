@@ -324,6 +324,32 @@ export function createRubble({ seed = 1 }) {
   return finish(batch, 'Schutt');
 }
 
+export function createDripstone({ hoehe = 1.2, radius = 0.3, haengend = false, deckenhoehe = 4, color = '#6a655a', seed = 1 }) {
+  const batch = createBatch();
+  const random = createRandom(Math.round(seed));
+  const rock = getMaterial('rock', { color });
+  const tip = Math.max(0.03, radius * 0.1);
+  const segments = 7;
+  const main = haengend
+    ? { y: deckenhoehe - hoehe / 2, top: radius, bottom: tip }
+    : { y: hoehe / 2, top: tip, bottom: radius };
+  batch.cylinder(rock, main.top, main.bottom, hoehe, segments, { x: 0, y: main.y, z: 0, ry: random.range(0, 3) });
+
+  const extra = random.range(0, 1) > 0.4 ? 2 : 1;
+  for (let i = 0; i < extra; i += 1) {
+    const smallHeight = hoehe * random.range(0.35, 0.65);
+    const smallRadius = radius * random.range(0.35, 0.6);
+    const angle = random.range(0, Math.PI * 2);
+    const offset = radius * random.range(0.7, 1.1);
+    const small = haengend
+      ? { y: deckenhoehe - smallHeight / 2, top: smallRadius, bottom: Math.max(0.02, smallRadius * 0.1) }
+      : { y: smallHeight / 2, top: Math.max(0.02, smallRadius * 0.1), bottom: smallRadius };
+    batch.cylinder(rock, small.top, small.bottom, smallHeight, segments, { x: Math.cos(angle) * offset, y: small.y, z: Math.sin(angle) * offset });
+  }
+
+  return finish(batch, 'Tropfstein');
+}
+
 export function createBarrier({ breite = 3.2 }) {
   const batch = createBatch();
   const post = getMaterial('rust_metal', { color: 0x6a6a60 });
@@ -426,6 +452,7 @@ export const INTERIOR_BUILDERS = {
   briefkaesten: createMailboxes,
   treppe: createStairs,
   schutt: createRubble,
+  tropfstein: createDripstone,
   absperrung: createBarrier,
   kanaldeckel: createManhole,
   rohr: createPipe,
