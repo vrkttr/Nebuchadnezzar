@@ -47,8 +47,10 @@ function loadHeights(zone, map, layer) {
   const firstGid = map.tilesets?.[0]?.firstgid ?? 1;
   const cells = new Int16Array(zone.width * zone.height);
   const list = [];
+  const open = new Uint8Array(cells.length);
   for (let index = 0; index < cells.length; index += 1) {
     const gid = layer.data[index] & 0x1fffffff;
+    if (gid === firstGid) open[index] = 1;
     const value = gid > 0 ? Math.max(0, gid - firstGid) : 0;
     cells[index] = value;
     if (value > 0) list.push([index % zone.width, Math.floor(index / zone.width), value]);
@@ -61,10 +63,12 @@ function loadHeights(zone, map, layer) {
   for (let iz = 0; iz < zone.height; iz += 1) {
     for (let ix = 0; ix < zone.width; ix += 1) {
       const here = at(ix, iz);
-      if (Math.abs(here - at(ix + 1, iz)) > limit) {
+      const isOpen = (jx, jz) => jx >= 0 && jz >= 0 && jx < zone.width && jz < zone.height && open[jz * zone.width + jx] === 1;
+      const hereOpen = open[iz * zone.width + ix] === 1;
+      if (Math.abs(here - at(ix + 1, iz)) > limit && !hereOpen && !isOpen(ix + 1, iz)) {
         zone.colliders.push({ shape: 'box', x: ix + 1 - zone.halfWidth, z: iz + 0.5 - zone.halfHeight, halfX: CLIFF_HALF_THICKNESS, halfZ: 0.5 + CLIFF_HALF_THICKNESS, rotation: 0, cameraHeight: 0 });
       }
-      if (Math.abs(here - at(ix, iz + 1)) > limit) {
+      if (Math.abs(here - at(ix, iz + 1)) > limit && !hereOpen && !isOpen(ix, iz + 1)) {
         zone.colliders.push({ shape: 'box', x: ix + 0.5 - zone.halfWidth, z: iz + 1 - zone.halfHeight, halfX: 0.5 + CLIFF_HALF_THICKNESS, halfZ: CLIFF_HALF_THICKNESS, rotation: 0, cameraHeight: 0 });
       }
     }

@@ -22,6 +22,8 @@ const PORTRAIT_LAYER = 1;
 const POSE_SMOOTHING = 16;
 const SPEED_SMOOTHING = 10;
 const MAX_SPEED = 12;
+const RIDE_WINDOW = 0.3;
+const RIDE_DEADBAND = 0.9;
 const HIT_DURATION = 0.28;
 const HIT_RECOIL = 0.3;
 const FALL_SPEED = 2.5;
@@ -463,6 +465,9 @@ export function createHumanoid(name, options = {}) {
   const target = { ...current };
   const lastPosition = new THREE.Vector3();
   let hasLastPosition = false;
+  let windowTime = 0;
+  let windowX = 0;
+  let windowZ = 0;
   let groundX = 0;
   let groundZ = 0;
   let groundY = 0;
@@ -582,11 +587,26 @@ export function createHumanoid(name, options = {}) {
     const position = object.position;
 
     if (hasLastPosition) {
-      const measured = Math.min(
-        Math.hypot((position.x - lastPosition.x) / delta - groundX, (position.z - lastPosition.z) / delta - groundZ),
-        MAX_SPEED
-      );
-      speed += (measured - speed) * dampFactor(SPEED_SMOOTHING, delta);
+      if (groundX !== 0 || groundZ !== 0) {
+        windowTime += delta;
+        if (windowTime >= RIDE_WINDOW) {
+          const relative = Math.hypot((position.x - windowX) / windowTime - groundX, (position.z - windowZ) / windowTime - groundZ);
+          const measured = relative < RIDE_DEADBAND ? 0 : Math.min(relative, MAX_SPEED);
+          speed += (measured - speed) * dampFactor(SPEED_SMOOTHING, windowTime);
+          windowTime = 0;
+          windowX = position.x;
+          windowZ = position.z;
+        }
+      } else {
+        windowTime = 0;
+        windowX = position.x;
+        windowZ = position.z;
+        const measured = Math.min(
+          Math.hypot((position.x - lastPosition.x) / delta - groundX, (position.z - lastPosition.z) / delta - groundZ),
+          MAX_SPEED
+        );
+        speed += (measured - speed) * dampFactor(SPEED_SMOOTHING, delta);
+      }
     }
 
     lastPosition.copy(position);
