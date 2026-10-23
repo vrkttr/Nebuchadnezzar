@@ -591,5 +591,9 @@
   "train.stop.suedost": "Südost",
   "train.stop.suedwest": "Südwest",
   "train.stop.westsued": "West-Süd",
-  "train.stop.westnord": "West-Nord"
+  "train.stop.westnord": "West-Nord",
+  "connection.lost.title": "Verbindung verloren",
+  "connection.lost.closed": "Die Verbindung zum Server wurde unterbrochen. Bestätige, um die Seite neu zu laden.",
+  "connection.lost.unreachable": "Der Server ist zurzeit nicht erreichbar. Bestätige, um die Seite neu zu laden.",
+  "connection.lost.ok": "OK"
 }

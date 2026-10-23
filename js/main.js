@@ -445,7 +445,46 @@ function start(token) {
     await loadingScreen.hide();
   }
 
+  let connectionOpened = false;
+  let leavingPage = false;
+  window.addEventListener('pagehide', () => {
+    leavingPage = true;
+  });
+
+  function showConnectionLost(key) {
+    if (document.getElementById('connection-lost')) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'connection-lost';
+    const box = document.createElement('div');
+    box.className = 'window nu-taped';
+    const title = document.createElement('div');
+    title.className = 'connection-lost-title';
+    title.textContent = t('connection.lost.title');
+    const text = document.createElement('p');
+    text.textContent = t(key);
+    const button = document.createElement('button');
+    button.className = 'window-button';
+    button.textContent = t('connection.lost.ok');
+    button.addEventListener('click', () => window.location.reload());
+    box.append(title, text, button);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    button.focus();
+  }
+
   const connection = createServerConnection(buildServerUrl(token), {
+    onOpen() {
+      connectionOpened = true;
+    },
+    onClose(event) {
+      if (leavingPage) return;
+      if (event?.code === 4001 || event?.code === 4002) {
+        allowLeave();
+        window.location.replace(getPortalUrl());
+        return;
+      }
+      showConnectionLost(connectionOpened ? 'connection.lost.closed' : 'connection.lost.unreachable');
+    },
     onMessage(message) {
       localizeMessage(message);
       if (message.type === 'init') {
@@ -637,12 +676,6 @@ function start(token) {
         }
       } else if (message.type === 'leave') {
         remotePlayers.remove(message.id);
-      }
-    },
-    onClose(event) {
-      if (!ownPlayerId || event?.code === 4002) {
-        allowLeave();
-        window.location.replace(getPortalUrl());
       }
     },
   });

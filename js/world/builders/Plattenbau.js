@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { createBatch, tiledBox } from '../Batch.js';
 import { createRandom } from '../Random.js';
+import { addDoor } from './Door.js';
 import { getMaterial, getColorMaterial, OVERLAY } from '../Textures.js';
 
 const CELL = 3;
@@ -149,7 +150,7 @@ export function createPlattenbau(params = {}) {
 
   if (entrance !== null) {
     const x = cellX(entrance);
-    batch.quad(door, 1.8, 2.5, { x, y: 1.25, z: depth / 2 + 0.045 });
+    addDoor(batch, { x, z: depth / 2, face: door, frame: steel });
     batch.box(concrete, 3.2, 0.2, 1.9, { x, y: 2.9, z: depth / 2 + 0.95, tile: CELL });
     batch.box(steel, 0.1, 2.8, 0.1, { x: x - 1.45, y: 1.4, z: depth / 2 + 1.75, tile: 1 });
     batch.box(steel, 0.1, 2.8, 0.1, { x: x + 1.45, y: 1.4, z: depth / 2 + 1.75, tile: 1 });

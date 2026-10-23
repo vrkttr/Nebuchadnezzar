@@ -26,7 +26,8 @@ function coerceProps(props = {}) {
 
 function surfaceMaterial(props) {
   const layer = LAYERS[props.ebene ?? 'overlay'];
-  return getMaterial(props.material, props.color === undefined ? layer : { color: props.color, ...layer });
+  const ordered = props.reihenfolge === undefined ? {} : { depthWrite: false };
+  return getMaterial(props.material, props.color === undefined ? { ...layer, ...ordered } : { color: props.color, ...layer, ...ordered });
 }
 
 function swapUv(geometry, across, along) {
@@ -49,6 +50,7 @@ function buildSurface(object, props) {
   const mesh = new THREE.Mesh(geometry, surfaceMaterial(props));
   mesh.position.set(object.x, props.y ?? 0.01, object.z);
   mesh.rotation.y = object.rotation;
+  if (props.reihenfolge !== undefined) mesh.renderOrder = props.reihenfolge;
   return mesh;
 }
 
@@ -106,6 +108,7 @@ function buildRoad(object, props) {
   const material = surfaceMaterial(props);
   const strip = new THREE.Mesh(geometry, material);
   strip.position.y = props.y ?? 0.012;
+  if (props.reihenfolge !== undefined) strip.renderOrder = props.reihenfolge;
   group.add(strip);
 
   for (const [x, z] of [points[0], points[count - 1]]) {
@@ -114,6 +117,7 @@ function buildRoad(object, props) {
     scaleUv(cap, width / tile, width / tile);
     const mesh = new THREE.Mesh(cap, material);
     mesh.position.set(x, props.y ?? 0.012, z);
+    if (props.reihenfolge !== undefined) mesh.renderOrder = props.reihenfolge;
     group.add(mesh);
   }
   return group;

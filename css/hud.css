@@ -2541,3 +2541,36 @@ html.touch-ui #minimap-buttons button {
   opacity: 0.45;
   cursor: default;
 }
+
+#connection-lost {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: auto;
+}
+
+#connection-lost .window {
+  position: relative;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  padding: 16px 18px 18px;
+  text-align: center;
+}
+
+.connection-lost-title {
+  color: inherit;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+#connection-lost p {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.4;
+}

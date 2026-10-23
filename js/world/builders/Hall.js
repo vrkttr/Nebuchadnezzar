@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { createBatch, tiledBox } from '../Batch.js';
 import { createRandom } from '../Random.js';
+import { addDoor } from './Door.js';
 import { getMaterial, getColorMaterial, OVERLAY } from '../Textures.js';
 
 const TILE = 3;
@@ -92,7 +93,7 @@ export function createHall(params = {}) {
   }
 
   if (door !== null) {
-    batch.quad(doorMaterial, 1.8, 2.5, { x: door, y: 1.25 + 0.2, z: front + 0.045 });
+    addDoor(batch, { x: door, y: 0.2, z: front, face: doorMaterial, frame: steel });
     batch.box(steel, 2.2, 0.2, 1.2, { x: door, y: 3.05, z: front + 0.6, tile: 1 });
     batch.box(lamp, 0.34, 0.12, 0.14, { x: door, y: 2.9, z: front + 0.1, tile: 1 });
   }
