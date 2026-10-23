@@ -21,6 +21,7 @@ import { isValidClass } from './classes.js';
 import { getPlayerModifiers, parseSkills, resetSkills, serializeSkills, spendSkillPoint } from './skills.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
+import { inventorySize } from './bags.js';
 import { grantStarterKit } from './starterKit.js';
 import { applyEquipmentStats, equipmentRows, loadEquipment, loadEquipmentPerks, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
@@ -261,8 +262,8 @@ async function loadCharacter(characterId) {
   );
 
   const friends = await loadFriends(dbPool, characterId);
-  const inventory = loadInventory(savedItemRows);
   const equipment = loadEquipment(savedEquipmentRows);
+  const inventory = loadInventory(savedItemRows, inventorySize(equipment));
   const equipmentPerks = loadEquipmentPerks(savedEquipmentRows);
   const zoneId = getZone(row.zone) ? row.zone : DEFAULT_ZONE_ID;
   const startPosition = zoneId === row.zone ? { x: row.pos_x, y: row.pos_y, z: row.pos_z } : getZone(zoneId).spawn;

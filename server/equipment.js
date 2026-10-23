@@ -4,8 +4,10 @@ import { formatPerk, parsePerk, perkMultipliers } from './perks.js';
 
 export const EQUIPMENT_SLOTS = ['weapon', 'head', 'shoulders', 'chest', 'hands', 'belt', 'legs', 'feet'];
 
+export const BAG_SLOTS = ['bag1', 'bag2', 'bag3', 'bag4'];
+
 export function createEquipment() {
-  return Object.fromEntries(EQUIPMENT_SLOTS.map((slot) => [slot, null]));
+  return Object.fromEntries([...EQUIPMENT_SLOTS, ...BAG_SLOTS].map((slot) => [slot, null]));
 }
 
 export function loadEquipment(rows) {
@@ -13,7 +15,10 @@ export function loadEquipment(rows) {
 
   for (const row of rows) {
     const item = getItem(row.item_id);
-    if (item && item.slot === row.slot && EQUIPMENT_SLOTS.includes(row.slot)) {
+    if (!item) continue;
+    if (item.slot === row.slot && EQUIPMENT_SLOTS.includes(row.slot)) {
+      equipment[row.slot] = row.item_id;
+    } else if (item.type === 'bag' && BAG_SLOTS.includes(row.slot)) {
       equipment[row.slot] = row.item_id;
     }
   }
@@ -41,7 +46,7 @@ export function serializeEquipmentPerks(perks = {}) {
 }
 
 export function equipmentRows(equipment, perks = {}) {
-  return EQUIPMENT_SLOTS.filter((slot) => equipment[slot]).map((slot) => [slot, equipment[slot], formatPerk(perks[slot])]);
+  return [...EQUIPMENT_SLOTS, ...BAG_SLOTS].filter((slot) => equipment[slot]).map((slot) => [slot, equipment[slot], formatPerk(perks[slot])]);
 }
 
 export function computeEquipmentStats(equipment) {

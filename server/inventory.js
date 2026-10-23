@@ -3,15 +3,15 @@ import { formatPerk, parsePerk } from './perks.js';
 
 export const INVENTORY_SIZE = 24;
 
-export function createInventory() {
-  return new Array(INVENTORY_SIZE).fill(null);
+export function createInventory(size = INVENTORY_SIZE) {
+  return new Array(size).fill(null);
 }
 
-export function loadInventory(rows) {
-  const inventory = createInventory();
+export function loadInventory(rows, size = INVENTORY_SIZE) {
+  const inventory = createInventory(size);
 
   for (const row of rows) {
-    if (row.slot < 0 || row.slot >= INVENTORY_SIZE) continue;
+    if (row.slot < 0 || row.slot >= size) continue;
     const stack = { itemId: row.item_id, quantity: row.quantity };
     const perk = getItem(row.item_id)?.type === 'weapon' ? parsePerk(row.perk) : null;
     if (perk) stack.perk = perk;

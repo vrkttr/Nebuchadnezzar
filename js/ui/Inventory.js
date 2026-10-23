@@ -4,7 +4,13 @@ export function createInventory(state, ui, handlers = {}) {
   const windowEl = document.getElementById('inventory-window');
   const grid = document.getElementById('inventory-grid');
   const closeButton = document.getElementById('inventory-close');
+  const bagBar = document.getElementById('bag-bar');
   const bagButton = document.querySelector('#bag-bar .bag-slot');
+  const BAG_KEYS = ['bag1', 'bag2', 'bag3', 'bag4'];
+  const BASE_SIZE = 24;
+  let bags = {};
+  let lastSlots = [];
+  const bagButtons = [];
 
   function isOpen() {
     return !windowEl.classList.contains('hidden');
@@ -117,11 +123,85 @@ export function createInventory(state, ui, handlers = {}) {
     return element;
   }
 
+  function bagLayout() {
+    const sections = [];
+    let start = BASE_SIZE;
+
+    for (const key of BAG_KEYS) {
+      const item = bags[key] ? state.items[bags[key]] : null;
+      const size = item?.bagSlots ?? 0;
+      if (size > 0) {
+        sections.push({ key, item, start, size });
+        start += size;
+      }
+    }
+
+    return sections;
+  }
+
   function render(slots) {
     state.inventory = slots;
+    lastSlots = slots;
     ui.tooltip.hide();
-    grid.replaceChildren(...slots.map(buildSlot));
+
+    const nodes = slots.slice(0, BASE_SIZE).map((slot, index) => buildSlot(slot, index));
+
+    for (const section of bagLayout()) {
+      const label = document.createElement('div');
+      label.className = 'inventory-section';
+      label.textContent = t('inventory.bagSection', { name: section.item.name });
+      nodes.push(label);
+
+      for (let index = section.start; index < section.start + section.size; index += 1) {
+        nodes.push(buildSlot(slots[index] ?? null, index));
+      }
+    }
+
+    grid.replaceChildren(...nodes);
   }
+
+  function renderBagButtons() {
+    BAG_KEYS.forEach((key, i) => {
+      const button = bagButtons[i];
+      const itemId = bags[key] ?? null;
+      const item = itemId ? state.items[itemId] : null;
+      button.replaceChildren();
+      button.classList.toggle('filled', Boolean(item));
+      button.title = item ? '' : t('inventory.bagSlotEmpty');
+      if (item) button.appendChild(ui.createIcon(item.icon ?? item.id));
+    });
+  }
+
+  function setBags(slots) {
+    bags = slots ?? {};
+    renderBagButtons();
+    render(lastSlots);
+  }
+
+  BAG_KEYS.forEach((key, i) => {
+    const button = document.createElement('button');
+    button.className = 'bag-slot bag-equip';
+    button.addEventListener('mouseenter', (event) => {
+      if (bags[key]) ui.tooltip.showItem(bags[key], 1, event);
+    });
+    button.addEventListener('mousemove', (event) => ui.tooltip.move(event));
+    button.addEventListener('mouseleave', () => ui.tooltip.hide());
+    button.addEventListener('click', (event) => {
+      if (!bags[key]) return;
+      ui.tooltip.hide();
+      ui.itemMenu.open(event, [{ label: t('character.unequipBag'), onSelect: () => handlers.onUnequip?.(key) }]);
+    });
+    button.addEventListener('dragover', (event) => event.preventDefault());
+    button.addEventListener('drop', (event) => {
+      event.preventDefault();
+      const from = Number.parseInt(event.dataTransfer.getData('text/plain'), 10);
+      const dropped = lastSlots[from] ? state.items[lastSlots[from].itemId] : null;
+      if (dropped?.type === 'bag') handlers.onUse?.(from);
+    });
+    bagBar?.appendChild(button);
+    bagButtons.push(button);
+  });
+  renderBagButtons();
 
   if (bagButton) {
     bagButton.replaceChildren(ui.createIcon('backpack'));
@@ -130,5 +210,5 @@ export function createInventory(state, ui, handlers = {}) {
 
   closeButton.addEventListener('click', hide);
 
-  return { render, toggle, hide, isOpen };
+  return { render, setBags, toggle, hide, isOpen };
 }

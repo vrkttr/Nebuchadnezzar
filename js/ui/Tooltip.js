@@ -71,6 +71,10 @@ export function createTooltip(state) {
       lines.push([t('tooltip.armor', { armor: item.stats.armor }), 'tooltip-stat']);
     }
 
+    if (item.type === 'bag') {
+      lines.push([t('tooltip.bagSlots', { count: item.bagSlots }), 'tooltip-stat']);
+    }
+
     if (item.slot) {
       lines.push([
         t('tooltip.requiresLevel', { level: item.level }),

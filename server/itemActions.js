@@ -1,8 +1,9 @@
 import { getPlayerModifiers } from './skills.js';
 import { getItem } from './items.js';
 import { addItem, serializeInventory } from './inventory.js';
-import { EQUIPMENT_SLOTS, applyEquipmentStats, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
+import { BAG_SLOTS, EQUIPMENT_SLOTS, applyEquipmentStats, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { startHearth } from './inn.js';
+import { placeItem, relayoutInventory } from './bags.js';
 
 const CONSUMABLE_COOLDOWN_MS = 6000;
 
@@ -39,6 +40,43 @@ function equipItem(notify, playerId, player, slotIndex, item) {
   notify(playerId, { type: 'event', kind: 'equipped', itemId: item.id });
 }
 
+function equipBag(notify, playerId, player, slotIndex, item) {
+  if (player.level < item.level) return fail(notify, playerId, 'level');
+
+  const bagSlot = BAG_SLOTS.find((slot) => !player.equipment[slot]);
+  if (!bagSlot) return fail(notify, playerId, 'bag-slots-full');
+
+  const nextEquipment = { ...player.equipment, [bagSlot]: item.id };
+  const holder = player.inventory.map((stack, index) => (index === slotIndex ? null : stack));
+  const nextInventory = relayoutInventory(holder, player.equipment, nextEquipment);
+  if (!nextInventory) return fail(notify, playerId, 'inventory-full');
+
+  player.inventory = nextInventory;
+  player.equipment[bagSlot] = item.id;
+
+  sync(notify, playerId, player);
+  notify(playerId, { type: 'event', kind: 'equipped', itemId: item.id });
+}
+
+function unequipBag(notify, playerId, player, bagSlot) {
+  const itemId = player.equipment[bagSlot];
+  if (!itemId) return;
+
+  const nextEquipment = { ...player.equipment, [bagSlot]: null };
+  const nextInventory = relayoutInventory(player.inventory, player.equipment, nextEquipment);
+
+  if (!nextInventory || !placeItem(nextInventory, itemId)) {
+    notify(playerId, { type: 'event', kind: 'item-failed', reason: 'bag-not-empty' });
+    return;
+  }
+
+  player.inventory = nextInventory;
+  player.equipment[bagSlot] = null;
+
+  sync(notify, playerId, player);
+  notify(playerId, { type: 'event', kind: 'unequipped', itemId });
+}
+
 function consumeItem(notify, playerId, player, slotIndex, item) {
   if (Date.now() < player.consumableReadyAt) return fail(notify, playerId, 'cooldown');
 
@@ -72,6 +110,7 @@ export function useInventoryItem(playerId, player, slotIndex, notify) {
   const item = stack ? getItem(stack.itemId) : null;
   if (!item) return;
 
+  if (item.type === 'bag') return equipBag(notify, playerId, player, slotIndex, item);
   if (item.slot) return equipItem(notify, playerId, player, slotIndex, item);
   if (item.use?.hearth) return startHearth(player, playerId, notify);
   if (item.use) return consumeItem(notify, playerId, player, slotIndex, item);
@@ -96,7 +135,9 @@ export function destroyInventoryItem(playerId, player, slotIndex, itemId, notify
 }
 
 export function unequipItem(playerId, player, equipmentSlot, notify) {
-  if (player.dead || !EQUIPMENT_SLOTS.includes(equipmentSlot)) return;
+  if (player.dead) return;
+  if (BAG_SLOTS.includes(equipmentSlot)) return unequipBag(notify, playerId, player, equipmentSlot);
+  if (!EQUIPMENT_SLOTS.includes(equipmentSlot)) return;
 
   const itemId = player.equipment[equipmentSlot];
   if (!itemId) return;

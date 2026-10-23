@@ -1,4 +1,5 @@
 import { GEAR_ITEMS } from './itemsGear.js';
+import { BAG_ITEMS } from './itemsBags.js';
 
 export const ITEMS = {
   scrap_metal: {
@@ -545,6 +546,7 @@ export const ITEMS = {
 };
 
 Object.assign(ITEMS, GEAR_ITEMS);
+Object.assign(ITEMS, BAG_ITEMS);
 
 export function getItem(itemId) {
   return ITEMS[itemId] ?? null;

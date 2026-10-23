@@ -223,6 +223,7 @@ function start(token) {
 
   const inventory = createInventory(gameState, ui, {
     onUse: (slot) => connection.send({ type: 'item-use', slot }),
+    onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
     onDestroy: (slot, itemId) => connection.send({ type: 'item-destroy', slot, itemId }),
     onSell: (slot, itemId) =>
       connection.send({ type: 'vendor-sell', npcId: vendorWindow.currentNpcId(), slot, itemId }),
@@ -534,6 +535,7 @@ function start(token) {
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         audio.registerItems(gameState.items);
         inventory.render(message.inventory ?? []);
+        inventory.setBags(message.equipment);
         hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
         abilitiesWindow.render(message.abilities ?? []);
         if (message.skills) skillsWindow.render(message.skills);
@@ -605,6 +607,7 @@ function start(token) {
       } else if (message.type === 'equipment') {
         gameState.equipmentPerks = message.perks ?? {};
         characterWindow.render(message.slots ?? {});
+        inventory.setBags(message.slots);
         player.setEquipment(message.slots);
         ownWeapon = message.slots?.weapon ?? null;
       } else if (message.type === 'inventory') {

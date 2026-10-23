@@ -1257,5 +1257,22 @@
   "skill.stealth.desc": "-{value} % Aggro-Reichweite pro Punkt (gesamt -{total} %)",
   "skill.gold.name": "Goldfunde",
   "skill.gold.desc": "+{value} % Gold von Gegnern pro Punkt (gesamt +{total} %)",
-  "failure.ability.not-facing": "Du musst dein Ziel ansehen."
+  "failure.ability.not-facing": "Du musst dein Ziel ansehen.",
+  "item.bag_pouch.name": "Leinenbeutel",
+  "item.bag_pouch.description": "Ein einfacher Beutel aus Leinen, mehrfach geflickt.",
+  "item.bag_satchel.name": "Umhängetasche",
+  "item.bag_satchel.description": "Eine Tasche mit Schultergurt und zwei Fächern.",
+  "item.bag_rucksack.name": "Wanderrucksack",
+  "item.bag_rucksack.description": "Robust, geräumig und mit vielen Schnallen.",
+  "item.bag_duffel.name": "Seesack",
+  "item.bag_duffel.description": "Ein großer Seesack aus verstärktem Segeltuch.",
+  "item.type.bag": "Beutel",
+  "item.slot.bag": "Beutel",
+  "tooltip.bagSlots": "{count} Plätze",
+  "inventory.bagSlotTitle": "Beutelplatz {n}",
+  "inventory.bagSlotEmpty": "Leerer Beutelplatz",
+  "inventory.bagSection": "{name}",
+  "failure.item.bag-slots-full": "Alle vier Beutelplätze sind belegt.",
+  "failure.item.bag-not-empty": "Im Rucksack ist nicht genug Platz, um den Inhalt dieses Beutels aufzunehmen.",
+  "character.unequipBag": "Beutel ablegen"
 }

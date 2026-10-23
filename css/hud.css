@@ -883,7 +883,22 @@ button {
   width: 296px;
 }
 
+#inventory-grid .inventory-section {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--nu-line);
+  color: var(--nu-text);
+  font-size: 12px;
+}
+
+.bag-slot.bag-equip:not(.filled) {
+  opacity: 0.45;
+}
+
 #inventory-grid {
+  max-height: 62vh;
+  overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(6, 42px);
   gap: 4px;
