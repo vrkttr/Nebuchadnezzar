@@ -66,6 +66,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
         targetRotationY: state.rotationY ?? 0,
         nameplateEl: createNameplateElement(name, state.guildName),
         data: state,
+        name,
         id,
       };
 
@@ -80,6 +81,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
     }
 
     remote.data = state;
+    remote.name = name;
     remote.target.set(state.x, state.y, state.z);
     remote.targetRotationY = state.rotationY ?? remote.targetRotationY;
     remote.setEquipment(state.equipment);
@@ -177,6 +179,7 @@ export function createRemotePlayers(scene, camera, nameplateContainer) {
   function getMarkers() {
     return Array.from(remotePlayers, ([id, remote]) => ({
       key: `player-${id}`,
+      name: remote.name,
       x: remote.object.position.x,
       z: remote.object.position.z,
     }));

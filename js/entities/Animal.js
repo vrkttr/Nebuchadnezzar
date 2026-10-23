@@ -30,7 +30,34 @@ const RAT_PROFILE = {
   stride: 1.6,
 };
 
+const BEAST_PROFILE = {
+  kind: 'dog',
+  legLength: 0.4,
+  body: [0.4, 0.4, 0.9],
+  head: [0.28, 0.27, 0.3],
+  snout: [0.16, 0.13, 0.22],
+  stride: 1.05,
+};
+
+const BEAR_PROFILE = {
+  kind: 'dog',
+  legLength: 0.62,
+  body: [0.8, 0.8, 1.45],
+  head: [0.44, 0.4, 0.46],
+  snout: [0.24, 0.2, 0.26],
+  stride: 0.75,
+};
+
 export const ANIMALS = {
+  wild_boar: { ...BEAST_PROFILE, legLength: 0.36, body: [0.5, 0.48, 0.95], scale: 1, fur: 0x4a3a2e, accent: 0x6e5a48, eyes: 0x1a1210, ears: 'pointed', teeth: true, mane: true, stride: 1.2 },
+  wolf: { ...DOG_PROFILE, scale: 1.15, fur: 0x6a665e, accent: 0x9a948a, eyes: 0xe0b030, ears: 'pointed', teeth: true },
+  alpha_wolf: { ...DOG_PROFILE, scale: 1.5, fur: 0x2c2a28, accent: 0x5a5650, eyes: 0xd03020, ears: 'pointed', teeth: true, mane: true },
+  bear: { ...BEAR_PROFILE, scale: 1.2, fur: 0x4a3626, accent: 0x6a523c, eyes: 0x1a1210, ears: 'round', teeth: true },
+  cave_bear: { ...BEAR_PROFILE, scale: 1.75, fur: 0x38383c, accent: 0x66666a, eyes: 0xd8b030, ears: 'round', teeth: true, mane: true },
+  guard_dog: { ...DOG_PROFILE, scale: 1.05, fur: 0x6a5a40, accent: 0x2a2420, eyes: 0x1a1612, ears: 'pointed', teeth: true },
+  chain_dog: { ...DOG_PROFILE, scale: 1.45, fur: 0x3a2a22, accent: 0x5a4a3c, eyes: 0xc03020, ears: 'pointed', teeth: true, mane: true },
+  bat: { kind: 'bat', scale: 1, fur: 0x2a2624, accent: 0x4a3c38, eyes: 0xc03020, span: 0.55 },
+  cave_spider: { kind: 'spider', scale: 1.3, fur: 0x2a2420, accent: 0x5a3228, eyes: 0xc03020 },
   stray_dog: { ...DOG_PROFILE, scale: 0.9, fur: 0x8c6c4a, accent: 0xd8cdb4, eyes: 0x1a1612, ears: 'floppy', patch: true },
   feral_dog: { ...DOG_PROFILE, scale: 1.1, fur: 0x3a322c, accent: 0x5a4a3a, eyes: 0xc03020, ears: 'pointed', teeth: true, mane: true },
   rat: { ...RAT_PROFILE, scale: 1, fur: 0x6a5a4a, accent: 0xc89a8a, eyes: 0x1a1210, ears: 'round' },
@@ -80,8 +107,219 @@ function buildTail(parent, spec, x, y, z, spread) {
   return segments;
 }
 
+function createBat(spec) {
+  const furMaterial = fur(spec.fur);
+  const wingMaterial = fur(spec.accent);
+  const eyeMaterial = dark(spec.eyes);
+  const object = new THREE.Group();
+  object.scale.setScalar(spec.scale);
+  object.userData.nameplateHeight = 1.9;
+  object.userData.headHeight = 1.5;
+
+  const pickProxy = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.9, 0.9), new THREE.MeshBasicMaterial({ visible: false }));
+  pickProxy.position.y = 1.3;
+  object.add(pickProxy);
+
+  const frame = pivot(object, 0, 1.3, 0);
+  frame.add(box(0.14, 0.12, 0.26, furMaterial, 0, 0, 0));
+  frame.add(box(0.1, 0.1, 0.1, furMaterial, 0, 0.02, 0.17));
+  for (const side of [-1, 1]) {
+    frame.add(box(0.025, 0.07, 0.025, furMaterial, side * 0.035, 0.1, 0.19));
+    frame.add(box(0.02, 0.02, 0.02, eyeMaterial, side * 0.035, 0.04, 0.225));
+  }
+
+  const wings = [];
+  for (const side of [-1, 1]) {
+    const shoulder = pivot(frame, side * 0.07, 0.02, 0);
+    shoulder.add(box(spec.span, 0.012, 0.22, wingMaterial, side * spec.span / 2, 0, 0));
+    const tip = pivot(shoulder, side * spec.span, 0, 0);
+    tip.add(box(spec.span * 0.6, 0.01, 0.14, wingMaterial, side * spec.span * 0.3, 0, -0.03));
+    wings.push({ shoulder, tip, side });
+  }
+
+  object.traverse((node) => node.layers.enable(PORTRAIT_LAYER));
+
+  let clock = Math.random() * 10;
+  let attackTime = -1;
+  let hitTime = -1;
+  let dead = false;
+  let fall = 0;
+
+  function update(delta) {
+    if (!(delta > 0)) return;
+    clock += delta;
+
+    let lunge = 0;
+    if (attackTime >= 0) {
+      attackTime += delta;
+      const progress = attackTime / ATTACK_DURATION;
+      if (progress >= 1) attackTime = -1;
+      else lunge = Math.sin(progress * Math.PI) * 0.35;
+    }
+
+    let kick = 0;
+    if (hitTime >= 0) {
+      hitTime += delta;
+      const progress = hitTime / HIT_DURATION;
+      if (progress >= 1) hitTime = -1;
+      else kick = Math.sin(progress * Math.PI);
+    }
+
+    fall = Math.min(1, Math.max(0, fall + (dead ? 1 : -1) * delta * 2.2));
+    const flap = dead ? 0 : Math.sin(clock * 22);
+    for (const { shoulder, tip, side } of wings) {
+      shoulder.rotation.z = side * (dead ? -1.2 : flap * 0.7);
+      tip.rotation.z = side * (dead ? -0.8 : flap * 0.5);
+    }
+
+    frame.position.y = 1.3 + (dead ? -1.18 * fall : Math.sin(clock * 3.1) * 0.12);
+    frame.position.z = lunge - kick * 0.1;
+    frame.rotation.z = fall * 1.5;
+    frame.rotation.x = dead ? 0 : -0.25 * Math.sin(clock * 5) - lunge * 0.8 + kick * 0.3;
+  }
+
+  return {
+    object,
+    update,
+    playAttack() {
+      if (!dead) attackTime = 0;
+    },
+    playHit() {
+      if (!dead) hitTime = 0;
+    },
+    setLying() {},
+    setDead(value) {
+      dead = Boolean(value);
+      if (dead) {
+        attackTime = -1;
+        hitTime = -1;
+      }
+    },
+  };
+}
+
+function createSpider(spec) {
+  const furMaterial = fur(spec.fur);
+  const accentMaterial = fur(spec.accent);
+  const eyeMaterial = dark(spec.eyes);
+  const object = new THREE.Group();
+  object.scale.setScalar(spec.scale);
+  object.userData.nameplateHeight = 1.1 * spec.scale;
+  object.userData.headHeight = 0.5 * spec.scale;
+
+  const pickProxy = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.7, 1.4), new THREE.MeshBasicMaterial({ visible: false }));
+  pickProxy.position.y = 0.35;
+  object.add(pickProxy);
+
+  const frame = pivot(object, 0, 0.32, 0);
+  frame.add(box(0.5, 0.3, 0.62, furMaterial, 0, 0.05, -0.38));
+  frame.add(box(0.3, 0.14, 0.36, accentMaterial, 0, 0.18, -0.4));
+  const head = pivot(frame, 0, 0.04, 0.0);
+  head.add(box(0.3, 0.22, 0.28, furMaterial, 0, 0, 0.06));
+  for (const side of [-1, 1]) {
+    head.add(box(0.05, 0.05, 0.03, eyeMaterial, side * 0.08, 0.07, 0.21));
+    head.add(box(0.04, 0.04, 0.04, eyeMaterial, side * 0.12, 0.03, 0.2));
+    head.add(box(0.05, 0.05, 0.16, accentMaterial, side * 0.06, -0.08, 0.2));
+  }
+
+  const legs = [];
+  for (let pair = 0; pair < 4; pair += 1) {
+    for (const side of [-1, 1]) {
+      const hip = pivot(frame, side * 0.2, 0.05, 0.12 - pair * 0.2);
+      const reach = 0.55 + (pair === 0 || pair === 3 ? 0.08 : 0);
+      const upper = pivot(hip, 0, 0, 0);
+      upper.rotation.z = side * -0.9;
+      upper.add(box(0.045, 0.045, 0.045, furMaterial, 0, 0, 0));
+      const upperBone = box(reach * 0.55, 0.045, 0.045, furMaterial, side * reach * 0.275, 0, 0);
+      upper.add(upperBone);
+      const knee = pivot(upper, side * reach * 0.55, 0, 0);
+      knee.rotation.z = side * 1.6;
+      knee.add(box(reach * 0.6, 0.035, 0.035, accentMaterial, side * reach * 0.3, 0, 0));
+      hip.rotation.y = side * (0.55 - pair * 0.33);
+      legs.push({ hip, upper, knee, side, phase: pair % 2 === 0 ? 0 : Math.PI, base: hip.rotation.y });
+    }
+  }
+
+  object.traverse((node) => node.layers.enable(PORTRAIT_LAYER));
+
+  const lastPosition = new THREE.Vector3();
+  let hasLastPosition = false;
+  let speed = 0;
+  let phase = 0;
+  let clock = Math.random() * 10;
+  let attackTime = -1;
+  let hitTime = -1;
+  let dead = false;
+  let fall = 0;
+
+  function update(delta) {
+    if (!(delta > 0)) return;
+
+    if (hasLastPosition) {
+      const measured = Math.min(Math.hypot(object.position.x - lastPosition.x, object.position.z - lastPosition.z) / delta, MAX_SPEED);
+      speed += (measured - speed) * dampFactor(SPEED_SMOOTHING, delta);
+    }
+    lastPosition.copy(object.position);
+    hasLastPosition = true;
+
+    clock += delta;
+    const moving = speed > MOVE_THRESHOLD && !dead;
+    phase += speed * 5 * delta;
+
+    let lunge = 0;
+    if (attackTime >= 0) {
+      attackTime += delta;
+      const progress = attackTime / ATTACK_DURATION;
+      if (progress >= 1) attackTime = -1;
+      else lunge = Math.sin(progress * Math.PI) * 0.35;
+    }
+
+    let kick = 0;
+    if (hitTime >= 0) {
+      hitTime += delta;
+      const progress = hitTime / HIT_DURATION;
+      if (progress >= 1) hitTime = -1;
+      else kick = Math.sin(progress * Math.PI);
+    }
+
+    fall = Math.min(1, Math.max(0, fall + (dead ? 1 : -1) * delta * 2.8));
+    const swing = moving ? 0.45 : 0.04;
+    for (const leg of legs) {
+      leg.hip.rotation.y = leg.base + Math.sin(phase + leg.phase + leg.side) * swing * (dead ? 0 : 1);
+      leg.upper.rotation.z = leg.side * (-0.9 - fall * 1.2) + Math.sin(phase * 2 + leg.phase) * 0.18 * (moving ? 1 : 0);
+      leg.knee.rotation.z = leg.side * (1.6 - fall * 1.0);
+    }
+
+    frame.position.z = lunge - kick * 0.12;
+    frame.position.y = 0.32 + Math.abs(Math.sin(phase * 2)) * (moving ? 0.03 : 0) - fall * 0.12;
+    frame.rotation.z = fall * 3.0;
+    head.rotation.x = Math.sin(clock * 1.7) * 0.05 + lunge * 0.6 - kick * 0.2;
+  }
+
+  return {
+    object,
+    update,
+    playAttack() {
+      if (!dead) attackTime = 0;
+    },
+    playHit() {
+      if (!dead) hitTime = 0;
+    },
+    setLying() {},
+    setDead(value) {
+      dead = Boolean(value);
+      if (dead) {
+        attackTime = -1;
+        hitTime = -1;
+      }
+    },
+  };
+}
+
 export function createAnimal(type) {
   const spec = ANIMALS[type];
+  if (spec.kind === 'bat') return createBat(spec);
+  if (spec.kind === 'spider') return createSpider(spec);
   const isDog = spec.kind === 'dog';
   const [bodyW, bodyH, bodyL] = spec.body;
   const [headW, headH, headL] = spec.head;

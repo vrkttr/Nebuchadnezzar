@@ -76,6 +76,7 @@ export function createCombatState(character) {
     actionLayout,
     actionBar: actionLayout.bar,
     buffs: {},
+    dots: [],
   };
 
   applyLevelStats(state);
@@ -112,6 +113,7 @@ function killPlayer(player) {
   player.autoAttack = false;
   player.xp = 0;
   player.buffs = {};
+  player.dots = [];
   player.input.moveX = 0;
   player.input.moveZ = 0;
   player.input.jump = false;
@@ -133,6 +135,7 @@ function respawnPlayer(player) {
   player.resource = player.resourceMax;
   player.cooldowns = createCooldownState();
   player.buffs = {};
+  player.dots = [];
   player.dead = false;
   player.attackTimer = PLAYER_ATTACK_INTERVAL;
   player.combatTimer = REGEN_DELAY;
@@ -196,7 +199,34 @@ function damagePlayer(player, playerId, enemy, emit) {
 
   if (player.health === 0) {
     killPlayer(player);
+    return;
   }
+
+  if (enemy.dot) {
+    const tick = Math.max(1, Math.round(amount * enemy.dot.factor * 3));
+    player.dots = (player.dots ?? []).filter((dot) => dot.kind !== enemy.dot.kind);
+    player.dots.push({ kind: enemy.dot.kind, remaining: enemy.dot.duration, timer: 1, tick, attackerId: enemy.id });
+  }
+}
+
+function updateDots(player, playerId, delta, emit) {
+  if (!player.dots?.length) return;
+
+  for (const dot of player.dots) {
+    dot.remaining -= delta;
+    dot.timer -= delta;
+    if (dot.timer > 0) continue;
+    dot.timer += 1;
+    player.health = Math.max(0, player.health - dot.tick);
+    player.combatTimer = 0;
+    emit({ type: 'damage', targetType: 'player', targetId: playerId, amount: dot.tick, attackerId: dot.attackerId });
+    if (player.health === 0) {
+      killPlayer(player);
+      return;
+    }
+  }
+
+  player.dots = player.dots.filter((dot) => dot.remaining > 0);
 }
 
 function fireRanged(player, playerId, enemy, weapon, emit, notify, onKill, multiplier = 1, abilityId = null) {
@@ -231,6 +261,9 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
     for (const abilityId of Object.keys(player.cooldowns)) {
       player.cooldowns[abilityId] = Math.max(0, player.cooldowns[abilityId] - delta);
     }
+
+    updateDots(player, playerId, delta, emit);
+    if (player.dead) continue;
 
     for (const buffId of Object.keys(player.buffs)) {
       player.buffs[buffId] -= delta;
@@ -295,6 +328,11 @@ function updateEnemyAttacks(players, enemies, delta, emit) {
     const target = players.get(enemy.targetPlayerId);
 
     if (!target || target.dead || horizontalDistance(enemy, target) > enemy.meleeRange) {
+      enemy.attackTimer = 0;
+      continue;
+    }
+
+    if (enemy.meleeRange > 4 && !hasLineOfSight(enemy.zoneId, enemy.x, enemy.z, target.x, target.z)) {
       enemy.attackTimer = 0;
       continue;
     }

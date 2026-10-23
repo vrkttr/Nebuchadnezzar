@@ -273,7 +273,7 @@ function start(token) {
     renderer,
     viewCapture,
     player,
-    sources: { npcs: npcs.getMarkers },
+    sources: { npcs: npcs.getMarkers, players: remotePlayers.getMarkers },
   });
   document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.map"]')?.addEventListener('click', () => worldMap.toggle());
   const minimap = createMinimap({

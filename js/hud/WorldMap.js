@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { t } from '../i18n/I18n.js';
+import { windowMaterials } from '../world/Textures.js';
 
 const STORAGE_KEY = 'sektorsieben.markers';
 const MAX_MARKERS = 12;
@@ -12,6 +13,12 @@ const CAMERA_HEIGHT = 80;
 const REMOVE_RADIUS = 13;
 const REDRAW_INTERVAL = 0.1;
 const MARKER_COLOR = '#f2c23a';
+const HOVER_RADIUS = 9;
+const DAY_HEMISPHERE_SKY = 0xe2e8e6;
+const DAY_HEMISPHERE_GROUND = 0x7b7660;
+const DAY_HEMISPHERE_INTENSITY = 2.1;
+const DAY_SUN = 0xfff0d2;
+const DAY_SUN_INTENSITY = 2.5;
 
 function readStore() {
   try {
@@ -48,6 +55,9 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
   const zoomOutButton = document.getElementById('map-zoom-out');
   const closeButton = document.getElementById('map-close');
   const context = canvas.getContext('2d');
+  const tooltipEl = document.createElement('div');
+  tooltipEl.id = 'map-tooltip';
+  viewEl.appendChild(tooltipEl);
   const pixelRatio = renderer.getPixelRatio();
 
   const store = readStore();
@@ -172,6 +182,15 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
       context.stroke();
     }
 
+    context.fillStyle = '#9ec4e0';
+    for (const other of sources.players()) {
+      const [x, y] = toCanvas(other.x, other.z);
+      context.beginPath();
+      context.arc(x, y, 4.5, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+    }
+
     markers.forEach((marker, index) => {
       const [x, y] = toCanvas(marker.x, marker.z);
       drawMarker(x, y, index + 1);
@@ -211,9 +230,20 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     const camera = new THREE.OrthographicCamera(-half, half, half, -half, 1, 200);
     camera.up.set(0, 0, -1);
 
-    const { hemisphere } = scene.userData.environment;
-    const savedHemisphere = hemisphere.intensity;
-    hemisphere.intensity = Math.max(hemisphere.intensity, 2.1);
+    const { hemisphere, sun } = scene.userData.environment;
+    const savedHemisphere = { intensity: hemisphere.intensity, color: hemisphere.color.clone(), ground: hemisphere.groundColor.clone() };
+    const savedSun = { intensity: sun.intensity, color: sun.color.clone() };
+    const savedWindows = windowMaterials.map((material) => material.color.clone());
+    if (world.indoor) {
+      hemisphere.intensity = Math.max(hemisphere.intensity, 2.1);
+    } else {
+      hemisphere.color.setHex(DAY_HEMISPHERE_SKY);
+      hemisphere.groundColor.setHex(DAY_HEMISPHERE_GROUND);
+      hemisphere.intensity = DAY_HEMISPHERE_INTENSITY;
+      sun.color.setHex(DAY_SUN);
+      sun.intensity = DAY_SUN_INTENSITY;
+      for (const material of windowMaterials) material.color.setScalar(1);
+    }
 
     const previous = hiddenObjects.map((object) => object.visible);
     hiddenObjects.forEach((object) => {
@@ -235,7 +265,12 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     hiddenObjects.forEach((object, index) => {
       object.visible = previous[index];
     });
-    hemisphere.intensity = savedHemisphere;
+    hemisphere.intensity = savedHemisphere.intensity;
+    hemisphere.color.copy(savedHemisphere.color);
+    hemisphere.groundColor.copy(savedHemisphere.ground);
+    sun.intensity = savedSun.intensity;
+    sun.color.copy(savedSun.color);
+    windowMaterials.forEach((material, index) => material.color.copy(savedWindows[index]));
 
     canvas.width = tilePixels;
     canvas.height = tilePixels;
@@ -249,13 +284,43 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
     return [event.clientX - rect.left, event.clientY - rect.top];
   }
 
+  function hoveredEntry(px, py) {
+    let best = null;
+    let bestDistance = HOVER_RADIUS;
+    for (const entry of [...sources.players(), ...sources.npcs()]) {
+      if (!entry.name) continue;
+      const [x, y] = toCanvas(entry.x, entry.z);
+      const distance = Math.hypot(x - px, y - py);
+      if (distance <= bestDistance) {
+        best = entry;
+        bestDistance = distance;
+      }
+    }
+    return best;
+  }
+
+  function updateTooltip(px, py) {
+    const entry = drag?.moved ? null : hoveredEntry(px, py);
+    if (!entry) {
+      tooltipEl.style.display = 'none';
+      return;
+    }
+    tooltipEl.textContent = entry.name;
+    tooltipEl.style.display = 'block';
+    tooltipEl.style.left = `${px + 24}px`;
+    tooltipEl.style.top = `${py + 24}px`;
+  }
+
   canvas.addEventListener('mousemove', (event) => {
-    const [x, z] = toWorld(...pointerPosition(event));
+    const [px, py] = pointerPosition(event);
+    const [x, z] = toWorld(px, py);
     cursorEl.textContent = formatCoordinates(x, z);
+    updateTooltip(px, py);
   });
 
   canvas.addEventListener('mouseleave', () => {
     cursorEl.textContent = '';
+    tooltipEl.style.display = 'none';
   });
 
   canvas.addEventListener(
@@ -270,6 +335,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
 
   canvas.addEventListener('mousedown', (event) => {
     if (event.button !== 0) return;
+    tooltipEl.style.display = 'none';
     const [x, y] = pointerPosition(event);
     drag = { startX: x, startY: y, lastX: x, lastY: y, moved: false };
   });

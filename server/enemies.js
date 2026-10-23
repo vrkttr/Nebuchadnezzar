@@ -1,5 +1,5 @@
 import { getClassModifiers } from './classes.js';
-import { ENEMY_RADIUS, isBlocked, resolveCollisions } from './world.js';
+import { ENEMY_RADIUS, hasLineOfSight, isBlocked, resolveCollisions } from './world.js';
 import { groundHeight } from './terrain.js';
 import { getZone, getZones } from './zoneLoader.js';
 
@@ -7,6 +7,8 @@ const CROUCH_AGGRO_FACTOR = 0.5;
 const HUMAN = { moveSpeed: 3, aggroRange: 8, attackInterval: 2, damageFactor: 1, meleeRange: 2 };
 const DOG = { moveSpeed: 4.6, aggroRange: 11, attackInterval: 1.4, damageFactor: 0.8, meleeRange: 1.8 };
 const RAT = { moveSpeed: 3.8, aggroRange: 7, attackInterval: 1.2, damageFactor: 0.65, meleeRange: 1.5 };
+const BEAST = { moveSpeed: 5, aggroRange: 10, attackInterval: 1.4, damageFactor: 0.9, meleeRange: 1.8 };
+const PACK_RANGE = 14;
 
 const ENEMY_TYPES = {
   stray_dog: { ...DOG, name: 'Streunender Hund', healthBase: 15, healthPerLevel: 8, damageFactor: 0.7, lootTable: 'dog' },
@@ -16,6 +18,23 @@ const ENEMY_TYPES = {
   marauder: { ...HUMAN, name: 'Marodeur', healthBase: 80, healthPerLevel: 20, lootTable: 'marauder' },
   deserter: { ...HUMAN, name: 'Deserteur', healthBase: 70, healthPerLevel: 16, aggroRange: 10, damageFactor: 1.1, lootTable: 'deserter' },
   brute: { ...HUMAN, name: 'Schläger', healthBase: 120, healthPerLevel: 25, moveSpeed: 2.6, attackInterval: 2.5, damageFactor: 1.5, lootTable: 'brute' },
+  wild_boar: { ...BEAST, name: 'Wildschwein', healthBase: 60, healthPerLevel: 14, moveSpeed: 5.2, aggroRange: 9, attackInterval: 1.8, damageFactor: 1.1, meleeRange: 1.7, lootTable: 'boar' },
+  wolf: { ...BEAST, name: 'Wolf', healthBase: 45, healthPerLevel: 11, moveSpeed: 5.4, aggroRange: 14, attackInterval: 1.2, damageFactor: 0.8, pack: 'wolf', lootTable: 'wolf' },
+  alpha_wolf: { ...BEAST, name: 'Leitwolf', healthBase: 90, healthPerLevel: 16, moveSpeed: 5.6, aggroRange: 16, attackInterval: 1.3, damageFactor: 1, meleeRange: 2, pack: 'wolf', lootTable: 'wolf' },
+  bear: { ...BEAST, name: 'Bär', healthBase: 150, healthPerLevel: 30, moveSpeed: 3.2, aggroRange: 8, attackInterval: 2.4, damageFactor: 1.7, meleeRange: 2.3, lootTable: 'bear' },
+  trapper: { ...HUMAN, name: 'Fallensteller', healthBase: 60, healthPerLevel: 14, aggroRange: 9, damageFactor: 0.9, dot: { kind: 'bleed', duration: 6, factor: 0.12 }, lootTable: 'trapper' },
+  highwayman: { ...HUMAN, name: 'Wegelagerer', healthBase: 70, healthPerLevel: 15, aggroRange: 12, attackInterval: 2.6, damageFactor: 1.4, meleeRange: 9, lootTable: 'highwayman' },
+  lumberjack: { ...HUMAN, name: 'Holzfäller', healthBase: 140, healthPerLevel: 28, moveSpeed: 2.4, attackInterval: 2.8, damageFactor: 1.9, meleeRange: 2.3, lootTable: 'lumberjack' },
+  rust_gang: { ...HUMAN, name: 'Rostbande', healthBase: 55, healthPerLevel: 12, aggroRange: 9, pack: 'rust', lootTable: 'scavenger' },
+  guard_dog: { ...DOG, name: 'Wachhund', healthBase: 40, healthPerLevel: 10, moveSpeed: 5, aggroRange: 12, damageFactor: 0.85, pack: 'guards', lootTable: 'dog' },
+  chain_dog: { ...DOG, name: 'Kettenhund', healthBase: 90, healthPerLevel: 18, moveSpeed: 4.8, aggroRange: 13, damageFactor: 1.1, meleeRange: 2, pack: 'guards', lootTable: 'dog' },
+  arsonist: { ...HUMAN, name: 'Brandstifter', healthBase: 65, healthPerLevel: 14, aggroRange: 11, attackInterval: 3, damageFactor: 0.8, meleeRange: 10, dot: { kind: 'burn', duration: 5, factor: 0.14 }, lootTable: 'arsonist' },
+  bandit_boss: { ...HUMAN, name: 'Räuberhauptmann', healthBase: 400, healthPerLevel: 45, attackInterval: 1.8, damageFactor: 1.3, meleeRange: 2.2, aggroRange: 10, lootTable: 'boss' },
+  bat: { ...BEAST, name: 'Fledermaus', healthBase: 20, healthPerLevel: 3, moveSpeed: 5.5, aggroRange: 10, attackInterval: 1, damageFactor: 0.35, meleeRange: 1.4, pack: 'bats', lootTable: 'bat' },
+  cave_spider: { ...BEAST, name: 'Höhlenspinne', healthBase: 110, healthPerLevel: 16, moveSpeed: 4.4, aggroRange: 9, attackInterval: 1.6, damageFactor: 0.9, dot: { kind: 'poison', duration: 8, factor: 0.1 }, lootTable: 'spider' },
+  lost_one: { ...HUMAN, name: 'Verirrter', healthBase: 100, healthPerLevel: 16, aggroRange: 7, damageFactor: 1, pack: 'lost', lootTable: 'lost' },
+  smuggler: { ...HUMAN, name: 'Schmuggler', healthBase: 110, healthPerLevel: 18, aggroRange: 14, attackInterval: 2.4, damageFactor: 1.3, meleeRange: 14, lootTable: 'smuggler' },
+  cave_bear: { ...BEAST, name: 'Höhlenbär', healthBase: 4200, healthPerLevel: 0, moveSpeed: 3.4, aggroRange: 9, attackInterval: 2.2, damageFactor: 1.2, meleeRange: 2.6, lootTable: 'cave_bear' },
   rat: { ...RAT, name: 'Kanalratte', healthBase: 25, healthPerLevel: 4, lootTable: 'rat' },
   giant_rat: { ...RAT, name: 'Riesenratte', healthBase: 50, healthPerLevel: 10, moveSpeed: 3.5, damageFactor: 0.85, meleeRange: 1.8, lootTable: 'rat' },
   plague_rat: { ...RAT, name: 'Seuchenratte', healthBase: 55, healthPerLevel: 12, damageFactor: 1, aggroRange: 9, lootTable: 'rat' },
@@ -48,6 +67,8 @@ for (const zone of getZones()) {
         attackInterval: definition.attackInterval,
         damageFactor: definition.damageFactor,
         meleeRange: definition.meleeRange,
+        pack: definition.pack ?? null,
+        dot: definition.dot ?? null,
       };
     })
   );
@@ -82,6 +103,8 @@ export function createEnemies(zoneId) {
       attackInterval: spawn.attackInterval,
       damageFactor: spawn.damageFactor,
       meleeRange: spawn.meleeRange,
+      pack: spawn.pack,
+      dot: spawn.dot,
       x: spawn.x,
       y: spawn.y,
       z: spawn.z,
@@ -264,6 +287,16 @@ export function updateEnemies(enemies, players, delta) {
         enemy.targetPlayerId = targetId;
         enemy.stuckTimer = 0;
         endWander(enemy);
+        if (enemy.pack) {
+          for (const mate of enemies.values()) {
+            if (mate === enemy || mate.dead || mate.state !== 'idle' || mate.pack !== enemy.pack) continue;
+            if (horizontalDistance(mate.x, mate.z, enemy.x, enemy.z) > PACK_RANGE) continue;
+            mate.state = 'chase';
+            mate.targetPlayerId = targetId;
+            mate.stuckTimer = 0;
+            endWander(mate);
+          }
+        }
       } else {
         updateWander(enemy, delta);
       }
@@ -280,7 +313,9 @@ export function updateEnemies(enemies, players, delta) {
 
       const distanceToTarget = horizontalDistance(enemy.x, enemy.z, target.x, target.z);
 
-      if (distanceToTarget > enemy.meleeRange) {
+      const lineBlocked = enemy.meleeRange > 4 && !hasLineOfSight(enemy.zoneId, enemy.x, enemy.z, target.x, target.z);
+
+      if (distanceToTarget > enemy.meleeRange || lineBlocked) {
         moveToward(enemy, target.x, target.z, delta);
         resolveCollisions(enemy, ENEMY_RADIUS);
         trackProgress(

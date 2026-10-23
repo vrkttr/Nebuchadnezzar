@@ -199,7 +199,28 @@ function stratified(object, density, margin, random, callback, clip = null, seed
   }
 }
 
+function parseCut(props) {
+  if (!props.schneise) return null;
+  const points = String(props.schneise).split(';').map((pair) => pair.split(',').map(Number));
+  return { points, half: (props.schneiseBreite ?? 4) / 2 };
+}
+
+function inCut(cut, x, z) {
+  if (!cut) return false;
+  for (let i = 0; i < cut.points.length - 1; i += 1) {
+    const [ax, az] = cut.points[i];
+    const [bx, bz] = cut.points[i + 1];
+    const dx = bx - ax;
+    const dz = bz - az;
+    const lengthSquared = dx * dx + dz * dz || 1;
+    const t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / lengthSquared));
+    if (Math.hypot(x - (ax + dx * t), z - (az + dz * t)) < cut.half) return true;
+  }
+  return false;
+}
+
 function expandForest(object, props, trees, bushes, clip = null) {
+  const cut = parseCut(props);
   const seed = props.seed ?? 1;
   const random = createRandom(seed);
   const margin = props.rand ?? 0.8;
@@ -208,6 +229,7 @@ function expandForest(object, props, trees, bushes, clip = null) {
   const conifers = props.nadelanteil ?? 0.45;
 
   stratified(object, props.dichte ?? 12, margin, random, ({ x, z }, cell) => {
+    if (inCut(cut, x, z)) return;
     trees.push({
       x,
       z,
@@ -219,6 +241,7 @@ function expandForest(object, props, trees, bushes, clip = null) {
 
   if (!props.unterholz) return;
   stratified(object, props.unterholz, margin, random, ({ x, z }, cell) => {
+    if (inCut(cut, x, z)) return;
     bushes.push({ x, z, size: cell.range(1.4, 2.6), seed: Math.floor(cell.next() * 1e6) });
   }, clip, seed, 0x9e3779b9);
 }

@@ -90,7 +90,7 @@ export function createNpcs(scene, camera, nameplateContainer) {
   }
 
   function getMarkers() {
-    return Array.from(npcs, ([id, npc]) => ({ npcId: id, x: npc.object.position.x, z: npc.object.position.z }));
+    return Array.from(npcs, ([id, npc]) => ({ npcId: id, name: npc.data.name, x: npc.object.position.x, z: npc.object.position.z }));
   }
 
   return { sync, clear, setMarkers, getObjects, getPosition, getObject, getPlate, getMarkers, setBlockers: occlusion.setBlockers, update };

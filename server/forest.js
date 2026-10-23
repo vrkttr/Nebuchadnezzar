@@ -81,6 +81,26 @@ function stratified(object, density, margin, random, callback, clip, seed, salt)
   }
 }
 
+function parseCut(props) {
+  if (!props.schneise) return null;
+  const points = String(props.schneise).split(';').map((pair) => pair.split(',').map(Number));
+  return { points, half: (props.schneiseBreite ?? 4) / 2 };
+}
+
+function inCut(cut, x, z) {
+  if (!cut) return false;
+  for (let i = 0; i < cut.points.length - 1; i += 1) {
+    const [ax, az] = cut.points[i];
+    const [bx, bz] = cut.points[i + 1];
+    const dx = bx - ax;
+    const dz = bz - az;
+    const lengthSquared = dx * dx + dz * dz || 1;
+    const t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / lengthSquared));
+    if (Math.hypot(x - (ax + dx * t), z - (az + dz * t)) < cut.half) return true;
+  }
+  return false;
+}
+
 export function treeColliders(zone) {
   const result = [];
 
@@ -95,11 +115,13 @@ export function treeColliders(zone) {
       const minHeight = props.minHeight ?? 7;
       const maxHeight = props.maxHeight ?? 11;
       const conifers = props.nadelanteil ?? 0.45;
+      const cut = parseCut(props);
 
       stratified(visual, props.dichte ?? 12, margin, random, ({ x, z }, cell) => {
         cell.next();
         cell.range(minHeight, maxHeight);
         cell.next();
+        if (inCut(cut, x, z)) return;
         result.push({ x, z, radius: TRUNK_RADIUS });
       }, zone.chunked ? WIDE_CLIP : null, seed, 0);
     }

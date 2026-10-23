@@ -1609,8 +1609,25 @@ button {
 }
 
 #map-view {
+  position: relative;
   padding: 10px 10px 4px;
   line-height: 0;
+}
+
+#map-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  padding: 4px 8px;
+  line-height: 1.2;
+  font-family: var(--nu-font-display);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: #f1ead2;
+  background: rgba(15, 14, 10, 0.92);
+  border: 1px solid var(--nu-line);
+  pointer-events: none;
 }
 
 #map-canvas {

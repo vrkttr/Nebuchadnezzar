@@ -1120,12 +1120,12 @@
       {
        "name": "intensitaet",
        "type": "int",
-       "value": 22
+       "value": 40
       },
       {
        "name": "distanz",
        "type": "int",
-       "value": 13
+       "value": 18
       }
      ]
     },
@@ -1259,12 +1259,12 @@
       {
        "name": "intensitaet",
        "type": "int",
-       "value": 18
+       "value": 34
       },
       {
        "name": "distanz",
        "type": "int",
-       "value": 11
+       "value": 16
       }
      ]
     },
@@ -1395,12 +1395,12 @@
       {
        "name": "intensitaet",
        "type": "int",
-       "value": 18
+       "value": 34
       },
       {
        "name": "distanz",
        "type": "int",
-       "value": 11
+       "value": 16
       }
      ]
     }
@@ -2119,7 +2119,7 @@
   {
    "name": "licht",
    "type": "float",
-   "value": 0.55
+   "value": 1.25
   },
   {
    "name": "sonne",
