@@ -318,5 +318,13 @@ export function createAmbient(scene, heightAt = () => 0) {
     return true;
   }
 
-  return { addPath, removePath, applyServer, clear, update };
+  function getObject(id) {
+    return remote.get(id)?.object ?? null;
+  }
+
+  function getKind(id) {
+    return remote.get(id)?.kind ?? null;
+  }
+
+  return { addPath, removePath, applyServer, getObject, getKind, clear, update };
 }

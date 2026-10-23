@@ -10,6 +10,7 @@ import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { inspectQuestObject, serializeQuestObjects } from './questObjects.js';
 import { collectAmbient, updateAmbient } from './ambient.js';
+import { updateSpeech } from './talk.js';
 import { DECK_HEIGHT, initTrains, serializeTrainState, updateTrain } from './train.js';
 import { groundHeight } from './terrain.js';
 import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
@@ -881,6 +882,7 @@ setInterval(() => {
     if (zonePlayers.size === 0) continue;
 
     updateAmbient(zone.id, zonePlayers, TICK_DELTA);
+    updateSpeech(zone.id, zonePlayers, TICK_DELTA, notify);
     for (const [id, state] of zonePlayers) {
       const ambientMessage = collectAmbient(zone.id, state, tickCount);
       const socket = sockets.get(id);

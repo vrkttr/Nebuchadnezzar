@@ -10,7 +10,7 @@ export function createChatBubbles(camera, container) {
   const bubbles = new Map();
   const projected = new THREE.Vector3();
 
-  function show(object, text, plate = null) {
+  function show(object, text, plate = null, height = BUBBLE_HEIGHT) {
     if (!object) return;
 
     bubbles.get(object)?.element.remove();
@@ -23,6 +23,7 @@ export function createChatBubbles(camera, container) {
     bubbles.set(object, {
       element,
       plate,
+      height,
       age: 0,
       lifetime: Math.min(MAX_LIFETIME, MIN_LIFETIME + text.length * 0.05),
     });
@@ -38,7 +39,7 @@ export function createChatBubbles(camera, container) {
         continue;
       }
 
-      projected.set(object.position.x, object.position.y + BUBBLE_HEIGHT, object.position.z);
+      projected.set(object.position.x, object.position.y + bubble.height, object.position.z);
       const distance = camera.position.distanceTo(projected);
       projected.project(camera);
 

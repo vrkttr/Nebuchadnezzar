@@ -59,6 +59,14 @@ export function createNpcs(scene, camera, nameplateContainer) {
     return npcs.get(id)?.object.position ?? null;
   }
 
+  function getObject(id) {
+    return npcs.get(id)?.object ?? null;
+  }
+
+  function getPlate(id) {
+    return npcs.get(id)?.plate ?? null;
+  }
+
   function update(delta) {
     for (const npc of npcs.values()) {
       npc.animate(delta);
@@ -80,5 +88,5 @@ export function createNpcs(scene, camera, nameplateContainer) {
     return Array.from(npcs, ([id, npc]) => ({ npcId: id, x: npc.object.position.x, z: npc.object.position.z }));
   }
 
-  return { sync, clear, setMarkers, getObjects, getPosition, getMarkers, update };
+  return { sync, clear, setMarkers, getObjects, getPosition, getObject, getPlate, getMarkers, update };
 }

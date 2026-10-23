@@ -26,6 +26,7 @@ function updateViewport() {
 
   let content = DEFAULT_VIEWPORT;
   let scale = 1;
+  let landscapeWidth = 0;
 
   if (touchInput.active) {
     const landscape = window.innerWidth >= window.innerHeight;
@@ -37,11 +38,27 @@ function updateViewport() {
     if (deviceHeight >= TABLET_MIN_SHORT_SIDE && deviceWidth < DESIGN_WIDTH) {
       content = `width=${DESIGN_WIDTH}, user-scalable=no, viewport-fit=cover`;
       scale = deviceWidth / DESIGN_WIDTH;
+      landscapeWidth = deviceWidth;
     }
   }
 
   if (meta.content !== content) meta.content = content;
-  document.documentElement.style.setProperty('--touch-scale', String(1 / scale));
+  const effective = scale < 1 ? Math.max(1, window.innerWidth / (landscapeWidth || window.innerWidth)) : 1;
+  document.documentElement.style.setProperty('--touch-scale', String(effective));
+}
+
+function reapplyViewport() {
+  const meta = document.querySelector('meta[name="viewport"]');
+  if (meta && touchInput.active) {
+    const wanted = meta.content;
+    meta.content = DEFAULT_VIEWPORT;
+    requestAnimationFrame(() => {
+      meta.content = wanted;
+      updateViewport();
+    });
+  }
+  updateViewport();
+  for (const delay of [150, 500, 1200]) setTimeout(updateViewport, delay);
 }
 
 function createButton(className, label, title) {
@@ -225,6 +242,8 @@ export function createTouchControls({ canvas, labels, onRotate, onZoom, onCycleT
   }
 
   window.addEventListener('resize', updateViewport);
+  document.addEventListener('fullscreenchange', reapplyViewport);
+  document.addEventListener('webkitfullscreenchange', reapplyViewport);
   window.addEventListener('orientationchange', updateViewport);
 
   window.addEventListener('blur', () => {

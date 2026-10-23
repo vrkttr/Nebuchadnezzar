@@ -9,7 +9,7 @@ const HEIGHT_LAYER = 'Hoehe';
 export const HEIGHT_UNIT = 0.05;
 export const STEP_UP = 0.4;
 const CLIFF_HALF_THICKNESS = 0.08;
-const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt', 'zugstrecke', 'haltestelle', 'eingang']);
+const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt', 'zugstrecke', 'haltestelle', 'bahnuebergang', 'eingang']);
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'wald', 'flecken']);
 export const CHUNK_SIZE = 64;
 const CHUNK_LIMIT = 4096;
@@ -119,6 +119,7 @@ function loadZone(id, file) {
     questObjects: [],
     train: null,
     trainStops: [],
+    trainCrossings: [],
     entrances: [],
     heights: null,
     colliders: [],
@@ -221,6 +222,8 @@ function loadZone(id, file) {
         };
       } else if (kind === 'eingang') {
         zone.entrances.push({ id: String(props.id ?? `eingang_${zone.entrances.length}`), x: center.x, z: center.z, rotation: rotationY });
+      } else if (kind === 'bahnuebergang') {
+        zone.trainCrossings.push({ x: center.x, z: center.z, width: Number(props.breite) || 6 });
       } else if (kind === 'haltestelle') {
         if (!props.id) throw new Error(`Zonendatei ${id}: Haltestelle ${object.id} braucht die Eigenschaft "id".`);
         zone.trainStops.push({ id: String(props.id), name: String(props.name ?? props.id), x: center.x, z: center.z });
@@ -401,7 +404,7 @@ export function serializeZone(zone) {
       objects: [],
       overview: zone.overview,
       heights: serializeHeights(zone),
-      train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops } : null,
+      train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops, crossings: zone.trainCrossings } : null,
       teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
       cameraBlockers: [],
     };
@@ -419,7 +422,7 @@ export function serializeZone(zone) {
     spawn: zone.spawn,
     objects: zone.visuals,
     heights: serializeHeights(zone),
-    train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops } : null,
+    train: zone.train ? { points: zone.train.points, wagons: zone.train.wagons, stops: zone.trainStops, crossings: zone.trainCrossings } : null,
     teleporters: zone.teleporters.map(({ id, x, z, width, depth, height, rotation, label }) => ({ id, x, z, width, depth, height, rotation, label })),
     cameraBlockers: zone.colliders
       .filter((collider) => collider.cameraHeight > 0)

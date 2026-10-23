@@ -247,7 +247,7 @@ function start(token) {
   let ownTargetRotationY = 0;
   const SMOOTHING = 12;
   const RIDING_SMOOTHING = 40;
-  const TRAIN_HORN_RANGE = 160;
+  const TRAIN_HORN_RANGE = 65;
   let riding = false;
   const LOOT_CLOSE_RANGE = 6;
   const NPC_CLOSE_RANGE = 6;
@@ -533,6 +533,11 @@ function start(token) {
             message.fromId === ownPlayerId ? null : remotePlayers.getNameplate(message.fromId)
           );
         }
+      } else if (message.type === 'speech') {
+        const isNpc = message.source === 'npc';
+        const speaker = isNpc ? npcs.getObject(message.id) : ambient.getObject(message.id);
+        const height = isNpc || ambient.getKind(message.id) !== 'dog' ? undefined : 1.1;
+        chatBubbles.show(speaker, t(message.key), isNpc ? npcs.getPlate(message.id) : null, height);
       } else if (message.type === 'group') {
         groupFrames.setGroup(message, ownPlayerId);
       } else if (message.type === 'group-invite') {
