@@ -223,8 +223,8 @@ export function createLaden(params = {}) {
   batch.box(plaster, sideWidth, hoehe, WALL, { x: DOOR_WIDTH / 2 + sideWidth / 2, y: hoehe / 2, z: depth / 2 - WALL / 2, tile: 3 });
   batch.box(plaster, DOOR_WIDTH, hoehe - DOOR_HEIGHT, WALL, { y: DOOR_HEIGHT + (hoehe - DOOR_HEIGHT) / 2, z: depth / 2 - WALL / 2, tile: 3 });
   batch.box(trim, DOOR_WIDTH + 0.4, 0.16, WALL + 0.2, { y: DOOR_HEIGHT + 0.02, z: depth / 2 - WALL / 2, tile: 1 });
-  batch.box(trim, 0.2, DOOR_HEIGHT, WALL + 0.2, { x: -DOOR_WIDTH / 2 - 0.1, y: DOOR_HEIGHT / 2, z: depth / 2 - WALL / 2, tile: 1 });
-  batch.box(trim, 0.2, DOOR_HEIGHT, WALL + 0.2, { x: DOOR_WIDTH / 2 + 0.1, y: DOOR_HEIGHT / 2, z: depth / 2 - WALL / 2, tile: 1 });
+  batch.box(trim, 0.24, DOOR_HEIGHT - 0.06, WALL + 0.2, { x: -DOOR_WIDTH / 2 - 0.08, y: (DOOR_HEIGHT - 0.06) / 2, z: depth / 2 - WALL / 2, tile: 1 });
+  batch.box(trim, 0.24, DOOR_HEIGHT - 0.06, WALL + 0.2, { x: DOOR_WIDTH / 2 + 0.08, y: (DOOR_HEIGHT - 0.06) / 2, z: depth / 2 - WALL / 2, tile: 1 });
   batch.box(getMaterial('slab', { color: 0x8a867c }), DOOR_WIDTH + 1.2, 0.14, 1.4, { y: 0.07, z: depth / 2 + 0.5, tile: 1 });
 
   const windowCount = Math.max(1, Math.floor((depth - 3) / 4));

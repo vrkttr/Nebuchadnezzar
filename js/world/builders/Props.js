@@ -19,8 +19,8 @@ export function createBarrel(params = {}) {
     batch.cylinder(steel, 0.42, 0.42, 0.06, 10, { y: 0.2 });
     batch.cylinder(steel, 0.42, 0.42, 0.06, 10, { y: 0.7 });
     if (burning) {
-      batch.cylinder(getColorMaterial(0xff9a3c, { unlit: true }), 0.34, 0.34, 0.04, 10, { y: 0.88 });
-      batch.cylinder(getColorMaterial(0xffd070, { unlit: true }), 0.18, 0.1, 0.4, 5, { y: 1.12 });
+      batch.cylinder(getColorMaterial(0xff9a3c, { unlit: true }), 0.34, 0.34, 0.04, 10, { y: 0.92 });
+      batch.cylinder(getColorMaterial(0xffd070, { unlit: true }), 0.18, 0.1, 0.4, 5, { y: 1.14 });
     }
   }
 

@@ -2,6 +2,8 @@ import { getItem } from './items.js';
 import { addItem, cloneInventory, sendInventory } from './inventory.js';
 import { addGold } from './loot.js';
 
+const PRICE_FACTOR = 3;
+
 function fail(notify, playerId, reason) {
   notify(playerId, { type: 'event', kind: 'vendor-failed', reason });
 }
@@ -11,7 +13,7 @@ export function serializeVendor(npc) {
     type: 'vendor-window',
     npcId: npc.id,
     name: npc.name,
-    stock: npc.vendor.stock.map((entry) => ({ itemId: entry.itemId, price: entry.price })),
+    stock: npc.vendor.stock.map((entry) => ({ itemId: entry.itemId, price: entry.price * PRICE_FACTOR })),
   };
 }
 
@@ -25,7 +27,7 @@ export function buyItem(player, playerId, npc, itemId, quantity, notify) {
 
   if (item.unique && player.inventory.some((stack) => stack && stack.itemId === item.id)) return fail(notify, playerId, 'owned');
 
-  const cost = entry.price * quantity;
+  const cost = entry.price * PRICE_FACTOR * quantity;
   if (player.gold < cost) return fail(notify, playerId, 'no-gold');
 
   const trial = cloneInventory(player.inventory);
