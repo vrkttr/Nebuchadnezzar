@@ -2613,3 +2613,11 @@ html.touch-ui #minimap-buttons button {
   font-size: 14px;
   line-height: 1.4;
 }
+
+html.touch-ui #hud,
+html.touch-ui #touch-controls,
+html.touch-ui .window,
+html.touch-ui #dialogue-box,
+html.touch-ui #confirm-dialog {
+  zoom: var(--ui-zoom, 1);
+}

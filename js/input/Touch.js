@@ -1,5 +1,6 @@
 const STICK_RADIUS_RATIO = 56 / 132;
 const DESIGN_WIDTH = 1100;
+const MIN_DESIGN_HEIGHT = 760;
 const TABLET_MIN_SHORT_SIDE = 600;
 const DEFAULT_VIEWPORT = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 const DEAD_ZONE = 0.12;
@@ -44,7 +45,17 @@ function updateViewport() {
   }
 
   if (meta.content !== content) meta.content = content;
-  const effective = scale < 1 ? Math.max(1, window.innerWidth / (landscapeWidth || window.innerWidth)) : 1;
+  let effective = scale < 1 ? Math.max(1, window.innerWidth / (landscapeWidth || window.innerWidth)) : 1;
+  let uiZoom = 1;
+  if (scale < 1 && window.innerWidth < DESIGN_WIDTH * 0.8) {
+    uiZoom = window.innerWidth / DESIGN_WIDTH;
+    effective = 1 / scale;
+  }
+  if (touchInput.active && window.innerWidth >= window.innerHeight) {
+    const designHeight = window.innerHeight / uiZoom;
+    if (designHeight < MIN_DESIGN_HEIGHT && designHeight >= 460) uiZoom *= designHeight / MIN_DESIGN_HEIGHT;
+  }
+  document.documentElement.style.setProperty('--ui-zoom', String(uiZoom));
   document.documentElement.style.setProperty('--touch-scale', String(effective));
 }
 
@@ -71,7 +82,7 @@ function showViewportDebug() {
     document.body.appendChild(box);
   }
   const vv = window.visualViewport;
-  box.textContent = `inner ${window.innerWidth}x${window.innerHeight}\nclient ${document.documentElement.clientWidth}\nscreen ${window.screen.width}x${window.screen.height}\ndpr ${window.devicePixelRatio}\nvv ${vv ? vv.width.toFixed(0) + 'x' + vv.height.toFixed(0) + ' s' + vv.scale.toFixed(3) : '-'}\nscale ${document.documentElement.style.getPropertyValue('--touch-scale')}\n${document.querySelector('meta[name="viewport"]').content}`;
+  box.textContent = `inner ${window.innerWidth}x${window.innerHeight}\nclient ${document.documentElement.clientWidth}\nscreen ${window.screen.width}x${window.screen.height}\ndpr ${window.devicePixelRatio}\nvv ${vv ? vv.width.toFixed(0) + 'x' + vv.height.toFixed(0) + ' s' + vv.scale.toFixed(3) : '-'}\nscale ${document.documentElement.style.getPropertyValue('--touch-scale')} zoom ${document.documentElement.style.getPropertyValue('--ui-zoom')}\n${document.querySelector('meta[name="viewport"]').content}`;
 }
 
 function createButton(className, label, title) {
