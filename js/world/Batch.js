@@ -98,7 +98,8 @@ export function createBatch() {
   }
 
   function cone(material, radius, height, segments, options = {}) {
-    add(material, new THREE.ConeGeometry(radius, height, segments, 1), options);
+    const { thetaStart = 0, ...placement } = options;
+    add(material, new THREE.ConeGeometry(radius, height, segments, 1, false, thetaStart), placement);
   }
 
   function quad(material, width, height, options = {}) {

@@ -36,8 +36,9 @@ function updateViewport() {
     const deviceHeight = landscape ? short : long;
 
     if (deviceHeight >= TABLET_MIN_SHORT_SIDE && deviceWidth < DESIGN_WIDTH) {
-      content = `width=${DESIGN_WIDTH}, user-scalable=no, viewport-fit=cover`;
       scale = deviceWidth / DESIGN_WIDTH;
+      const fixed = scale.toFixed(4);
+      content = `width=${DESIGN_WIDTH}, initial-scale=${fixed}, minimum-scale=${fixed}, maximum-scale=${fixed}, user-scalable=no, viewport-fit=cover`;
       landscapeWidth = deviceWidth;
     }
   }
@@ -48,17 +49,29 @@ function updateViewport() {
 }
 
 function reapplyViewport() {
-  const meta = document.querySelector('meta[name="viewport"]');
-  if (meta && touchInput.active) {
-    const wanted = meta.content;
-    meta.content = DEFAULT_VIEWPORT;
-    requestAnimationFrame(() => {
-      meta.content = wanted;
-      updateViewport();
-    });
+  if (!touchInput.active) {
+    updateViewport();
+    return;
   }
-  updateViewport();
-  for (const delay of [150, 500, 1200]) setTimeout(updateViewport, delay);
+  const refresh = () => {
+    updateViewport();
+    showViewportDebug();
+  };
+  refresh();
+  for (const delay of [50, 150, 500, 1200, 2500]) setTimeout(refresh, delay);
+}
+
+function showViewportDebug() {
+  if (!location.search.includes('vpdebug')) return;
+  let box = document.getElementById('vp-debug');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'vp-debug';
+    box.style.cssText = 'position:fixed;left:0;top:0;z-index:99999;background:#000c;color:#0f0;font:12px monospace;padding:4px;pointer-events:none;white-space:pre';
+    document.body.appendChild(box);
+  }
+  const vv = window.visualViewport;
+  box.textContent = `inner ${window.innerWidth}x${window.innerHeight}\nclient ${document.documentElement.clientWidth}\nscreen ${window.screen.width}x${window.screen.height}\ndpr ${window.devicePixelRatio}\nvv ${vv ? vv.width.toFixed(0) + 'x' + vv.height.toFixed(0) + ' s' + vv.scale.toFixed(3) : '-'}\nscale ${document.documentElement.style.getPropertyValue('--touch-scale')}\n${document.querySelector('meta[name="viewport"]').content}`;
 }
 
 function createButton(className, label, title) {
@@ -241,7 +254,7 @@ export function createTouchControls({ canvas, labels, onRotate, onZoom, onCycleT
     else apply(detectTouchDevice());
   }
 
-  window.addEventListener('resize', updateViewport);
+  window.addEventListener('resize', reapplyViewport);
   document.addEventListener('fullscreenchange', reapplyViewport);
   document.addEventListener('webkitfullscreenchange', reapplyViewport);
   window.addEventListener('orientationchange', updateViewport);

@@ -61,7 +61,7 @@ export function createAltbau(params = {}) {
 
   if (dach === 'walm') {
     const rise = random.range(2.2, 3.6);
-    batch.cone(roofMaterial, 1, rise, 4, { y: height + 0.28 + rise / 2, ry: Math.PI / 4, sx: (length + 0.9) / SQRT2, sy: 1, sz: (depth + 0.9) / SQRT2 });
+    batch.cone(roofMaterial, 1, rise, 4, { y: height + 0.28 + rise / 2, thetaStart: Math.PI / 4, sx: (length + 0.9) / SQRT2, sy: 1, sz: (depth + 0.9) / SQRT2 });
     if (random.next() < 0.6) {
       const chimneyX = random.range(-length / 3, length / 3);
       const chimneyZ = random.range(-1, 1);
@@ -82,7 +82,7 @@ export function createAltbau(params = {}) {
     }
   } else {
     const rise = random.range(1.2, 1.8);
-    batch.cone(roofMaterial, 1, rise, 4, { y: height + 0.28 + rise / 2, ry: Math.PI / 4, sx: (length + 0.9) / SQRT2, sy: 1, sz: (depth + 0.9) / SQRT2 });
+    batch.cone(roofMaterial, 1, rise, 4, { y: height + 0.28 + rise / 2, thetaStart: Math.PI / 4, sx: (length + 0.9) / SQRT2, sy: 1, sz: (depth + 0.9) / SQRT2 });
   }
 
   const doorCell = tuer ? random.int(0, cells - 1) : -1;
