@@ -1,5 +1,5 @@
 import { ABILITIES, createActionLayout, createCooldownState, syncActionLayout } from './abilities.js';
-import { getClassModifiers } from './classes.js';
+import { createSkills, getPlayerModifiers } from './skills.js';
 import { applyEquipmentStats, getEquippedWeapon } from './equipment.js';
 import { countItem, removeItem, sendInventory } from './inventory.js';
 import { addGold, goldForKill } from './loot.js';
@@ -31,10 +31,24 @@ function horizontalDistance(a, b) {
   return Math.hypot(a.x - b.x, a.z - b.z);
 }
 
+const FACING_HALF_ANGLE = Math.PI / 3;
+const ATTACK_TIMER_CAP = 10;
+const FACING_WARNING_INTERVAL = 2;
+
+export function isFacing(player, target) {
+  const dx = target.x - player.x;
+  const dz = target.z - player.z;
+  if (Math.hypot(dx, dz) < 0.5) return true;
+
+  let difference = Math.atan2(dx, dz) - player.rotationY;
+  difference = Math.atan2(Math.sin(difference), Math.cos(difference));
+  return Math.abs(difference) <= FACING_HALF_ANGLE;
+}
+
 const RANGED_BASE_DAMAGE_SHARE = 0.4;
 
 function rollPlayerDamage(player, ranged = false) {
-  const modifiers = getClassModifiers(player.classId);
+  const modifiers = getPlayerModifiers(player);
 
   if (ranged) {
     return Math.round(
@@ -68,6 +82,7 @@ export function createCombatState(character) {
     damageMax: 0,
     equipment: character.equipment,
     equipmentPerks: character.equipmentPerks ?? {},
+    skills: character.skills ?? createSkills(),
     weaponDamageMult: 1,
     weaponSpeedMult: 1,
     armor: 0,
@@ -170,7 +185,7 @@ function awardKill(killer, killerId, enemy, notify, onKill) {
 
   for (const { id, state } of recipients) {
     const xpAmount = Math.round(xpForKill(state.level, enemy.level) * share);
-    const goldAmount = Math.max(1, Math.round(goldForKill(state.level, enemy.level) * getClassModifiers(state.classId).goldMult * share));
+    const goldAmount = Math.max(1, Math.round(goldForKill(state.level, enemy.level) * getPlayerModifiers(state).goldMult * share));
 
     notify(id, { type: 'event', kind: 'kill', enemyName: enemy.name, enemyType: enemy.type });
 
@@ -279,7 +294,8 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
     }
 
     player.combatTimer += delta;
-    player.attackTimer = Math.min(player.attackTimer + delta, PLAYER_ATTACK_INTERVAL);
+    player.attackTimer = Math.min(player.attackTimer + delta, ATTACK_TIMER_CAP);
+    player.facingWarning = Math.max(0, (player.facingWarning ?? 0) - delta);
 
     for (const abilityId of Object.keys(player.cooldowns)) {
       player.cooldowns[abilityId] = Math.max(0, player.cooldowns[abilityId] - delta);
@@ -311,7 +327,12 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
       const interval = (ranged ? ranged.interval : PLAYER_ATTACK_INTERVAL) / (player.weaponSpeedMult ?? 1);
       const range = ranged ? ranged.range : PLAYER_ATTACK_RANGE;
 
-      if (player.attackTimer >= interval && horizontalDistance(player, enemy) <= range) {
+      if (player.attackTimer >= interval && horizontalDistance(player, enemy) <= range && !isFacing(player, enemy)) {
+        if (player.facingWarning <= 0) {
+          player.facingWarning = FACING_WARNING_INTERVAL;
+          notify(playerId, { type: 'event', kind: 'ability-failed', reason: 'not-facing' });
+        }
+      } else if (player.attackTimer >= interval && horizontalDistance(player, enemy) <= range) {
         if (!ranged) {
           player.attackTimer = 0;
           damageEnemy(enemy, rollPlayerDamage(player), playerId, player, emit, notify, onKill);
@@ -388,7 +409,7 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
   if (ability.kind === 'heal') {
     if (player.health >= player.healthMax) return fail('full-health');
     spend();
-    const amount = Math.round(player.healthMax * ability.healPercent * getClassModifiers(player.classId).healMult);
+    const amount = Math.round(player.healthMax * ability.healPercent * getPlayerModifiers(player).healMult);
     player.health = Math.min(player.healthMax, player.health + amount);
     notify(playerId, { type: 'event', kind: 'heal', amount, abilityId: ability.id });
     return;
@@ -409,6 +430,25 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
   }
 
   const weapon = getEquippedWeapon(player.equipment);
+
+  if (ability.kind === 'aoe') {
+    if (weapon?.ranged) return fail('melee-only');
+
+    const targets = [...enemies.values()]
+      .filter((candidate) => !candidate.dead && horizontalDistance(player, candidate) <= ability.radius)
+      .sort((a, b) => horizontalDistance(player, a) - horizontalDistance(player, b))
+      .slice(0, ability.maxTargets);
+
+    if (targets.length === 0) return fail('no-enemies');
+
+    spend();
+    targets.forEach((target, index) => {
+      const amount = Math.round(rollPlayerDamage(player) * ability.damageMultiplier);
+      damageEnemy(target, amount, playerId, player, emit, notify, onKill, index === 0 ? ability.id : null);
+    });
+    return;
+  }
+
   const enemy = player.targetEnemyId ? enemies.get(player.targetEnemyId) : null;
 
   if (!enemy || enemy.dead) return fail('no-target');
@@ -416,6 +456,7 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
   if (ability.kind === 'ranged') {
     if (!weapon?.ranged) return fail('needs-ranged');
     if (horizontalDistance(player, enemy) > weapon.ranged.range) return fail('out-of-range');
+    if (!isFacing(player, enemy)) return fail('not-facing');
     if (!fireRanged(player, playerId, enemy, weapon, emit, notify, onKill, ability.damageMultiplier, ability.id)) return;
     spend();
     player.attackTimer = 0;
@@ -424,6 +465,7 @@ export function useAbility(playerId, player, enemies, slot, emit, notify, onKill
 
   if (weapon?.ranged) return fail('melee-only');
   if (horizontalDistance(player, enemy) > ability.range) return fail('out-of-range');
+  if (!isFacing(player, enemy)) return fail('not-facing');
 
   spend();
 

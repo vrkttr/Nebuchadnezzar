@@ -47,6 +47,7 @@ export function createPlayerController(camera) {
     return {
       moveX: moveDirection.x,
       moveZ: moveDirection.z,
+      facing: buttons.right ? Math.atan2(forward.x, forward.z) : null,
       jump: isKeyDown('Space') || (touchInput.active && touchInput.jump),
       run: isKeyDown('ShiftLeft') || isKeyDown('ShiftRight') || (touchInput.active && touchInput.run),
       crouch: isKeyDown('ControlLeft') || isKeyDown('ControlRight') || (touchInput.active && touchInput.crouch),

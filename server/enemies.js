@@ -1,4 +1,4 @@
-import { getClassModifiers } from './classes.js';
+import { getPlayerModifiers } from './skills.js';
 import { ENEMY_RADIUS, hasLineOfSight, isBlocked, resolveCollisions } from './world.js';
 import { groundHeight } from './terrain.js';
 import { getZone, getZones } from './zoneLoader.js';
@@ -179,7 +179,7 @@ function findNearestPlayerInRange(enemy, players, range) {
     if (player.dead) continue;
 
     const distance = horizontalDistance(enemy.x, enemy.z, player.x, player.z);
-    const reach = range * (player.input?.crouch ? CROUCH_AGGRO_FACTOR : 1) * getClassModifiers(player.classId).aggroMult;
+    const reach = range * (player.input?.crouch ? CROUCH_AGGRO_FACTOR : 1) * getPlayerModifiers(player).aggroMult;
     if (distance <= reach && distance <= nearestDistance) {
       nearestDistance = distance;
       nearestId = id;

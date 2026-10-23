@@ -1,4 +1,4 @@
-import { getClassModifiers } from './classes.js';
+import { getPlayerModifiers } from './skills.js';
 import { getItem } from './items.js';
 import { formatPerk, parsePerk, perkMultipliers } from './perks.js';
 
@@ -64,7 +64,8 @@ export function applyEquipmentStats(player) {
   const multipliers = perkMultipliers(player.equipmentPerks?.weapon ?? null);
   player.weaponDamageMult = multipliers.damage;
   player.weaponSpeedMult = multipliers.speed;
-  player.armor += getClassModifiers(player.classId).armorBonus;
+  const modifiers = getPlayerModifiers(player);
+  player.armor = Math.round((player.armor + modifiers.armorBonus) * modifiers.armorMult);
 }
 
 export function getEquippedWeapon(equipment) {

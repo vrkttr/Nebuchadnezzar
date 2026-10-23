@@ -120,6 +120,7 @@ export function createTooltip(state) {
     if (ability.kind === 'buff') {
       return t('tooltip.abilityBuff', { percent: Math.round(ability.damageReduction * 100), seconds: ability.duration });
     }
+    if (ability.kind === 'aoe') return t('tooltip.abilityAoe', { percent: Math.round(ability.damageMultiplier * 100), radius: ability.radius });
     return t('tooltip.abilityDamage', { percent: Math.round(ability.damageMultiplier * 100) });
   }
 

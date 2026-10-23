@@ -1,4 +1,4 @@
-import { getClassModifiers } from './classes.js';
+import { getPlayerModifiers } from './skills.js';
 
 const BASE_HEALTH = 100;
 const HEALTH_PER_LEVEL = 15;
@@ -20,7 +20,7 @@ export function xpToNextLevel(level) {
 
 export function applyLevelStats(player) {
   const bonusLevels = player.level - 1;
-  const { healthMult } = getClassModifiers(player.classId);
+  const { healthMult } = getPlayerModifiers(player);
   player.healthMax = Math.round((BASE_HEALTH + bonusLevels * HEALTH_PER_LEVEL) * healthMult);
   player.resourceMax = BASE_RESOURCE + bonusLevels * RESOURCE_PER_LEVEL;
   player.damageMin = BASE_DAMAGE_MIN + bonusLevels * DAMAGE_PER_LEVEL;

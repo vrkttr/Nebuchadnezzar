@@ -2666,3 +2666,88 @@ html.touch-ui #confirm-dialog {
   font-size: 12px;
   padding: 4px 8px;
 }
+
+#skills-window {
+  left: calc(50% - 430px);
+  top: 12%;
+  width: 340px;
+}
+
+#skills-points {
+  margin: 0;
+  padding: 10px 14px 0;
+  font-size: 14px;
+  color: var(--nu-ink-soft);
+}
+
+#skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px;
+}
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px;
+  border: 1px solid var(--nu-line);
+}
+
+.skill-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.skill-name {
+  font-size: 14px;
+}
+
+.skill-desc {
+  font-size: 12px;
+  color: var(--nu-ink-soft);
+}
+
+.skill-rank {
+  font-size: 13px;
+  min-width: 40px;
+  text-align: right;
+}
+
+.skill-add {
+  width: 28px;
+  padding: 4px 0;
+  background: var(--nu-board-darker);
+  border: 2px solid var(--nu-line);
+  color: var(--nu-text);
+  font-family: var(--nu-font-display);
+  cursor: pointer;
+}
+
+.skill-add:hover:not(:disabled) {
+  border-color: var(--nu-amber-dark);
+}
+
+.skill-add:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+#skills-footer {
+  padding: 0 14px 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#talents-button.attention {
+  border-color: var(--nu-amber-dark);
+  color: #e8b45a;
+}
+
+@media (max-width: 880px), (max-height: 560px) {
+  #skills-window {
+    left: 8px;
+    top: 8px;
+  }
+}

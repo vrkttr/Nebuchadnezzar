@@ -16,12 +16,13 @@ import { groundHeight } from './terrain.js';
 import { createEnemies, serializeEnemies, serializeEnemy, serializeEnemyState, serializeEnemyStates, updateEnemies } from './enemies.js';
 import { GROUP_SHARE_RANGE, createCombatState, setGroupResolver, updateCombat, useAbility } from './combat.js';
 import { itemRefId, serializeAbilities, serializeActionItems, setActionSlot, syncActionLayout } from './abilities.js';
-import { xpToNextLevel } from './progression.js';
-import { getClassModifiers, isValidClass } from './classes.js';
+import { applyLevelStats, xpToNextLevel } from './progression.js';
+import { isValidClass } from './classes.js';
+import { getPlayerModifiers, parseSkills, resetSkills, serializeSkills, spendSkillPoint } from './skills.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
 import { grantStarterKit } from './starterKit.js';
-import { equipmentRows, loadEquipment, loadEquipmentPerks, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
+import { applyEquipmentStats, equipmentRows, loadEquipment, loadEquipmentPerks, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
 import { serializeNpcs } from './npcs.js';
 import {
@@ -126,6 +127,24 @@ function sendAbilities(playerId, state) {
   notify(playerId, { type: 'abilities', abilities: serializeAbilities(state.level, state.actionBar), actionItems: serializeActionItems(state.actionBar) });
 }
 
+function sendSkills(playerId, state) {
+  notify(playerId, serializeSkills(state));
+}
+
+function saveSkills(state) {
+  dbPool
+    .query('UPDATE characters SET skills = ? WHERE id = ?', [JSON.stringify(state.skills), state.characterId])
+    .catch((error) => console.error('Fehler beim Speichern der Fertigkeiten:', error));
+}
+
+function refreshSkillStats(state) {
+  const previousHealth = state.healthMax;
+  applyLevelStats(state);
+  applyEquipmentStats(state);
+  if (state.healthMax > previousHealth) state.health += state.healthMax - previousHealth;
+  state.health = Math.min(state.health, state.healthMax);
+}
+
 function saveActionLayout(state) {
   dbPool
     .query('UPDATE characters SET action_bar = ? WHERE id = ?', [JSON.stringify(state.actionLayout), state.characterId])
@@ -152,7 +171,7 @@ function createInitialState(character) {
     rotationY: character.rotationY,
     velocityY: 0,
     isGrounded: true,
-    input: { moveX: 0, moveZ: 0, jump: false, run: false, crouch: false },
+    input: { moveX: 0, moveZ: 0, facing: null, jump: false, run: false, crouch: false },
     inventory: character.inventory,
     consumableReadyAt: 0,
     dataVersion: character.starterKit ? 1 : 0,
@@ -213,7 +232,7 @@ function parseGraphics(text) {
 
 async function loadCharacter(characterId) {
   const [characterRows] = await dbPool.query(
-    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.zone, c.home_zone, c.hearth_ready_at, u.audio_volume, u.audio_ambient, u.audio_music, u.graphics, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
+    'SELECT c.id, c.name, c.pos_x, c.pos_y, c.pos_z, c.rotation_y, c.level, c.xp, c.gold, c.appear_skin, c.appear_hair_style, c.appear_hair_color, c.appear_top, c.appear_pants, c.starter_kit, c.intro_seen, c.class_id, c.guild_id, g.name AS guild_name, g.leader_id AS guild_leader_id, u.auto_fullscreen, u.touch_controls, c.action_bar, c.skills, c.zone, c.home_zone, c.hearth_ready_at, u.audio_volume, u.audio_ambient, u.audio_music, u.graphics, u.audio_muted FROM characters c JOIN users u ON u.id = c.user_id LEFT JOIN guilds g ON g.id = c.guild_id WHERE c.id = ?',
     [characterId]
   );
 
@@ -262,6 +281,7 @@ async function loadCharacter(characterId) {
     autoFullscreen: row.auto_fullscreen === undefined ? true : Boolean(row.auto_fullscreen),
     touchControls: ['auto', 'on', 'off'].includes(row.touch_controls) ? row.touch_controls : 'auto',
     actionLayout: parseActionLayout(row.action_bar),
+    skills: parseSkills(row.skills, row.level),
     zoneId,
     friends,
     homeZone: getZone(row.home_zone) ? row.home_zone : null,
@@ -432,6 +452,7 @@ wss.on('connection', async (socket, request) => {
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),
       equipmentPerks: serializeEquipmentPerks(initialState.equipmentPerks),
+      skills: serializeSkills(initialState),
       appearance: initialState.appearance,
       npcs: serializeNpcs(initialState.zoneId),
       chests: serializeChests(initialState.zoneId, initialState.openedChests),
@@ -465,6 +486,7 @@ wss.on('connection', async (socket, request) => {
 
       state.input.moveX = moveX;
       state.input.moveZ = moveZ;
+      state.input.facing = Number.isFinite(message.facing) ? message.facing : null;
       state.input.jump = Boolean(message.jump);
       state.input.run = Boolean(message.run);
       state.input.crouch = Boolean(message.crouch);
@@ -485,6 +507,23 @@ wss.on('connection', async (socket, request) => {
         sendAbilities(id, state);
         saveActionLayout(state);
       }
+    } else if (message.type === 'skill-spend') {
+      const state = players.get(id);
+      if (!state || state.dead) return;
+      if (spendSkillPoint(state, message.skillId)) {
+        refreshSkillStats(state);
+        saveSkills(state);
+      }
+      sendSkills(id, state);
+    } else if (message.type === 'skill-reset') {
+      const state = players.get(id);
+      if (!state || state.dead) return;
+      if (resetSkills(state)) {
+        state.dataVersion += 1;
+        refreshSkillStats(state);
+        saveSkills(state);
+      }
+      sendSkills(id, state);
     } else if (message.type === 'chat') {
       handleChat(players, id, message, notify);
     } else if (message.type === 'guild-create') {
@@ -857,12 +896,14 @@ function simulate() {
       state.resource = Math.max(0, state.resource - RUN_RESOURCE_DRAIN * TICK_DELTA);
       if (state.resource === 0) state.exhausted = true;
     }
-    const speed = (input.crouch ? CROUCH_SPEED : running ? RUN_SPEED : WALK_SPEED) * getClassModifiers(state.classId).moveSpeedMult * waterFactor;
+    const speed = (input.crouch ? CROUCH_SPEED : running ? RUN_SPEED : WALK_SPEED) * getPlayerModifiers(state).moveSpeedMult * waterFactor;
     state.x += input.moveX * speed * TICK_DELTA;
     state.z += input.moveZ * speed * TICK_DELTA;
 
     if (input.moveX !== 0 || input.moveZ !== 0) {
       state.rotationY = Math.atan2(input.moveX, input.moveZ);
+    } else if (input.facing !== null && input.facing !== undefined) {
+      state.rotationY = input.facing;
     }
 
     if (input.jump && state.isGrounded) {
@@ -977,6 +1018,7 @@ setInterval(() => {
     if (state.abilityLevel !== state.level) {
       state.abilityLevel = state.level;
       syncActionLayout(state.actionLayout, state.level);
+      sendSkills(id, state);
       sendAbilities(id, state);
       saveActionLayout(state);
     }

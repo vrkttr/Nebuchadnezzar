@@ -44,6 +44,7 @@ const [
   { createPlane },
   { createIntroWindow },
   { createAbilitiesWindow },
+  { createSkillsWindow },
   { createQuestWindow },
   { createSocialWindow },
   { createAbilityDrag },
@@ -105,6 +106,7 @@ const [
   import(v('./effects/Plane.js')),
   import(v('./ui/IntroWindow.js')),
   import(v('./ui/AbilitiesWindow.js')),
+  import(v('./ui/SkillsWindow.js')),
   import(v('./ui/QuestWindow.js')),
   import(v('./ui/SocialWindow.js')),
   import(v('./ui/AbilityDrag.js')),
@@ -188,6 +190,10 @@ function start(token) {
     onSmithForge: (npcId, entry) => connection.send({ type: 'smith-forge', npcId, source: entry.source, index: entry.index, itemId: entry.itemId }),
   });
   const abilitiesWindow = createAbilitiesWindow(ui);
+  const skillsWindow = createSkillsWindow(gameState, ui, {
+    onSpend: (skillId) => connection.send({ type: 'skill-spend', skillId }),
+    onReset: () => connection.send({ type: 'skill-reset' }),
+  });
   const questWindow = createQuestWindow({
     confirmDialog: ui.confirmDialog,
     onAbandon: (questId) => connection.send({ type: 'quest-abandon', questId }),
@@ -230,7 +236,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'quests', 'social']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'quests', 'social']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -530,11 +536,14 @@ function start(token) {
         inventory.render(message.inventory ?? []);
         hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
         abilitiesWindow.render(message.abilities ?? []);
+        if (message.skills) skillsWindow.render(message.skills);
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
         player.setAppearance(message.appearance);
       } else if (message.type === 'appearance') {
         player.setAppearance(message.appearance);
+      } else if (message.type === 'skills') {
+        skillsWindow.render(message);
       } else if (message.type === 'abilities') {
         hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
         abilitiesWindow.render(message.abilities ?? []);
@@ -882,11 +891,13 @@ function start(token) {
         inventory.isOpen() ||
         characterWindow.isOpen() ||
         abilitiesWindow.isOpen() ||
+        skillsWindow.isOpen() ||
         questWindow.isOpen() ||
         socialWindow.isOpen() ||
         worldMap.isOpen()
       ) {
         abilitiesWindow.hide();
+        skillsWindow.hide();
         questWindow.hide();
         socialWindow.hide();
         npcWindow.hide();
@@ -931,6 +942,11 @@ function start(token) {
 
     if (event.code === 'KeyL' && !event.repeat) {
       questWindow.toggle();
+      return;
+    }
+
+    if (event.code === 'KeyN' && !event.repeat) {
+      skillsWindow.toggle();
       return;
     }
 
@@ -984,7 +1000,7 @@ function start(token) {
     player.object.position.lerp(ownTargetPosition, factor);
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     player.update(delta);
-    if (streamer && !mapCapturing) streamer.setViewRadius(graphics.haze ? VIEW_DISTANCES[graphics.viewDistance]?.far ?? Infinity : Infinity);
+    if (streamer && !mapCapturing) streamer.setViewRadius(VIEW_DISTANCES[graphics.viewDistance]?.far ?? Infinity);
     streamer?.update(player.object.position.x, player.object.position.z);
     ambient.update(delta, player.object.position);
     train.update(delta);

@@ -87,6 +87,22 @@ export const ABILITIES = {
     damageReduction: 0.4,
     duration: 8,
   },
+  whirlwind: {
+    id: 'whirlwind',
+    kind: 'aoe',
+    slot: 7,
+    unlockLevel: 10,
+    name: 'Rundumschlag',
+    shortName: 'RS',
+    icon: 'whirlwind',
+    description: 'Ein weiter Hieb im Kreis, der alle Gegner in der Nähe trifft. Benötigt eine Nahkampfwaffe, kein Ziel nötig.',
+    range: 0,
+    radius: 5,
+    maxTargets: 8,
+    cost: 30,
+    cooldown: 12,
+    damageMultiplier: 0.9,
+  },
 };
 
 export const ACTION_BAR_SLOTS = 12;
@@ -230,6 +246,7 @@ export function serializeAbilities(level, actionBar) {
     cost: ability.cost,
     cooldown: ability.cooldown,
     range: ability.range,
+    radius: ability.radius,
     unlockLevel: ability.unlockLevel,
     unlocked: level >= ability.unlockLevel,
   }));
