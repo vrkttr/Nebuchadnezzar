@@ -283,6 +283,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
       object.visible = false;
     });
 
+    sources.reveal(true);
     for (let row = 0; row < tiles; row += 1) {
       for (let column = 0; column < tiles; column += 1) {
         const tileX = -extent / 2 + (column + 0.5) * tileExtent;
@@ -295,6 +296,7 @@ export function createWorldMap({ scene, renderer, viewCapture, player, sources }
       }
     }
 
+    sources.reveal(false);
     hiddenObjects.forEach((object, index) => {
       object.visible = previous[index];
     });

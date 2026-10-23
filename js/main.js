@@ -56,7 +56,7 @@ const [
   { createDrips },
   { createAtmosphere },
   { setPuddleExclusions },
-  { applyGraphics },
+  { applyGraphics, graphics, VIEW_DISTANCES },
   { updateSewer, isInWater },
   { gameState },
   { buildServerUrl, getPortalUrl },
@@ -143,6 +143,7 @@ function start(token) {
   const spawnPoint = new THREE.Vector3();
   let zone = null;
   let streamer = null;
+  let mapCapturing = false;
 
   const dialogue = createDialogue();
   const audio = createAudio();
@@ -276,6 +277,10 @@ function start(token) {
     sources: {
       npcs: npcs.getMarkers,
       players: remotePlayers.getMarkers,
+      reveal: (on) => {
+        mapCapturing = on;
+        streamer?.setViewRadius(Infinity);
+      },
       complete: () => !streamer || streamer.progress(0, 0, 100000) >= 1,
       hidden: () => [
         player.object,
@@ -972,6 +977,7 @@ function start(token) {
     player.object.position.lerp(ownTargetPosition, factor);
     player.object.rotation.y = lerpAngle(player.object.rotation.y, ownTargetRotationY, factor);
     player.update(delta);
+    if (streamer && !mapCapturing) streamer.setViewRadius(graphics.haze ? VIEW_DISTANCES[graphics.viewDistance]?.far ?? Infinity : Infinity);
     streamer?.update(player.object.position.x, player.object.position.z);
     ambient.update(delta, player.object.position);
     train.update(delta);

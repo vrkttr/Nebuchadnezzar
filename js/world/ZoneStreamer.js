@@ -26,6 +26,9 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
   const blockers = new Map();
   const waiters = [];
   let budgetMs = 5;
+  let viewRadius = Infinity;
+  let lastX = 0;
+  let lastZ = 0;
   let blockersDirty = false;
   let emittersDirty = false;
 
@@ -247,11 +250,28 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
     }
   }
 
+  function applyVisibility() {
+    for (const chunk of chunks.values()) {
+      if (!chunk.group) continue;
+      const [x, z] = centerOf(chunk.cx, chunk.cz);
+      chunk.group.visible = Math.hypot(x - lastX, z - lastZ) <= viewRadius + size * 0.75;
+    }
+  }
+
+  function setViewRadius(radius) {
+    if (radius === viewRadius) return;
+    viewRadius = radius;
+    applyVisibility();
+  }
+
   function update(px, pz) {
+    lastX = px;
+    lastZ = pz;
     requestMissing(px, pz);
     unloadFar(px, pz);
     build(px, pz);
     flush();
+    applyVisibility();
     if (waiters.length > 0) resolveWaiters();
   }
 
@@ -313,5 +333,5 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
     return { chunks: chunks.size, ready, spans: spans.size, blockers: blockers.size };
   }
 
-  return { receive, update, whenReady, progress, setBudget, dispose, stats };
+  return { receive, update, whenReady, progress, setBudget, setViewRadius, dispose, stats };
 }
