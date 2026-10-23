@@ -13,6 +13,8 @@ const HAIRS = [0x2a2018, 0x4a3a2a, 0x6a5a40, 0x8a7a5a, 0x1a1a1a, 0x7a6a62];
 const BIRD_SPACING = 140;
 const BIRD_RADIUS = 170;
 const SERVER_SMOOTHING = 8;
+const POSE_SIT = 2;
+const POSE_LIE = 3;
 
 function hash(value) {
   let h = 2166136261;
@@ -216,15 +218,17 @@ export function createAmbient(scene) {
 
   function createRemote(data) {
     const random = seeded(data.seed / 1e6);
-    const record = { id: data.id, kind: data.kind, object: null, animate: null, chicken: null, target: new THREE.Vector3(data.x, 0, data.z), targetRotationY: data.r ?? 0, ph: random() * 6.28, moving: 0 };
+    const record = { id: data.id, kind: data.kind, rig: null, pose: -1, object: null, animate: null, chicken: null, target: new THREE.Vector3(data.x, 0, data.z), targetRotationY: data.r ?? 0, ph: random() * 6.28, moving: 0 };
     if (data.kind === 'citizen') {
       const humanoid = createHumanoid('streuner', { appearance: humanAppearance(random) });
       record.object = humanoid.object;
       record.animate = humanoid.update;
+      record.rig = humanoid;
     } else if (data.kind === 'dog') {
       const animal = createAnimal(random() < 0.5 ? 'stray_dog' : 'feral_dog');
       record.object = animal.object;
       record.animate = animal.update;
+      record.rig = animal;
     } else {
       const chicken = buildChicken(random);
       record.object = chicken.object;
@@ -235,6 +239,14 @@ export function createAmbient(scene) {
     record.object.rotation.y = record.targetRotationY;
     scene.add(record.object);
     remote.set(data.id, record);
+    applyPose(record, data.s ?? 0);
+  }
+
+  function applyPose(record, pose) {
+    if (record.pose === pose) return;
+    record.pose = pose;
+    record.rig?.setSeated?.(pose === POSE_SIT);
+    record.rig?.setLying?.(pose === POSE_LIE);
   }
 
   function removeRemote(id) {
@@ -250,11 +262,12 @@ export function createAmbient(scene) {
       if (remote.has(data.id)) continue;
       createRemote(data);
     }
-    for (const [id, x, z, r] of message.states ?? []) {
+    for (const [id, x, z, r, pose] of message.states ?? []) {
       const record = remote.get(id);
       if (!record) continue;
       record.target.set(x, 0, z);
       record.targetRotationY = r;
+      applyPose(record, pose ?? 0);
     }
   }
 

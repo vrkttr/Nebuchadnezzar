@@ -319,5 +319,11 @@ export function createTrain({ scene, label, onHorn }) {
     });
   }
 
-  return { setRoute, clear, receive, update };
+  function rideVelocity() {
+    if (!target || parts.length < 2) return { x: 0, z: 0 };
+    const yaw = parts[1].object.rotation.y;
+    return { x: Math.sin(yaw) * target.speed, z: Math.cos(yaw) * target.speed };
+  }
+
+  return { setRoute, clear, receive, update, rideVelocity };
 }

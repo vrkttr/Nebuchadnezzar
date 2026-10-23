@@ -198,6 +198,8 @@ export function createAnimal(type) {
   let hitTime = -1;
   let dead = false;
   let fall = 0;
+  let lying = false;
+  let lie = 0;
   const pose = { bob: 0, pitch: 0, swing: 0 };
 
   function update(delta) {
@@ -222,7 +224,11 @@ export function createAnimal(type) {
     pose.bob += (bobTarget - pose.bob) * factor;
     pose.pitch += (pitchTarget - pose.pitch) * factor;
 
-    for (const leg of legs) leg.hip.rotation.x = Math.sin(phase + leg.offset) * pose.swing;
+    lie += ((lying && !dead && !moving ? 1 : 0) - lie) * dampFactor(6, delta);
+    legs.forEach((leg, index) => {
+      const rest = index < 2 ? -1.4 : 1.1;
+      leg.hip.rotation.x = Math.sin(phase + leg.offset) * pose.swing * (1 - lie) + rest * lie;
+    });
 
     let lunge = 0;
     let bite = 0;
@@ -250,10 +256,10 @@ export function createAnimal(type) {
     const fallEase = fall * fall * (3 - 2 * fall);
 
     frame.position.z = lunge - kick * 0.12;
-    frame.position.y = pose.bob + fallEase * (isDog ? 0.12 : 0.04);
+    frame.position.y = pose.bob + fallEase * (isDog ? 0.12 : 0.04) - lie * (spec.legLength - 0.08);
     frame.rotation.z = fallEase * (Math.PI / 2);
     hips.rotation.x = -pose.pitch + kick * 0.25;
-    headPivot.rotation.x = (dead ? 0.3 : 0.1) * fallEase + bite * 0.5 + (moving ? 0 : Math.sin(clock * 1.3) * 0.06) - kick * 0.3;
+    headPivot.rotation.x = lie * 0.3 + (dead ? 0.3 : 0.1) * fallEase + bite * 0.5 + (moving ? 0 : Math.sin(clock * 1.3) * 0.06) - kick * 0.3;
     jaw.rotation.x = bite * 0.8 * (dead ? 0 : 1);
 
     tails.forEach((segments, index) => {
@@ -273,6 +279,9 @@ export function createAnimal(type) {
     },
     playHit() {
       if (!dead) hitTime = 0;
+    },
+    setLying(value) {
+      lying = Boolean(value);
     },
     setDead(value) {
       dead = Boolean(value);

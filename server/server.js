@@ -858,7 +858,7 @@ setInterval(() => {
 
     if (zonePlayers.size === 0) continue;
 
-    updateAmbient(zone.id, true);
+    updateAmbient(zone.id, zonePlayers, TICK_DELTA);
     for (const [id, state] of zonePlayers) {
       const ambientMessage = collectAmbient(zone.id, state, tickCount);
       const socket = sockets.get(id);
@@ -879,6 +879,7 @@ setInterval(() => {
         dead: state.dead,
         autoAttack: state.autoAttack,
         crouching: state.input.crouch,
+        onTrain: Boolean(state.trainRide),
         guildName: state.guildName,
         guildLeader: Boolean(state.guildId) && state.guildLeaderId === state.characterId,
         equipment: state.equipment,

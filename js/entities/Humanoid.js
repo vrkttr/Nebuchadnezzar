@@ -13,6 +13,9 @@ const CROUCH_HEAD_DROP = 0.25;
 const CROUCH_DROP = 0.2;
 const CROUCH_HIP = 0.85;
 const CROUCH_KNEE = 1.35;
+const SIT_DROP = 0.4;
+const SIT_HIP = 1.5;
+const SIT_KNEE = 1.5;
 const MOVE_THRESHOLD = 0.3;
 const RUN_THRESHOLD = 2.7;
 const PORTRAIT_LAYER = 1;
@@ -455,10 +458,13 @@ export function createHumanoid(name, options = {}) {
     torsoY: 0,
     bob: 0,
     crouch: 0,
+    sit: 0,
   };
   const target = { ...current };
   const lastPosition = new THREE.Vector3();
   let hasLastPosition = false;
+  let groundX = 0;
+  let groundZ = 0;
   let speed = 0;
   let phase = 0;
   let idleTime = Math.random() * 10;
@@ -467,6 +473,7 @@ export function createHumanoid(name, options = {}) {
   let hitTime = -1;
   let dead = false;
   let crouching = false;
+  let sitting = false;
   let fallAmount = 0;
 
   function computeTarget(airborne, moving, running) {
@@ -575,7 +582,7 @@ export function createHumanoid(name, options = {}) {
 
     if (hasLastPosition) {
       const measured = Math.min(
-        Math.hypot(position.x - lastPosition.x, position.z - lastPosition.z) / delta,
+        Math.hypot((position.x - lastPosition.x) / delta - groundX, (position.z - lastPosition.z) / delta - groundZ),
         MAX_SPEED
       );
       speed += (measured - speed) * dampFactor(SPEED_SMOOTHING, delta);
@@ -595,6 +602,7 @@ export function createHumanoid(name, options = {}) {
 
     computeTarget(airborne && !dead, moving && !dead, running && !crouching);
     target.crouch = crouching && !dead && !airborne ? 1 : 0;
+    target.sit = sitting && !dead && !airborne && !moving ? 1 : 0;
 
     const factor = dampFactor(POSE_SMOOTHING, delta);
     for (const key of Object.keys(current)) {
@@ -628,21 +636,22 @@ export function createHumanoid(name, options = {}) {
     }
 
     const crouch = current.crouch;
+    const sit = current.sit;
     object.userData.headHeight = object.scale.y * STANDING_HEAD_HEIGHT - crouch * CROUCH_HEAD_DROP;
     const stride = 1 - crouch * 0.5;
     const bend = 1 - crouch * 0.4;
 
-    hips.position.y = HIP_HEIGHT + current.bob - crouch * CROUCH_DROP;
+    hips.position.y = HIP_HEIGHT + current.bob - crouch * CROUCH_DROP - sit * SIT_DROP;
     torso.rotation.set(current.torsoX + crouch * 0.32 - hitKick, torsoY, 0);
     headPivot.rotation.x = -hitKick * 0.8;
-    legLeft.hip.rotation.x = current.hipLeft * stride - crouch * CROUCH_HIP;
-    legLeft.knee.rotation.x = current.kneeLeft * bend + crouch * CROUCH_KNEE;
-    legRight.hip.rotation.x = current.hipRight * stride - crouch * CROUCH_HIP;
-    legRight.knee.rotation.x = current.kneeRight * bend + crouch * CROUCH_KNEE;
-    armLeft.shoulder.rotation.x = current.shoulderLeft;
-    armLeft.elbow.rotation.x = current.elbowLeft;
-    armRight.shoulder.rotation.x = shoulderRight;
-    armRight.elbow.rotation.x = elbowRight;
+    legLeft.hip.rotation.x = current.hipLeft * stride - crouch * CROUCH_HIP - sit * SIT_HIP;
+    legLeft.knee.rotation.x = current.kneeLeft * bend + crouch * CROUCH_KNEE + sit * SIT_KNEE;
+    legRight.hip.rotation.x = current.hipRight * stride - crouch * CROUCH_HIP - sit * SIT_HIP;
+    legRight.knee.rotation.x = current.kneeRight * bend + crouch * CROUCH_KNEE + sit * SIT_KNEE;
+    armLeft.shoulder.rotation.x = current.shoulderLeft - sit * 0.5;
+    armLeft.elbow.rotation.x = current.elbowLeft - sit * 0.8;
+    armRight.shoulder.rotation.x = shoulderRight - sit * 0.5;
+    armRight.elbow.rotation.x = elbowRight - sit * 0.8;
   }
 
   function playAttack(style = 'melee') {
@@ -667,6 +676,15 @@ export function createHumanoid(name, options = {}) {
     crouching = Boolean(value);
   }
 
+  function setGroundVelocity(x, z) {
+    groundX = x;
+    groundZ = z;
+  }
+
+  function setSeated(value) {
+    sitting = Boolean(value);
+  }
+
   function isDown() {
     return dead && fallAmount >= 1;
   }
@@ -674,5 +692,5 @@ export function createHumanoid(name, options = {}) {
   setEquipment(options.equipment ?? appearance.equipment ?? {});
   enablePortraitLayer(object);
 
-  return { object, update, playAttack, playHit, setDead, setCrouch, isDown, setEquipment, setAppearance: applyLook };
+  return { object, update, playAttack, playHit, setDead, setCrouch, setSeated, setGroundVelocity, isDown, setEquipment, setAppearance: applyLook };
 }

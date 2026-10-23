@@ -8,8 +8,15 @@ const GROUND_HEIGHT = 0.12;
 export function createFootsteps(audio, isInWater = () => false) {
   const tracked = new Map();
   let ownAirborne = false;
+  let groundX = 0;
+  let groundZ = 0;
 
-  function advance(key, x, z, delta) {
+  function setGroundVelocity(x, z) {
+    groundX = x;
+    groundZ = z;
+  }
+
+  function advance(key, x, z, delta, velocityX = 0, velocityZ = 0) {
     let entry = tracked.get(key);
 
     if (!entry) {
@@ -18,7 +25,7 @@ export function createFootsteps(audio, isInWater = () => false) {
       return null;
     }
 
-    const distance = Math.hypot(x - entry.x, z - entry.z);
+    const distance = Math.hypot(x - entry.x - velocityX * delta, z - entry.z - velocityZ * delta);
     entry.x = x;
     entry.z = z;
     entry.seen = true;
@@ -43,7 +50,7 @@ export function createFootsteps(audio, isInWater = () => false) {
   function update(delta, own, others) {
     for (const entry of tracked.values()) entry.seen = false;
 
-    const ownStep = advance('own', own.x, own.z, delta);
+    const ownStep = advance('own', own.x, own.z, delta, groundX, groundZ);
     const grounded = own.y < GROUND_HEIGHT;
 
     if (!grounded && !ownAirborne) {
@@ -66,5 +73,5 @@ export function createFootsteps(audio, isInWater = () => false) {
     }
   }
 
-  return { update };
+  return { update, setGroundVelocity };
 }

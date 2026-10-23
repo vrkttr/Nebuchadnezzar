@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const ZONE_DIRECTORY = join(dirname(fileURLToPath(import.meta.url)), 'zones');
 const COLLISION_LAYER = 'Kollision';
 const OVERVIEW_LAYER = 'Karte';
-const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt', 'zugstrecke', 'haltestelle']);
+const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt', 'zugstrecke', 'haltestelle', 'eingang']);
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'wald', 'flecken']);
 export const CHUNK_SIZE = 64;
 const CHUNK_LIMIT = 4096;
@@ -70,6 +70,7 @@ function loadZone(id, file) {
     questObjects: [],
     train: null,
     trainStops: [],
+    entrances: [],
     colliders: [],
     waters: [],
     npcs: [],
@@ -168,6 +169,8 @@ function loadZone(id, file) {
           honk: Number(props.hupzeit) || 5,
           wagons: Number.isInteger(props.waggons) ? props.waggons : 3,
         };
+      } else if (kind === 'eingang') {
+        zone.entrances.push({ id: String(props.id ?? `eingang_${zone.entrances.length}`), x: center.x, z: center.z, rotation: rotationY });
       } else if (kind === 'haltestelle') {
         if (!props.id) throw new Error(`Zonendatei ${id}: Haltestelle ${object.id} braucht die Eigenschaft "id".`);
         zone.trainStops.push({ id: String(props.id), name: String(props.name ?? props.id), x: center.x, z: center.z });

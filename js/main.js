@@ -910,6 +910,10 @@ function start(token) {
     streamer?.update(player.object.position.x, player.object.position.z);
     ambient.update(delta, player.object.position);
     train.update(delta);
+    const rideVelocity = train.rideVelocity();
+    player.setGroundVelocity(riding ? rideVelocity.x : 0, riding ? rideVelocity.z : 0);
+    footsteps.setGroundVelocity(riding ? rideVelocity.x : 0, riding ? rideVelocity.z : 0);
+    remotePlayers.setTrainVelocity(rideVelocity.x, rideVelocity.z);
     updateSewer(delta);
     drips.update(delta, player.object.position);
     remotePlayers.update(delta);
