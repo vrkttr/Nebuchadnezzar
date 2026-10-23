@@ -174,6 +174,7 @@ function awardKill(killer, killerId, enemy, notify, onKill) {
 function damageEnemy(enemy, amount, attackerId, attacker, emit, notify, onKill, abilityId = null, weaponId = null) {
   enemy.health = Math.max(0, enemy.health - amount);
   attacker.combatTimer = 0;
+  enemy.provoked = true;
   emit({ type: 'damage', targetType: 'enemy', targetId: enemy.id, amount, attackerId, abilityId, weaponId });
 
   if (enemy.health === 0) {

@@ -132,7 +132,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Schallgedämpfte Pistole. Verwendet 9-mm-Munition.',
     stats: { damageMin: 3, damageMax: 6 },
-    ranged: { range: 28, interval: 0.9, ammo: 'ammo_9mm' },
+    ranged: { range: 18, interval: 0.9, ammo: 'ammo_9mm' },
     value: 60,
   },
   ak47: {
@@ -147,7 +147,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Robustes Sturmgewehr. Verwendet 7,62-mm-Munition.',
     stats: { damageMin: 4, damageMax: 7 },
-    ranged: { range: 40, interval: 0.55, ammo: 'ammo_762' },
+    ranged: { range: 22, interval: 0.55, ammo: 'ammo_762' },
     value: 120,
   },
   ammo_9mm: {
@@ -256,7 +256,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Sechs Schuss. Verwendet .357-Munition.',
     stats: { damageMin: 5, damageMax: 9 },
-    ranged: { range: 30, interval: 1.1, ammo: 'ammo_357' },
+    ranged: { range: 20, interval: 1.1, ammo: 'ammo_357' },
     value: 90,
   },
   shotgun: {
@@ -271,7 +271,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Auf kurze Distanz verheerend. Verwendet Schrotpatronen.',
     stats: { damageMin: 8, damageMax: 14 },
-    ranged: { range: 14, interval: 1.4, ammo: 'ammo_shell' },
+    ranged: { range: 10, interval: 1.4, ammo: 'ammo_shell' },
     value: 140,
   },
   hunting_rifle: {
@@ -286,7 +286,7 @@ export const ITEMS = {
     stackSize: 1,
     description: 'Präzise auf große Entfernung. Verwendet 7,62-mm-Munition.',
     stats: { damageMin: 9, damageMax: 15 },
-    ranged: { range: 55, interval: 1.8, ammo: 'ammo_762' },
+    ranged: { range: 30, interval: 1.8, ammo: 'ammo_762' },
     value: 170,
   },
   ammo_357: {

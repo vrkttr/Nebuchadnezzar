@@ -663,6 +663,7 @@ button {
 }
 
 #chat-messages {
+  pointer-events: auto;
   flex: 1;
   overflow-y: auto;
   padding: 6px 8px;

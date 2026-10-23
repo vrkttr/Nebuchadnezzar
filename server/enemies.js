@@ -257,6 +257,7 @@ export function updateEnemies(enemies, players, delta) {
     if (enemy.state === 'idle' && !hasPlayerNearby(enemy, players)) continue;
 
     if (enemy.state === 'idle') {
+      enemy.provoked = false;
       const targetId = findNearestPlayerInRange(enemy, players, enemy.aggroRange);
       if (targetId) {
         enemy.state = 'chase';
@@ -270,7 +271,7 @@ export function updateEnemies(enemies, players, delta) {
       const target = players.get(enemy.targetPlayerId);
       const distanceFromSpawn = horizontalDistance(enemy.x, enemy.z, enemy.spawnX, enemy.spawnZ);
 
-      if (!target || target.dead || distanceFromSpawn > LEASH_RANGE) {
+      if (!target || target.dead || (!enemy.provoked && distanceFromSpawn > LEASH_RANGE)) {
         enemy.state = 'return';
         enemy.targetPlayerId = null;
         enemy.stuckTimer = 0;
