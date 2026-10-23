@@ -136,6 +136,12 @@ const NPC_DEFINITIONS = {
     color: 0x6a5a4a,
     greeting: 'Bitte nicht so laut. Wer bist du?',
   },
+  tamara: {
+    id: 'tamara',
+    name: 'Tamara',
+    color: 0x8a3a30,
+    greeting: 'Leise! Sie hören alles hier unten. Wer hat dich geschickt?',
+  },
   pumpenwart: {
     id: 'pumpenwart',
     name: 'Pumpenwart',

@@ -831,5 +831,21 @@
   "enemy.cave_bear": "Cave Bear",
   "zone.hoehle.name": "Cave",
   "teleporter.hoehle_eingang": "Enter the cave",
-  "teleporter.hoehle_ausgang": "Leave the cave"
+  "teleporter.hoehle_ausgang": "Leave the cave",
+  "npc.tamara.name": "Tamara",
+  "npc.tamara.greeting": "Quiet! They hear everything down here. Who sent you?",
+  "questobject.hoehle_kanne": "Overturned Water Can",
+  "questobject.hoehle_kreide": "Chalk Marks",
+  "quest.baron_9.name": "The Narrow Path",
+  "quest.baron_9.offer": "The path in the northeast ends at a rock face, and behind it it gets dark. A cave. That is where Tamara must be, where else. I cannot go with you, I would not last an hour down there. You are strong enough for what lives there. Find her. Just tell her that I am waiting.",
+  "quest.baron_9.progress": "In the northeast the narrow path ends at a rock face with a dark entrance. That is where you have to look for her.",
+  "quest.baron_9.complete": "She is alive. She is alive, and she has water and canned food. I am sitting here keeping my hands still so nobody sees them shake. Thank you. Say nothing of this to the Baron, not yet. She has to decide herself when she comes back. Take this, it is the little we have.",
+  "quest.baron_9.objective.0": "Reach the cave entrance in the northeast",
+  "quest.baron_9.objective.1": "Examine the overturned water can",
+  "quest.baron_9.objective.1.text": "A tin can lies on its side, the ground beneath it still damp. Next to it small shoe prints lead deeper into the cave. Whoever walked here did not dawdle.",
+  "quest.baron_9.objective.2": "Examine the chalk marks on the wall",
+  "quest.baron_9.objective.2.text": "An arrow is drawn on the wall in chalk, three strokes beneath it. One for every fork, the size of a child's hand. The arrow points further north.",
+  "quest.baron_9.objective.3": "Talk to Tamara",
+  "quest.baron_9.objective.3.text": "Tamara presses herself into the niche, the red scarf pulled up to her chin. \"You are not from him. Good.\" She exhales. \"Tell Mama I am fine. I have water, I have canned food from the crates. I am not going back while the Lost block the way. I hear them at night. When the way is clear, I will come.\"",
+  "quest.baron_9.objective.4": "Lost Ones driven back in the cave"
 }

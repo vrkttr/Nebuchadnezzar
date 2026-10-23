@@ -361,6 +361,17 @@ export const APPEARANCES = {
     backpackColor: 0x3a3c34,
     equipment: { weapon: 'hunting_rifle', chest: 'padded_vest' },
   },
+  tamara: {
+    skin: 0xd6b196,
+    hair: 0x4a3222,
+    hairStyle: 'long',
+    top: 0x5a5a4a,
+    pants: 0x34322c,
+    shoes: 0x241e1a,
+    sleeves: 'long',
+    scarf: 0x8a3a30,
+    scale: 0.92,
+  },
   caretaker: {
     skin: 0xc49a7c,
     hair: 0x6a6a68,

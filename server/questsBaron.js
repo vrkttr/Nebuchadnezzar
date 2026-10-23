@@ -278,4 +278,43 @@ export const BARON_QUESTS = {
     ],
     rewards: { xp: 700, gold: 120, items: [{ itemId: 'gas_mask', quantity: 1 }] },
   },
+  baron_9: {
+    id: 'baron_9',
+    name: 'Der schmale Pfad',
+    level: 20,
+    giverNpc: 'annelie',
+    turnInNpc: 'annelie',
+    requires: 'baron_7',
+    offerText:
+      'Der Pfad im Nordosten endet an einem Felsen, hinter dem es dunkel wird. Eine Höhle. Dort muss Tamara sein, wo sonst. Ich kann dich nicht begleiten, ich würde dort unten keine Stunde durchhalten. Du bist stark genug für die Gegner dort. Finde sie. Sag ihr nur, dass ich warte.',
+    progressText: 'Im Nordosten endet der schmale Pfad an einem Felsen mit einem dunklen Eingang. Dort musst du sie suchen.',
+    completeText:
+      'Sie lebt. Sie lebt, und sie hat Wasser und Konserven. Ich sitze hier und halte die Hände still, damit man nicht sieht, wie sie zittern. Danke. Sag nichts davon dem Baron, noch nicht. Sie muss selbst entscheiden, wann sie zurückkommt. Nimm das hier, es ist das Wenige, das wir haben.',
+    objectives: [
+      { type: 'reach', zone: 'babylos', x: 195, z: -140, radius: 6, count: 1, label: 'Den Höhleneingang im Nordosten erreichen' },
+      {
+        type: 'inspect',
+        ref: 'hoehle_kanne',
+        count: 1,
+        label: 'Umgestürzte Wasserkanne untersuchen',
+        text: 'Eine Blechkanne liegt auf der Seite, der Boden darunter ist noch feucht. Daneben kleine Schuhabdrücke, die tiefer in die Höhle führen. Wer hier entlanggegangen ist, hat nicht getrödelt.',
+      },
+      {
+        type: 'inspect',
+        ref: 'hoehle_kreide',
+        count: 1,
+        label: 'Kreidezeichen an der Wand untersuchen',
+        text: 'Mit Kreide ist ein Pfeil an die Wand gemalt, darunter drei Striche. Für jede Abzweigung einer, in der Größe einer Kinderhand. Der Pfeil zeigt weiter nach Norden.',
+      },
+      {
+        type: 'talk',
+        npcId: 'tamara',
+        count: 1,
+        label: 'Mit Tamara sprechen',
+        text: 'Tamara drückt sich in die Nische, den roten Schal bis zum Kinn gezogen. „Du bist nicht von ihm. Gut.“ Sie atmet aus. „Sag Mama, es geht mir gut. Ich habe Wasser, ich habe Konserven aus den Kisten. Ich gehe nicht zurück, solange die Verirrten den Weg versperren. Ich höre sie nachts. Wenn der Weg frei ist, komme ich.“',
+      },
+      { type: 'kill', enemyType: 'lost_one', count: 4, label: 'Verirrte in der Höhle zurückgedrängt' },
+    ],
+    rewards: { xp: 2400, gold: 320, items: [{ itemId: 'medkit', quantity: 2 }, { itemId: 'kevlar_vest', quantity: 1 }] },
+  },
 };
