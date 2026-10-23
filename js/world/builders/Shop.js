@@ -18,6 +18,7 @@ const THEMES = {
   gilde: { wall: '#a39e90', trim: 0x2e2e32, board: '#3a2a4a', ink: '#ecdcb0' },
   markt: { wall: '#b5a78c', trim: 0x4d3b2a, board: '#6a5430', ink: '#f2e4bd' },
   taverne: { wall: '#a8957a', trim: 0x3d2d20, board: '#5a2a22', ink: '#f2dcb0' },
+  schmiede: { wall: '#8a8378', trim: 0x2c2826, board: '#2a2522', ink: '#e6b878' },
 };
 
 function signMaterial(text, theme) {
@@ -96,6 +97,13 @@ function buildExterior(batch, kind, width, depth, height, theme) {
     const banner = getColorMaterial(0x7a3a4a, { side: THREE.DoubleSide });
     batch.box(banner, 0.8, 1.5, 0.04, { x: flagX, y: flagY - 0.2, z: flagZ + 0.2, tile: 1 });
     batch.box(getColorMaterial(0xc8a850), 0.3, 0.3, 0.06, { x: flagX, y: flagY, z: flagZ + 0.24, ry: 0, rz: Math.PI / 4, tile: 1 });
+  } else if (kind === 'schmiede') {
+    const iron = getColorMaterial(0x2e2e30);
+    batch.box(iron, 0.7, 0.16, 0.34, { x: flagX, y: flagY + 0.1, z: flagZ + 0.25, tile: 1 });
+    batch.box(iron, 0.36, 0.14, 0.34, { x: flagX, y: flagY - 0.02, z: flagZ + 0.25, tile: 1 });
+    batch.box(iron, 0.22, 0.34, 0.28, { x: flagX, y: flagY - 0.2, z: flagZ + 0.25, tile: 1 });
+    batch.box(iron, 0.5, 0.1, 0.34, { x: flagX, y: flagY - 0.42, z: flagZ + 0.25, tile: 1 });
+    batch.cone(iron, 0.14, 0.34, 6, { x: flagX + 0.5, y: flagY + 0.1, z: flagZ + 0.25, rz: -Math.PI / 2 });
   } else if (kind === 'taverne') {
     const glass = getColorMaterial(0xc8a050);
     batch.cylinder(glass, 0.2, 0.17, 0.4, 8, { x: flagX, y: flagY - 0.1, z: flagZ + 0.25 });
@@ -108,6 +116,13 @@ function buildExterior(batch, kind, width, depth, height, theme) {
 
   batch.box(plaster, 0.5, height, 0.5, { x: -width / 2, y: height / 2, z: frontZ, tile: 2 });
   batch.box(plaster, 0.5, height, 0.5, { x: width / 2, y: height / 2, z: frontZ, tile: 2 });
+
+  if (kind === 'schmiede') {
+    const brick = getMaterial('concrete_panel', { color: '#a08a78' });
+    const backZ = -depth / 2 + WALL + 0.1;
+    batch.box(brick, 1.5, height + 2.4, 0.9, { x: 3.0, y: (height + 2.4) / 2, z: backZ + 0.45, tile: 2 });
+    batch.box(getColorMaterial(0x2c2826), 1.8, 0.25, 1.2, { x: 3.0, y: height + 2.5, z: backZ + 0.45, tile: 1 });
+  }
 }
 
 function buildInterior(batch, kind, width, depth) {
@@ -121,7 +136,7 @@ function buildInterior(batch, kind, width, depth) {
   const back = -depth / 2 + WALL + 0.1;
   const counterZ = back + depth * 0.4;
 
-  if (kind !== 'barbier') {
+  if (kind !== 'barbier' && kind !== 'schmiede') {
     batch.box(wood, width - 4.4, 1.0, 0.8, { x: 0, y: 0.5, z: counterZ, tile: 1 });
     batch.box(boards, width - 4.2, 0.07, 1.0, { x: 0, y: 1.03, z: counterZ, tile: 1 });
   }
@@ -179,6 +194,34 @@ function buildInterior(batch, kind, width, depth) {
       batch.box(cloth, 1.0, 0.1, 1.0, { x, y: 1.25, z: back + 3.4, tile: 1 });
     }
     batch.box(getColorMaterial(0x7a3a4a, { side: THREE.DoubleSide }), 3, 2.2, 0.04, { x: 0, y: 2, z: back + 0.1, tile: 1 });
+  } else if (kind === 'schmiede') {
+    const brick = getMaterial('concrete_panel', { color: '#a08a78' });
+    const iron = getColorMaterial(0x2e2e30);
+    batch.box(brick, 2.4, 1.0, 1.2, { x: 3.0, y: 0.5, z: back + 1.5, tile: 1 });
+    batch.box(brick, 2.4, 2.6, 0.9, { x: 3.0, y: 1.3, z: back + 0.45, tile: 1 });
+    batch.box(getColorMaterial(0x2c2826), 1.6, 0.12, 0.8, { x: 3.0, y: 1.02, z: back + 1.5, tile: 1 });
+    batch.box(getColorMaterial(0xe8782a, { unlit: true }), 1.2, 0.08, 0.5, { x: 3.0, y: 1.08, z: back + 1.5, tile: 1 });
+    batch.box(iron, 0.9, 0.5, 0.5, { x: 1.2, y: 0.25, z: back + 0.7, tile: 1 });
+    batch.box(wood, 0.5, 0.9, 0.35, { x: 1.2, y: 1.2, z: back + 0.5, rx: 0.3, tile: 1 });
+    batch.box(wood, 0.9, 0.9, 0.9, { x: -1.6, y: 0.45, z: back + 4.2, tile: 1 });
+    batch.box(iron, 0.35, 0.22, 0.32, { x: -1.6, y: 1.01, z: back + 4.2, tile: 1 });
+    batch.box(iron, 0.9, 0.16, 0.34, { x: -1.6, y: 1.2, z: back + 4.2, tile: 1 });
+    batch.cone(iron, 0.17, 0.4, 6, { x: -2.25, y: 1.2, z: back + 4.2, rz: Math.PI / 2 });
+    batch.box(iron, 0.7, 0.16, 0.5, { x: -1.6, y: 1.36, z: back + 4.2, tile: 1 });
+    batch.box(wood, 1.0, 0.9, 4.0, { x: -inner + 0.6, y: 0.45, z: back + 2.6, tile: 1 });
+    batch.box(boards, 1.1, 0.07, 4.1, { x: -inner + 0.6, y: 0.93, z: back + 2.6, tile: 1 });
+    batch.box(iron, 0.5, 0.1, 0.1, { x: -inner + 0.6, y: 1.03, z: back + 1.8, ry: 0.5, tile: 1 });
+    batch.box(iron, 0.4, 0.1, 0.1, { x: -inner + 0.6, y: 1.03, z: back + 3.1, ry: -0.4, tile: 1 });
+    for (let i = 0; i < 4; i += 1) {
+      const z = back + 4.0 + i * 0.9;
+      batch.box(steel, 0.06, 1.1, 0.04, { x: inner - 0.3, y: 1.5, z, rx: 0.05, rz: i % 2 ? 0.1 : -0.1, tile: 1 });
+      batch.box(rust, 0.28, 0.06, 0.05, { x: inner - 0.3, y: 1.05, z, tile: 1 });
+    }
+    batch.box(wood, 0.5, 2.0, 4.2, { x: inner + 0.1, y: 1.0, z: back + 5.2, tile: 1 });
+    batch.cylinder(wood, 0.5, 0.45, 0.7, 10, { x: inner - 1.0, y: 0.35, z: back + 7.6 });
+    batch.cylinder(getColorMaterial(0x2a3a44, { unlit: true }), 0.42, 0.42, 0.02, 10, { x: inner - 1.0, y: 0.68, z: back + 7.6 });
+    batch.box(wood, 0.8, 0.5, 0.8, { x: -inner + 0.8, y: 0.25, z: back + 7.2, tile: 1 });
+    batch.box(rust, 0.7, 0.4, 0.7, { x: -inner + 0.8, y: 0.7, z: back + 7.2, tile: 1 });
   } else if (kind === 'taverne') {
     shelves(0, back + depth * 0.25, -1);
     for (const [x, z] of [[-width * 0.28, back + depth * 0.62], [width * 0.28, back + depth * 0.62], [-width * 0.28, back + depth * 0.84], [width * 0.28, back + depth * 0.84]]) {
@@ -251,6 +294,11 @@ export function createLaden(params = {}) {
   group.add(batch.build('Huelle'));
 
   for (const z of lampPositions) group.add(fxMarker('lamp', { steady: true, power: 55, distance: 18 }, { y: hoehe - 0.45, z }));
+  if (typ === 'schmiede') {
+    const backZ = -depth / 2 + WALL + 0.1;
+    group.add(fxMarker('fire', {}, { x: 3.0, y: 1.05, z: backZ + 1.5 }));
+    group.add(fxMarker('smoke', {}, { x: 3.0, y: hoehe + 2.7, z: backZ + 0.45 }));
+  }
 
   const text = schild ? t(schild) : '';
   if (text) {

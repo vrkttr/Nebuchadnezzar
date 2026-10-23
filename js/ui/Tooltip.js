@@ -45,7 +45,7 @@ export function createTooltip(state) {
     element.classList.add('hidden');
   }
 
-  function itemLines(item, quantity) {
+  function itemLines(item, quantity, perk) {
     if (!item) return [[t('item.unknown'), 'tooltip-name']];
 
     const typeLabel = tOr([`item.type.${item.type}`], item.type);
@@ -61,6 +61,10 @@ export function createTooltip(state) {
     if (item.ranged) {
       lines.push([t('tooltip.ranged', { range: item.ranged.range, rate: formatNumber(1 / item.ranged.interval, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) }), 'tooltip-stat']);
       lines.push([t('tooltip.ammo', { name: state.items[item.ranged.ammo]?.name ?? item.ranged.ammo }), 'tooltip-dim']);
+    }
+
+    if (perk?.kind) {
+      lines.push([t(`tooltip.perk.${perk.kind}`, { value: perk.value }), 'tooltip-perk']);
     }
 
     if (item.stats?.armor) {
@@ -106,8 +110,8 @@ export function createTooltip(state) {
     return lines;
   }
 
-  function showItem(itemId, quantity, event) {
-    show(itemLines(state.items[itemId], quantity), event);
+  function showItem(itemId, quantity, event, perk = null) {
+    show(itemLines(state.items[itemId], quantity, perk), event);
   }
 
   function abilityEffectLine(ability) {

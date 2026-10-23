@@ -85,7 +85,7 @@ export function createInventory(state, ui, handlers = {}) {
       element.appendChild(countEl);
     }
 
-    element.addEventListener('mouseenter', (event) => ui.tooltip.showItem(slot.itemId, slot.quantity, event));
+    element.addEventListener('mouseenter', (event) => ui.tooltip.showItem(slot.itemId, slot.quantity, event, slot.perk ?? null));
     element.addEventListener('mousemove', (event) => ui.tooltip.move(event));
     element.addEventListener('mouseleave', () => ui.tooltip.hide());
     element.draggable = true;

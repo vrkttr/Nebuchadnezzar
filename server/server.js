@@ -21,14 +21,16 @@ import { getClassModifiers, isValidClass } from './classes.js';
 import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
 import { grantStarterKit } from './starterKit.js';
-import { equipmentRows, loadEquipment, serializeEquipment } from './equipment.js';
+import { equipmentRows, loadEquipment, loadEquipmentPerks, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
 import { serializeNpcs } from './npcs.js';
 import {
   acceptNpcQuest,
   buyFromVendor,
   completeNpcQuest,
+  forgeAtSmith,
   openNpc,
+  openSmith,
   openVendor,
   refreshNpcWindow,
   resolveGuildNpc,
@@ -220,12 +222,12 @@ async function loadCharacter(characterId) {
   const row = characterRows[0];
 
   const [savedItemRows] = await dbPool.query(
-    'SELECT slot, item_id, quantity FROM inventory_items WHERE character_id = ?',
+    'SELECT slot, item_id, quantity, perk FROM inventory_items WHERE character_id = ?',
     [characterId]
   );
 
   const [savedEquipmentRows] = await dbPool.query(
-    'SELECT slot, item_id FROM equipment_items WHERE character_id = ?',
+    'SELECT slot, item_id, perk FROM equipment_items WHERE character_id = ?',
     [characterId]
   );
 
@@ -242,6 +244,7 @@ async function loadCharacter(characterId) {
   const friends = await loadFriends(dbPool, characterId);
   const inventory = loadInventory(savedItemRows);
   const equipment = loadEquipment(savedEquipmentRows);
+  const equipmentPerks = loadEquipmentPerks(savedEquipmentRows);
   const zoneId = getZone(row.zone) ? row.zone : DEFAULT_ZONE_ID;
   const startPosition = zoneId === row.zone ? { x: row.pos_x, y: row.pos_y, z: row.pos_z } : getZone(zoneId).spawn;
   const starterKit = !row.starter_kit;
@@ -275,6 +278,7 @@ async function loadCharacter(characterId) {
     graphics: parseGraphics(row.graphics),
     inventory,
     equipment,
+    equipmentPerks,
     quests: loadQuests(savedQuestRows),
     openedChests: new Set(savedChestRows.map((chest) => chestKey(chest.zone, chest.chest_id))),
   };
@@ -308,7 +312,7 @@ function removePlayer(playerId) {
 async function writeState(state) {
   const dataVersion = state.dataVersion;
   const items = inventoryRows(state.inventory);
-  const equipped = equipmentRows(state.equipment);
+  const equipped = equipmentRows(state.equipment, state.equipmentPerks);
   const quests = questRows(state.quests);
 
   const characterQuery =
@@ -341,16 +345,16 @@ async function writeState(state) {
 
     if (items.length > 0) {
       await connection.query(
-        'INSERT INTO inventory_items (character_id, slot, item_id, quantity) VALUES ?',
-        [items.map(([slot, itemId, quantity]) => [state.characterId, slot, itemId, quantity])]
+        'INSERT INTO inventory_items (character_id, slot, item_id, quantity, perk) VALUES ?',
+        [items.map(([slot, itemId, quantity, perk]) => [state.characterId, slot, itemId, quantity, perk])]
       );
     }
 
     await connection.query('DELETE FROM equipment_items WHERE character_id = ?', [state.characterId]);
 
     if (equipped.length > 0) {
-      await connection.query('INSERT INTO equipment_items (character_id, slot, item_id) VALUES ?', [
-        equipped.map(([slot, itemId]) => [state.characterId, slot, itemId]),
+      await connection.query('INSERT INTO equipment_items (character_id, slot, item_id, perk) VALUES ?', [
+        equipped.map(([slot, itemId, perk]) => [state.characterId, slot, itemId, perk]),
       ]);
     }
 
@@ -427,6 +431,7 @@ wss.on('connection', async (socket, request) => {
       items: serializeItems(),
       inventory: serializeInventory(initialState.inventory),
       equipment: serializeEquipment(initialState.equipment),
+      equipmentPerks: serializeEquipmentPerks(initialState.equipmentPerks),
       appearance: initialState.appearance,
       npcs: serializeNpcs(initialState.zoneId),
       chests: serializeChests(initialState.zoneId, initialState.openedChests),
@@ -486,6 +491,12 @@ wss.on('connection', async (socket, request) => {
       const state = players.get(id);
       const npc = state ? resolveGuildNpc(state, id, message.npcId, notify) : null;
       if (npc) createGuild(dbPool, players, id, message.name, notify).then(() => refreshNpcWindow(state, id, npc, notify));
+    } else if (message.type === 'smith-open') {
+      const state = players.get(id);
+      if (state) openSmith(state, id, message.npcId, notify);
+    } else if (message.type === 'smith-forge') {
+      const state = players.get(id);
+      if (state) forgeAtSmith(state, id, message.npcId, message.source, message.index, message.itemId, notify);
     } else if (message.type === 'barber-apply') {
       const state = players.get(id);
       const npc = state ? resolveBarberNpc(state, id, message.npcId, notify) : null;

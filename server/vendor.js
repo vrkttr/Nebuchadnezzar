@@ -3,6 +3,9 @@ import { addItem, cloneInventory, sendInventory } from './inventory.js';
 import { addGold } from './loot.js';
 
 const PRICE_FACTOR = 3;
+const BUYABLE_QUALITIES = new Set(['common', 'uncommon']);
+
+const isBuyable = (entry) => BUYABLE_QUALITIES.has(getItem(entry.itemId)?.quality ?? 'common');
 
 function fail(notify, playerId, reason) {
   notify(playerId, { type: 'event', kind: 'vendor-failed', reason });
@@ -13,12 +16,12 @@ export function serializeVendor(npc) {
     type: 'vendor-window',
     npcId: npc.id,
     name: npc.name,
-    stock: npc.vendor.stock.map((entry) => ({ itemId: entry.itemId, price: entry.price * PRICE_FACTOR })),
+    stock: npc.vendor.stock.filter(isBuyable).map((entry) => ({ itemId: entry.itemId, price: entry.price * PRICE_FACTOR })),
   };
 }
 
 export function buyItem(player, playerId, npc, itemId, quantity, notify) {
-  const entry = npc.vendor.stock.find((candidate) => candidate.itemId === itemId);
+  const entry = npc.vendor.stock.filter(isBuyable).find((candidate) => candidate.itemId === itemId);
   const item = entry ? getItem(entry.itemId) : null;
 
   if (!entry || !item || !Number.isInteger(quantity) || quantity < 1 || quantity > item.stackSize) {

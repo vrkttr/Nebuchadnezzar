@@ -135,6 +135,15 @@ export const APPEARANCES = {
     backpack: 'big',
     backpackColor: 0x5a4a34,
   },
+  schmied: {
+    skin: 0xb88a6a,
+    hair: 0x2a1e16,
+    hairStyle: 'short',
+    top: 0x3a3028,
+    pants: 0x24221f,
+    shoes: 0x1a1612,
+    sleeves: 'short',
+  },
   barbier: {
     skin: 0xc79b7c,
     hair: 0x16120e,

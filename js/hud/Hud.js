@@ -326,6 +326,10 @@ export function createHud(state, handlers = {}) {
       addMessage(failureText('npc', event.reason));
     } else if (event.kind === 'vendor-failed') {
       addMessage(failureText('vendor', event.reason));
+    } else if (event.kind === 'smith-failed') {
+      addMessage(failureText('smith', event.reason));
+    } else if (event.kind === 'forged') {
+      addMessage(t(`event.forged.${event.perk?.kind ?? 'damage'}`, { name: itemName(event.itemId), value: event.perk?.value ?? 0, cost: event.cost }));
     } else if (event.kind === 'purchased') {
       const suffix = event.quantity > 1 ? ` x${event.quantity}` : '';
       addMessage(t('event.purchased', { name: itemName(event.itemId), suffix, cost: event.cost }));

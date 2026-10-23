@@ -1,7 +1,7 @@
 import { getClassModifiers } from './classes.js';
 import { getItem } from './items.js';
 import { addItem, serializeInventory } from './inventory.js';
-import { EQUIPMENT_SLOTS, applyEquipmentStats, serializeEquipment } from './equipment.js';
+import { EQUIPMENT_SLOTS, applyEquipmentStats, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { startHearth } from './inn.js';
 
 const CONSUMABLE_COOLDOWN_MS = 6000;
@@ -13,7 +13,7 @@ function fail(notify, playerId, reason) {
 function sync(notify, playerId, player) {
   player.dataVersion += 1;
   notify(playerId, { type: 'inventory', slots: serializeInventory(player.inventory) });
-  notify(playerId, { type: 'equipment', slots: serializeEquipment(player.equipment) });
+  notify(playerId, { type: 'equipment', slots: serializeEquipment(player.equipment), perks: serializeEquipmentPerks(player.equipmentPerks) });
 }
 
 function equipItem(notify, playerId, player, slotIndex, item) {
@@ -21,9 +21,18 @@ function equipItem(notify, playerId, player, slotIndex, item) {
   if (player.level < item.level) return fail(notify, playerId, 'level');
 
   const previousItemId = player.equipment[item.slot];
+  const previousPerk = player.equipmentPerks?.[item.slot] ?? null;
+  const newPerk = player.inventory[slotIndex]?.perk ?? null;
 
-  player.inventory[slotIndex] = previousItemId ? { itemId: previousItemId, quantity: 1 } : null;
+  player.inventory[slotIndex] = previousItemId
+    ? previousPerk
+      ? { itemId: previousItemId, quantity: 1, perk: previousPerk }
+      : { itemId: previousItemId, quantity: 1 }
+    : null;
   player.equipment[item.slot] = item.id;
+  player.equipmentPerks ??= {};
+  if (newPerk) player.equipmentPerks[item.slot] = newPerk;
+  else delete player.equipmentPerks[item.slot];
   applyEquipmentStats(player);
 
   sync(notify, playerId, player);
@@ -92,12 +101,15 @@ export function unequipItem(playerId, player, equipmentSlot, notify) {
   const itemId = player.equipment[equipmentSlot];
   if (!itemId) return;
 
-  if (addItem(player.inventory, itemId, 1) > 0) {
+  const perk = player.equipmentPerks?.[equipmentSlot] ?? null;
+
+  if (addItem(player.inventory, itemId, 1, perk) > 0) {
     notify(playerId, { type: 'event', kind: 'inventory-full' });
     return;
   }
 
   player.equipment[equipmentSlot] = null;
+  if (player.equipmentPerks) delete player.equipmentPerks[equipmentSlot];
   applyEquipmentStats(player);
 
   sync(notify, playerId, player);

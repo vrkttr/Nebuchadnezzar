@@ -66,6 +66,9 @@ CREATE TABLE IF NOT EXISTS equipment_items (
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
 
+ALTER TABLE inventory_items ADD COLUMN IF NOT EXISTS perk VARCHAR(24) NULL;
+ALTER TABLE equipment_items ADD COLUMN IF NOT EXISTS perk VARCHAR(24) NULL;
+
 CREATE TABLE IF NOT EXISTS character_quests (
     character_id INT NOT NULL,
     quest_id VARCHAR(64) NOT NULL,

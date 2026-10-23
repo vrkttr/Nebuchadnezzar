@@ -132,6 +132,13 @@ const NPC_DEFINITIONS = {
     greeting: 'Setz dich. Eine neue Frisur macht aus einem Verlierer keinen Gewinner, aber man sieht dem Tod besser ins Gesicht.',
     barber: true,
   },
+  schmied: {
+    id: 'schmied',
+    name: 'Schmied',
+    color: 0x4a3a2e,
+    greeting: 'Gib mir deine Waffe und ein paar Münzen. Ich schlage ihr etwas ein, das kein Händler verkaufen kann. Gefällt dir das Ergebnis nicht, schmieden wir sie neu.',
+    smith: true,
+  },
   gastwirt: {
     id: 'gastwirt',
     name: 'Gastwirt',

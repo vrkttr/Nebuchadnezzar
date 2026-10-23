@@ -91,7 +91,7 @@ export function createCharacterWindow(state, ui, handlers = {}) {
       cell.appendChild(shortEl);
     }
 
-    cell.onmouseenter = (event) => ui.tooltip.showItem(itemId, 0, event);
+    cell.onmouseenter = (event) => ui.tooltip.showItem(itemId, 0, event, state.equipmentPerks?.[slot] ?? null);
     cell.onmousemove = (event) => ui.tooltip.move(event);
     cell.onmouseleave = () => ui.tooltip.hide();
     cell.onclick = (event) => {

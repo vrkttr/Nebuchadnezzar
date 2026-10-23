@@ -1,5 +1,6 @@
 import { getClassModifiers } from './classes.js';
 import { getItem } from './items.js';
+import { formatPerk, parsePerk, perkMultipliers } from './perks.js';
 
 export const EQUIPMENT_SLOTS = ['weapon', 'head', 'shoulders', 'chest', 'hands', 'belt', 'legs', 'feet'];
 
@@ -20,12 +21,27 @@ export function loadEquipment(rows) {
   return equipment;
 }
 
+export function loadEquipmentPerks(rows) {
+  const perks = {};
+
+  for (const row of rows) {
+    const perk = row.slot === 'weapon' ? parsePerk(row.perk) : null;
+    if (perk && getItem(row.item_id)?.type === 'weapon') perks[row.slot] = perk;
+  }
+
+  return perks;
+}
+
 export function serializeEquipment(equipment) {
   return { ...equipment };
 }
 
-export function equipmentRows(equipment) {
-  return EQUIPMENT_SLOTS.filter((slot) => equipment[slot]).map((slot) => [slot, equipment[slot]]);
+export function serializeEquipmentPerks(perks = {}) {
+  return { ...perks };
+}
+
+export function equipmentRows(equipment, perks = {}) {
+  return EQUIPMENT_SLOTS.filter((slot) => equipment[slot]).map((slot) => [slot, equipment[slot], formatPerk(perks[slot])]);
 }
 
 export function computeEquipmentStats(equipment) {
@@ -45,6 +61,9 @@ export function computeEquipmentStats(equipment) {
 
 export function applyEquipmentStats(player) {
   Object.assign(player, computeEquipmentStats(player.equipment));
+  const multipliers = perkMultipliers(player.equipmentPerks?.weapon ?? null);
+  player.weaponDamageMult = multipliers.damage;
+  player.weaponSpeedMult = multipliers.speed;
   player.armor += getClassModifiers(player.classId).armorBonus;
 }
 

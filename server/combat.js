@@ -14,7 +14,10 @@ const PLAYER_RESPAWN_TIME = 4;
 const REGEN_DELAY = 6;
 const REGEN_PER_SECOND = 3;
 const RESOURCE_REGEN_PER_SECOND = 2;
-const ARMOR_CONSTANT = 50;
+const ARMOR_BASE = 20;
+const ARMOR_PER_LEVEL = 6;
+
+const armorConstant = (attackerLevel) => ARMOR_BASE + ARMOR_PER_LEVEL * attackerLevel;
 
 const ENEMY_RESPAWN_TIME = 60;
 const GROUP_BONUS_PER_MEMBER = 0.2;
@@ -38,13 +41,14 @@ function rollPlayerDamage(player, ranged = false) {
       randomInt(
         Math.round(player.damageMin * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMin,
         Math.round(player.damageMax * RANGED_BASE_DAMAGE_SHARE) + player.equipDamageMax
-      ) * modifiers.rangedDamageMult
+      ) * modifiers.rangedDamageMult * (player.weaponDamageMult ?? 1)
     );
   }
 
   return Math.round(
     randomInt(player.damageMin + player.equipDamageMin, player.damageMax + player.equipDamageMax) *
-      modifiers.meleeDamageMult
+      modifiers.meleeDamageMult *
+      (player.weaponDamageMult ?? 1)
   );
 }
 
@@ -63,6 +67,9 @@ export function createCombatState(character) {
     damageMin: 0,
     damageMax: 0,
     equipment: character.equipment,
+    equipmentPerks: character.equipmentPerks ?? {},
+    weaponDamageMult: 1,
+    weaponSpeedMult: 1,
     armor: 0,
     equipDamageMin: 0,
     equipDamageMax: 0,
@@ -203,7 +210,7 @@ function dotStatus(notify, playerId, player) {
 function damagePlayer(player, playerId, enemy, emit, notify) {
   const rawAmount = Math.round(randomInt(3 + enemy.level * 2, 6 + enemy.level * 3) * enemy.damageFactor);
   const reduction = player.buffs?.brace > 0 ? ABILITIES.brace.damageReduction : 0;
-  const amount = Math.max(1, Math.round(((rawAmount * ARMOR_CONSTANT) / (ARMOR_CONSTANT + player.armor)) * (1 - reduction)));
+  const amount = Math.max(1, Math.round(((rawAmount * armorConstant(enemy.level)) / (armorConstant(enemy.level) + player.armor)) * (1 - reduction)));
   player.health = Math.max(0, player.health - amount);
   player.combatTimer = 0;
   emit({ type: 'damage', targetType: 'player', targetId: playerId, amount, attackerId: enemy.id, shot: enemy.meleeRange > 4 ? (enemy.dot?.kind === 'burn' ? 'fire' : 'bullet') : undefined });
@@ -301,7 +308,7 @@ function updatePlayers(players, enemies, delta, emit, notify, onKill) {
     } else if (player.autoAttack) {
       const weapon = getEquippedWeapon(player.equipment);
       const ranged = weapon?.ranged ?? null;
-      const interval = ranged ? ranged.interval : PLAYER_ATTACK_INTERVAL;
+      const interval = (ranged ? ranged.interval : PLAYER_ATTACK_INTERVAL) / (player.weaponSpeedMult ?? 1);
       const range = ranged ? ranged.range : PLAYER_ATTACK_RANGE;
 
       if (player.attackTimer >= interval && horizontalDistance(player, enemy) <= range) {

@@ -98,6 +98,8 @@ const EVENT_SOUNDS = {
   'quest-failed': 'error',
   'npc-failed': 'error',
   'vendor-failed': 'error',
+  'smith-failed': 'error',
+  forged: 'equip',
 };
 
 const WEAPON_FAMILY = { machete: 'blade', rusty_pipe: 'blunt' };

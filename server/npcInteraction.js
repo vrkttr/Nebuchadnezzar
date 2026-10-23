@@ -3,6 +3,7 @@ import { acceptQuest, completeQuest, questsForNpc, recordTalk } from './quests.j
 import { GUILD_FOUNDING_COST } from './guilds.js';
 import { BARBER_COST } from './barber.js';
 import { buyItem, sellItem, serializeVendor } from './vendor.js';
+import { forgeWeapon, serializeSmith } from './smith.js';
 
 function resolveNpc(player, playerId, npcId, notify) {
   if (player.dead) return null;
@@ -37,6 +38,7 @@ function sendNpcWindow(player, playerId, npc, notify) {
     innBound: player.homeZone === player.zoneId,
     barber: Boolean(npc.barber),
     barberCost: BARBER_COST,
+    smith: Boolean(npc.smith),
     appearance: player.appearance,
     quests: questsForNpc(player, npc.id),
   });
@@ -106,4 +108,18 @@ export function sellToVendor(player, playerId, npcId, slotIndex, itemId, notify)
   if (!npc?.vendor) return;
 
   sellItem(player, playerId, slotIndex, itemId, notify);
+}
+
+export function openSmith(player, playerId, npcId, notify) {
+  const npc = resolveNpc(player, playerId, npcId, notify);
+  if (!npc?.smith) return;
+
+  notify(playerId, serializeSmith(player, npc));
+}
+
+export function forgeAtSmith(player, playerId, npcId, source, index, itemId, notify) {
+  const npc = resolveNpc(player, playerId, npcId, notify);
+  if (!npc?.smith) return;
+
+  forgeWeapon(player, playerId, npc, source, index, itemId, notify);
 }

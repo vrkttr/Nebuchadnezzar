@@ -184,6 +184,8 @@ function start(token) {
     onInnBind: (npcId) => connection.send({ type: 'inn-bind', npcId }),
     onBarberPreview: (appearance) => player.setAppearance(appearance),
     onBarberApply: (npcId, appearance) => connection.send({ type: 'barber-apply', npcId, appearance }),
+    onSmithOpen: (npcId) => connection.send({ type: 'smith-open', npcId }),
+    onSmithForge: (npcId, entry) => connection.send({ type: 'smith-forge', npcId, source: entry.source, index: entry.index, itemId: entry.itemId }),
   });
   const abilitiesWindow = createAbilitiesWindow(ui);
   const questWindow = createQuestWindow({
@@ -519,6 +521,7 @@ function start(token) {
         audio.applySettings(message.audio);
         applyGraphics(message.graphics);
         ownWeapon = message.equipment?.weapon ?? null;
+        gameState.equipmentPerks = message.equipmentPerks ?? {};
         enterZone(message, true).then(() => {
           if (message.showIntro) introWindow.show();
         });
@@ -585,10 +588,13 @@ function start(token) {
       } else if (message.type === 'npc-window') {
         audio.play(`npc_${message.npcId}_greet`);
         npcWindow.show(message);
+      } else if (message.type === 'smith-window') {
+        npcWindow.showSmith(message);
       } else if (message.type === 'vendor-window') {
         npcWindow.hide();
         vendorWindow.show(message);
       } else if (message.type === 'equipment') {
+        gameState.equipmentPerks = message.perks ?? {};
         characterWindow.render(message.slots ?? {});
         player.setEquipment(message.slots);
         ownWeapon = message.slots?.weapon ?? null;

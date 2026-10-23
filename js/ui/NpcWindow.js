@@ -15,6 +15,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
   let activeQuestId = null;
   let guildForm = false;
   let barberDraft = null;
+  let smithData = null;
 
   function isOpen() {
     return !windowEl.classList.contains('hidden');
@@ -30,6 +31,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
     windowEl.classList.add('hidden');
     ui.tooltip.hide();
     data = null;
+    smithData = null;
     activeQuestId = null;
     guildForm = false;
   }
@@ -101,6 +103,10 @@ export function createNpcWindow(state, ui, handlers = {}) {
           render();
         })
       );
+    }
+
+    if (data.smith) {
+      options.appendChild(button(t('smith.open'), 'npc-option', () => handlers.onSmithOpen?.(data.npcId)));
     }
 
     if (data.guild && !data.guildName) {
@@ -214,6 +220,75 @@ export function createNpcWindow(state, ui, handlers = {}) {
     body.replaceChildren(...children);
   }
 
+  function perkText(perk) {
+    return perk?.kind ? t(`tooltip.perk.${perk.kind}`, { value: perk.value }) : t('smith.noPerk');
+  }
+
+  function renderSmith() {
+    title.textContent = t('smith.title');
+
+    const gold = state.player.gold ?? 0;
+    const list = element('div', 'smith-list');
+
+    for (const entry of smithData.entries) {
+      const item = state.items[entry.itemId];
+      const row = element('div', 'smith-row');
+
+      const icon = element('span', `npc-reward-icon quality-${item?.quality ?? 'common'}`);
+      if (item?.icon) icon.appendChild(ui.createIcon(item.icon));
+      else icon.textContent = item?.shortName ?? '?';
+
+      const info = element('span', 'smith-info');
+      const name = element('span', `smith-name quality-text-${item?.quality ?? 'common'}`, item?.name ?? entry.itemId);
+      const where = entry.source === 'equipment' ? ` (${t('smith.equipped')})` : '';
+      name.textContent += where;
+      info.appendChild(name);
+      info.appendChild(element('span', entry.perk ? 'smith-perk' : 'smith-perk smith-perk-none', perkText(entry.perk)));
+
+      const affordable = gold >= entry.cost;
+      const action = button(
+        t(entry.perk ? 'smith.reforge' : 'smith.forge', { cost: entry.cost.toLocaleString('de-DE') }),
+        'window-button smith-button',
+        () => {
+          const run = () => handlers.onSmithForge?.(data.npcId, entry);
+          if (entry.perk) {
+            ui.confirmDialog.open(
+              t('smith.confirmReplace', { name: item?.name ?? entry.itemId, perk: perkText(entry.perk), cost: entry.cost.toLocaleString('de-DE') }),
+              t('smith.confirmYes'),
+              run
+            );
+          } else {
+            run();
+          }
+        }
+      );
+      action.disabled = !affordable;
+
+      row.addEventListener('mouseenter', (event) => ui.tooltip.showItem(entry.itemId, 0, event, entry.perk));
+      row.addEventListener('mousemove', (event) => ui.tooltip.move(event));
+      row.addEventListener('mouseleave', () => ui.tooltip.hide());
+
+      row.appendChild(icon);
+      row.appendChild(info);
+      row.appendChild(action);
+      list.appendChild(row);
+    }
+
+    const children = [element('p', 'npc-text', t('smith.hint'))];
+    if (smithData.entries.length === 0) children.push(element('p', 'npc-hint', t('smith.empty')));
+    else children.push(list);
+
+    const buttons = element('div', 'npc-buttons');
+    buttons.appendChild(
+      button(t('npc.back'), 'window-button', () => {
+        smithData = null;
+        render();
+      })
+    );
+    children.push(buttons);
+    body.replaceChildren(...children);
+  }
+
   function renderQuest(quest) {
     title.textContent = quest.name;
 
@@ -271,6 +346,11 @@ export function createNpcWindow(state, ui, handlers = {}) {
       return;
     }
 
+    if (smithData) {
+      renderSmith();
+      return;
+    }
+
     if (guildForm) {
       renderGuildForm();
       return;
@@ -289,6 +369,7 @@ export function createNpcWindow(state, ui, handlers = {}) {
   function show(message) {
     if (!data || data.npcId !== message.npcId) activeQuestId = null;
     if (barberDraft) barberDraft = null;
+    smithData = null;
 
     data = message;
     if (message.guildName) guildForm = false;
@@ -296,7 +377,15 @@ export function createNpcWindow(state, ui, handlers = {}) {
     windowEl.classList.remove('hidden');
   }
 
+  function showSmith(message) {
+    if (!data || data.npcId !== message.npcId) return;
+    smithData = message;
+    if (typeof message.gold === 'number') state.player.gold = message.gold;
+    render();
+    windowEl.classList.remove('hidden');
+  }
+
   closeButton.addEventListener('click', hide);
 
-  return { show, hide, isOpen, currentNpcId: () => data?.npcId ?? null };
+  return { show, showSmith, hide, isOpen, currentNpcId: () => data?.npcId ?? null };
 }

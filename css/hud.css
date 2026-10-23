@@ -2621,3 +2621,48 @@ html.touch-ui #dialogue-box,
 html.touch-ui #confirm-dialog {
   zoom: var(--ui-zoom, 1);
 }
+
+.tooltip-perk {
+  color: #e8b45a;
+}
+
+.smith-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 12px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.smith-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  background: var(--nu-board-darker);
+  border: 2px solid var(--nu-line);
+}
+
+.smith-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 13px;
+}
+
+.smith-perk {
+  color: #e8b45a;
+  font-size: 12px;
+}
+
+.smith-perk-none {
+  color: var(--nu-text-dim, var(--nu-text));
+}
+
+.smith-button {
+  flex: 0 0 auto;
+  font-size: 12px;
+  padding: 4px 8px;
+}

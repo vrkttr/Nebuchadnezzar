@@ -1,4 +1,5 @@
 import { getItem } from './items.js';
+import { formatPerk, parsePerk } from './perks.js';
 
 export const INVENTORY_SIZE = 24;
 
@@ -11,13 +12,16 @@ export function loadInventory(rows) {
 
   for (const row of rows) {
     if (row.slot < 0 || row.slot >= INVENTORY_SIZE) continue;
-    inventory[row.slot] = { itemId: row.item_id, quantity: row.quantity };
+    const stack = { itemId: row.item_id, quantity: row.quantity };
+    const perk = getItem(row.item_id)?.type === 'weapon' ? parsePerk(row.perk) : null;
+    if (perk) stack.perk = perk;
+    inventory[row.slot] = stack;
   }
 
   return inventory;
 }
 
-export function addItem(inventory, itemId, quantity) {
+export function addItem(inventory, itemId, quantity, perk = null) {
   const item = getItem(itemId);
   if (!item || quantity <= 0) return quantity;
 
@@ -25,7 +29,7 @@ export function addItem(inventory, itemId, quantity) {
 
   for (const slot of inventory) {
     if (remaining === 0) break;
-    if (slot && slot.itemId === itemId && slot.quantity < item.stackSize) {
+    if (!perk && slot && slot.itemId === itemId && !slot.perk && slot.quantity < item.stackSize) {
       const moved = Math.min(item.stackSize - slot.quantity, remaining);
       slot.quantity += moved;
       remaining -= moved;
@@ -35,7 +39,7 @@ export function addItem(inventory, itemId, quantity) {
   for (let index = 0; index < inventory.length && remaining > 0; index += 1) {
     if (inventory[index] === null) {
       const moved = Math.min(item.stackSize, remaining);
-      inventory[index] = { itemId, quantity: moved };
+      inventory[index] = perk ? { itemId, quantity: moved, perk } : { itemId, quantity: moved };
       remaining -= moved;
     }
   }
@@ -79,14 +83,14 @@ export function sendInventory(notify, playerId, player) {
 }
 
 export function serializeInventory(inventory) {
-  return inventory.map((slot) => (slot ? { itemId: slot.itemId, quantity: slot.quantity } : null));
+  return inventory.map((slot) => (slot ? { itemId: slot.itemId, quantity: slot.quantity, perk: slot.perk ?? null } : null));
 }
 
 export function inventoryRows(inventory) {
   const rows = [];
 
   inventory.forEach((slot, index) => {
-    if (slot) rows.push([index, slot.itemId, slot.quantity]);
+    if (slot) rows.push([index, slot.itemId, slot.quantity, formatPerk(slot.perk)]);
   });
 
   return rows;
