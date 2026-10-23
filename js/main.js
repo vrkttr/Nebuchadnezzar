@@ -523,6 +523,7 @@ function start(token) {
           if (message.showIntro) introWindow.show();
         });
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
+        audio.registerItems(gameState.items);
         inventory.render(message.inventory ?? []);
         hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
         abilitiesWindow.render(message.abilities ?? []);

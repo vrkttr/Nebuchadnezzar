@@ -128,6 +128,7 @@ function createSilentAudio() {
     applySettings: noop,
     weaponFamily: () => 'fist',
     shotSound: () => null,
+    registerItems: noop,
     setIndoor: noop,
     ready: () => Promise.resolve(),
   };
@@ -242,6 +243,13 @@ export function createAudio() {
     }
     const name = EVENT_SOUNDS[event.kind];
     if (name) play(name);
+  }
+
+  function registerItems(items) {
+    for (const item of Object.values(items ?? {})) {
+      if (item.look?.family) WEAPON_FAMILY[item.id] = item.look.family;
+      if (item.look?.shot) WEAPON_SHOT[item.id] = item.look.shot;
+    }
   }
 
   function weaponFamily(weaponId) {
@@ -378,6 +386,7 @@ export function createAudio() {
     applySettings,
     weaponFamily,
     shotSound,
+    registerItems,
     setIndoor,
     ready,
   };

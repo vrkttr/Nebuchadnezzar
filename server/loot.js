@@ -1,10 +1,14 @@
 export const MAX_GOLD = 2000000000;
 
 import { getItem } from './items.js';
+import { GEAR_ITEMS } from './itemsGear.js';
 
 const GOLD_PER_LEVEL_MIN = 2;
 const GOLD_PER_LEVEL_MAX = 5;
 const QUALITY_RANK = { uncommon: 1, rare: 2, epic: 3 };
+const GEAR_DROP_CHANCE = 0.07;
+const GEAR_QUALITY_WEIGHT = { common: 1, uncommon: 1, rare: 0.45, epic: 0.15 };
+const GEAR_POOL = Object.values(GEAR_ITEMS).filter((item) => item.slot);
 
 const LOOT_TABLES = {
   raider: [
@@ -383,12 +387,29 @@ export function addGold(player, amount) {
   player.gold = Math.max(0, Math.min(MAX_GOLD, player.gold + amount));
 }
 
+function rollGearDrop(playerLevel, enemyLevel) {
+  const factor = levelFactor(playerLevel, enemyLevel);
+  if (Math.random() >= GEAR_DROP_CHANCE * factor) return null;
+
+  const candidates = GEAR_POOL.filter((item) => item.level >= enemyLevel - 3 && item.level <= enemyLevel + 1);
+  const total = candidates.reduce((sum, item) => sum + (GEAR_QUALITY_WEIGHT[item.quality] ?? 1), 0);
+  if (total <= 0) return null;
+
+  let pick = Math.random() * total;
+  for (const item of candidates) {
+    pick -= GEAR_QUALITY_WEIGHT[item.quality] ?? 1;
+    if (pick <= 0) return { itemId: item.id, quantity: 1 };
+  }
+  return null;
+}
+
 export function rollLoot(tableId, playerLevel, enemyLevel) {
-  const table = LOOT_TABLES[tableId];
-  if (!table) return [];
+  const table = LOOT_TABLES[tableId] ?? [];
 
   const factor = levelFactor(playerLevel, enemyLevel);
   const drops = [];
+  const gear = rollGearDrop(playerLevel, enemyLevel);
+  if (gear) drops.push(gear);
 
   for (const entry of table) {
     const chance = entry.chance * factor * qualityScale(entry.itemId, playerLevel, enemyLevel);

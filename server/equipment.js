@@ -1,7 +1,7 @@
 import { getClassModifiers } from './classes.js';
 import { getItem } from './items.js';
 
-export const EQUIPMENT_SLOTS = ['weapon', 'head', 'chest', 'legs'];
+export const EQUIPMENT_SLOTS = ['weapon', 'head', 'shoulders', 'chest', 'hands', 'belt', 'legs', 'feet'];
 
 export function createEquipment() {
   return Object.fromEntries(EQUIPMENT_SLOTS.map((slot) => [slot, null]));

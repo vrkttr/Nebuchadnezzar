@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { getMaterial } from '../world/Textures.js';
 import { dampFactor } from '../utils/Interpolation.js';
 import { resolveAppearance } from './Appearances.js';
+import { buildGearVisual } from './GearVisuals.js';
+import { gameState } from '../state/GameState.js';
 
 const HIP_HEIGHT = 0.94;
 const DEFAULT_SCALE = 0.95;
@@ -28,7 +30,8 @@ const HIT_DURATION = 0.28;
 const HIT_RECOIL = 0.3;
 const FALL_SPEED = 2.5;
 const FALL_LIFT = 0.12;
-const EQUIPMENT_SLOTS = ['weapon', 'head', 'chest', 'legs'];
+const EQUIPMENT_SLOTS = ['weapon', 'head', 'shoulders', 'chest', 'hands', 'belt', 'legs', 'feet'];
+const MOUNT_SIDES = [1, -1];
 
 const cloth = (color) => getMaterial('cloth', { color });
 const skin = (color) => getMaterial('skin', { color });
@@ -373,8 +376,15 @@ export function createHumanoid(name, options = {}) {
     weapon: weaponAnchor,
     head: headPivot,
     chest: torso,
+    belt: torso,
   };
-  const equipped = { weapon: null, head: null, chest: null, legs: null };
+  const multiMounts = {
+    legs: () => [pivot(legLeft.hip, 0, -0.44, 0), pivot(legRight.hip, 0, -0.44, 0)],
+    feet: () => [pivot(legLeft.hip, 0, -0.44, 0), pivot(legRight.hip, 0, -0.44, 0)],
+    hands: () => [pivot(armLeft.hand, 0, 0, 0), pivot(armRight.hand, 0, 0, 0)],
+    shoulders: () => [pivot(armLeft.shoulder, 0, 0, 0), pivot(armRight.shoulder, 0, 0, 0)],
+  };
+  const equipped = Object.fromEntries(EQUIPMENT_SLOTS.map((slot) => [slot, null]));
   const removers = {};
 
   function clearSlot(slot) {
@@ -405,28 +415,30 @@ export function createHumanoid(name, options = {}) {
   }
 
   function applyPants(itemId) {
-    const color = PANTS_OVERRIDE[itemId] ?? appearance.pants;
+    const color = PANTS_OVERRIDE[itemId] ?? gameState.items?.[itemId]?.look?.main ?? appearance.pants;
     for (const mesh of pantsMeshes) mesh.material = cloth(color);
   }
 
   function fillSlot(slot, itemId) {
-    const build = EQUIPMENT_VISUALS[itemId];
-    if (!build) return;
+    const legacy = EQUIPMENT_VISUALS[itemId];
+    const look = gameState.items?.[itemId]?.look;
+    const make = (side) => legacy ?? buildGearVisual(slot, look, side);
+    if (!make(1)) return;
 
-    if (slot === 'legs') {
-      const mounts = [pivot(legLeft.hip, 0, -0.44, 0), pivot(legRight.hip, 0, -0.44, 0)];
-      for (const mount of mounts) {
-        build(mount);
+    if (multiMounts[slot]) {
+      const mounts = multiMounts[slot]();
+      mounts.forEach((mount, index) => {
+        make(MOUNT_SIDES[index])(mount);
         enablePortraitLayer(mount);
-      }
-      applyPants(itemId);
+      });
+      if (slot === 'legs') applyPants(itemId);
       removers[slot] = () => {
         for (const mount of mounts) mount.parent.remove(mount);
-        applyPants(null);
+        if (slot === 'legs') applyPants(null);
       };
     } else {
       const root = new THREE.Group();
-      build(root);
+      make(1)(root);
       enablePortraitLayer(root);
       mountPoints[slot].add(root);
       removers[slot] = () => root.parent.remove(root);

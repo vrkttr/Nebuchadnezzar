@@ -1,7 +1,7 @@
 import { t } from '../i18n/I18n.js';
 import { slotLabel } from './Tooltip.js';
 
-const SLOT_ORDER = ['head', 'chest', 'legs', 'weapon'];
+const SLOT_ORDER = ['head', 'shoulders', 'chest', 'hands', 'belt', 'legs', 'feet', 'weapon'];
 
 export function createCharacterWindow(state, ui, handlers = {}) {
   const windowEl = document.getElementById('character-window');
