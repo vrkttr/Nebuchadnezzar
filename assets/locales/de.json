@@ -636,5 +636,9 @@
   "speech.flugzeug.10": "Manche sagen, es gehört zum Sektorenprogramm. Andere sagen, es ist ein Zeichen. Ich sage: Es ist ein Flugzeug. Aber warum?",
   "speech.flugzeug.11": "Es kommt nie näher und fliegt nie weg. Irgendetwas hält es hier.",
   "speech.flugzeug.12": "Wenn man lange genug hinaufschaut, bildet man sich ein, es würde zurückwinken.",
-  "speech.wuff": "Wuff wuff!"
+  "speech.wuff": "Wuff wuff!",
+  "npc.baron.name": "Baron",
+  "npc.baron.greeting": "Was starrst du? Ich beiße nicht. Meistens nicht.",
+  "npc.annelie.name": "Annelie",
+  "npc.annelie.greeting": "Bitte nicht so laut. Wer bist du?"
 }

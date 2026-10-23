@@ -4,6 +4,7 @@ import { addGold } from './loot.js';
 import { getNpcDefinition } from './npcs.js';
 import { grantXp } from './progression.js';
 import { MORDFALL_QUESTS } from './questsMordfall.js';
+import { BARON_QUESTS } from './questsBaron.js';
 
 export const MAX_ACTIVE_QUESTS = 10;
 
@@ -204,7 +205,7 @@ const BASE_QUESTS = {
   },
 };
 
-export const QUESTS = { ...BASE_QUESTS, ...MORDFALL_QUESTS };
+export const QUESTS = { ...BASE_QUESTS, ...MORDFALL_QUESTS, ...BARON_QUESTS };
 
 export function getQuest(questId) {
   return typeof questId === 'string' && Object.hasOwn(QUESTS, questId) ? QUESTS[questId] : null;
@@ -281,6 +282,8 @@ function isAvailable(player, quest) {
   if (player.quests[quest.id]) return false;
   if (player.level < quest.level) return false;
   if (quest.requires && player.quests[quest.requires]?.status !== 'completed') return false;
+  if (quest.requiresAny && !quest.requiresAny.some((questId) => player.quests[questId]?.status === 'completed')) return false;
+  if (quest.alsoRequires?.some((questId) => player.quests[questId]?.status !== 'completed')) return false;
   if (quest.excludes?.some((questId) => player.quests[questId])) return false;
 
   return true;

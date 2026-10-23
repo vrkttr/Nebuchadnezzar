@@ -911,7 +911,7 @@ function start(token) {
       return;
     }
 
-    if (event.code === 'KeyQ' && !event.repeat) {
+    if (event.code === 'KeyL' && !event.repeat) {
       questWindow.toggle();
       return;
     }

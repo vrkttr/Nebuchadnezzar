@@ -124,6 +124,18 @@ const NPC_DEFINITIONS = {
     color: 0x5a5a3a,
     greeting: 'Wenn es um das Beet geht: Es gehört mir. Alles andere geht dich nichts an.',
   },
+  baron: {
+    id: 'baron',
+    name: 'Baron',
+    color: 0x4a3428,
+    greeting: 'Was starrst du? Ich beiße nicht. Meistens nicht.',
+  },
+  annelie: {
+    id: 'annelie',
+    name: 'Annelie',
+    color: 0x6a5a4a,
+    greeting: 'Bitte nicht so laut. Wer bist du?',
+  },
   pumpenwart: {
     id: 'pumpenwart',
     name: 'Pumpenwart',
