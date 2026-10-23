@@ -508,10 +508,10 @@ function start(token) {
         enterZone(message, true).then(() => {
           if (message.showIntro) introWindow.show();
         });
-        hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
-        abilitiesWindow.render(message.abilities ?? []);
         gameState.items = Object.fromEntries((message.items ?? []).map((item) => [item.id, item]));
         inventory.render(message.inventory ?? []);
+        hud.setAbilities(message.abilities ?? [], message.actionItems ?? []);
+        abilitiesWindow.render(message.abilities ?? []);
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
         player.setAppearance(message.appearance);
