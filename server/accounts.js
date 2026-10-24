@@ -91,6 +91,15 @@ function parseAppearance(source) {
   });
 }
 
+const PERMANENT_BAN = '9999-12-31 23:59:59';
+const MAX_BAN_HOURS = 24 * 365 * 5;
+const MAX_BAN_REASON = 200;
+const BAN_LIST_LIMIT = 100;
+
+function formatUntil(date) {
+  return `${date.toISOString().slice(0, 16).replace('T', ' ')} UTC`;
+}
+
 export function createAccounts({ db, enterWorld }) {
   const loginIpFailures = createCounter(20, TEN_MINUTES);
   const loginUserFailures = createCounter(8, TEN_MINUTES);
@@ -137,6 +146,19 @@ export function createAccounts({ db, enterWorld }) {
     send(socket, { ...(await accountPayload(socket.userId)), ...extra });
   }
 
+  async function activeBan(userId) {
+    const [rows] = await db.query('SELECT UNIX_TIMESTAMP(banned_until) AS until, ban_reason FROM users WHERE id = ? AND banned_until IS NOT NULL AND banned_until > NOW()', [userId]);
+    if (rows.length === 0) return null;
+    const until = Number(rows[0].until);
+    const permanent = !Number.isFinite(until) || until >= 253402300000;
+    return { permanent, until: permanent ? null : formatUntil(new Date(until * 1000)), reason: rows[0].ban_reason || '-' };
+  }
+
+  function failBanned(socket, action, ban) {
+    if (ban.permanent) return fail(socket, action, 'auth.error.bannedPermanent', { reason: ban.reason });
+    return fail(socket, action, 'auth.error.bannedUntil', { until: ban.until, reason: ban.reason });
+  }
+
   async function startSession(socket, user) {
     const token = randomBytes(32).toString('hex');
     await db.query('INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL ? DAY))', [
@@ -181,6 +203,8 @@ export function createAccounts({ db, enterWorld }) {
     }
 
     loginUserFailures.clear(userKey);
+    const ban = await activeBan(user.id);
+    if (ban) return failBanned(socket, 'login', ban);
     await startSession(socket, user);
     result(socket, 'login', true);
   }
@@ -230,6 +254,12 @@ export function createAccounts({ db, enterWorld }) {
     if (rows.length === 0) {
       resumeIpFailures.add(socket.ip);
       return fail(socket, 'resume', 'auth.error.session');
+    }
+
+    const ban = await activeBan(rows[0].user_id);
+    if (ban) {
+      await db.query('DELETE FROM sessions WHERE token_hash = ?', [tokenHash]);
+      return failBanned(socket, 'resume', ban);
     }
 
     socket.userId = rows[0].user_id;
@@ -341,6 +371,9 @@ export function createAccounts({ db, enterWorld }) {
   async function enter(socket) {
     if (!requireUser(socket, 'enter-world') || socket.inWorld) return;
 
+    const ban = await activeBan(socket.userId);
+    if (ban) return failBanned(socket, 'enter-world', ban);
+
     const [rows] = await db.query('SELECT id, class_id FROM characters WHERE user_id = ?', [socket.userId]);
     if (rows.length === 0) return fail(socket, 'enter-world', 'character.error.none');
     if (!isValidClass(rows[0].class_id)) return fail(socket, 'enter-world', 'class.error.missing');
@@ -390,6 +423,38 @@ export function createAccounts({ db, enterWorld }) {
       } finally {
         socket.menuBusy = false;
       }
+    },
+    async ban(characterName, hours, reason) {
+      const [rows] = await db.query('SELECT user_id, name FROM characters WHERE name = ?', [characterName]);
+      if (rows.length === 0) return null;
+
+      const duration = Number.isFinite(hours) && hours > 0 ? Math.min(Math.floor(hours), MAX_BAN_HOURS) : 0;
+      const cleanReason = text(reason, MAX_BAN_REASON).trim() || null;
+      if (duration > 0) {
+        await db.query('UPDATE users SET banned_until = DATE_ADD(NOW(), INTERVAL ? HOUR), ban_reason = ? WHERE id = ?', [duration, cleanReason, rows[0].user_id]);
+      } else {
+        await db.query('UPDATE users SET banned_until = ?, ban_reason = ? WHERE id = ?', [PERMANENT_BAN, cleanReason, rows[0].user_id]);
+      }
+      await db.query('DELETE FROM sessions WHERE user_id = ?', [rows[0].user_id]);
+      const ban = await activeBan(rows[0].user_id);
+      return { name: rows[0].name, userId: rows[0].user_id, until: ban?.until ?? null };
+    },
+    async unban(characterName) {
+      const [rows] = await db.query('SELECT user_id, name FROM characters WHERE name = ?', [characterName]);
+      if (rows.length === 0) return null;
+      await db.query('UPDATE users SET banned_until = NULL, ban_reason = NULL WHERE id = ?', [rows[0].user_id]);
+      return { name: rows[0].name };
+    },
+    async listBans() {
+      const [rows] = await db.query(
+        'SELECT c.name AS name, UNIX_TIMESTAMP(u.banned_until) AS until, u.ban_reason AS reason FROM users u JOIN characters c ON c.user_id = u.id WHERE u.banned_until IS NOT NULL AND u.banned_until > NOW() ORDER BY u.banned_until DESC LIMIT ?',
+        [BAN_LIST_LIMIT]
+      );
+      return rows.map((row) => {
+        const until = Number(row.until);
+        const permanent = !Number.isFinite(until) || until >= 253402300000;
+        return { name: row.name, permanent, until: permanent ? null : formatUntil(new Date(until * 1000)), reason: row.reason ?? '' };
+      });
     },
     async cleanup() {
       await db.query('DELETE FROM sessions WHERE expires_at < NOW()');

@@ -8,6 +8,10 @@ const GOLD_PER_LEVEL_MAX = 5;
 const QUALITY_RANK = { uncommon: 1, rare: 2, epic: 3 };
 const GEAR_DROP_CHANCE = 0.07;
 const GEAR_QUALITY_WEIGHT = { common: 1, uncommon: 1, rare: 0.45, epic: 0.15 };
+const BOSS_GEAR_QUALITY_WEIGHT = { common: 0, uncommon: 0.4, rare: 1, epic: 0.6 };
+const BOSS_GOLD_FACTOR = 5;
+const BOSS_TABLE_CHANCE_FACTOR = 1.4;
+const BOSS_EXTRA_GEAR_CHANCE = 0.35;
 const GEAR_POOL = Object.values(GEAR_ITEMS).filter((item) => item.slot);
 
 const LOOT_TABLES = {
@@ -377,10 +381,10 @@ function qualityScale(itemId, playerLevel, enemyLevel) {
   return Math.max(0.1, 1 + difference * 0.4);
 }
 
-export function goldForKill(playerLevel, enemyLevel) {
+export function goldForKill(playerLevel, enemyLevel, boss = false) {
   const base = randomInt(enemyLevel * GOLD_PER_LEVEL_MIN, enemyLevel * GOLD_PER_LEVEL_MAX);
 
-  return Math.max(1, Math.round(base * levelFactor(playerLevel, enemyLevel)));
+  return Math.max(1, Math.round(base * levelFactor(playerLevel, enemyLevel) * (boss ? BOSS_GOLD_FACTOR : 1)));
 }
 
 export function addGold(player, amount) {
@@ -403,16 +407,41 @@ function rollGearDrop(playerLevel, enemyLevel) {
   return null;
 }
 
-export function rollLoot(tableId, playerLevel, enemyLevel) {
+function rollBossGear(enemyLevel) {
+  let candidates = GEAR_POOL.filter((item) => item.level >= enemyLevel - 3 && item.level <= enemyLevel + 3 && (BOSS_GEAR_QUALITY_WEIGHT[item.quality] ?? 0) > 0);
+  if (candidates.length === 0) candidates = GEAR_POOL.filter((item) => item.level <= enemyLevel + 3 && (BOSS_GEAR_QUALITY_WEIGHT[item.quality] ?? 0) > 0).sort((a, b) => b.level - a.level).slice(0, 12);
+
+  const total = candidates.reduce((sum, item) => sum + BOSS_GEAR_QUALITY_WEIGHT[item.quality], 0);
+  if (total <= 0) return null;
+
+  let pick = Math.random() * total;
+  for (const item of candidates) {
+    pick -= BOSS_GEAR_QUALITY_WEIGHT[item.quality];
+    if (pick <= 0) return { itemId: item.id, quantity: 1 };
+  }
+  return null;
+}
+
+export function rollLoot(tableId, playerLevel, enemyLevel, boss = false) {
   const table = LOOT_TABLES[tableId] ?? [];
 
   const factor = levelFactor(playerLevel, enemyLevel);
   const drops = [];
-  const gear = rollGearDrop(playerLevel, enemyLevel);
-  if (gear) drops.push(gear);
+
+  if (boss) {
+    const guaranteed = rollBossGear(enemyLevel);
+    if (guaranteed) drops.push(guaranteed);
+    if (Math.random() < BOSS_EXTRA_GEAR_CHANCE) {
+      const extra = rollBossGear(enemyLevel);
+      if (extra && !drops.some((drop) => drop.itemId === extra.itemId)) drops.push(extra);
+    }
+  } else {
+    const gear = rollGearDrop(playerLevel, enemyLevel);
+    if (gear) drops.push(gear);
+  }
 
   for (const entry of table) {
-    const chance = entry.chance * factor * qualityScale(entry.itemId, playerLevel, enemyLevel);
+    const chance = entry.chance * factor * qualityScale(entry.itemId, playerLevel, enemyLevel) * (boss ? BOSS_TABLE_CHANCE_FACTOR : 1);
 
     if (Math.random() < Math.min(1, chance)) {
       drops.push({ itemId: entry.itemId, quantity: randomInt(entry.min, entry.max) });

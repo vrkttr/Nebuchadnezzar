@@ -129,3 +129,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     KEY idx_sessions_user (user_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS banned_until DATETIME NULL;
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS ban_reason VARCHAR(200) NULL;

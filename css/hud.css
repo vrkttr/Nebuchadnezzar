@@ -49,6 +49,21 @@ button {
   color: #e0664c;
 }
 
+.nameplate-boss {
+  color: #f0b43c;
+  font-family: var(--nu-font-display);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+}
+
+#target-frame.target-boss {
+  border-color: var(--nu-amber);
+}
+
+#target-frame.target-boss #target-name {
+  color: var(--nu-amber);
+}
+
 .nameplate-npc {
   color: #a8cf7a;
 }
@@ -779,6 +794,23 @@ button {
 
 #minimap-buttons button:hover {
   color: var(--nu-text);
+}
+
+#minimap-buttons button.hidden {
+  display: none;
+}
+
+#minimap-buttons button img {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: auto;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+#minimap-buttons button:hover img {
+  opacity: 1;
 }
 
 #bag-bar {

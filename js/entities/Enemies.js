@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createEnemy } from './Characters.js';
+import { t } from '../i18n/I18n.js';
 import { dampFactor, lerpAngle } from '../utils/Interpolation.js';
 import { createOcclusion } from '../utils/Occlusion.js';
 
@@ -25,7 +26,7 @@ export function createEnemies(scene, camera, nameplateContainer, player) {
   let selectedId = null;
 
   function labelFor(data) {
-    return `${data.name} (Lv ${data.level})`;
+    return data.boss ? `${data.name} (Lv ${data.level}) · ${t('enemy.boss')}` : `${data.name} (Lv ${data.level})`;
   }
 
   function applyVisibility(enemy) {
@@ -51,6 +52,7 @@ export function createEnemies(scene, camera, nameplateContainer, player) {
     const nameplateEl = document.createElement('div');
     nameplateEl.className = 'nameplate nameplate-enemy';
     nameplateEl.textContent = labelFor(data);
+    if (data.boss) nameplateEl.classList.add('nameplate-boss');
     nameplateContainer.appendChild(nameplateEl);
 
     const enemy = {

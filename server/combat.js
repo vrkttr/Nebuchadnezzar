@@ -185,7 +185,7 @@ function awardKill(killer, killerId, enemy, notify, onKill) {
 
   for (const { id, state } of recipients) {
     const xpAmount = Math.round(xpForKill(state.level, enemy.level) * share);
-    const goldAmount = Math.max(1, Math.round(goldForKill(state.level, enemy.level) * getPlayerModifiers(state).goldMult * share));
+    const goldAmount = Math.max(1, Math.round(goldForKill(state.level, enemy.level, enemy.boss === true) * getPlayerModifiers(state).goldMult * share));
 
     notify(id, { type: 'event', kind: 'kill', enemyName: enemy.name, enemyType: enemy.type });
 

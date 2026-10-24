@@ -21,7 +21,7 @@ function toggleFullscreen() {
   enterFullscreen();
 }
 
-function enterFullscreen() {
+export function enterFullscreen() {
   if (document.fullscreenElement) return;
 
   document.documentElement

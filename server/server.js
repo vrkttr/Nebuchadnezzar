@@ -731,7 +731,7 @@ async function enterWorld(socket, characterId) {
     } else if (typeof message.type === 'string' && message.type.startsWith('mail-')) {
       handleMail(mailContext, id, players.get(id), message).catch((error) => console.error('Fehler im Postsystem:', error));
     } else if (typeof message.type === 'string' && message.type.startsWith('admin-')) {
-      handleAdmin(adminContext, id, players.get(id), message);
+      Promise.resolve(handleAdmin(adminContext, id, players.get(id), message)).catch((error) => console.error('Fehler im Adminsystem:', error));
     } else if (message.type === 'vendor-sell') {
       const state = players.get(id);
       if (!state || typeof message.itemId !== 'string') return;
@@ -763,6 +763,7 @@ function serializeMailboxes(zoneId) {
 const adminContext = {
   players,
   notify,
+  bans: accounts,
   changeZone: (playerId, state, zoneId, spawnId, override) => changeZone(playerId, state, zoneId, spawnId, override),
   groundHeight: (zoneId, x, z) => groundHeight(zoneId, x, z),
   kick: (playerId) => {

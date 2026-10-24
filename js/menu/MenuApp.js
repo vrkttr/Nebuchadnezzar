@@ -1,5 +1,6 @@
 import { SUPPORTED_LANGUAGES, getLanguage, setLanguage, t } from '../i18n/I18n.js';
 import { GAME_VERSION } from '../config.js';
+import { enterFullscreen } from '../input/Keyboard.js';
 import { createSettingsForm, describeResult } from '../ui/SettingsForm.js';
 import { clear, el } from '../utils/Dom.js';
 import { classFields, createCharacterForm } from './CharacterForm.js';
@@ -393,6 +394,7 @@ export function createMenu({ connection, onEnterWorld }) {
       return;
     }
     entering = true;
+    if (account.settings?.autoFullscreen) enterFullscreen();
     showLoading(true);
     const result = await request({ type: 'enter-world' }, 'enter-world');
     if (disposed) return;

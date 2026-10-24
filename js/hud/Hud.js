@@ -388,9 +388,11 @@ export function createHud(state, handlers = {}) {
     updateItemSlots();
     updateCast();
 
+    targetFrame.classList.toggle('target-boss', state.target?.boss === true);
+
     if (state.target) {
       targetFrame.classList.remove('hidden');
-      targetName.textContent = state.target.name;
+      targetName.textContent = state.target.boss ? `${state.target.name} · ${t('enemy.boss')}` : state.target.name;
       targetLevel.textContent = state.target.level;
       targetHealthFill.style.width = `${toPercent(state.target.health, state.target.healthMax)}%`;
       targetInvite.classList.add('hidden');

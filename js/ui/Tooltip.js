@@ -41,6 +41,12 @@ export function createTooltip(state) {
     move(event);
   }
 
+  function showText(title, hint, event) {
+    const lines = [[title, 'tooltip-name']];
+    if (hint) lines.push([hint, 'tooltip-dim']);
+    show(lines, event);
+  }
+
   function hide() {
     element.classList.add('hidden');
   }
@@ -156,5 +162,5 @@ export function createTooltip(state) {
     show(lines, event);
   }
 
-  return { showItem, showAbility, move, hide };
+  return { showItem, showAbility, showText, move, hide };
 }

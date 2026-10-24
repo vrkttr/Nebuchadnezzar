@@ -1,7 +1,7 @@
 import { t } from '../i18n/I18n.js';
 import { el } from '../utils/Dom.js';
 
-const TABS = ['general', 'sound', 'graphics'];
+const TABS = ['general', 'sound', 'graphics', 'account'];
 const GROUPS = [
   ['lighting', ['shadows', 'lights', 'flicker', 'daynight']],
   ['sky', ['clouds', 'haze', 'puddles']],
@@ -132,19 +132,22 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
       switchRow('settings.autoFullscreen', 'settings.autoFullscreenHint', autoFullscreen),
       el('label', { class: 'menu-field' }, el('span', { class: 'nu-label', text: t('settings.touchControls') }), touchControls),
       el('p', { class: 'menu-hint', text: t('settings.touchControlsHint') })
-    ),
-    onPasswordChange
-      ? el(
-          'section',
-          { class: 'menu-group' },
-          el('h2', { class: 'menu-group-title', text: t('settings.password') }),
-          el('label', { class: 'menu-field' }, el('span', { class: 'nu-label', text: t('settings.password.current') }), passwordFields.current),
-          el('label', { class: 'menu-field' }, el('span', { class: 'nu-label', text: t('settings.password.new') }), passwordFields.next),
-          el('label', { class: 'menu-field' }, el('span', { class: 'nu-label', text: t('register.confirm') }), passwordFields.confirm),
-          passwordMessage,
-          el('div', { class: 'menu-actions' }, passwordButton)
-        )
-      : null
+    )
+  );
+
+  const account = el(
+    'div',
+    { class: 'menu-tabpanel', id: 'settings-panel-account', hidden: true },
+    el(
+      'section',
+      { class: 'menu-group' },
+      el('h2', { class: 'menu-group-title', text: t('settings.password') }),
+      el('label', { class: 'menu-field' }, el('span', { class: 'nu-label', text: t('settings.password.current') }), passwordFields.current),
+      el('label', { class: 'menu-field' }, el('span', { class: 'nu-label', text: t('settings.password.new') }), passwordFields.next),
+      el('label', { class: 'menu-field' }, el('span', { class: 'nu-label', text: t('register.confirm') }), passwordFields.confirm),
+      passwordMessage,
+      el('div', { class: 'menu-actions' }, passwordButton)
+    )
   );
 
   const sound = el(
@@ -184,7 +187,7 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
   );
   detectPreset();
 
-  const panels = { general, sound, graphics };
+  const panels = { general, sound, graphics, account };
   const tabButtons = TABS.map((name) =>
     el('button', { type: 'button', class: 'menu-tab', role: 'tab', 'aria-selected': name === activeTab ? 'true' : 'false', text: t(`settings.tab.${name}`) })
   );
@@ -194,6 +197,7 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
     activeTab = name;
     tabButtons.forEach((button, index) => button.setAttribute('aria-selected', TABS[index] === name ? 'true' : 'false'));
     for (const [panelName, panel] of Object.entries(panels)) panel.hidden = panelName !== name;
+    saveBar.hidden = name === 'account';
   }
 
   function collect() {
@@ -220,6 +224,8 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
     showStatus(message, outcome.ok ? t('settings.saved') : outcome.text, outcome.ok);
   });
 
+  const saveBar = el('div', { class: 'menu-actions menu-actions-sticky' }, saveButton);
+
   const element = el(
     'div',
     { class: 'menu-form menu-settings' },
@@ -227,8 +233,9 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
     general,
     sound,
     graphics,
+    account,
     message,
-    el('div', { class: 'menu-actions menu-actions-sticky' }, saveButton)
+    saveBar
   );
 
   return { element };

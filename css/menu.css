@@ -582,6 +582,10 @@
   outline-offset: 2px;
 }
 
+.menu-actions[hidden] {
+  display: none;
+}
+
 .menu-actions-sticky {
   position: sticky;
   bottom: 0;

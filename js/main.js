@@ -271,6 +271,16 @@ function start(connection, initMessage) {
 
   document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.menu"]')?.addEventListener('click', () => gameMenu.toggle());
 
+  for (const button of document.querySelectorAll('#minimap-buttons button')) {
+    const title = t(button.dataset.i18nTitle);
+    button.removeAttribute('title');
+    button.setAttribute('aria-label', title);
+    button.addEventListener('mouseenter', (event) => ui.tooltip.showText(title, button.dataset.key ? `[${button.dataset.key}]` : '', event));
+    button.addEventListener('mousemove', (event) => ui.tooltip.move(event));
+    button.addEventListener('mouseleave', () => ui.tooltip.hide());
+    button.addEventListener('click', () => ui.tooltip.hide());
+  }
+
   const inventory = createInventory(gameState, ui, {
     onUse: (slot) => connection.send({ type: 'item-use', slot }),
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
@@ -616,6 +626,8 @@ function start(connection, initMessage) {
         mailWindow.setUnread(message.unread);
       } else if (message.type === 'admin-overview') {
         adminWindow.setOverview(message);
+      } else if (message.type === 'admin-bans') {
+        adminWindow.setBans(message);
       } else if (message.type === 'kicked') {
         kicked = true;
       } else if (message.type === 'skills') {

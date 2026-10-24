@@ -9,8 +9,9 @@ export function createAdminWindow(state, handlers = {}) {
   const openButton = document.getElementById('admin-button');
 
   let overview = { players: [], zones: [] };
+  let bans = [];
   let timer = null;
-  const draft = { item: '', quantity: '1', zone: '', spawn: '', x: '', z: '', gold: '', level: '', text: '', name: '' };
+  const draft = { item: '', quantity: '1', zone: '', spawn: '', x: '', z: '', gold: '', level: '', text: '', name: '', banName: '', banHours: '', banReason: '' };
 
   function isOpen() {
     return !windowEl.classList.contains('hidden');
@@ -29,6 +30,7 @@ export function createAdminWindow(state, handlers = {}) {
   function show() {
     windowEl.classList.remove('hidden');
     handlers.onSend?.({ type: 'admin-overview' });
+    handlers.onSend?.({ type: 'admin-bans' });
     stopTimer();
     timer = setInterval(() => handlers.onSend?.({ type: 'admin-overview' }), REFRESH_MS);
   }
@@ -99,6 +101,12 @@ export function createAdminWindow(state, handlers = {}) {
       if (player.name !== state.player?.name) {
         line.appendChild(button(t('admin.goTo'), () => send({ type: 'admin-tp-to', name: player.name }), 'window-button admin-mini'));
         line.appendChild(button(t('admin.summon'), () => send({ type: 'admin-summon', name: player.name }), 'window-button admin-mini'));
+        line.appendChild(
+          button(t('admin.banFill'), () => {
+            draft.banName = player.name;
+            render();
+          }, 'window-button window-button-danger admin-mini')
+        );
         line.appendChild(button(t('admin.kick'), () => send({ type: 'admin-kick', name: player.name }), 'window-button window-button-danger admin-mini'));
       }
       list.appendChild(line);
@@ -183,6 +191,41 @@ export function createAdminWindow(state, handlers = {}) {
     return wrapper;
   }
 
+  function buildBans() {
+    const wrapper = section(t('admin.bans'));
+    wrapper.append(
+      row(field('banName', t('admin.banName'))),
+      row(
+        field('banHours', t('admin.banHours'), 'number', '110px'),
+        field('banReason', t('admin.banReason')),
+        button(
+          t('admin.banButton'),
+          () => {
+            if (draft.banName.trim() === '') return;
+            send({ type: 'admin-ban', name: draft.banName.trim(), hours: Number.parseInt(draft.banHours, 10) || 0, reason: draft.banReason });
+            draft.banName = '';
+            draft.banHours = '';
+            draft.banReason = '';
+            render();
+          },
+          'window-button window-button-danger admin-button'
+        )
+      )
+    );
+
+    const list = el('div', 'admin-players');
+    for (const ban of bans) {
+      const line = el('div', 'admin-player');
+      line.appendChild(el('span', 'admin-player-name', ban.name));
+      line.appendChild(el('span', 'admin-player-zone', `${ban.permanent ? t('admin.banPermanent') : ban.until}${ban.reason ? ` · ${ban.reason}` : ''}`));
+      line.appendChild(button(t('admin.unban'), () => send({ type: 'admin-unban', name: ban.name }), 'window-button admin-mini'));
+      list.appendChild(line);
+    }
+    if (bans.length === 0) list.appendChild(el('div', 'admin-player-zone', t('admin.noBans')));
+    wrapper.appendChild(list);
+    return wrapper;
+  }
+
   function buildMisc() {
     const wrapper = section(t('admin.misc'));
     wrapper.append(
@@ -216,7 +259,7 @@ export function createAdminWindow(state, handlers = {}) {
   function render() {
     const focused = document.activeElement;
     const focusKey = focused && body.contains(focused) ? Array.from(body.querySelectorAll('input,select')).indexOf(focused) : -1;
-    body.replaceChildren(buildPlayers(), buildSpawn(), buildTeleport(), buildMisc());
+    body.replaceChildren(buildPlayers(), buildSpawn(), buildTeleport(), buildBans(), buildMisc());
     if (focusKey >= 0) body.querySelectorAll('input,select')[focusKey]?.focus();
   }
 
@@ -229,6 +272,14 @@ export function createAdminWindow(state, handlers = {}) {
         const players = body.querySelector('.admin-players');
         if (players) players.replaceWith(buildPlayers().querySelector('.admin-players'));
       }
+    }
+  }
+
+  function setBans(message) {
+    bans = Array.isArray(message.bans) ? message.bans : [];
+    if (isOpen()) {
+      const typing = document.activeElement && body.contains(document.activeElement) && document.activeElement.tagName === 'INPUT';
+      if (!typing) render();
     }
   }
 
@@ -245,5 +296,5 @@ export function createAdminWindow(state, handlers = {}) {
   });
   observer.observe(windowEl, { attributes: true, attributeFilter: ['class'] });
 
-  return { isOpen, hide, toggle, setOverview, enable };
+  return { isOpen, hide, toggle, setOverview, setBans, enable };
 }

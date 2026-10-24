@@ -74,6 +74,40 @@ function teleport(ctx, id, state, zoneId, spawnId, position) {
   return true;
 }
 
+async function sendBans(ctx, playerId) {
+  ctx.notify(playerId, { type: 'admin-bans', bans: await ctx.bans.listBans() });
+}
+
+async function banPlayer(ctx, id, message) {
+  const { notify, players } = ctx;
+  const name = typeof message.name === 'string' ? message.name.trim() : '';
+  if (name === '') return say(notify, id, 'admin.fail.banName');
+  if (isAdminName(name)) return say(notify, id, 'admin.fail.banAdmin');
+
+  const hours = Number(message.hours);
+  const reason = typeof message.reason === 'string' ? message.reason : '';
+  const outcome = await ctx.bans.ban(name, hours, reason);
+  if (!outcome) return say(notify, id, 'admin.fail.banUnknown', { name });
+
+  const online = findByName(players, outcome.name);
+  if (online) {
+    notify(online.id, { type: 'kicked' });
+    ctx.kick(online.id);
+  }
+
+  say(notify, id, outcome.until ? 'admin.ok.banUntil' : 'admin.ok.banPermanent', { name: outcome.name, until: outcome.until });
+  await sendBans(ctx, id);
+}
+
+async function unbanPlayer(ctx, id, message) {
+  const name = typeof message.name === 'string' ? message.name.trim() : '';
+  const outcome = name === '' ? null : await ctx.bans.unban(name);
+  if (!outcome) return say(ctx.notify, id, 'admin.fail.banUnknown', { name });
+
+  say(ctx.notify, id, 'admin.ok.unban', { name: outcome.name });
+  await sendBans(ctx, id);
+}
+
 export function handleAdmin(ctx, id, state, message) {
   if (!state?.isAdmin || typeof message.type !== 'string') return;
 
@@ -160,6 +194,15 @@ export function handleAdmin(ctx, id, state, message) {
       if (!teleport(ctx, id, state, zone.id, spawnId, null)) return say(notify, id, 'admin.fail.zone');
       return say(notify, id, 'admin.ok.tpZone', { zone: zone.id });
     }
+
+    case 'admin-bans':
+      return sendBans(ctx, id);
+
+    case 'admin-ban':
+      return banPlayer(ctx, id, message);
+
+    case 'admin-unban':
+      return unbanPlayer(ctx, id, message);
 
     case 'admin-tp-coords': {
       const x = Number(message.x);
