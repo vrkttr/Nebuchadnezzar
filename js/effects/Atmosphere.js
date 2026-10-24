@@ -244,6 +244,19 @@ export function createAtmosphere({ scene, camera, renderer }) {
     setSunOffset(day.lightDirection.x * SUN_DISTANCE, day.lightDirection.y * SUN_DISTANCE, day.lightDirection.z * SUN_DISTANCE);
 
     const view = VIEW_DISTANCES[graphics.viewDistance] ?? VIEW_DISTANCES[2];
+    const shadow = sunLight.shadow;
+    if (shadow.mapSize.x !== view.shadowMap) {
+      shadow.mapSize.set(view.shadowMap, view.shadowMap);
+      shadow.map?.dispose();
+      shadow.map = null;
+    }
+    if (shadow.camera.right !== view.shadowRange) {
+      shadow.camera.left = -view.shadowRange;
+      shadow.camera.right = view.shadowRange;
+      shadow.camera.top = view.shadowRange;
+      shadow.camera.bottom = -view.shadowRange;
+      shadow.camera.updateProjectionMatrix();
+    }
     if (camera.far !== view.cameraFar) {
       camera.far = view.cameraFar;
       camera.updateProjectionMatrix();

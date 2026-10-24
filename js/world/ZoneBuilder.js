@@ -273,13 +273,18 @@ function buildForests(trees, bushes) {
 
   const group = new THREE.Group();
   group.name = 'Waelder';
+  const undergrowth = new THREE.Group();
+  undergrowth.name = 'Unterholz';
   for (const chunk of chunks.values()) {
-    const batch = createBatch();
-    for (const tree of chunk.trees) addTree(batch, tree);
-    for (const bush of chunk.bushes) addUndergrowth(batch, bush);
-    group.add(batch.build('Wald'));
+    const treeBatch = createBatch();
+    for (const tree of chunk.trees) addTree(treeBatch, tree);
+    group.add(treeBatch.build('Wald'));
+    if (chunk.bushes.length === 0) continue;
+    const bushBatch = createBatch();
+    for (const bush of chunk.bushes) addUndergrowth(bushBatch, bush);
+    undergrowth.add(bushBatch.build('Unterholz'));
   }
-  return group;
+  return { trees: group, undergrowth };
 }
 
 function buildPowerLine(object, props) {
@@ -364,9 +369,11 @@ export function addObject(target, context, object, clip = null) {
   }
 }
 
-export function finishObjects(target, context) {
+export function finishObjects(target, context, detailTarget = target) {
   for (const { props, walls } of context.wallGroups.values()) target.add(buildWallBatch(props, walls));
-  target.add(buildForests(context.trees, context.bushes));
+  const forests = buildForests(context.trees, context.bushes);
+  target.add(forests.trees);
+  detailTarget.add(forests.undergrowth);
   target.add(context.moss.build());
 }
 

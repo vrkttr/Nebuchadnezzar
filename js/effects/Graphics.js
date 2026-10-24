@@ -1,8 +1,8 @@
 export const VIEW_DISTANCES = [
-  { near: 30, far: 90, cameraFar: 1000 },
-  { near: 55, far: 170, cameraFar: 1000 },
-  { near: 90, far: 320, cameraFar: 1000 },
-  { near: 170, far: 620, cameraFar: 1000 },
+  { near: 30, far: 90, cameraFar: 1000, shadowMap: 1024, shadowRange: 32 },
+  { near: 55, far: 170, cameraFar: 1000, shadowMap: 1024, shadowRange: 40 },
+  { near: 90, far: 320, cameraFar: 1000, shadowMap: 2048, shadowRange: 48 },
+  { near: 170, far: 620, cameraFar: 1000, shadowMap: 2048, shadowRange: 56 },
 ];
 
 export const DEFAULTS = {

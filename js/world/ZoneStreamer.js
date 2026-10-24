@@ -4,6 +4,8 @@ import { addObject, createBuildContext, finishObjects } from './ZoneBuilder.js';
 const LOAD_RADIUS = 600;
 const UNLOAD_RADIUS = 700;
 const MAX_REQUEST = 16;
+const DETAIL_KINDS = new Set(['grasbueschel', 'busch', 'kiste', 'muelltonne', 'bank', 'hochbeet', 'waescheleine', 'barrikade']);
+const DETAIL_FRACTION = 0.5;
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'flecken', 'weg', 'strasse']);
 const READY_TIMEOUT_MS = 25000;
 const RETRY_MS = 8000;
@@ -118,7 +120,7 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
   }
 
   function finishChunk(chunk) {
-    finishObjects(chunk.group, chunk.context);
+    finishObjects(chunk.group, chunk.context, chunk.detail);
     chunk.state = 'ready';
     if (chunk.context.emitters.length > 0) emittersDirty = true;
     chunk.data = null;
@@ -138,6 +140,9 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
       chunk.blockerIds = [];
       chunk.group = new THREE.Group();
       chunk.group.name = `Chunk_${key}`;
+      chunk.detail = new THREE.Group();
+      chunk.detail.name = `Detail_${key}`;
+      chunk.group.add(chunk.detail);
       chunk.context = createBuildContext();
       zoneGroup.add(chunk.group);
       retainBlockers(chunk);
@@ -213,7 +218,7 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
         chunk.cursor += 1;
 
         if (SPANNING_KINDS.has(object.kind)) retainSpan(object, chunk);
-        else addObject(chunk.group, chunk.context, object, clip);
+        else addObject(DETAIL_KINDS.has(object.kind) ? chunk.detail : chunk.group, chunk.context, object, clip);
       }
 
       if (chunk.cursor >= objects.length) finishChunk(chunk);
@@ -254,7 +259,9 @@ export function createZoneStreamer({ scene, zoneGroup, world, send, onBlockers, 
     for (const chunk of chunks.values()) {
       if (!chunk.group) continue;
       const [x, z] = centerOf(chunk.cx, chunk.cz);
-      chunk.group.visible = Math.hypot(x - lastX, z - lastZ) <= viewRadius + size * 0.75;
+      const distance = Math.hypot(x - lastX, z - lastZ);
+      chunk.group.visible = distance <= viewRadius + size * 0.75;
+      chunk.detail.visible = distance <= viewRadius * DETAIL_FRACTION + size * 0.75;
     }
   }
 
