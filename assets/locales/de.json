@@ -1547,5 +1547,6 @@
   "trade.fullSelf": "Dein Rucksack hat nicht genug Platz.",
   "trade.fullOther": "{name} hat nicht genug Platz im Rucksack.",
   "trade.goldLimit": "Der Handel würde das Goldlimit überschreiten.",
-  "trade.completed": "Handel abgeschlossen."
+  "trade.completed": "Handel abgeschlossen.",
+  "trade.groupOnly": "Handeln ist nur innerhalb einer Gruppe möglich."
 }

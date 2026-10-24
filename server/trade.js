@@ -149,6 +149,11 @@ export function requestTrade(trades, players, playerId, targetId, notify, now = 
     return;
   }
 
+  if (!player.groupId || player.groupId !== target.groupId) {
+    notify(playerId, system('Handeln ist nur innerhalb einer Gruppe möglich.', 'trade.groupOnly'));
+    return;
+  }
+
   if (target.zoneId !== player.zoneId || Math.hypot(target.x - player.x, target.z - player.z) > TRADE_RANGE) {
     notify(playerId, system(`${target.characterName} ist zu weit entfernt.`, 'trade.tooFar', { name: target.characterName }));
     return;

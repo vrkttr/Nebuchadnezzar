@@ -1202,6 +1202,7 @@ function start(connection, initMessage) {
         tradeTargetObject &&
         !gameState.player.dead &&
         !tradeWindow.isOpen() &&
+        Boolean(groupFrames.getGroup()?.members.some((member) => member.id === gameState.playerTarget)) &&
         player.object.position.distanceTo(tradeTargetObject.position) <= 12
     );
     const ownGroup = groupFrames.getGroup();

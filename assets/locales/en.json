@@ -1775,5 +1775,6 @@
   "trade.fullSelf": "Your backpack does not have enough space.",
   "trade.fullOther": "{name}'s backpack does not have enough space.",
   "trade.goldLimit": "The trade would exceed the gold limit.",
-  "trade.completed": "Trade completed."
+  "trade.completed": "Trade completed.",
+  "trade.groupOnly": "Trading is only possible within a group."
 }
