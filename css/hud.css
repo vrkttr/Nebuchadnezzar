@@ -3083,3 +3083,113 @@ html.touch-ui #confirm-dialog {
 #ticket-body {
   padding: 10px 14px 14px;
 }
+
+#trade-window {
+  left: calc(50% - 190px);
+  top: 14%;
+  width: 380px;
+  max-width: calc(100vw - 16px);
+}
+
+.trade-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px 12px 0;
+}
+
+.trade-side {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px;
+  border: 2px solid var(--nu-line);
+  background: var(--nu-board-darker);
+}
+
+.trade-side-title {
+  color: var(--nu-amber);
+  font-family: var(--nu-font-display);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trade-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
+  gap: 4px;
+  justify-content: center;
+}
+
+.trade-gold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  color: var(--nu-amber);
+  font-family: var(--nu-font-display);
+  font-size: 12px;
+}
+
+.trade-gold input,
+.trade-quantity input {
+  width: 90px;
+  padding: 2px 4px;
+  background: var(--nu-board-darker);
+  border: 2px solid var(--nu-line);
+  color: var(--nu-text);
+  font-family: var(--nu-font-text);
+  font-size: 12px;
+  text-align: right;
+}
+
+.trade-gold-view {
+  justify-content: flex-end;
+  min-height: 24px;
+}
+
+.trade-status {
+  min-height: 16px;
+  color: var(--nu-ink-soft);
+  font-size: 11px;
+  text-align: center;
+}
+
+.trade-status.accepted {
+  color: #6aa84f;
+}
+
+.trade-quantity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px 0;
+  color: var(--nu-text);
+  font-size: 12px;
+}
+
+.trade-quantity.hidden {
+  display: none;
+}
+
+.trade-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.trade-actions .window-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.inventory-slot.trade-locked {
+  opacity: 0.45;
+  cursor: default;
+}

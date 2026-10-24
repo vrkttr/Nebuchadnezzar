@@ -24,6 +24,7 @@ export const gameState = {
   playerTarget: null,
   playerTargetData: null,
   canInviteTarget: false,
+  canTradeTarget: false,
   canGuildInviteTarget: false,
   canGuildKickTarget: false,
   zoneName: '',

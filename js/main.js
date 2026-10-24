@@ -31,6 +31,7 @@ const [
   { createNpcs },
   { createNpcWindow },
   { createVendorWindow },
+  { createTradeWindow },
   { createWindowManager },
   { createChat },
   { createGroupFrames },
@@ -100,6 +101,7 @@ const [
   import(v('./entities/Npcs.js')),
   import(v('./ui/NpcWindow.js')),
   import(v('./ui/VendorWindow.js')),
+  import(v('./ui/TradeWindow.js')),
   import(v('./ui/WindowManager.js')),
   import(v('./ui/Chat.js')),
   import(v('./ui/GroupFrames.js')),
@@ -188,6 +190,9 @@ function start(connection, initMessage) {
     onInvite: () => {
       if (gameState.playerTarget) connection.send({ type: 'group-invite', playerId: gameState.playerTarget });
     },
+    onTrade: () => {
+      if (gameState.playerTarget) connection.send({ type: 'trade-request', playerId: gameState.playerTarget });
+    },
     ui,
   });
 
@@ -230,6 +235,17 @@ function start(connection, initMessage) {
   const vendorWindow = createVendorWindow(gameState, ui, {
     onBuy: (npcId, itemId, quantity) =>
       connection.send({ type: 'vendor-buy', npcId, itemId, quantity }),
+  });
+  const tradeWindow = createTradeWindow(gameState, ui, {
+    onOffer: (tradeSlot, slot, quantity) => connection.send({ type: 'trade-offer', tradeSlot, slot, quantity }),
+    onClear: (tradeSlot) => connection.send({ type: 'trade-clear', tradeSlot }),
+    onGold: (amount) => connection.send({ type: 'trade-gold', amount }),
+    onAccept: () => connection.send({ type: 'trade-accept' }),
+    onCancel: () => connection.send({ type: 'trade-cancel' }),
+    onChange: () => {
+      if (tradeWindow.isOpen() && !inventory.isOpen()) inventory.toggle();
+      inventory.refresh();
+    },
   });
   const footsteps = createFootsteps(audio, isInWater);
   const drips = createDrips(scene, audio);
@@ -292,12 +308,15 @@ function start(connection, initMessage) {
       connection.send({ type: 'item-move', from, to });
     },
     isVendorOpen: () => vendorWindow.isOpen(),
+    isTradeOpen: () => tradeWindow.isOpen(),
+    isTradeLocked: (slot) => tradeWindow.lockedSlots().has(slot),
+    onTradeAdd: (slot, split) => tradeWindow.addFromInventory(slot, split),
   });
   const characterWindow = createCharacterWindow(gameState, ui, {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'ticket', 'quests', 'social', 'game-menu', 'settings']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'trade', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'ticket', 'quests', 'social', 'game-menu', 'settings']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -428,6 +447,7 @@ function start(connection, initMessage) {
     lootWindow.hide();
     npcWindow.hide();
     vendorWindow.hide();
+    tradeWindow.close();
     chatBubbles.clear();
     worldMap.hide();
   }
@@ -654,6 +674,10 @@ function start(connection, initMessage) {
         const speaker = isNpc ? npcs.getObject(message.id) : ambient.getObject(message.id);
         const height = isNpc || ambient.getKind(message.id) !== 'dog' ? undefined : 1.1;
         chatBubbles.show(speaker, t(message.key), isNpc ? npcs.getPlate(message.id) : null, height);
+      } else if (message.type === 'trade') {
+        tradeWindow.setData(message);
+      } else if (message.type === 'trade-close') {
+        tradeWindow.close();
       } else if (message.type === 'group') {
         groupFrames.setGroup(message, ownPlayerId);
       } else if (message.type === 'group-invite') {
@@ -985,6 +1009,11 @@ function start(connection, initMessage) {
         return;
       }
 
+      if (tradeWindow.isOpen()) {
+        tradeWindow.cancel();
+        return;
+      }
+
       if (
         npcWindow.isOpen() ||
         vendorWindow.isOpen() ||
@@ -1167,6 +1196,14 @@ function start(connection, initMessage) {
     if (gameState.target) gameState.playerTarget = null;
     gameState.playerTargetData = gameState.playerTarget ? remotePlayers.getData(gameState.playerTarget) : null;
     if (gameState.playerTarget && !gameState.playerTargetData) gameState.playerTarget = null;
+    const tradeTargetObject = gameState.playerTarget ? remotePlayers.getObject(gameState.playerTarget) : null;
+    gameState.canTradeTarget = Boolean(
+      gameState.playerTargetData &&
+        tradeTargetObject &&
+        !gameState.player.dead &&
+        !tradeWindow.isOpen() &&
+        player.object.position.distanceTo(tradeTargetObject.position) <= 12
+    );
     const ownGroup = groupFrames.getGroup();
     gameState.canInviteTarget = Boolean(
       gameState.playerTargetData &&

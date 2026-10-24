@@ -36,6 +36,11 @@ export function createInventory(state, ui, handlers = {}) {
   function openMenu(event, index, slot, item) {
     const actions = [];
 
+    if (handlers.isTradeOpen?.() && !handlers.isTradeLocked?.(index)) {
+      actions.push({ label: t('item.trade'), onSelect: () => handlers.onTradeAdd?.(index, false) });
+      if (slot.quantity > 1) actions.push({ label: t('item.tradeSplit'), onSelect: () => handlers.onTradeAdd?.(index, true) });
+    }
+
     if (handlers.isVendorOpen?.() && item?.value > 0) {
       actions.push({
         label: t('item.sell', { gold: item.value * slot.quantity }),
@@ -55,6 +60,8 @@ export function createInventory(state, ui, handlers = {}) {
   function buildSlot(slot, index) {
     const element = document.createElement('div');
     element.className = 'inventory-slot';
+    const locked = Boolean(handlers.isTradeLocked?.(index));
+    if (locked) element.classList.add('trade-locked');
 
     element.addEventListener('dragover', (event) => {
       event.preventDefault();
@@ -94,7 +101,7 @@ export function createInventory(state, ui, handlers = {}) {
     element.addEventListener('mouseenter', (event) => ui.tooltip.showItem(slot.itemId, slot.quantity, event, slot.perk ?? null));
     element.addEventListener('mousemove', (event) => ui.tooltip.move(event));
     element.addEventListener('mouseleave', () => ui.tooltip.hide());
-    element.draggable = true;
+    element.draggable = !locked;
     element.addEventListener('dragstart', (event) => {
       ui.tooltip.hide();
       event.dataTransfer.effectAllowed = 'move';
@@ -102,9 +109,17 @@ export function createInventory(state, ui, handlers = {}) {
       element.classList.add('dragging');
     });
     element.addEventListener('dragend', () => element.classList.remove('dragging'));
-    element.addEventListener('click', (event) => openMenu(event, index, slot, item));
+    element.addEventListener('click', (event) => {
+      if (!locked) openMenu(event, index, slot, item);
+    });
     element.addEventListener('contextmenu', (event) => {
       event.preventDefault();
+
+      if (handlers.isTradeOpen?.()) {
+        ui.tooltip.hide();
+        if (!locked) handlers.onTradeAdd?.(index, event.shiftKey);
+        return;
+      }
 
       if (handlers.isVendorOpen?.()) {
         if (item?.value > 0) {
@@ -210,5 +225,9 @@ export function createInventory(state, ui, handlers = {}) {
 
   closeButton.addEventListener('click', hide);
 
-  return { render, setBags, toggle, hide, isOpen };
+  function refresh() {
+    render(lastSlots);
+  }
+
+  return { render, refresh, setBags, toggle, hide, isOpen };
 }

@@ -65,6 +65,8 @@ export function createHud(state, handlers = {}) {
   const targetName = document.getElementById('target-name');
   const targetLevel = document.getElementById('target-level');
   const targetHealthFill = document.getElementById('target-health-fill');
+  const targetTrade = document.getElementById('target-trade');
+  targetTrade.addEventListener('click', () => handlers.onTrade?.());
   const targetInvite = document.getElementById('target-invite');
   targetInvite.addEventListener('click', () => handlers.onInvite?.());
   const targetGuildKick = document.getElementById('target-guild-kick');
@@ -396,17 +398,20 @@ export function createHud(state, handlers = {}) {
       targetLevel.textContent = state.target.level;
       targetHealthFill.style.width = `${toPercent(state.target.health, state.target.healthMax)}%`;
       targetInvite.classList.add('hidden');
+      targetTrade.classList.add('hidden');
       targetGuildInvite.classList.add('hidden');
     } else if (state.playerTargetData) {
       targetFrame.classList.remove('hidden');
       targetName.textContent = state.playerTargetData.characterName ?? '???';
       targetLevel.textContent = state.playerTargetData.level ?? '?';
       targetHealthFill.style.width = `${toPercent(state.playerTargetData.health, state.playerTargetData.healthMax)}%`;
+      targetTrade.classList.toggle('hidden', !state.canTradeTarget);
       targetInvite.classList.toggle('hidden', !state.canInviteTarget);
       targetGuildInvite.classList.toggle('hidden', !state.canGuildInviteTarget);
       targetGuildKick.classList.toggle('hidden', !state.canGuildKickTarget);
     } else {
       targetInvite.classList.add('hidden');
+      targetTrade.classList.add('hidden');
       targetGuildInvite.classList.add('hidden');
       targetFrame.classList.add('hidden');
     }

@@ -1,5 +1,6 @@
 import { handleChat } from './chat.js';
 import { answerGuildInvite, createGuild, inviteToGuild, kickFromGuild, leaveGuild } from './guilds.js';
+import { cancelPlayerTrade, createTrades, handleTrade, isTradeLocked, updateTrades } from './trade.js';
 import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
 import { applyBarber } from './barber.js';
@@ -99,6 +100,7 @@ const ENEMY_VIEW_LEAVE = 240;
 const MAX_CHUNKS_PER_REQUEST = 16;
 const lootContainers = createLootContainers();
 const groups = createGroups();
+const trades = createTrades({ persist: (first, second) => persistPair(first, second) });
 
 function notify(playerId, message) {
   const socket = sockets.get(playerId);
@@ -191,6 +193,7 @@ function createInitialState(character) {
     questView: null,
     questViewKey: '',
     groupId: null,
+    tradeId: null,
     guildId: character.guildId ?? null,
     guildName: character.guildName ?? null,
     guildLeaderId: character.guildLeaderId ?? null,
@@ -316,6 +319,7 @@ function removePlayer(playerId) {
   if (!state) return null;
 
   removeLootOfPlayer(lootContainers, playerId);
+  cancelPlayerTrade(trades, players, playerId, notify, 'disconnected');
   leaveGroup(groups, players, playerId, notify);
   announcePresence(players, playerId, false, notify);
   players.delete(playerId);
@@ -324,8 +328,7 @@ function removePlayer(playerId) {
   return state;
 }
 
-async function writeState(state) {
-  const dataVersion = state.dataVersion;
+function stateQueries(state) {
   const items = inventoryRows(state.inventory);
   const equipped = equipmentRows(state.equipment, state.equipmentPerks);
   const quests = questRows(state.quests);
@@ -345,8 +348,47 @@ async function writeState(state) {
     state.characterId,
   ];
 
+  return { items, equipped, quests, characterQuery, characterParams };
+}
+
+async function writeFullState(connection, state, queries) {
+  const { items, equipped, quests, characterQuery, characterParams } = queries;
+
+  await connection.query(characterQuery, characterParams);
+
+  await connection.query('DELETE FROM inventory_items WHERE character_id = ?', [state.characterId]);
+
+  if (items.length > 0) {
+    await connection.query(
+      'INSERT INTO inventory_items (character_id, slot, item_id, quantity, perk) VALUES ?',
+      [items.map(([slot, itemId, quantity, perk]) => [state.characterId, slot, itemId, quantity, perk])]
+    );
+  }
+
+  await connection.query('DELETE FROM equipment_items WHERE character_id = ?', [state.characterId]);
+
+  if (equipped.length > 0) {
+    await connection.query('INSERT INTO equipment_items (character_id, slot, item_id, perk) VALUES ?', [
+      equipped.map(([slot, itemId, perk]) => [state.characterId, slot, itemId, perk]),
+    ]);
+  }
+
+  await connection.query('DELETE FROM character_quests WHERE character_id = ?', [state.characterId]);
+
+  if (quests.length > 0) {
+    await connection.query(
+      'INSERT INTO character_quests (character_id, quest_id, status, progress) VALUES ?',
+      [quests.map(([questId, status, progress]) => [state.characterId, questId, status, progress])]
+    );
+  }
+}
+
+async function writeState(state) {
+  const dataVersion = state.dataVersion;
+  const queries = stateQueries(state);
+
   if (dataVersion === state.savedDataVersion) {
-    await dbPool.query(characterQuery, characterParams);
+    await dbPool.query(queries.characterQuery, queries.characterParams);
     return;
   }
 
@@ -354,34 +396,7 @@ async function writeState(state) {
 
   try {
     await connection.beginTransaction();
-    await connection.query(characterQuery, characterParams);
-
-    await connection.query('DELETE FROM inventory_items WHERE character_id = ?', [state.characterId]);
-
-    if (items.length > 0) {
-      await connection.query(
-        'INSERT INTO inventory_items (character_id, slot, item_id, quantity, perk) VALUES ?',
-        [items.map(([slot, itemId, quantity, perk]) => [state.characterId, slot, itemId, quantity, perk])]
-      );
-    }
-
-    await connection.query('DELETE FROM equipment_items WHERE character_id = ?', [state.characterId]);
-
-    if (equipped.length > 0) {
-      await connection.query('INSERT INTO equipment_items (character_id, slot, item_id, perk) VALUES ?', [
-        equipped.map(([slot, itemId, perk]) => [state.characterId, slot, itemId, perk]),
-      ]);
-    }
-
-    await connection.query('DELETE FROM character_quests WHERE character_id = ?', [state.characterId]);
-
-    if (quests.length > 0) {
-      await connection.query(
-        'INSERT INTO character_quests (character_id, quest_id, status, progress) VALUES ?',
-        [quests.map(([questId, status, progress]) => [state.characterId, questId, status, progress])]
-      );
-    }
-
+    await writeFullState(connection, state, queries);
     await connection.commit();
     state.savedDataVersion = dataVersion;
   } catch (error) {
@@ -390,6 +405,33 @@ async function writeState(state) {
   } finally {
     connection.release();
   }
+}
+
+async function writePair(first, second) {
+  const versions = [first.dataVersion, second.dataVersion];
+  const connection = await dbPool.getConnection();
+
+  try {
+    await connection.beginTransaction();
+    await writeFullState(connection, first, stateQueries(first));
+    await writeFullState(connection, second, stateQueries(second));
+    await connection.commit();
+    first.savedDataVersion = versions[0];
+    second.savedDataVersion = versions[1];
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
+function persistPair(first, second) {
+  const run = Promise.all([first.saveQueue, second.saveQueue]).then(() => writePair(first, second));
+  const settled = run.catch(() => {});
+  first.saveQueue = settled;
+  second.saveQueue = settled;
+  return run;
 }
 
 function persistState(state) {
@@ -588,6 +630,8 @@ async function enterWorld(socket, characterId) {
       if (typeof message.playerId === 'string') kickMember(groups, players, id, message.playerId, notify);
     } else if (message.type === 'group-promote') {
       if (typeof message.playerId === 'string') promoteMember(groups, players, id, message.playerId, notify);
+    } else if (typeof message.type === 'string' && message.type.startsWith('trade-')) {
+      handleTrade(trades, players, id, message, notify);
     } else if (message.type === 'target') {
       const state = players.get(id);
       if (!state || state.dead) return;
@@ -665,6 +709,8 @@ async function enterWorld(socket, characterId) {
       const slot = Number.parseInt(message.slot, 10);
       if (!Number.isInteger(slot)) return;
 
+      if (isTradeLocked(trades, players, id, slot)) return;
+
       useInventoryItem(id, state, slot, notify);
     } else if (message.type === 'item-destroy') {
       const state = players.get(id);
@@ -673,12 +719,18 @@ async function enterWorld(socket, characterId) {
       const slot = Number.parseInt(message.slot, 10);
       if (!Number.isInteger(slot)) return;
 
+      if (isTradeLocked(trades, players, id, slot)) return;
+
       destroyInventoryItem(id, state, slot, message.itemId, notify);
     } else if (message.type === 'item-move') {
       const state = players.get(id);
       if (!state) return;
 
-      moveInventoryItem(id, state, Number.parseInt(message.from, 10), Number.parseInt(message.to, 10), notify);
+      const from = Number.parseInt(message.from, 10);
+      const to = Number.parseInt(message.to, 10);
+      if (isTradeLocked(trades, players, id, from) || isTradeLocked(trades, players, id, to)) return;
+
+      moveInventoryItem(id, state, from, to, notify);
     } else if (message.type === 'item-unequip') {
       const state = players.get(id);
       if (!state || typeof message.slot !== 'string') return;
@@ -738,6 +790,8 @@ async function enterWorld(socket, characterId) {
 
       const slot = Number.parseInt(message.slot, 10);
       if (!Number.isInteger(slot)) return;
+
+      if (isTradeLocked(trades, players, id, slot)) return;
 
       sellToVendor(state, id, message.npcId, slot, message.itemId, notify);
     }
@@ -1032,6 +1086,7 @@ setInterval(() => {
   );
   updateLootContainers(lootContainers, TICK_DELTA, notify);
   updateGroups(groups, players, notify);
+  updateTrades(trades, players, notify);
   if (players.size === 0) return;
 
   for (const [id, state] of players) {
