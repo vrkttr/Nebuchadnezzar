@@ -6267,56 +6267,6 @@
      ]
     },
     {
-     "id": 262,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 768,
-     "y": 3488,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "plant_guard"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 36
-      }
-     ]
-    },
-    {
-     "id": 263,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1344,
-     "y": 3456,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "plant_guard"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 36
-      }
-     ]
-    },
-    {
      "id": 264,
      "name": "",
      "type": "gegner",
@@ -6692,61 +6642,11 @@
      ]
     },
     {
-     "id": 279,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1088,
-     "y": 2624,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "marauder"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 39
-      }
-     ]
-    },
-    {
      "id": 280,
      "name": "",
      "type": "gegner",
      "class": "gegner",
      "x": 896,
-     "y": 2336,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "plant_guard"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 39
-      }
-     ]
-    },
-    {
-     "id": 281,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1152,
      "y": 2336,
      "width": 0,
      "height": 0,
@@ -7208,31 +7108,6 @@
        "name": "type",
        "type": "string",
        "value": "brute"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 41
-      }
-     ]
-    },
-    {
-     "id": 300,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 960,
-     "y": 1280,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "plant_guard"
       },
       {
        "name": "level",

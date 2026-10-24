@@ -27,7 +27,7 @@
   {
    "name": "licht",
    "type": "float",
-   "value": 0.95
+   "value": 1.15
   },
   {
    "name": "sonne",
@@ -42,7 +42,7 @@
   {
    "name": "nebel",
    "type": "string",
-   "value": "#0a0b0b:40:130"
+   "value": "#0a0b0b:45:150"
   },
   {
    "name": "groundTexture",
@@ -8636,33 +8636,8 @@
      "name": "",
      "type": "gegner",
      "class": "gegner",
-     "x": 768,
-     "y": 3808,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "rust_gang"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 26
-      }
-     ]
-    },
-    {
-     "id": 383,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 816.0,
-     "y": 3840,
+     "x": 768.0,
+     "y": 3616.0,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -8723,31 +8698,6 @@
        "name": "type",
        "type": "string",
        "value": "trapper"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 27
-      }
-     ]
-    },
-    {
-     "id": 386,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1344,
-     "y": 3584,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "deserter"
       },
       {
        "name": "level",
@@ -9282,62 +9232,12 @@
      ]
     },
     {
-     "id": 408,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1024,
-     "y": 1728,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "marauder"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 30
-      }
-     ]
-    },
-    {
      "id": 409,
      "name": "",
      "type": "gegner",
      "class": "gegner",
      "x": 896,
      "y": 2112,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "deserter"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 30
-      }
-     ]
-    },
-    {
-     "id": 410,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 1152,
-     "y": 2176,
      "width": 0,
      "height": 0,
      "rotation": 0,
