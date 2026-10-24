@@ -3,6 +3,7 @@ import { addItem, cloneInventory, sendInventory } from './inventory.js';
 import { addGold } from './loot.js';
 import { applyLevelStats, xpToNextLevel } from './progression.js';
 import { getZone, getZones } from './zoneLoader.js';
+import { handleAdminPlayer } from './adminPlayers.js';
 
 const ADMIN_NAMES = new Set(
   (process.env.ADMIN_CHARACTERS ?? 'PROPELLA')
@@ -112,6 +113,8 @@ export function handleAdmin(ctx, id, state, message) {
   if (!state?.isAdmin || typeof message.type !== 'string') return;
 
   const { players, notify } = ctx;
+
+  if (message.type.startsWith('admin-pl-')) return handleAdminPlayer(ctx, id, state, message);
 
   switch (message.type) {
     case 'admin-overview':

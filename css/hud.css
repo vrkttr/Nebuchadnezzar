@@ -2897,7 +2897,141 @@ html.touch-ui #confirm-dialog {
   color: var(--nu-ink-soft);
 }
 
+#admin-editor-window {
+  left: 10%;
+  top: 6%;
+  width: min(760px, calc(100vw - 16px));
+}
+
+#admin-editor-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 14px 14px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.admin-pl-results {
+  max-height: 130px;
+}
+
+.admin-pl-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.admin-pl-tab-active {
+  background: var(--nu-ink);
+  color: var(--nu-paper);
+}
+
+.admin-pl-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-pl-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.admin-pl-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-pl-label {
+  flex: 0 0 190px;
+  font-size: 12px;
+}
+
+.admin-pl-line .admin-input {
+  flex: 1;
+}
+
+.admin-pl-line .admin-check {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.admin-pl-hint {
+  font-size: 11px;
+  color: var(--nu-ink-soft);
+}
+
+.admin-pl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-pl-listrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.admin-pl-listhead {
+  font-size: 11px;
+  color: var(--nu-ink-soft);
+}
+
+.admin-pl-cell {
+  flex: 0 0 96px;
+  min-width: 0;
+}
+
+.admin-pl-wide {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-pl-tiny {
+  flex: 0 0 24px;
+}
+
+.admin-pl-cell .admin-input,
+.admin-pl-wide .admin-input {
+  width: 100%;
+}
+
+.admin-pl-area {
+  min-height: 60px;
+  resize: vertical;
+  width: 100%;
+}
+
+.admin-pl-warning {
+  color: #a33;
+  font-size: 12px;
+}
+
+.admin-pl-dirty {
+  font-size: 12px;
+  color: #a33;
+}
+
+.admin-pl-ok {
+  font-size: 12px;
+  color: #3d6b2b;
+}
+
+.admin-pl-error {
+  font-size: 12px;
+  color: #a33;
+}
+
 @media (max-width: 880px), (max-height: 560px) {
+  #admin-editor-window {
+    left: 8px;
+    top: 8px;
+  }
+
   #admin-window {
     right: 8px;
     top: 8px;

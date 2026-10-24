@@ -480,7 +480,10 @@ wss.on('connection', (socket, request) => {
   });
 });
 
+const lockedCharacters = new Set();
+
 async function enterWorld(socket, characterId) {
+  if (lockedCharacters.has(characterId)) return false;
   await disconnectCharacter(characterId);
 
   const character = await loadCharacter(characterId);
@@ -818,9 +821,22 @@ function serializeMailboxes(zoneId) {
   return (getZone(zoneId)?.mailboxes ?? []).map(({ id, x, z, rotationY }) => ({ id, x, y: 0, z, rotationY }));
 }
 
+async function withCharacterLocked(characterId, work) {
+  lockedCharacters.add(characterId);
+  try {
+    await disconnectCharacter(characterId);
+    return await work();
+  } finally {
+    lockedCharacters.delete(characterId);
+  }
+}
+
 const adminContext = {
   players,
   notify,
+  db: dbPool,
+  isAdminName,
+  withCharacterLocked,
   bans: accounts,
   changeZone: (playerId, state, zoneId, spawnId, override) => changeZone(playerId, state, zoneId, spawnId, override),
   groundHeight: (zoneId, x, z) => groundHeight(zoneId, x, z),

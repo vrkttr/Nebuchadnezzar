@@ -91,6 +91,12 @@ export function createAdminWindow(state, handlers = {}) {
     return node;
   }
 
+  function buildEditorLink() {
+    const wrapper = section(t('admin.pl.title'));
+    wrapper.appendChild(row(button(t('admin.pl.openEditor'), () => handlers.onEditor?.())));
+    return wrapper;
+  }
+
   function buildPlayers() {
     const wrapper = section(t('admin.players', { count: overview.players.length }));
     const list = el('div', 'admin-players');
@@ -259,7 +265,7 @@ export function createAdminWindow(state, handlers = {}) {
   function render() {
     const focused = document.activeElement;
     const focusKey = focused && body.contains(focused) ? Array.from(body.querySelectorAll('input,select')).indexOf(focused) : -1;
-    body.replaceChildren(buildPlayers(), buildSpawn(), buildTeleport(), buildBans(), buildMisc());
+    body.replaceChildren(buildEditorLink(), buildPlayers(), buildSpawn(), buildTeleport(), buildBans(), buildMisc());
     if (focusKey >= 0) body.querySelectorAll('input,select')[focusKey]?.focus();
   }
 

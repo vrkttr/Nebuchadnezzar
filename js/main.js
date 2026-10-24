@@ -47,6 +47,7 @@ const [
   { createAbilitiesWindow },
   { createSkillsWindow },
   { createAdminWindow },
+  { createAdminPlayerEditor },
   { createMailWindow },
   { createTicketWindow },
   { createMailboxes },
@@ -117,6 +118,7 @@ const [
   import(v('./ui/AbilitiesWindow.js')),
   import(v('./ui/SkillsWindow.js')),
   import(v('./ui/AdminWindow.js')),
+  import(v('./ui/AdminPlayerEditor.js')),
   import(v('./ui/MailWindow.js')),
   import(v('./ui/TicketWindow.js')),
   import(v('./entities/Mailboxes.js')),
@@ -213,8 +215,12 @@ function start(connection, initMessage) {
     onSpend: (skillId) => connection.send({ type: 'skill-spend', skillId }),
     onReset: () => connection.send({ type: 'skill-reset' }),
   });
+  const adminPlayerEditor = createAdminPlayerEditor(gameState, {
+    onSend: (payload) => connection.send(payload),
+  });
   const adminWindow = createAdminWindow(gameState, {
     onSend: (payload) => connection.send(payload),
+    onEditor: () => adminPlayerEditor.show(),
   });
   const mailWindow = createMailWindow(gameState, {
     onSend: (payload) => connection.send(payload),
@@ -320,7 +326,7 @@ function start(connection, initMessage) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'trade', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'ticket', 'quests', 'social', 'game-menu', 'settings']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'trade', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'admin-editor', 'mail', 'ticket', 'quests', 'social', 'game-menu', 'settings']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -654,6 +660,12 @@ function start(connection, initMessage) {
         adminWindow.setOverview(message);
       } else if (message.type === 'admin-bans') {
         adminWindow.setBans(message);
+      } else if (message.type === 'admin-pl-list') {
+        adminPlayerEditor.setList(message);
+      } else if (message.type === 'admin-pl-data') {
+        adminPlayerEditor.setData(message);
+      } else if (message.type === 'admin-pl-result') {
+        adminPlayerEditor.setResult(message);
       } else if (message.type === 'kicked') {
         kicked = true;
       } else if (message.type === 'skills') {
@@ -1032,6 +1044,7 @@ function start(connection, initMessage) {
         abilitiesWindow.isOpen() ||
         skillsWindow.isOpen() ||
         adminWindow.isOpen() ||
+        adminPlayerEditor.isOpen() ||
         mailWindow.isOpen() ||
         ticketWindow.isOpen() ||
         gameMenu.isOpen() ||
@@ -1042,6 +1055,7 @@ function start(connection, initMessage) {
         abilitiesWindow.hide();
         skillsWindow.hide();
         adminWindow.hide();
+        adminPlayerEditor.hide();
         mailWindow.hide();
         ticketWindow.hide();
         gameMenu.hide();
