@@ -23,6 +23,7 @@ import { serializeItems } from './items.js';
 import { inventoryRows, loadInventory, serializeInventory } from './inventory.js';
 import { inventorySize } from './bags.js';
 import { handleAdmin, isAdminName } from './admin.js';
+import { handleMail, sendStatus as sendMailStatus } from './mail.js';
 import { grantStarterKit } from './starterKit.js';
 import { applyEquipmentStats, equipmentRows, loadEquipment, loadEquipmentPerks, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
@@ -460,6 +461,7 @@ wss.on('connection', async (socket, request) => {
       appearance: initialState.appearance,
       npcs: serializeNpcs(initialState.zoneId),
       chests: serializeChests(initialState.zoneId, initialState.openedChests),
+      mailboxes: serializeMailboxes(initialState.zoneId),
       world: serializeZone(getZone(initialState.zoneId)),
       position: { x: initialState.x, y: initialState.y, z: initialState.z, rotationY: initialState.rotationY },
       audio: character.audio,
@@ -467,6 +469,8 @@ wss.on('connection', async (socket, request) => {
       home: serializeHome(initialState),
     })
   );
+
+  sendMailStatus(mailContext, id, initialState).catch((error) => console.error('Fehler beim Laden der Post:', error));
 
   socket.on('message', (data) => {
     let message;
@@ -718,6 +722,8 @@ wss.on('connection', async (socket, request) => {
       if (!state || typeof message.itemId !== 'string') return;
 
       buyFromVendor(state, id, message.npcId, message.itemId, Number(message.quantity), notify);
+    } else if (typeof message.type === 'string' && message.type.startsWith('mail-')) {
+      handleMail(mailContext, id, players.get(id), message).catch((error) => console.error('Fehler im Postsystem:', error));
     } else if (typeof message.type === 'string' && message.type.startsWith('admin-')) {
       handleAdmin(adminContext, id, players.get(id), message);
     } else if (message.type === 'vendor-sell') {
@@ -743,6 +749,12 @@ wss.on('connection', async (socket, request) => {
     console.error('Socket-Fehler:', error);
   });
 });
+
+const mailContext = { db: dbPool, players, notify };
+
+function serializeMailboxes(zoneId) {
+  return (getZone(zoneId)?.mailboxes ?? []).map(({ id, x, z, rotationY }) => ({ id, x, y: 0, z, rotationY }));
+}
 
 const adminContext = {
   players,
@@ -892,6 +904,7 @@ function changeZone(playerId, state, zoneId, spawnId, override = null) {
     enemies: initialEnemies(state),
     npcs: serializeNpcs(zoneId),
     chests: serializeChests(zoneId, state.openedChests),
+    mailboxes: serializeMailboxes(zoneId),
     position: { x: spawn.x, y: spawn.y, z: spawn.z, rotationY: spawn.rotationY },
   });
 

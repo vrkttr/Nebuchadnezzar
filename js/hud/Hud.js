@@ -338,6 +338,12 @@ export function createHud(state, handlers = {}) {
       addMessage(t('event.sold', { name: itemName(event.itemId), suffix, gold: event.gold }));
     } else if (event.kind === 'inventory-full') {
       addMessage(t('event.inventoryFull'));
+    } else if (event.kind === 'mail-failed') {
+      addMessage(failureText('mail', event.reason));
+    } else if (event.kind === 'mail-sent') {
+      addMessage(t('event.mailSent', { name: event.to, gold: event.cost }));
+    } else if (event.kind === 'mail-received') {
+      addMessage(t('event.mailReceived'));
     } else if (event.kind === 'loot-failed') {
       addMessage(failureText('loot', event.reason));
     } else if (event.kind === 'levelup') {

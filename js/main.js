@@ -46,6 +46,8 @@ const [
   { createAbilitiesWindow },
   { createSkillsWindow },
   { createAdminWindow },
+  { createMailWindow },
+  { createMailboxes },
   { createQuestWindow },
   { createSocialWindow },
   { createAbilityDrag },
@@ -109,6 +111,8 @@ const [
   import(v('./ui/AbilitiesWindow.js')),
   import(v('./ui/SkillsWindow.js')),
   import(v('./ui/AdminWindow.js')),
+  import(v('./ui/MailWindow.js')),
+  import(v('./entities/Mailboxes.js')),
   import(v('./ui/QuestWindow.js')),
   import(v('./ui/SocialWindow.js')),
   import(v('./ui/AbilityDrag.js')),
@@ -199,6 +203,9 @@ function start(token) {
   const adminWindow = createAdminWindow(gameState, {
     onSend: (payload) => connection.send(payload),
   });
+  const mailWindow = createMailWindow(gameState, {
+    onSend: (payload) => connection.send(payload),
+  });
   const questWindow = createQuestWindow({
     confirmDialog: ui.confirmDialog,
     onAbandon: (questId) => connection.send({ type: 'quest-abandon', questId }),
@@ -242,12 +249,13 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'quests', 'social']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'quests', 'social']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
   const lootMarkers = createLootMarkers(scene);
   const worldChests = createWorldChests(scene);
+  const mailboxes = createMailboxes(scene);
   const questObjects = createQuestObjects(scene);
   const lootWindow = createLootWindow(gameState, ui, {
     onTake: (lootId, entryId) => connection.send({ type: 'loot-take', lootId, entryId }),
@@ -367,6 +375,7 @@ function start(token) {
     remotePlayers.clear();
     lootMarkers.clear();
     worldChests.clear();
+    mailboxes.clear();
     questObjects.clear();
     lootWindow.hide();
     npcWindow.hide();
@@ -444,6 +453,7 @@ function start(token) {
     enemies.sync(message.enemies ?? []);
     npcs.sync(message.npcs ?? []);
     worldChests.sync(message.chests ?? []);
+    mailboxes.sync(message.mailboxes ?? []);
     npcs.setMarkers(questMarkers);
     loadingScreen.setProgress(0.4, t('loading.status.textures'));
 
@@ -556,6 +566,10 @@ function start(token) {
         player.setAppearance(message.appearance);
       } else if (message.type === 'appearance') {
         player.setAppearance(message.appearance);
+      } else if (message.type === 'mail-window') {
+        mailWindow.show(message);
+      } else if (message.type === 'mail-status') {
+        mailWindow.setUnread(message.unread);
       } else if (message.type === 'admin-overview') {
         adminWindow.setOverview(message);
       } else if (message.type === 'kicked') {
@@ -762,6 +776,7 @@ function start(token) {
       !current.userData.isPlayer &&
       !current.userData.isLoot &&
       !current.userData.isChest &&
+      !current.userData.isMailbox &&
       !current.userData.isQuestObject &&
       !current.userData.isTeleporter
     ) {
@@ -776,7 +791,7 @@ function start(token) {
 
     raycaster.setFromCamera(pointer, camera);
     const intersections = raycaster.intersectObjects(
-      [...npcs.getObjects(), ...enemies.getObjects(), ...remotePlayers.getObjects(), ...lootMarkers.getObjects(), ...worldChests.getObjects(), ...questObjects.getObjects(), ...(zone?.teleporters ?? [])],
+      [...npcs.getObjects(), ...enemies.getObjects(), ...remotePlayers.getObjects(), ...lootMarkers.getObjects(), ...worldChests.getObjects(), ...mailboxes.getObjects(), ...questObjects.getObjects(), ...(zone?.teleporters ?? [])],
       true
     );
 
@@ -795,6 +810,9 @@ function start(token) {
       connection.send({ type: 'zone-enter', teleporterId: target.userData.teleporterId });
     } else if (target.userData.isQuestObject) {
       connection.send({ type: 'quest-inspect', objectId: target.userData.questObjectId });
+    } else if (target.userData.isMailbox) {
+      mailWindow.setMailbox(target.userData.mailboxId);
+      connection.send({ type: 'mail-open', mailboxId: target.userData.mailboxId });
     } else if (target.userData.isChest) {
       connection.send({ type: 'chest-open', chestId: target.userData.chestId });
     } else if (target.userData.isLoot) {
@@ -912,6 +930,7 @@ function start(token) {
         abilitiesWindow.isOpen() ||
         skillsWindow.isOpen() ||
         adminWindow.isOpen() ||
+        mailWindow.isOpen() ||
         questWindow.isOpen() ||
         socialWindow.isOpen() ||
         worldMap.isOpen()
@@ -919,6 +938,7 @@ function start(token) {
         abilitiesWindow.hide();
         skillsWindow.hide();
         adminWindow.hide();
+        mailWindow.hide();
         questWindow.hide();
         socialWindow.hide();
         npcWindow.hide();

@@ -70,6 +70,19 @@ CREATE TABLE IF NOT EXISTS equipment_items (
 ALTER TABLE inventory_items ADD COLUMN IF NOT EXISTS perk VARCHAR(24) NULL;
 ALTER TABLE equipment_items ADD COLUMN IF NOT EXISTS perk VARCHAR(24) NULL;
 
+CREATE TABLE IF NOT EXISTS mails (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    recipient_id INT NOT NULL,
+    sender_id INT NULL,
+    sender_name VARCHAR(32) NOT NULL,
+    subject VARCHAR(60) NOT NULL,
+    body TEXT NOT NULL,
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_mails_recipient (recipient_id),
+    FOREIGN KEY (recipient_id) REFERENCES characters(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS character_quests (
     character_id INT NOT NULL,
     quest_id VARCHAR(64) NOT NULL,

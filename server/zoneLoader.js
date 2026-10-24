@@ -9,7 +9,7 @@ const HEIGHT_LAYER = 'Hoehe';
 export const HEIGHT_UNIT = 0.05;
 export const STEP_UP = 0.4;
 const CLIFF_HALF_THICKNESS = 0.08;
-const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'questobjekt', 'zugstrecke', 'haltestelle', 'bahnuebergang', 'eingang']);
+const LOGIC_CLASSES = new Set(['spawn', 'npc', 'gegner', 'teleporter', 'lootkiste', 'briefkasten', 'questobjekt', 'zugstrecke', 'haltestelle', 'bahnuebergang', 'eingang']);
 const SPANNING_KINDS = new Set(['flaeche', 'leitung', 'wald', 'flecken']);
 export const CHUNK_SIZE = 64;
 const CHUNK_LIMIT = 4096;
@@ -116,6 +116,7 @@ function loadZone(id, file) {
     spawns: {},
     teleporters: [],
     chests: [],
+    mailboxes: [],
     questObjects: [],
     train: null,
     trainStops: [],
@@ -209,6 +210,10 @@ function loadZone(id, file) {
           lootTable: String(props.loot ?? 'chest_common'),
           name: props.name ?? 'Versteckte Kiste',
         });
+      } else if (kind === 'briefkasten') {
+        if (!props.id) throw new Error(`Zonendatei ${id}: Briefkasten ${object.id} braucht die Eigenschaft "id".`);
+        if (zone.mailboxes.some((box) => box.id === String(props.id))) throw new Error(`Zonendatei ${id}: Briefkasten "${props.id}" ist doppelt vergeben.`);
+        zone.mailboxes.push({ id: String(props.id), x: center.x, z: center.z, rotationY });
       } else if (kind === 'zugstrecke') {
         if (shape !== 'polyline' || !points || points.length < 2) throw new Error(`Zonendatei ${id}: Zugstrecke ${object.id} muss eine Linie sein.`);
         if (zone.train) throw new Error(`Zonendatei ${id}: Es ist nur eine Zugstrecke je Zone möglich.`);
