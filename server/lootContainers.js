@@ -73,7 +73,7 @@ export function createLootContainers() {
 }
 
 export function spawnLootForKill(containers, ownerId, owner, enemy, notify) {
-  const drops = rollLoot(enemy.lootTable, owner.level, enemy.level, enemy.boss === true);
+  const drops = rollLoot(enemy.lootTable, owner.level, enemy.level, enemy.boss === true, enemy.zoneId);
   if (drops.length === 0) return false;
 
   const id = `loot-${nextLootId}`;

@@ -32,6 +32,7 @@ const FALL_SPEED = 2.5;
 const FALL_LIFT = 0.12;
 const EQUIPMENT_SLOTS = ['weapon', 'head', 'shoulders', 'chest', 'hands', 'belt', 'legs', 'feet'];
 const MOUNT_SIDES = [1, -1];
+const SHIN_SPLIT_Y = 0.05;
 
 const cloth = (color) => getMaterial('cloth', { color });
 const skin = (color) => getMaterial('skin', { color });
@@ -380,7 +381,7 @@ export function createHumanoid(name, options = {}) {
   };
   const multiMounts = {
     legs: () => [pivot(legLeft.hip, 0, -0.44, 0), pivot(legRight.hip, 0, -0.44, 0)],
-    feet: () => [pivot(legLeft.hip, 0, -0.44, 0), pivot(legRight.hip, 0, -0.44, 0)],
+    feet: () => [pivot(legLeft.knee, 0, 0, 0), pivot(legRight.knee, 0, 0, 0)],
     hands: () => [pivot(armLeft.hand, 0, 0, 0), pivot(armRight.hand, 0, 0, 0)],
     shoulders: () => [pivot(armLeft.shoulder, 0, 0, 0), pivot(armRight.shoulder, 0, 0, 0)],
   };
@@ -427,13 +428,23 @@ export function createHumanoid(name, options = {}) {
 
     if (multiMounts[slot]) {
       const mounts = multiMounts[slot]();
+      const shinMounts = slot === 'legs' ? [pivot(legLeft.knee, 0, 0, 0), pivot(legRight.knee, 0, 0, 0)] : [];
       mounts.forEach((mount, index) => {
         make(MOUNT_SIDES[index])(mount);
+        const shin = shinMounts[index];
+        if (shin) {
+          for (const child of [...mount.children]) {
+            if (child.position.y >= SHIN_SPLIT_Y) continue;
+            mount.remove(child);
+            shin.add(child);
+          }
+          enablePortraitLayer(shin);
+        }
         enablePortraitLayer(mount);
       });
       if (slot === 'legs') applyPants(itemId);
       removers[slot] = () => {
-        for (const mount of mounts) mount.parent.remove(mount);
+        for (const mount of [...mounts, ...shinMounts]) mount.parent.remove(mount);
         if (slot === 'legs') applyPants(null);
       };
     } else {

@@ -1100,9 +1100,23 @@ button {
 
 .intro-text {
   margin: 0;
-  min-height: 140px;
   font-size: 15px;
   line-height: 1.5;
+  white-space: pre-line;
+}
+
+.intro-controls {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--nu-line);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--nu-text-dim);
+}
+
+#intro-body {
+  max-height: 68vh;
+  overflow-y: auto;
 }
 
 #npc-body {

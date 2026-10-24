@@ -1,5 +1,5 @@
 const ICON_PATH = 'assets/icons/';
-const ICON_VERSION = 106;
+const ICON_VERSION = 107;
 
 export function createIcon(name, className = 'icon') {
   const image = document.createElement('img');

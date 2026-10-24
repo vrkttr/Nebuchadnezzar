@@ -9,6 +9,7 @@ const QUALITY_RANK = { uncommon: 1, rare: 2, epic: 3 };
 const GEAR_DROP_CHANCE = 0.07;
 const GEAR_QUALITY_WEIGHT = { common: 1, uncommon: 1, rare: 0.45, epic: 0.15 };
 const BOSS_GEAR_QUALITY_WEIGHT = { common: 0, uncommon: 0.4, rare: 1, epic: 0.6 };
+const ZONE_ITEM_FACTORS = { startwelt: { duct_tape: 1.6 } };
 const BOSS_GOLD_FACTOR = 5;
 const BOSS_TABLE_CHANCE_FACTOR = 1.4;
 const BOSS_EXTRA_GEAR_CHANCE = 0.35;
@@ -33,7 +34,7 @@ const LOOT_TABLES = {
 
   scavenger: [
     { itemId: 'bandage', chance: 0.12, min: 1, max: 2 },
-    { itemId: 'duct_tape', chance: 0.22, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.15, min: 1, max: 2 },
     { itemId: 'battery', chance: 0.08, min: 1, max: 1 },
     { itemId: 'work_pants', chance: 0.06, min: 1, max: 1 },
     { itemId: 'hard_hat', chance: 0.05, min: 1, max: 1 },
@@ -50,7 +51,7 @@ const LOOT_TABLES = {
   ],
   rat: [
     { itemId: 'rat_tail', chance: 0.6, min: 1, max: 2 },
-    { itemId: 'duct_tape', chance: 0.14, min: 1, max: 1 },
+    { itemId: 'duct_tape', chance: 0.08, min: 1, max: 1 },
     { itemId: 'battery', chance: 0.06, min: 1, max: 1 },
     { itemId: 'rag_bundle', chance: 0.4, min: 1, max: 3 },
     { itemId: 'scrap_metal', chance: 0.4, min: 1, max: 3 },
@@ -86,7 +87,7 @@ const LOOT_TABLES = {
     { itemId: 'military_pants', chance: 0.05, min: 1, max: 1 },
     { itemId: 'bandage', chance: 0.3, min: 1, max: 3 },
     { itemId: 'battery', chance: 0.2, min: 1, max: 2 },
-    { itemId: 'duct_tape', chance: 0.28, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.2, min: 1, max: 2 },
     { itemId: 'motorcycle_helmet', chance: 0.08, min: 1, max: 1 },
     { itemId: 'scrap_metal', chance: 0.7, min: 2, max: 5 },
     { itemId: 'canned_food', chance: 0.4, min: 1, max: 3 },
@@ -165,7 +166,7 @@ const LOOT_TABLES = {
     { itemId: 'scrap_metal', chance: 0.5, min: 1, max: 3 },
     { itemId: 'rag_bundle', chance: 0.6, min: 2, max: 4 },
     { itemId: 'battery', chance: 0.15, min: 1, max: 1 },
-    { itemId: 'duct_tape', chance: 0.28, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.2, min: 1, max: 2 },
     { itemId: 'medkit', chance: 0.1, min: 1, max: 1 },
     { itemId: 'gas_mask', chance: 0.05, min: 1, max: 1 },
     { itemId: 'ammo_9mm', chance: 0.3, min: 4, max: 10 },
@@ -177,7 +178,7 @@ const LOOT_TABLES = {
     { itemId: 'battery', chance: 0.04, min: 1, max: 1 },
   ],
   spider: [
-    { itemId: 'duct_tape', chance: 0.28, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.2, min: 1, max: 2 },
     { itemId: 'rag_bundle', chance: 0.3, min: 1, max: 2 },
     { itemId: 'battery', chance: 0.1, min: 1, max: 1 },
     { itemId: 'bandage', chance: 0.15, min: 1, max: 2 },
@@ -422,7 +423,8 @@ function rollBossGear(enemyLevel) {
   return null;
 }
 
-export function rollLoot(tableId, playerLevel, enemyLevel, boss = false) {
+export function rollLoot(tableId, playerLevel, enemyLevel, boss = false, zoneId = null) {
+  const zoneFactors = ZONE_ITEM_FACTORS[zoneId] ?? {};
   const table = LOOT_TABLES[tableId] ?? [];
 
   const factor = levelFactor(playerLevel, enemyLevel);
@@ -441,7 +443,7 @@ export function rollLoot(tableId, playerLevel, enemyLevel, boss = false) {
   }
 
   for (const entry of table) {
-    const chance = entry.chance * factor * qualityScale(entry.itemId, playerLevel, enemyLevel) * (boss ? BOSS_TABLE_CHANCE_FACTOR : 1);
+    const chance = entry.chance * factor * qualityScale(entry.itemId, playerLevel, enemyLevel) * (boss ? BOSS_TABLE_CHANCE_FACTOR : 1) * (zoneFactors[entry.itemId] ?? 1);
 
     if (Math.random() < Math.min(1, chance)) {
       drops.push({ itemId: entry.itemId, quantity: randomInt(entry.min, entry.max) });
