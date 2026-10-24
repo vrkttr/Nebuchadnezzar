@@ -52,7 +52,7 @@ export async function initI18n() {
   ]);
   store.messages = { ...fallback, ...selected };
   document.documentElement.lang = language;
-  document.title = t('app.title');
+  document.title = t('app.pageTitle');
   return language;
 }
 

@@ -3,6 +3,7 @@ import { GAME_VERSION } from '../config.js';
 import { enterFullscreen, setAutoFullscreen } from '../input/Keyboard.js';
 import { createSettingsForm, describeResult } from '../ui/SettingsForm.js';
 import { clear, el } from '../utils/Dom.js';
+import { canQuitGame, quitGame } from '../utils/Host.js';
 import { classFields, createCharacterForm } from './CharacterForm.js';
 import { createMenuMusic } from './MenuMusic.js';
 import { createMenuScene } from './MenuScene.js';
@@ -143,11 +144,13 @@ export function createMenu({ connection, onEnterWorld }) {
   }
 
   function navItems() {
+    const quit = canQuitGame() ? [{ label: 'menu.nav.quit', action: quitGame }] : [];
     if (!account) {
       return [
         { label: 'menu.nav.login', screen: 'login' },
         { label: 'menu.nav.register', screen: 'register' },
         { label: 'menu.nav.credits', screen: 'credits' },
+        ...quit,
       ];
     }
     const items = [];
@@ -160,6 +163,7 @@ export function createMenu({ connection, onEnterWorld }) {
     items.push({ label: 'menu.nav.settings', screen: 'settings' });
     items.push({ label: 'menu.nav.credits', screen: 'credits' });
     items.push({ label: 'menu.nav.logout', action: logout });
+    items.push(...quit);
     return items;
   }
 

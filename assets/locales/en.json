@@ -1,5 +1,6 @@
 {
   "app.title": "Verdigrim",
+  "app.pageTitle": "Verdigrim – Post-apocalyptic 3D MMORPG in your browser",
   "common.close": "Close",
   "common.cancel": "Cancel",
   "loading.tipLabel": "Tip",
@@ -1601,6 +1602,7 @@
   "menu.nav.createCharacter": "Create character",
   "menu.nav.settings": "Settings",
   "menu.nav.logout": "Log out",
+  "menu.nav.quit": "Quit game",
   "login.title": "Log in",
   "login.username": "Username",
   "login.password": "Password",
@@ -1740,6 +1742,7 @@
   "gamemenu.settings": "Settings",
   "gamemenu.mainMenu": "To main menu",
   "gamemenu.logout": "Sign out",
+  "gamemenu.quit": "Quit game",
   "gamemenu.resume": "Back to game",
   "zone.industriehalle.name": "Industrial Hall",
   "teleporter.industriehalle_eingang": "Enter the industrial hall",

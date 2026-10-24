@@ -1,5 +1,6 @@
 import { SUPPORTED_LANGUAGES, getLanguage, setLanguage, t } from '../i18n/I18n.js';
 import { el } from '../utils/Dom.js';
+import { canQuitGame, quitGame } from '../utils/Host.js';
 import { createSettingsForm, describeResult } from './SettingsForm.js';
 
 export function createGameMenu({ request, onMainMenu, onLogout, onPreview }) {
@@ -57,12 +58,14 @@ export function createGameMenu({ request, onMainMenu, onLogout, onPreview }) {
   function showMenu() {
     revertPreview();
     settingsWindow.classList.add('hidden');
-    menuBody.replaceChildren(
+    const entries = [
       entry('gamemenu.settings', showSettings),
       entry('gamemenu.mainMenu', onMainMenu),
       entry('gamemenu.logout', onLogout),
-      entry('gamemenu.resume', hide)
-    );
+    ];
+    if (canQuitGame()) entries.push(entry('gamemenu.quit', quitGame));
+    entries.push(entry('gamemenu.resume', hide));
+    menuBody.replaceChildren(...entries);
     menuWindow.classList.remove('hidden');
   }
 

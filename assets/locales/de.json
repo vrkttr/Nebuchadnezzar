@@ -1,5 +1,6 @@
 {
   "app.title": "Verdigrim",
+  "app.pageTitle": "Verdigrim – Postapokalyptisches 3D-MMORPG im Browser",
   "common.close": "Schließen",
   "common.cancel": "Abbrechen",
   "loading.tipLabel": "Tipp",
@@ -1373,6 +1374,7 @@
   "menu.nav.createCharacter": "Charakter erstellen",
   "menu.nav.settings": "Einstellungen",
   "menu.nav.logout": "Abmelden",
+  "menu.nav.quit": "Spiel beenden",
   "login.title": "Anmeldung",
   "login.username": "Benutzername",
   "login.password": "Passwort",
@@ -1512,6 +1514,7 @@
   "gamemenu.settings": "Einstellungen",
   "gamemenu.mainMenu": "Zum Hauptmenü",
   "gamemenu.logout": "Abmelden",
+  "gamemenu.quit": "Spiel beenden",
   "gamemenu.resume": "Zurück zum Spiel",
   "zone.industriehalle.name": "Industriehalle",
   "teleporter.industriehalle_eingang": "Industriehalle betreten",
