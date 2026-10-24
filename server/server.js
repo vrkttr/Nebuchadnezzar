@@ -1,6 +1,6 @@
 import { handleChat } from './chat.js';
 import { answerGuildInvite, createGuild, inviteToGuild, kickFromGuild, leaveGuild } from './guilds.js';
-import { cancelPlayerTrade, createTrades, handleTrade, isTradeLocked, updateTrades } from './trade.js';
+import { cancelPlayerTrade, cancelTradeRequests, createTrades, handleTrade, isTradeLocked, updateTrades } from './trade.js';
 import { answerInvite, createGroups, invitePlayer, kickMember, leaveGroup, promoteMember, updateGroups } from './groups.js';
 import { loadAppearance } from './appearance.js';
 import { applyBarber } from './barber.js';
@@ -194,6 +194,9 @@ function createInitialState(character) {
     questViewKey: '',
     groupId: null,
     tradeId: null,
+    tradeInvite: null,
+    tradeRequestOut: null,
+    tradeBlocks: new Map(),
     guildId: character.guildId ?? null,
     guildName: character.guildName ?? null,
     guildLeaderId: character.guildLeaderId ?? null,
@@ -319,6 +322,7 @@ function removePlayer(playerId) {
   if (!state) return null;
 
   removeLootOfPlayer(lootContainers, playerId);
+  cancelTradeRequests(players, playerId, notify);
   cancelPlayerTrade(trades, players, playerId, notify, 'disconnected');
   leaveGroup(groups, players, playerId, notify);
   announcePresence(players, playerId, false, notify);

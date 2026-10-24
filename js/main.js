@@ -418,7 +418,7 @@ function start(connection, initMessage) {
     onLeave: () => connection.send({ type: 'group-leave' }),
     onKick: (playerId) => connection.send({ type: 'group-kick', playerId }),
     onPromote: (playerId) => connection.send({ type: 'group-promote', playerId }),
-    onAnswer: (accept, kind) => connection.send({ type: kind === 'guild' ? 'guild-answer' : 'group-answer', accept }),
+    onAnswer: (accept, kind) => connection.send({ type: kind === 'guild' ? 'guild-answer' : kind === 'trade' ? 'trade-answer' : 'group-answer', accept }),
   });
 
   remotePlayers.setRelationResolver((id, data) => {
@@ -682,6 +682,10 @@ function start(connection, initMessage) {
         groupFrames.setGroup(message, ownPlayerId);
       } else if (message.type === 'group-invite') {
         groupFrames.showInvite(t('group.inviteText', { name: message.fromName }), 'group');
+      } else if (message.type === 'trade-invite') {
+        groupFrames.showInvite(t('trade.inviteText', { name: message.fromName }), 'trade');
+      } else if (message.type === 'trade-invite-close') {
+        groupFrames.hideInvite();
       } else if (message.type === 'guild-invite') {
         groupFrames.showInvite(t('guild.inviteText', { name: message.fromName, guild: message.guildName }), 'guild');
       } else if (message.type === 'social') {

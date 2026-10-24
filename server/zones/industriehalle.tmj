@@ -11,7 +11,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "nextlayerid": 6,
- "nextobjectid": 450,
+ "nextobjectid": 453,
  "tilesets": [],
  "properties": [
   {
@@ -6167,7 +6167,7 @@
      ]
     },
     {
-     "id": 354,
+     "id": 357,
      "name": "",
      "type": "sofa",
      "class": "sofa",
@@ -6191,7 +6191,7 @@
      ]
     },
     {
-     "id": 356,
+     "id": 359,
      "name": "",
      "type": "tisch",
      "class": "tisch",
@@ -6215,7 +6215,7 @@
      ]
     },
     {
-     "id": 358,
+     "id": 361,
      "name": "",
      "type": "stuhl",
      "class": "stuhl",
@@ -6227,7 +6227,7 @@
      "visible": true
     },
     {
-     "id": 359,
+     "id": 362,
      "name": "",
      "type": "stuhl",
      "class": "stuhl",
@@ -6239,7 +6239,7 @@
      "visible": true
     },
     {
-     "id": 360,
+     "id": 363,
      "name": "",
      "type": "kuehlschrank",
      "class": "kuehlschrank",
@@ -6251,7 +6251,7 @@
      "visible": true
     },
     {
-     "id": 362,
+     "id": 365,
      "name": "",
      "type": "herd",
      "class": "herd",
@@ -6263,7 +6263,7 @@
      "visible": true
     },
     {
-     "id": 364,
+     "id": 367,
      "name": "",
      "type": "deckenlampe",
      "class": "deckenlampe",
@@ -8123,7 +8123,7 @@
      "visible": true
     },
     {
-     "id": 355,
+     "id": 358,
      "name": "",
      "type": "",
      "class": "",
@@ -8135,7 +8135,7 @@
      "visible": true
     },
     {
-     "id": 357,
+     "id": 360,
      "name": "",
      "type": "",
      "class": "",
@@ -8147,7 +8147,7 @@
      "visible": true
     },
     {
-     "id": 361,
+     "id": 364,
      "name": "",
      "type": "",
      "class": "",
@@ -8159,7 +8159,7 @@
      "visible": true
     },
     {
-     "id": 363,
+     "id": 366,
      "name": "",
      "type": "",
      "class": "",
@@ -8183,7 +8183,97 @@
    "y": 0,
    "objects": [
     {
-     "id": 365,
+     "id": 354,
+     "name": "",
+     "type": "questobjekt",
+     "class": "questobjekt",
+     "x": 1612.8,
+     "y": 166.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 20,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "halle_lieferschein"
+      },
+      {
+       "name": "modell",
+       "type": "string",
+       "value": "dokument"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Lieferscheine"
+      }
+     ]
+    },
+    {
+     "id": 355,
+     "name": "",
+     "type": "questobjekt",
+     "class": "questobjekt",
+     "x": 1932.8,
+     "y": 224.0,
+     "width": 0,
+     "height": 0,
+     "rotation": -30,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "halle_schichtbuch"
+      },
+      {
+       "name": "modell",
+       "type": "string",
+       "value": "dokument"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Schichtbuch"
+      }
+     ]
+    },
+    {
+     "id": 356,
+     "name": "",
+     "type": "questobjekt",
+     "class": "questobjekt",
+     "x": 1612.8,
+     "y": 307.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 70,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "halle_rationsliste"
+      },
+      {
+       "name": "modell",
+       "type": "string",
+       "value": "dokument"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Rationsliste"
+      }
+     ]
+    },
+    {
+     "id": 368,
      "name": "",
      "type": "spawn",
      "class": "spawn",
@@ -8203,7 +8293,7 @@
      ]
     },
     {
-     "id": 366,
+     "id": 369,
      "name": "",
      "type": "teleporter",
      "class": "teleporter",
@@ -8242,7 +8332,7 @@
      ]
     },
     {
-     "id": 367,
+     "id": 370,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8267,7 +8357,7 @@
      ]
     },
     {
-     "id": 368,
+     "id": 371,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8292,7 +8382,7 @@
      ]
     },
     {
-     "id": 369,
+     "id": 372,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8317,7 +8407,7 @@
      ]
     },
     {
-     "id": 370,
+     "id": 373,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8342,7 +8432,7 @@
      ]
     },
     {
-     "id": 371,
+     "id": 374,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8367,7 +8457,7 @@
      ]
     },
     {
-     "id": 372,
+     "id": 375,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8392,7 +8482,7 @@
      ]
     },
     {
-     "id": 373,
+     "id": 376,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8417,7 +8507,7 @@
      ]
     },
     {
-     "id": 374,
+     "id": 377,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8442,7 +8532,7 @@
      ]
     },
     {
-     "id": 375,
+     "id": 378,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8467,7 +8557,7 @@
      ]
     },
     {
-     "id": 376,
+     "id": 379,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8492,7 +8582,7 @@
      ]
     },
     {
-     "id": 377,
+     "id": 380,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8517,7 +8607,7 @@
      ]
     },
     {
-     "id": 378,
+     "id": 381,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8542,7 +8632,7 @@
      ]
     },
     {
-     "id": 379,
+     "id": 382,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8567,7 +8657,7 @@
      ]
     },
     {
-     "id": 380,
+     "id": 383,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8592,7 +8682,7 @@
      ]
     },
     {
-     "id": 381,
+     "id": 384,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8617,7 +8707,7 @@
      ]
     },
     {
-     "id": 382,
+     "id": 385,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8642,7 +8732,7 @@
      ]
     },
     {
-     "id": 383,
+     "id": 386,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8667,7 +8757,7 @@
      ]
     },
     {
-     "id": 384,
+     "id": 387,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8692,7 +8782,7 @@
      ]
     },
     {
-     "id": 385,
+     "id": 388,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8717,7 +8807,7 @@
      ]
     },
     {
-     "id": 386,
+     "id": 389,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8742,7 +8832,7 @@
      ]
     },
     {
-     "id": 387,
+     "id": 390,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8767,7 +8857,7 @@
      ]
     },
     {
-     "id": 388,
+     "id": 391,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8792,7 +8882,7 @@
      ]
     },
     {
-     "id": 389,
+     "id": 392,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8817,7 +8907,7 @@
      ]
     },
     {
-     "id": 390,
+     "id": 393,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8842,7 +8932,7 @@
      ]
     },
     {
-     "id": 391,
+     "id": 394,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8867,7 +8957,7 @@
      ]
     },
     {
-     "id": 392,
+     "id": 395,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8892,7 +8982,7 @@
      ]
     },
     {
-     "id": 393,
+     "id": 396,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8917,7 +9007,7 @@
      ]
     },
     {
-     "id": 394,
+     "id": 397,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8942,7 +9032,7 @@
      ]
     },
     {
-     "id": 395,
+     "id": 398,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8967,7 +9057,7 @@
      ]
     },
     {
-     "id": 396,
+     "id": 399,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -8992,7 +9082,7 @@
      ]
     },
     {
-     "id": 397,
+     "id": 400,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9017,7 +9107,7 @@
      ]
     },
     {
-     "id": 398,
+     "id": 401,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9042,7 +9132,7 @@
      ]
     },
     {
-     "id": 399,
+     "id": 402,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9067,7 +9157,7 @@
      ]
     },
     {
-     "id": 400,
+     "id": 403,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9092,7 +9182,7 @@
      ]
     },
     {
-     "id": 401,
+     "id": 404,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9117,7 +9207,7 @@
      ]
     },
     {
-     "id": 402,
+     "id": 405,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9142,7 +9232,7 @@
      ]
     },
     {
-     "id": 403,
+     "id": 406,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9167,7 +9257,7 @@
      ]
     },
     {
-     "id": 404,
+     "id": 407,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9192,7 +9282,7 @@
      ]
     },
     {
-     "id": 405,
+     "id": 408,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9217,7 +9307,7 @@
      ]
     },
     {
-     "id": 406,
+     "id": 409,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9242,7 +9332,7 @@
      ]
     },
     {
-     "id": 407,
+     "id": 410,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9267,7 +9357,7 @@
      ]
     },
     {
-     "id": 408,
+     "id": 411,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9292,7 +9382,7 @@
      ]
     },
     {
-     "id": 409,
+     "id": 412,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9317,7 +9407,7 @@
      ]
     },
     {
-     "id": 410,
+     "id": 413,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9342,7 +9432,7 @@
      ]
     },
     {
-     "id": 411,
+     "id": 414,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9367,7 +9457,7 @@
      ]
     },
     {
-     "id": 412,
+     "id": 415,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9392,7 +9482,7 @@
      ]
     },
     {
-     "id": 413,
+     "id": 416,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9417,7 +9507,7 @@
      ]
     },
     {
-     "id": 414,
+     "id": 417,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9442,7 +9532,7 @@
      ]
     },
     {
-     "id": 415,
+     "id": 418,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9467,7 +9557,7 @@
      ]
     },
     {
-     "id": 416,
+     "id": 419,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9492,7 +9582,7 @@
      ]
     },
     {
-     "id": 417,
+     "id": 420,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9517,7 +9607,7 @@
      ]
     },
     {
-     "id": 418,
+     "id": 421,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9542,7 +9632,7 @@
      ]
     },
     {
-     "id": 419,
+     "id": 422,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9567,7 +9657,7 @@
      ]
     },
     {
-     "id": 420,
+     "id": 423,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9592,7 +9682,7 @@
      ]
     },
     {
-     "id": 421,
+     "id": 424,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9617,7 +9707,7 @@
      ]
     },
     {
-     "id": 422,
+     "id": 425,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9642,7 +9732,7 @@
      ]
     },
     {
-     "id": 423,
+     "id": 426,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9667,7 +9757,7 @@
      ]
     },
     {
-     "id": 424,
+     "id": 427,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9692,7 +9782,7 @@
      ]
     },
     {
-     "id": 425,
+     "id": 428,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9717,7 +9807,7 @@
      ]
     },
     {
-     "id": 426,
+     "id": 429,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9742,7 +9832,7 @@
      ]
     },
     {
-     "id": 427,
+     "id": 430,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9767,7 +9857,7 @@
      ]
     },
     {
-     "id": 428,
+     "id": 431,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9792,7 +9882,7 @@
      ]
     },
     {
-     "id": 429,
+     "id": 432,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9817,7 +9907,7 @@
      ]
     },
     {
-     "id": 430,
+     "id": 433,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9842,7 +9932,7 @@
      ]
     },
     {
-     "id": 431,
+     "id": 434,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9867,7 +9957,7 @@
      ]
     },
     {
-     "id": 432,
+     "id": 435,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9892,7 +9982,7 @@
      ]
     },
     {
-     "id": 433,
+     "id": 436,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9917,7 +10007,7 @@
      ]
     },
     {
-     "id": 434,
+     "id": 437,
      "name": "",
      "type": "gegner",
      "class": "gegner",
@@ -9942,7 +10032,7 @@
      ]
     },
     {
-     "id": 435,
+     "id": 438,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -9972,7 +10062,7 @@
      ]
     },
     {
-     "id": 436,
+     "id": 439,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10002,7 +10092,7 @@
      ]
     },
     {
-     "id": 437,
+     "id": 440,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10032,7 +10122,7 @@
      ]
     },
     {
-     "id": 438,
+     "id": 441,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10062,7 +10152,7 @@
      ]
     },
     {
-     "id": 439,
+     "id": 442,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10092,7 +10182,7 @@
      ]
     },
     {
-     "id": 440,
+     "id": 443,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10122,7 +10212,7 @@
      ]
     },
     {
-     "id": 441,
+     "id": 444,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10152,7 +10242,7 @@
      ]
     },
     {
-     "id": 442,
+     "id": 445,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10182,7 +10272,7 @@
      ]
     },
     {
-     "id": 443,
+     "id": 446,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10212,7 +10302,7 @@
      ]
     },
     {
-     "id": 444,
+     "id": 447,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10242,7 +10332,7 @@
      ]
     },
     {
-     "id": 445,
+     "id": 448,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10272,7 +10362,7 @@
      ]
     },
     {
-     "id": 446,
+     "id": 449,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10302,7 +10392,7 @@
      ]
     },
     {
-     "id": 447,
+     "id": 450,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10332,7 +10422,7 @@
      ]
     },
     {
-     "id": 448,
+     "id": 451,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10352,7 +10442,7 @@
       {
        "name": "loot",
        "type": "string",
-       "value": "chest_industrial"
+       "value": "chest_boss"
       },
       {
        "name": "name",
@@ -10362,7 +10452,7 @@
      ]
     },
     {
-     "id": 449,
+     "id": 452,
      "name": "",
      "type": "lootkiste",
      "class": "lootkiste",
@@ -10382,7 +10472,7 @@
       {
        "name": "loot",
        "type": "string",
-       "value": "chest_industrial"
+       "value": "chest_boss"
       },
       {
        "name": "name",

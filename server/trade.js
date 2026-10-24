@@ -134,46 +134,134 @@ function canTrade(player, now) {
   return player && !player.dead && !(player.loadingUntil > now);
 }
 
+const REQUEST_TIMEOUT_MS = 30000;
+const DECLINE_COOLDOWN_MS = 15000;
+
+function checkPair(players, player, target, now) {
+  if (player.tradeId) return system('Du handelst bereits.', 'trade.selfBusy');
+  if (!canTrade(player, now)) return system('Du kannst gerade nicht handeln.', 'trade.selfUnavailable');
+  if (!player.groupId || player.groupId !== target.groupId) return system('Handeln ist nur innerhalb einer Gruppe möglich.', 'trade.groupOnly');
+  if (target.zoneId !== player.zoneId || Math.hypot(target.x - player.x, target.z - player.z) > TRADE_RANGE) {
+    return system(`${target.characterName} ist zu weit entfernt.`, 'trade.tooFar', { name: target.characterName });
+  }
+  if (!canTrade(target, now)) return system(`${target.characterName} kann gerade nicht handeln.`, 'trade.targetUnavailable', { name: target.characterName });
+  if (target.tradeId) return system(`${target.characterName} handelt bereits.`, 'trade.targetBusy', { name: target.characterName });
+  return null;
+}
+
+function openRequest(player, now) {
+  return player.tradeRequestOut && player.tradeRequestOut.expiresAt > now ? player.tradeRequestOut : null;
+}
+
+function openInvite(player, now) {
+  return player.tradeInvite && player.tradeInvite.expiresAt > now ? player.tradeInvite : null;
+}
+
+function dropRequest(players, requesterId, notify, closeInvite = true) {
+  const requester = players.get(requesterId);
+  const request = requester?.tradeRequestOut;
+  if (!requester || !request) return;
+  requester.tradeRequestOut = null;
+  const target = players.get(request.toId);
+  if (target?.tradeInvite && target.tradeInvite.fromId === requesterId) {
+    target.tradeInvite = null;
+    if (closeInvite) notify(request.toId, { type: 'trade-invite-close' });
+  }
+}
+
 export function requestTrade(trades, players, playerId, targetId, notify, now = Date.now()) {
   const player = players.get(playerId);
   const target = players.get(targetId);
   if (!player || !target || playerId === targetId) return;
 
-  if (player.tradeId) {
-    notify(playerId, system('Du handelst bereits.', 'trade.selfBusy'));
+  const problem = checkPair(players, player, target, now);
+  if (problem) {
+    notify(playerId, problem);
     return;
   }
 
-  if (!canTrade(player, now)) {
-    notify(playerId, system('Du kannst gerade nicht handeln.', 'trade.selfUnavailable'));
+  if (openRequest(player, now)) {
+    notify(playerId, system('Du hast bereits eine Handelsanfrage gesendet.', 'trade.requestPending'));
     return;
   }
 
-  if (!player.groupId || player.groupId !== target.groupId) {
-    notify(playerId, system('Handeln ist nur innerhalb einer Gruppe möglich.', 'trade.groupOnly'));
+  if (player.tradeBlocks?.get(targetId) > now) {
+    notify(playerId, system(`${target.characterName} hat deine Anfrage gerade erst abgelehnt.`, 'trade.recentlyDeclined', { name: target.characterName }));
     return;
   }
 
-  if (target.zoneId !== player.zoneId || Math.hypot(target.x - player.x, target.z - player.z) > TRADE_RANGE) {
-    notify(playerId, system(`${target.characterName} ist zu weit entfernt.`, 'trade.tooFar', { name: target.characterName }));
+  if (openInvite(target, now) || (target.pendingInvite && target.pendingInvite.expiresAt > now) || (target.pendingGuildInvite && target.pendingGuildInvite.expiresAt > now)) {
+    notify(playerId, system(`${target.characterName} hat bereits eine Anfrage.`, 'trade.targetInvited', { name: target.characterName }));
     return;
   }
 
-  if (!canTrade(target, now)) {
-    notify(playerId, system(`${target.characterName} kann gerade nicht handeln.`, 'trade.targetUnavailable', { name: target.characterName }));
+  if (openInvite(player, now)) {
+    notify(playerId, system('Beantworte zuerst die offene Handelsanfrage.', 'trade.answerFirst'));
     return;
   }
 
-  if (target.tradeId) {
-    notify(playerId, system(`${target.characterName} handelt bereits.`, 'trade.targetBusy', { name: target.characterName }));
+  target.tradeInvite = { fromId: playerId, expiresAt: now + REQUEST_TIMEOUT_MS };
+  player.tradeRequestOut = { toId: targetId, expiresAt: now + REQUEST_TIMEOUT_MS };
+  notify(targetId, { type: 'trade-invite', fromId: playerId, fromName: player.characterName });
+  notify(playerId, system(`Handelsanfrage an ${target.characterName} gesendet.`, 'trade.requestSent', { name: target.characterName }));
+}
+
+export function answerTrade(trades, players, playerId, accept, notify, now = Date.now()) {
+  const player = players.get(playerId);
+  const invite = player?.tradeInvite;
+  if (!player || !invite) return;
+  player.tradeInvite = null;
+
+  const requester = players.get(invite.fromId);
+  if (!requester || requester.tradeRequestOut?.toId !== playerId) return;
+  requester.tradeRequestOut = null;
+
+  if (!accept) {
+    if (!requester.tradeBlocks) requester.tradeBlocks = new Map();
+    requester.tradeBlocks.set(playerId, now + DECLINE_COOLDOWN_MS);
+    notify(invite.fromId, system(`${player.characterName} hat die Handelsanfrage abgelehnt.`, 'trade.declined', { name: player.characterName }));
     return;
   }
 
-  const trade = { id: randomUUID(), a: createSide(playerId), b: createSide(targetId) };
+  if (invite.expiresAt <= now) return;
+
+  const problem = checkPair(players, requester, player, now);
+  if (problem) {
+    notify(invite.fromId, problem);
+    notify(playerId, problem);
+    return;
+  }
+
+  const trade = { id: randomUUID(), a: createSide(invite.fromId), b: createSide(playerId) };
   trades.trades.set(trade.id, trade);
+  requester.tradeId = trade.id;
   player.tradeId = trade.id;
-  target.tradeId = trade.id;
   sendState(trades, players, trade, notify);
+}
+
+export function cancelTradeRequests(players, playerId, notify) {
+  const player = players.get(playerId);
+  if (!player) return;
+  dropRequest(players, playerId, notify);
+  if (player.tradeInvite) {
+    const requester = players.get(player.tradeInvite.fromId);
+    if (requester?.tradeRequestOut?.toId === playerId) requester.tradeRequestOut = null;
+    player.tradeInvite = null;
+  }
+}
+
+function expireRequests(players, notify, now) {
+  for (const [playerId, player] of players) {
+    if (player.tradeRequestOut && player.tradeRequestOut.expiresAt <= now) {
+      const targetId = player.tradeRequestOut.toId;
+      player.tradeRequestOut = null;
+      const target = players.get(targetId);
+      if (target?.tradeInvite?.fromId === playerId) {
+        target.tradeInvite = null;
+        notify(targetId, { type: 'trade-invite-close' });
+      }
+    }
+  }
 }
 
 function activeTrade(trades, players, playerId) {
@@ -348,6 +436,8 @@ export function isTradeLocked(trades, players, playerId, slot) {
 }
 
 export function updateTrades(trades, players, notify, now = Date.now()) {
+  expireRequests(players, notify, now);
+
   for (const trade of Array.from(trades.trades.values())) {
     const first = players.get(trade.a.playerId);
     const second = players.get(trade.b.playerId);
@@ -383,6 +473,8 @@ export function updateTrades(trades, players, notify, now = Date.now()) {
 export function handleTrade(trades, players, playerId, message, notify) {
   if (message.type === 'trade-request') {
     if (typeof message.playerId === 'string') requestTrade(trades, players, playerId, message.playerId, notify);
+  } else if (message.type === 'trade-answer') {
+    answerTrade(trades, players, playerId, message.accept === true, notify);
   } else if (message.type === 'trade-offer') {
     const quantity = message.quantity === undefined ? undefined : Number.parseInt(message.quantity, 10);
     offerItem(trades, players, playerId, Number.parseInt(message.tradeSlot, 10), Number.parseInt(message.slot, 10), quantity, notify);
@@ -393,6 +485,7 @@ export function handleTrade(trades, players, playerId, message, notify) {
   } else if (message.type === 'trade-accept') {
     acceptTrade(trades, players, playerId, notify);
   } else if (message.type === 'trade-cancel') {
+    cancelTradeRequests(players, playerId, notify);
     cancelPlayerTrade(trades, players, playerId, notify, 'cancelled');
   }
 }

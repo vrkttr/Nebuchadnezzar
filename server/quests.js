@@ -6,6 +6,7 @@ import { grantXp } from './progression.js';
 import { MORDFALL_QUESTS } from './questsMordfall.js';
 import { BARON_QUESTS } from './questsBaron.js';
 import { JAGD_QUESTS } from './questsJagd.js';
+import { HALLE_QUESTS } from './questsHalle.js';
 
 export const MAX_ACTIVE_QUESTS = 10;
 
@@ -206,7 +207,7 @@ const BASE_QUESTS = {
   },
 };
 
-export const QUESTS = { ...BASE_QUESTS, ...MORDFALL_QUESTS, ...BARON_QUESTS, ...JAGD_QUESTS };
+export const QUESTS = { ...BASE_QUESTS, ...MORDFALL_QUESTS, ...BARON_QUESTS, ...JAGD_QUESTS, ...HALLE_QUESTS };
 
 export function getQuest(questId) {
   return typeof questId === 'string' && Object.hasOwn(QUESTS, questId) ? QUESTS[questId] : null;
