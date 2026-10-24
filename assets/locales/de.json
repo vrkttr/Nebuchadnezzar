@@ -1576,5 +1576,10 @@
   "item.bag_foreman.description": "Der Seesack des Vorarbeiters. Er hat nie jemanden an ihn herangelassen.",
   "questobject.halle_lieferschein": "Lieferscheine",
   "questobject.halle_schichtbuch": "Schichtbuch",
-  "questobject.halle_rationsliste": "Rationsliste"
+  "questobject.halle_rationsliste": "Rationsliste",
+  "zone.kraftwerk.name": "Kraftwerk",
+  "teleporter.kraftwerk_eingang": "Kraftwerk betreten",
+  "teleporter.kraftwerk_ausgang": "Kraftwerk verlassen",
+  "enemy.plant_guard": "Werkschutz",
+  "enemy.machinist": "Der Maschinist"
 }

@@ -160014,7 +160014,8 @@
     0,
     0,
     0
-   ]
+   ],
+   "objects": []
   },
   {
    "draworder": "topdown",
@@ -165657,6 +165658,121 @@
        "name": "tint",
        "type": "string",
        "value": "#9a9a86"
+      }
+     ]
+    },
+    {
+     "id": 2556,
+     "name": "",
+     "type": "halle",
+     "class": "halle",
+     "x": 2304.0,
+     "y": 3712.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 44
+      },
+      {
+       "name": "depth",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 611
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#8e8b7a"
+      },
+      {
+       "name": "gate",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "door",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 2558,
+     "name": "",
+     "type": "halle",
+     "class": "halle",
+     "x": 3280.0,
+     "y": 3712.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "length",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "depth",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 612
+      },
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#7e7a6a"
+      }
+     ]
+    },
+    {
+     "id": 2560,
+     "name": "",
+     "type": "schornstein",
+     "class": "schornstein",
+     "x": 3712.0,
+     "y": 3456.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 613
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 46
       }
      ]
     }
@@ -202403,45 +202519,6 @@
      ]
     },
     {
-     "id": 2283,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 1920,
-     "y": 3200,
-     "width": 640,
-     "height": 640,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 4025
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
      "id": 2370,
      "name": "",
      "type": "wald",
@@ -202584,318 +202661,6 @@
        "name": "unterholz",
        "type": "int",
        "value": 12
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2371,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 1920.0,
-     "y": 3840.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 5030
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2372,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 1920.0,
-     "y": 4160.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 5031
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2373,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 2240.0,
-     "y": 3840.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 6030
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2374,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 2240.0,
-     "y": 4160.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 6031
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2375,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 2560.0,
-     "y": 3840.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 7030
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2376,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 2560.0,
-     "y": 4160.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 7031
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2377,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 2880.0,
-     "y": 3840.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 8030
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "minHeight",
-       "type": "int",
-       "value": 7
-      },
-      {
-       "name": "maxHeight",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 2378,
-     "name": "",
-     "type": "wald",
-     "class": "wald",
-     "x": 2880.0,
-     "y": 4160.0,
-     "width": 320.0,
-     "height": 320.0,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 8031
-      },
-      {
-       "name": "dichte",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "unterholz",
-       "type": "int",
-       "value": 7
       },
       {
        "name": "minHeight",
@@ -216059,6 +215824,63 @@
        "value": 11.0
       }
      ]
+    },
+    {
+     "id": 2557,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1600.0,
+     "y": 3424.0,
+     "width": 1408,
+     "height": 576,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 13.0
+      }
+     ]
+    },
+    {
+     "id": 2559,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2992.0,
+     "y": 3488.0,
+     "width": 576,
+     "height": 448,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 22.0
+      }
+     ]
+    },
+    {
+     "id": 2561,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 3625.6,
+     "y": 3369.6,
+     "width": 172.8,
+     "height": 172.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 46.0
+      }
+     ]
     }
    ],
    "opacity": 1,
@@ -222539,6 +222361,65 @@
        "value": "industriehalle"
       }
      ]
+    },
+    {
+     "id": 2562,
+     "name": "",
+     "type": "teleporter",
+     "class": "teleporter",
+     "x": 2256.0,
+     "y": 4000.0,
+     "width": 96.0,
+     "height": 70.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kraftwerk_eingang"
+      },
+      {
+       "name": "zone",
+       "type": "string",
+       "value": "kraftwerk"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "eingang"
+      },
+      {
+       "name": "label",
+       "type": "string",
+       "value": "Kraftwerk betreten"
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 2563,
+     "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 2304.0,
+     "y": 4112.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kraftwerk"
+      }
+     ]
     }
    ],
    "opacity": 1,
@@ -222560,7 +222441,7 @@
   }
  ],
  "nextlayerid": 9,
- "nextobjectid": 2556,
+ "nextobjectid": 2564,
  "orientation": "orthogonal",
  "renderorder": "right-down",
  "tiledversion": "1.10.2",

@@ -31,6 +31,8 @@ const ENEMY_TYPES = {
   arsonist: { ...HUMAN, name: 'Brandstifter', healthBase: 65, healthPerLevel: 14, aggroRange: 11, attackInterval: 3, damageFactor: 0.8, meleeRange: 10, dot: { kind: 'burn', duration: 5, factor: 0.14 }, lootTable: 'arsonist' },
   bandit_boss: { ...HUMAN, name: 'Räuberhauptmann', healthBase: 400, healthPerLevel: 45, attackInterval: 1.8, damageFactor: 1.3, meleeRange: 2.2, aggroRange: 10, boss: true, lootTable: 'boss' },
   foreman: { ...HUMAN, name: 'Der Vorarbeiter', healthBase: 5200, healthPerLevel: 0, attackInterval: 2.2, damageFactor: 0.9, meleeRange: 2.4, aggroRange: 8, boss: true, lootTable: 'foreman' },
+  plant_guard: { ...HUMAN, name: 'Werkschutz', healthBase: 130, healthPerLevel: 24, aggroRange: 13, attackInterval: 2.2, damageFactor: 1.35, meleeRange: 12, lootTable: 'plant_guard' },
+  machinist: { ...HUMAN, name: 'Der Maschinist', healthBase: 8200, healthPerLevel: 0, attackInterval: 2.0, damageFactor: 0.95, meleeRange: 2.5, aggroRange: 8, boss: true, lootTable: 'machinist' },
   bat: { ...BEAST, name: 'Fledermaus', healthBase: 20, healthPerLevel: 3, moveSpeed: 5.5, aggroRange: 10, attackInterval: 1, damageFactor: 0.35, meleeRange: 1.4, pack: 'bats', lootTable: 'bat' },
   cave_spider: { ...BEAST, name: 'Höhlenspinne', healthBase: 110, healthPerLevel: 16, moveSpeed: 4.4, aggroRange: 9, attackInterval: 1.6, damageFactor: 0.9, dot: { kind: 'poison', duration: 8, factor: 0.1 }, lootTable: 'spider' },
   lost_one: { ...HUMAN, name: 'Verirrter', healthBase: 100, healthPerLevel: 16, aggroRange: 7, damageFactor: 1, pack: 'lost', lootTable: 'lost' },

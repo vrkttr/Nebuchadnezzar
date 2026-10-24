@@ -1826,5 +1826,10 @@
   "quest.halle_3.offer": "One word comes up in every conversation about the hall: the foreman. Nobody knows his name, nobody wants to have seen him, and yet everyone says someone is still on duty there as if nothing had happened. He sits in the manager's office at the end of the administration wing. I am not sending you to kill him, but so the way there is open again. He will hardly let himself be asked to leave, though. Be prepared.",
   "quest.halle_3.progress": "The manager's office is at the end of the administration wing. Expect his guards, and bring bandages for several fights.",
   "quest.halle_3.complete": "He did his duty to the very end, you say? On whose orders, I would like to know. But nobody answers that today. The hall is yours now, as far as anything belongs to anyone. Take this, a freight pack from my own stock. And keep your eyes open the next time you are near an archive.",
-  "quest.halle_3.objective.0": "Foreman defeated"
+  "quest.halle_3.objective.0": "Foreman defeated",
+  "zone.kraftwerk.name": "Power Plant",
+  "teleporter.kraftwerk_eingang": "Enter the power plant",
+  "teleporter.kraftwerk_ausgang": "Leave the power plant",
+  "enemy.plant_guard": "Plant Security",
+  "enemy.machinist": "The Machinist"
 }
