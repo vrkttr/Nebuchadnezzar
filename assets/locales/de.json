@@ -1512,5 +1512,9 @@
   "gamemenu.settings": "Einstellungen",
   "gamemenu.mainMenu": "Zum Hauptmenü",
   "gamemenu.logout": "Abmelden",
-  "gamemenu.resume": "Zurück zum Spiel"
+  "gamemenu.resume": "Zurück zum Spiel",
+  "zone.industriehalle.name": "Industriehalle",
+  "teleporter.industriehalle_eingang": "Industriehalle betreten",
+  "teleporter.industriehalle_ausgang": "Industriehalle verlassen",
+  "enemy.foreman": "Der Vorarbeiter"
 }

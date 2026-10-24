@@ -1740,5 +1740,9 @@
   "gamemenu.settings": "Settings",
   "gamemenu.mainMenu": "To main menu",
   "gamemenu.logout": "Sign out",
-  "gamemenu.resume": "Back to game"
+  "gamemenu.resume": "Back to game",
+  "zone.industriehalle.name": "Industrial Hall",
+  "teleporter.industriehalle_eingang": "Enter the industrial hall",
+  "teleporter.industriehalle_ausgang": "Leave the industrial hall",
+  "enemy.foreman": "The Foreman"
 }

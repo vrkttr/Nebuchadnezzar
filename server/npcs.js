@@ -238,6 +238,7 @@ const NPC_DEFINITIONS = {
     vendor: {
       stock: [
         { itemId: 'canned_food', price: 8 },
+        { itemId: 'duct_tape', price: 9 },
         { itemId: 'bandage', price: 6 },
         { itemId: 'painkillers', price: 14 },
         { itemId: 'medkit', price: 45 },

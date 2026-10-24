@@ -1,0 +1,10397 @@
+{
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "compressionlevel": -1,
+ "infinite": false,
+ "width": 64,
+ "height": 136,
+ "tilewidth": 32,
+ "tileheight": 32,
+ "nextlayerid": 6,
+ "nextobjectid": 450,
+ "tilesets": [],
+ "properties": [
+  {
+   "name": "name",
+   "type": "string",
+   "value": "Industriehalle"
+  },
+  {
+   "name": "innen",
+   "type": "bool",
+   "value": true
+  },
+  {
+   "name": "licht",
+   "type": "float",
+   "value": 0.95
+  },
+  {
+   "name": "sonne",
+   "type": "float",
+   "value": 0.0
+  },
+  {
+   "name": "hintergrund",
+   "type": "string",
+   "value": "#050606"
+  },
+  {
+   "name": "nebel",
+   "type": "string",
+   "value": "#0a0b0b:40:130"
+  },
+  {
+   "name": "groundTexture",
+   "type": "string",
+   "value": "slab"
+  },
+  {
+   "name": "groundColor",
+   "type": "string",
+   "value": "#66665e"
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "Boden",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 1,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 0.0,
+     "y": 0.0,
+     "width": 2048,
+     "height": 4352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#66665e"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.0
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 32.0,
+     "y": 960.0,
+     "width": 1984,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7a766a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 32.0,
+     "y": 32.0,
+     "width": 1984,
+     "height": 928,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "boards"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#6a5c48"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 640.0,
+     "y": 32.0,
+     "width": 768,
+     "height": 608,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "cloth"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#5a3a36"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 32.0,
+     "y": 2976.0,
+     "width": 1984,
+     "height": 1344,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#6c6c62"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 32.0,
+     "y": 1312.0,
+     "width": 1984,
+     "height": 1632,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#5a5b54"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.01
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 979.2,
+     "y": 3008.0,
+     "width": 12.8,
+     "height": 1280,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c8a020"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 1056.0,
+     "y": 3008.0,
+     "width": 12.8,
+     "height": 1280,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c8a020"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 979.2,
+     "y": 1344.0,
+     "width": 12.8,
+     "height": 1600,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c8a020"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "name": "",
+     "type": "flaeche",
+     "class": "flaeche",
+     "x": 1056.0,
+     "y": 1344.0,
+     "width": 12.8,
+     "height": 1600,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "slab"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c8a020"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "name": "",
+     "type": "fleck",
+     "class": "fleck",
+     "x": 208.0,
+     "y": 3280.0,
+     "width": 160.0,
+     "height": 160.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#45423a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "name": "",
+     "type": "fleck",
+     "class": "fleck",
+     "x": 1600.0,
+     "y": 3712.0,
+     "width": 128.0,
+     "height": 128.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#45423a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "name": "",
+     "type": "fleck",
+     "class": "fleck",
+     "x": 544.0,
+     "y": 1888.0,
+     "width": 192.0,
+     "height": 192.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#45423a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "name": "",
+     "type": "fleck",
+     "class": "fleck",
+     "x": 1392.0,
+     "y": 2352.0,
+     "width": 160.0,
+     "height": 160.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#45423a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "name": "",
+     "type": "fleck",
+     "class": "fleck",
+     "x": 320.0,
+     "y": 2624.0,
+     "width": 128.0,
+     "height": 128.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#45423a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "name": "",
+     "type": "fleck",
+     "class": "fleck",
+     "x": 1200.0,
+     "y": 3376.0,
+     "width": 160.0,
+     "height": 160.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#45423a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "",
+     "type": "fleck",
+     "class": "fleck",
+     "x": 912.0,
+     "y": 1552.0,
+     "width": 96.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "material",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#45423a"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "y",
+       "type": "float",
+       "value": 0.02
+      },
+      {
+       "name": "ebene",
+       "type": "string",
+       "value": "top"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "name": "Gebaeude",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 18,
+     "name": "",
+     "type": "decke",
+     "class": "decke",
+     "x": 0.0,
+     "y": 0.0,
+     "width": 2048,
+     "height": 960,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a8478"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "",
+     "type": "decke",
+     "class": "decke",
+     "x": 0.0,
+     "y": 960.0,
+     "width": 2048,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 4.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a70"
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "",
+     "type": "decke",
+     "class": "decke",
+     "x": 0.0,
+     "y": 1312.0,
+     "width": 2048,
+     "height": 3040,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#6c6a62"
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 0.0,
+     "y": 0.0,
+     "width": 2048,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 0.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 4320,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 2016.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 4320,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 32.0,
+     "y": 4320.0,
+     "width": 940.8,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1075.2,
+     "y": 4320.0,
+     "width": 940.8,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "name": "",
+     "type": "tuer",
+     "class": "tuer",
+     "x": 972.8,
+     "y": 4320.0,
+     "width": 102.4,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "offen",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.2
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#6a6a60"
+      }
+     ]
+    },
+    {
+     "id": 32,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 32.0,
+     "y": 2944.0,
+     "width": 864,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1152.0,
+     "y": 2944.0,
+     "width": 864,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 32.0,
+     "y": 1280.0,
+     "width": 288,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 576.0,
+     "y": 1280.0,
+     "width": 1440,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#7e7a6c"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 40,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 32.0,
+     "y": 928.0,
+     "width": 1440,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 42,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1728.0,
+     "y": 928.0,
+     "width": 288,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 44,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 32.0,
+     "y": 640.0,
+     "width": 224,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 46,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 384.0,
+     "y": 640.0,
+     "width": 480,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 48,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1184.0,
+     "y": 640.0,
+     "width": 448,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 50,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1760.0,
+     "y": 640.0,
+     "width": 256,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 608.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 608,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1408.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 608,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 56,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 32.0,
+     "y": 320.0,
+     "width": 224,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 58,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 384.0,
+     "y": 320.0,
+     "width": 224,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 60,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1440.0,
+     "y": 352.0,
+     "width": 192,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1760.0,
+     "y": 352.0,
+     "width": 256,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#a89e86"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 191,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 748.8,
+     "y": 1580.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a8678"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 193,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 748.8,
+     "y": 2220.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a8678"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 195,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 748.8,
+     "y": 2796.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a8678"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 197,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1260.8,
+     "y": 1580.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a8678"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 199,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1260.8,
+     "y": 2220.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a8678"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 201,
+     "name": "",
+     "type": "wand",
+     "class": "wand",
+     "x": 1260.8,
+     "y": 2796.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "y0",
+       "type": "int",
+       "value": 0
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 7.0
+      },
+      {
+       "name": "material",
+       "type": "string",
+       "value": "concrete_panel"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#8a8678"
+      },
+      {
+       "name": "tile",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "buendeln",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "Objekte",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 64,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 272.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 66,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 496.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 68,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1584.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 70,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1808.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 72,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 272.0,
+     "y": 3312.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 74,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 496.0,
+     "y": 3312.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 76,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1584.0,
+     "y": 3312.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 78,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1808.0,
+     "y": 3312.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 80,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 272.0,
+     "y": 3536.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 82,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 496.0,
+     "y": 3536.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 84,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1584.0,
+     "y": 3536.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 86,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1808.0,
+     "y": 3536.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 272.0,
+     "y": 3760.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 90,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 496.0,
+     "y": 3760.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 92,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1584.0,
+     "y": 3760.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 94,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1808.0,
+     "y": 3760.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 96,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 272.0,
+     "y": 3984.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 98,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 496.0,
+     "y": 3984.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 100,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1584.0,
+     "y": 3984.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 102,
+     "name": "",
+     "type": "regal",
+     "class": "regal",
+     "x": 1808.0,
+     "y": 3984.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 6.0
+      }
+     ]
+    },
+    {
+     "id": 104,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 76.8,
+     "y": 3200,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#6a7a8a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 106,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 76.8,
+     "y": 3488,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#8a5a3a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 108,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 76.8,
+     "y": 4000,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#4a6a52"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 110,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 1971.2,
+     "y": 3328,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#7a3a2a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 112,
+     "name": "",
+     "type": "container",
+     "class": "container",
+     "x": 1971.2,
+     "y": 3904,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "tint",
+       "type": "string",
+       "value": "#6a7a8a"
+      },
+      {
+       "name": "stacked",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 114,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 736,
+     "y": 3200,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 9430
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 116,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 780.8,
+     "y": 3206.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 1907
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 118,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 710.4,
+     "y": 3456,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6594
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 120,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1312,
+     "y": 3168,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5599
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 122,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1350.4,
+     "y": 3392,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 9772
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 124,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1299.2,
+     "y": 3968,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8096
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 126,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 768,
+     "y": 4096,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6300
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 128,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 832,
+     "y": 3904,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 9141
+      }
+     ]
+    },
+    {
+     "id": 130,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 867.2,
+     "y": 3891.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5898
+      }
+     ]
+    },
+    {
+     "id": 132,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1216,
+     "y": 3648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 4157
+      },
+      {
+       "name": "lying",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 134,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 720.0,
+     "y": 3648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8492
+      }
+     ]
+    },
+    {
+     "id": 136,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1376,
+     "y": 4160,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 3409
+      }
+     ]
+    },
+    {
+     "id": 138,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 608,
+     "y": 4224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5556
+      }
+     ]
+    },
+    {
+     "id": 140,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 320,
+     "y": 4224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5842
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 142,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 358.4,
+     "y": 4236.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8522
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 144,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1728,
+     "y": 4224,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 2957
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 146,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1689.6,
+     "y": 4211.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7461
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 148,
+     "name": "",
+     "type": "werkbank",
+     "class": "werkbank",
+     "x": 640.0,
+     "y": 3017.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 150,
+     "name": "",
+     "type": "werkbank",
+     "class": "werkbank",
+     "x": 1376.0,
+     "y": 3017.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 152,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 656.0,
+     "y": 3104,
+     "width": 0,
+     "height": 0,
+     "rotation": 254,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6577
+      }
+     ]
+    },
+    {
+     "id": 153,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 1408,
+     "y": 3744,
+     "width": 0,
+     "height": 0,
+     "rotation": 227,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7705
+      }
+     ]
+    },
+    {
+     "id": 154,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 656.0,
+     "y": 4160,
+     "width": 0,
+     "height": 0,
+     "rotation": 263,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 1612
+      }
+     ]
+    },
+    {
+     "id": 155,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 400.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 156,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 400.0,
+     "y": 3568.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 157,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 400.0,
+     "y": 4048.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 158,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 912.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 159,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 912.0,
+     "y": 3568.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 160,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 912.0,
+     "y": 4048.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 161,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1168.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 162,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1168.0,
+     "y": 3568.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 163,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1168.0,
+     "y": 4048.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 164,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1680.0,
+     "y": 3088.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 165,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1680.0,
+     "y": 3568.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 166,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1680.0,
+     "y": 4048.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 167,
+     "name": "",
+     "type": "maschine",
+     "class": "maschine",
+     "x": 112.0,
+     "y": 1456.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#4a5a6a"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 2979
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.6
+      }
+     ]
+    },
+    {
+     "id": 169,
+     "name": "",
+     "type": "maschine",
+     "class": "maschine",
+     "x": 1776.0,
+     "y": 1584.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#4a5a6a"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7021
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.6
+      }
+     ]
+    },
+    {
+     "id": 171,
+     "name": "",
+     "type": "maschine",
+     "class": "maschine",
+     "x": 112.0,
+     "y": 2032.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#5a6a60"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6975
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.6
+      }
+     ]
+    },
+    {
+     "id": 173,
+     "name": "",
+     "type": "maschine",
+     "class": "maschine",
+     "x": 1776.0,
+     "y": 2160.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#6a5a46"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5831
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.6
+      }
+     ]
+    },
+    {
+     "id": 175,
+     "name": "",
+     "type": "maschine",
+     "class": "maschine",
+     "x": 112.0,
+     "y": 2608.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#6a5a46"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 1251
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.6
+      }
+     ]
+    },
+    {
+     "id": 177,
+     "name": "",
+     "type": "maschine",
+     "class": "maschine",
+     "x": 1776.0,
+     "y": 2736.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#5a6a60"
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6933
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 2.6
+      }
+     ]
+    },
+    {
+     "id": 179,
+     "name": "",
+     "type": "foerderband",
+     "class": "foerderband",
+     "x": 320.0,
+     "y": 1483.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 11
+      }
+     ]
+    },
+    {
+     "id": 181,
+     "name": "",
+     "type": "foerderband",
+     "class": "foerderband",
+     "x": 320.0,
+     "y": 2059.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5253
+      }
+     ]
+    },
+    {
+     "id": 183,
+     "name": "",
+     "type": "foerderband",
+     "class": "foerderband",
+     "x": 320.0,
+     "y": 2635.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 2670
+      }
+     ]
+    },
+    {
+     "id": 185,
+     "name": "",
+     "type": "foerderband",
+     "class": "foerderband",
+     "x": 1280.0,
+     "y": 1611.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6042
+      }
+     ]
+    },
+    {
+     "id": 187,
+     "name": "",
+     "type": "foerderband",
+     "class": "foerderband",
+     "x": 1280.0,
+     "y": 2187.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8219
+      }
+     ]
+    },
+    {
+     "id": 189,
+     "name": "",
+     "type": "foerderband",
+     "class": "foerderband",
+     "x": 1280.0,
+     "y": 2763.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 9272
+      }
+     ]
+    },
+    {
+     "id": 203,
+     "name": "",
+     "type": "rohr",
+     "class": "rohr",
+     "x": 48.0,
+     "y": 1785.6,
+     "width": 1952.0,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 5.4
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 204,
+     "name": "",
+     "type": "rohr",
+     "class": "rohr",
+     "x": 48.0,
+     "y": 2425.6,
+     "width": 1952.0,
+     "height": 12.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 5.4
+      },
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 23
+      }
+     ]
+    },
+    {
+     "id": 205,
+     "name": "",
+     "type": "werkbank",
+     "class": "werkbank",
+     "x": 944.0,
+     "y": 1353.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 207,
+     "name": "",
+     "type": "werkbank",
+     "class": "werkbank",
+     "x": 1168.0,
+     "y": 1353.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.4
+      }
+     ]
+    },
+    {
+     "id": 209,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 896,
+     "y": 1792,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5511
+      }
+     ]
+    },
+    {
+     "id": 211,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 934.4,
+     "y": 1808.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 732
+      }
+     ]
+    },
+    {
+     "id": 213,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1184,
+     "y": 2560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8319
+      },
+      {
+       "name": "burning",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 215,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 704,
+     "y": 2368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 1545
+      },
+      {
+       "name": "lying",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 217,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1376,
+     "y": 1920,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 181
+      }
+     ]
+    },
+    {
+     "id": 219,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1414.4,
+     "y": 1929.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8549
+      }
+     ]
+    },
+    {
+     "id": 221,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 384,
+     "y": 2912,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7176
+      }
+     ]
+    },
+    {
+     "id": 223,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1664,
+     "y": 2912,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7815
+      }
+     ]
+    },
+    {
+     "id": 225,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 832,
+     "y": 2112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 3388
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 227,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1344,
+     "y": 2688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5461
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 229,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 448,
+     "y": 1792,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 2970
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 231,
+     "name": "",
+     "type": "kiste",
+     "class": "kiste",
+     "x": 1728,
+     "y": 1984,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 9363
+      },
+      {
+       "name": "stack",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 233,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 640,
+     "y": 2880,
+     "width": 0,
+     "height": 0,
+     "rotation": 179,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 3847
+      }
+     ]
+    },
+    {
+     "id": 234,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 1472,
+     "y": 2880,
+     "width": 0,
+     "height": 0,
+     "rotation": 33,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 657
+      }
+     ]
+    },
+    {
+     "id": 235,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 128,
+     "y": 2432,
+     "width": 0,
+     "height": 0,
+     "rotation": 59,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7026
+      }
+     ]
+    },
+    {
+     "id": 236,
+     "name": "",
+     "type": "schutt",
+     "class": "schutt",
+     "x": 1920,
+     "y": 1600,
+     "width": 0,
+     "height": 0,
+     "rotation": 174,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 2000
+      }
+     ]
+    },
+    {
+     "id": 237,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 352.0,
+     "y": 1584.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 238,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 352.0,
+     "y": 1968.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 239,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 352.0,
+     "y": 2352.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 240,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 352.0,
+     "y": 2736.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 241,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 800.0,
+     "y": 1584.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 242,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 800.0,
+     "y": 1968.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 243,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 800.0,
+     "y": 2352.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 244,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 800.0,
+     "y": 2736.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 245,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1312.0,
+     "y": 1584.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 246,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1312.0,
+     "y": 1968.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 247,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1312.0,
+     "y": 2352.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 248,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1312.0,
+     "y": 2736.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 249,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1760.0,
+     "y": 1584.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 250,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1760.0,
+     "y": 1968.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 251,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1760.0,
+     "y": 2352.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 252,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1760.0,
+     "y": 2736.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 6.3
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 253,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 304.0,
+     "y": 1059.2,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.2
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 1.0
+      }
+     ]
+    },
+    {
+     "id": 255,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 432.0,
+     "y": 1059.2,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.2
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 1.0
+      }
+     ]
+    },
+    {
+     "id": 257,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 336.0,
+     "y": 1132.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 180,
+     "visible": true
+    },
+    {
+     "id": 258,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 464.0,
+     "y": 1132.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 180,
+     "visible": true
+    },
+    {
+     "id": 259,
+     "name": "",
+     "type": "sofa",
+     "class": "sofa",
+     "x": 944.0,
+     "y": 1001.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#4f5a44"
+      }
+     ]
+    },
+    {
+     "id": 261,
+     "name": "",
+     "type": "sofa",
+     "class": "sofa",
+     "x": 1136.0,
+     "y": 1001.6,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#5a4a3a"
+      }
+     ]
+    },
+    {
+     "id": 263,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 1040.0,
+     "y": 1116.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.4
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 0.9
+      }
+     ]
+    },
+    {
+     "id": 265,
+     "name": "",
+     "type": "fernseher",
+     "class": "fernseher",
+     "x": 1040.0,
+     "y": 1116.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 266,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1696.0,
+     "y": 1228.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 268,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1824.0,
+     "y": 1228.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 270,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 64.0,
+     "y": 982.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 272,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 1648.0,
+     "y": 1078.4,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 4.0
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 1.0
+      }
+     ]
+    },
+    {
+     "id": 274,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 1680.0,
+     "y": 1152.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 180,
+     "visible": true
+    },
+    {
+     "id": 275,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 240.0,
+     "y": 1104.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 4.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 276,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 880.0,
+     "y": 1104.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 4.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 277,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1520.0,
+     "y": 1104.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 4.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 278,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1840.0,
+     "y": 1104.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 4.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 22
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 279,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 144.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 281,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 400.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 283,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1680.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 285,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1872.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 287,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 304.0,
+     "y": 784.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 288,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 816.0,
+     "y": 784.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 289,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1136.0,
+     "y": 784.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 290,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1584.0,
+     "y": 784.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 291,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1840.0,
+     "y": 784.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 11
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 292,
+     "name": "",
+     "type": "sofa",
+     "class": "sofa",
+     "x": 752.0,
+     "y": 886.4,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.2
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#5a4a3a"
+      }
+     ]
+    },
+    {
+     "id": 294,
+     "name": "",
+     "type": "absperrung",
+     "class": "absperrung",
+     "x": 1296.0,
+     "y": 880.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 295,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 304.0,
+     "y": 464.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 297,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 336.0,
+     "y": 547.2,
+     "width": 32,
+     "height": 32,
+     "rotation": 180,
+     "visible": true
+    },
+    {
+     "id": 298,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 304.0,
+     "y": 144.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 1.2
+      }
+     ]
+    },
+    {
+     "id": 300,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 336.0,
+     "y": 227.2,
+     "width": 32,
+     "height": 32,
+     "rotation": 180,
+     "visible": true
+    },
+    {
+     "id": 301,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 80.0,
+     "y": 512.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 303,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 80.0,
+     "y": 144.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 305,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 560.0,
+     "y": 400.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 307,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 432.0,
+     "y": 80.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.0
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 0.9
+      }
+     ]
+    },
+    {
+     "id": 309,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 304.0,
+     "y": 464.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 310,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 304.0,
+     "y": 144.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 20
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 311,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 1008.0,
+     "y": 124.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 5.0
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 1.6
+      }
+     ]
+    },
+    {
+     "id": 313,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 1008.0,
+     "y": 76.8,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 314,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 624.0,
+     "y": 48.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 316,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1328.0,
+     "y": 48.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 318,
+     "name": "",
+     "type": "sofa",
+     "class": "sofa",
+     "x": 726.4,
+     "y": 304.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#3a3a34"
+      }
+     ]
+    },
+    {
+     "id": 320,
+     "name": "",
+     "type": "sofa",
+     "class": "sofa",
+     "x": 1321.6,
+     "y": 336.0,
+     "width": 32,
+     "height": 32,
+     "rotation": -90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#3a3a34"
+      }
+     ]
+    },
+    {
+     "id": 322,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 678.4,
+     "y": 582.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6435
+      }
+     ]
+    },
+    {
+     "id": 324,
+     "name": "",
+     "type": "fass",
+     "class": "fass",
+     "x": 1369.6,
+     "y": 582.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 3913
+      },
+      {
+       "name": "lying",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 326,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 816.0,
+     "y": 240.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#f0d29a"
+      }
+     ]
+    },
+    {
+     "id": 327,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1200.0,
+     "y": 240.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#f0d29a"
+      }
+     ]
+    },
+    {
+     "id": 328,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 816.0,
+     "y": 496.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#f0d29a"
+      }
+     ]
+    },
+    {
+     "id": 329,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1200.0,
+     "y": 496.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 24
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#f0d29a"
+      }
+     ]
+    },
+    {
+     "id": 330,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1552.0,
+     "y": 54.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 332,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1744.0,
+     "y": 54.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 334,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1878.4,
+     "y": 54.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 336,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1545.6,
+     "y": 99.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 338,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1984.0,
+     "y": 99.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 340,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1545.6,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 342,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1984.0,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 344,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1680.0,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 346,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1795.2,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 348,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1680.0,
+     "y": 291.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 350,
+     "name": "",
+     "type": "aktenschrank",
+     "class": "aktenschrank",
+     "x": 1795.2,
+     "y": 291.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 352,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1584.0,
+     "y": 144.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 16
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    },
+    {
+     "id": 353,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1840.0,
+     "y": 240.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 354,
+     "name": "",
+     "type": "sofa",
+     "class": "sofa",
+     "x": 1552.0,
+     "y": 464.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 90,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#4f5a44"
+      }
+     ]
+    },
+    {
+     "id": 356,
+     "name": "",
+     "type": "tisch",
+     "class": "tisch",
+     "x": 1712.0,
+     "y": 480.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "breite",
+       "type": "float",
+       "value": 2.2
+      },
+      {
+       "name": "tiefe",
+       "type": "float",
+       "value": 1.0
+      }
+     ]
+    },
+    {
+     "id": 358,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 1744.0,
+     "y": 560.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 180,
+     "visible": true
+    },
+    {
+     "id": 359,
+     "name": "",
+     "type": "stuhl",
+     "class": "stuhl",
+     "x": 1712.0,
+     "y": 432.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 360,
+     "name": "",
+     "type": "kuehlschrank",
+     "class": "kuehlschrank",
+     "x": 1968.0,
+     "y": 444.8,
+     "width": 32,
+     "height": 32,
+     "rotation": -90,
+     "visible": true
+    },
+    {
+     "id": 362,
+     "name": "",
+     "type": "herd",
+     "class": "herd",
+     "x": 1968.0,
+     "y": 560.0,
+     "width": 32,
+     "height": 32,
+     "rotation": -90,
+     "visible": true
+    },
+    {
+     "id": 364,
+     "name": "",
+     "type": "deckenlampe",
+     "class": "deckenlampe",
+     "x": 1712.0,
+     "y": 496.0,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      },
+      {
+       "name": "licht",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "intensitaet",
+       "type": "int",
+       "value": 18
+      },
+      {
+       "name": "distanz",
+       "type": "int",
+       "value": 10
+      },
+      {
+       "name": "farbe",
+       "type": "string",
+       "value": "#e8c890"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "Kollision",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 22,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 0.0,
+     "y": 0.0,
+     "width": 2048,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 0.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 4320,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2016.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 4320,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 32.0,
+     "y": 4320.0,
+     "width": 940.8,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1075.2,
+     "y": 4320.0,
+     "width": 940.8,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 33,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 32.0,
+     "y": 2944.0,
+     "width": 864,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1152.0,
+     "y": 2944.0,
+     "width": 864,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 37,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 32.0,
+     "y": 1280.0,
+     "width": 288,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 576.0,
+     "y": 1280.0,
+     "width": 1440,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 41,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 32.0,
+     "y": 928.0,
+     "width": 1440,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1728.0,
+     "y": 928.0,
+     "width": 288,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 32.0,
+     "y": 640.0,
+     "width": 224,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 384.0,
+     "y": 640.0,
+     "width": 480,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1184.0,
+     "y": 640.0,
+     "width": 448,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1760.0,
+     "y": 640.0,
+     "width": 256,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 608.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 608,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1408.0,
+     "y": 32.0,
+     "width": 32,
+     "height": 608,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 32.0,
+     "y": 320.0,
+     "width": 224,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 384.0,
+     "y": 320.0,
+     "width": 224,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1440.0,
+     "y": 352.0,
+     "width": 192,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 63,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1760.0,
+     "y": 352.0,
+     "width": 256,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 3.5
+      }
+     ]
+    },
+    {
+     "id": 65,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 270.4,
+     "y": 3008.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 67,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 494.4,
+     "y": 3008.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 69,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1582.4,
+     "y": 3008.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 71,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1806.4,
+     "y": 3008.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 73,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 270.4,
+     "y": 3232.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 75,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 494.4,
+     "y": 3232.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 77,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1582.4,
+     "y": 3232.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 79,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1806.4,
+     "y": 3232.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 81,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 270.4,
+     "y": 3456.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 83,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 494.4,
+     "y": 3456.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 85,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1582.4,
+     "y": 3456.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 87,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1806.4,
+     "y": 3456.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 89,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 270.4,
+     "y": 3680.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 91,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 494.4,
+     "y": 3680.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 93,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1582.4,
+     "y": 3680.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 95,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1806.4,
+     "y": 3680.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 97,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 270.4,
+     "y": 3904.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 99,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 494.4,
+     "y": 3904.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 101,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1582.4,
+     "y": 3904.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 103,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1806.4,
+     "y": 3904.0,
+     "width": 192.0,
+     "height": 28.8,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 105,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 116.8,
+     "y": 3104.0,
+     "width": 192.0,
+     "height": 80.0,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 107,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 116.8,
+     "y": 3392.0,
+     "width": 192.0,
+     "height": 80.0,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 109,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 116.8,
+     "y": 3904.0,
+     "width": 192.0,
+     "height": 80.0,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 111,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2011.2,
+     "y": 3232.0,
+     "width": 192.0,
+     "height": 80.0,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 113,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2011.2,
+     "y": 3808.0,
+     "width": 192.0,
+     "height": 80.0,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 115,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 720.0,
+     "y": 3184.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 117,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 764.8,
+     "y": 3190.4,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 119,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 694.4,
+     "y": 3440.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 121,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1296.0,
+     "y": 3152.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 123,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1334.4,
+     "y": 3376.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 125,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1283.2,
+     "y": 3952.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 127,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 752.0,
+     "y": 4080.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 129,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 819.2,
+     "y": 3891.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 131,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 854.4,
+     "y": 3878.4,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 133,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1203.2,
+     "y": 3635.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 135,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 707.2,
+     "y": 3635.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 137,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1363.2,
+     "y": 4147.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 139,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 595.2,
+     "y": 4211.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 141,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 304.0,
+     "y": 4208.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 143,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 342.4,
+     "y": 4220.8,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 145,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1712.0,
+     "y": 4208.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 147,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1673.6,
+     "y": 4195.2,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 149,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 617.6,
+     "y": 3017.6,
+     "width": 76.8,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 151,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1353.6,
+     "y": 3017.6,
+     "width": 76.8,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 168,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 112.0,
+     "y": 1456.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 170,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1776.0,
+     "y": 1584.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 172,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 112.0,
+     "y": 2032.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 174,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1776.0,
+     "y": 2160.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 176,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 112.0,
+     "y": 2608.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 178,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1776.0,
+     "y": 2736.0,
+     "width": 160.0,
+     "height": 96.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 180,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 320.0,
+     "y": 1483.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 182,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 320.0,
+     "y": 2059.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 184,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 320.0,
+     "y": 2635.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 186,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1280.0,
+     "y": 1611.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 188,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1280.0,
+     "y": 2187.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 190,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1280.0,
+     "y": 2763.2,
+     "width": 448,
+     "height": 41.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 192,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 748.8,
+     "y": 1580.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 194,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 748.8,
+     "y": 2220.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 196,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 748.8,
+     "y": 2796.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 198,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1260.8,
+     "y": 1580.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 200,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1260.8,
+     "y": 2220.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 202,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1260.8,
+     "y": 2796.8,
+     "width": 38.4,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 7.0
+      }
+     ]
+    },
+    {
+     "id": 206,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 921.6,
+     "y": 1353.6,
+     "width": 76.8,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 208,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1145.6,
+     "y": 1353.6,
+     "width": 76.8,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 210,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 883.2,
+     "y": 1779.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 212,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 921.6,
+     "y": 1795.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 214,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1171.2,
+     "y": 2547.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 216,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 691.2,
+     "y": 2355.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 218,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1363.2,
+     "y": 1907.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 220,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1401.6,
+     "y": 1916.8,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 222,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 371.2,
+     "y": 2899.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 224,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1651.2,
+     "y": 2899.2,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 226,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 816.0,
+     "y": 2096.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 228,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1328.0,
+     "y": 2672.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 230,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 432.0,
+     "y": 1776.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 232,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1712.0,
+     "y": 1968.0,
+     "width": 32.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 254,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 268.8,
+     "y": 1059.2,
+     "width": 102.4,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 256,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 396.8,
+     "y": 1059.2,
+     "width": 102.4,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 260,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 912.0,
+     "y": 1001.6,
+     "width": 96.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 262,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1104.0,
+     "y": 1001.6,
+     "width": 96.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 264,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1017.6,
+     "y": 1118.4,
+     "width": 76.8,
+     "height": 28.8,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 267,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1696.0,
+     "y": 1228.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 269,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1824.0,
+     "y": 1228.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 271,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 64.0,
+     "y": 982.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 273,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1600.0,
+     "y": 1078.4,
+     "width": 128.0,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 280,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 144.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 282,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 400.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 284,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1680.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 286,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1872.0,
+     "y": 691.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 293,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 732.8,
+     "y": 886.4,
+     "width": 70.4,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 296,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 272.0,
+     "y": 460.8,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 299,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 272.0,
+     "y": 140.8,
+     "width": 96.0,
+     "height": 38.4,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 302,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 80.0,
+     "y": 512.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 304,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 80.0,
+     "y": 144.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 306,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 560.0,
+     "y": 400.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 308,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 416.0,
+     "y": 81.6,
+     "width": 64.0,
+     "height": 28.8,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 312,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 944.0,
+     "y": 115.2,
+     "width": 160.0,
+     "height": 51.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 315,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 624.0,
+     "y": 48.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 317,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1328.0,
+     "y": 48.0,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 319,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 726.4,
+     "y": 272.0,
+     "width": 96.0,
+     "height": 32.0,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 321,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1321.6,
+     "y": 368.0,
+     "width": 96.0,
+     "height": 32.0,
+     "rotation": -90,
+     "visible": true
+    },
+    {
+     "id": 323,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 665.6,
+     "y": 569.6,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 325,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1356.8,
+     "y": 569.6,
+     "width": 25.6,
+     "height": 25.6,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 331,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1552.0,
+     "y": 54.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 333,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1744.0,
+     "y": 54.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 335,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1878.4,
+     "y": 54.4,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 337,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1545.6,
+     "y": 99.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 339,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1984.0,
+     "y": 99.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 341,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1545.6,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 343,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1984.0,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 345,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1680.0,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 347,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1795.2,
+     "y": 188.8,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 349,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1680.0,
+     "y": 291.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 351,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1795.2,
+     "y": 291.2,
+     "width": 96.0,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 355,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1552.0,
+     "y": 432.0,
+     "width": 96.0,
+     "height": 32.0,
+     "rotation": 90,
+     "visible": true
+    },
+    {
+     "id": 357,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1692.8,
+     "y": 480.0,
+     "width": 70.4,
+     "height": 32.0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 361,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1969.6,
+     "y": 414.4,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 363,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1969.6,
+     "y": 529.6,
+     "width": 28.8,
+     "height": 28.8,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "Logik",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 365,
+     "name": "",
+     "type": "spawn",
+     "class": "spawn",
+     "x": 1024,
+     "y": 4160,
+     "width": 0,
+     "height": 0,
+     "rotation": -180,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "eingang"
+      }
+     ]
+    },
+    {
+     "id": 366,
+     "name": "",
+     "type": "teleporter",
+     "class": "teleporter",
+     "x": 972.8,
+     "y": 4252.8,
+     "width": 102.4,
+     "height": 44.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "industriehalle_ausgang"
+      },
+      {
+       "name": "zone",
+       "type": "string",
+       "value": "babylos"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "industriehalle"
+      },
+      {
+       "name": "label",
+       "type": "string",
+       "value": "Industriehalle verlassen"
+      },
+      {
+       "name": "hoehe",
+       "type": "float",
+       "value": 3.0
+      }
+     ]
+    },
+    {
+     "id": 367,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 368.0,
+     "y": 3168,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 25
+      }
+     ]
+    },
+    {
+     "id": 368,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 368.0,
+     "y": 3456,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 25
+      }
+     ]
+    },
+    {
+     "id": 369,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 368.0,
+     "y": 3744,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 370,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 368.0,
+     "y": 4032,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 371,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1680.0,
+     "y": 3168,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 25
+      }
+     ]
+    },
+    {
+     "id": 372,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1680.0,
+     "y": 3456,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "rust_gang"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 373,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1680.0,
+     "y": 3744,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 374,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1680.0,
+     "y": 4032,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 27
+      }
+     ]
+    },
+    {
+     "id": 375,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 832,
+     "y": 3328,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 376,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 880.0,
+     "y": 3296,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 377,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1216,
+     "y": 3264,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 27
+      }
+     ]
+    },
+    {
+     "id": 378,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1216,
+     "y": 3520,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "smuggler"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 27
+      }
+     ]
+    },
+    {
+     "id": 379,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 768,
+     "y": 3808,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "rust_gang"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 380,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 816.0,
+     "y": 3840,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "rust_gang"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 26
+      }
+     ]
+    },
+    {
+     "id": 381,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1344,
+     "y": 3776,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "lumberjack"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 28
+      }
+     ]
+    },
+    {
+     "id": 382,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 704,
+     "y": 3712,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "trapper"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 27
+      }
+     ]
+    },
+    {
+     "id": 383,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1344,
+     "y": 3584,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 27
+      }
+     ]
+    },
+    {
+     "id": 384,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 176.0,
+     "y": 3648,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 25
+      }
+     ]
+    },
+    {
+     "id": 385,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 176.0,
+     "y": 4096,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "scavenger"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 25
+      }
+     ]
+    },
+    {
+     "id": 386,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1920,
+     "y": 3584,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "arsonist"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 27
+      }
+     ]
+    },
+    {
+     "id": 387,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1888,
+     "y": 4096,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 27
+      }
+     ]
+    },
+    {
+     "id": 388,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1024,
+     "y": 3136,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 28
+      }
+     ]
+    },
+    {
+     "id": 389,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 352,
+     "y": 1664,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "arsonist"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 28
+      }
+     ]
+    },
+    {
+     "id": 390,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 320,
+     "y": 1984,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "trapper"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 28
+      }
+     ]
+    },
+    {
+     "id": 391,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 352,
+     "y": 2368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 29
+      }
+     ]
+    },
+    {
+     "id": 392,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 352,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "smuggler"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 29
+      }
+     ]
+    },
+    {
+     "id": 393,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 928,
+     "y": 1472,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 29
+      }
+     ]
+    },
+    {
+     "id": 394,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 816.0,
+     "y": 1856,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "rust_gang"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 29
+      }
+     ]
+    },
+    {
+     "id": 395,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 864,
+     "y": 1888,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "rust_gang"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 29
+      }
+     ]
+    },
+    {
+     "id": 396,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 704,
+     "y": 2560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "lumberjack"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 397,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1664,
+     "y": 1792,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "arsonist"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 29
+      }
+     ]
+    },
+    {
+     "id": 398,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1664,
+     "y": 2112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 399,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1696,
+     "y": 2496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "trapper"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 400,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1664,
+     "y": 2880,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "smuggler"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 401,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1344,
+     "y": 1472,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 402,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1344,
+     "y": 2304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "lumberjack"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 31
+      }
+     ]
+    },
+    {
+     "id": 403,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1232.0,
+     "y": 1856,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "rust_gang"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 404,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1280,
+     "y": 1888,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "rust_gang"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 405,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1024,
+     "y": 1728,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 406,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 896,
+     "y": 2112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 407,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1152,
+     "y": 2176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 408,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1024,
+     "y": 2496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 31
+      }
+     ]
+    },
+    {
+     "id": 409,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 960,
+     "y": 2752,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "arsonist"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 31
+      }
+     ]
+    },
+    {
+     "id": 410,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1152,
+     "y": 2816,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "smuggler"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 31
+      }
+     ]
+    },
+    {
+     "id": 411,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 512,
+     "y": 1856,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "trapper"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 29
+      }
+     ]
+    },
+    {
+     "id": 412,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1536,
+     "y": 1920,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 31
+      }
+     ]
+    },
+    {
+     "id": 413,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 512,
+     "y": 2432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "lumberjack"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 30
+      }
+     ]
+    },
+    {
+     "id": 414,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1536,
+     "y": 2624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 31
+      }
+     ]
+    },
+    {
+     "id": 415,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 384,
+     "y": 1177.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "smuggler"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 416,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 448,
+     "y": 1017.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 417,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 992,
+     "y": 1075.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 418,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1664,
+     "y": 1177.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 419,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1408,
+     "y": 1075.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "arsonist"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 420,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 448,
+     "y": 784.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 421,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1344,
+     "y": 768,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 422,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 768,
+     "y": 787.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "lumberjack"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 33
+      }
+     ]
+    },
+    {
+     "id": 423,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 384,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 424,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 192,
+     "y": 128,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "smuggler"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 425,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 448,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "marauder"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 426,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1728,
+     "y": 144.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 427,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1664,
+     "y": 256,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "deserter"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 428,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1824,
+     "y": 512,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 429,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1600,
+     "y": 576,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "smuggler"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 32
+      }
+     ]
+    },
+    {
+     "id": 430,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 864,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "brute"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 33
+      }
+     ]
+    },
+    {
+     "id": 431,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1184,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "highwayman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 33
+      }
+     ]
+    },
+    {
+     "id": 432,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 832,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "lumberjack"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 34
+      }
+     ]
+    },
+    {
+     "id": 433,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1216,
+     "y": 192,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "lumberjack"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 34
+      }
+     ]
+    },
+    {
+     "id": 434,
+     "name": "",
+     "type": "gegner",
+     "class": "gegner",
+     "x": 1024,
+     "y": 288,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "type",
+       "type": "string",
+       "value": "foreman"
+      },
+      {
+       "name": "level",
+       "type": "int",
+       "value": 35
+      }
+     ]
+    },
+    {
+     "id": 435,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 144.0,
+     "y": 3088.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "lager_1"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 436,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1904.0,
+     "y": 3088.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "lager_2"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 437,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 672,
+     "y": 4208.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "lager_3"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 438,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1392.0,
+     "y": 3856.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "lager_4"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 439,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 96.0,
+     "y": 2880,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "prod_1"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 440,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1936.0,
+     "y": 1408,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "prod_2"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 441,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1024,
+     "y": 1417.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "prod_3"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 442,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 112.0,
+     "y": 1856,
+     "width": 0,
+     "height": 0,
+     "rotation": 90,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "prod_4"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 443,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1952,
+     "y": 1017.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "lobby_1"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 444,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 89.6,
+     "y": 416.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "verw_1"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 445,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 89.6,
+     "y": 83.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "verw_2"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 446,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1488.0,
+     "y": 393.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "verw_3"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 447,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1990.4,
+     "y": 313.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "verw_4"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Werkskiste"
+      }
+     ]
+    },
+    {
+     "id": 448,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 720.0,
+     "y": 176.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "boss_1"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Chefkiste"
+      }
+     ]
+    },
+    {
+     "id": 449,
+     "name": "",
+     "type": "lootkiste",
+     "class": "lootkiste",
+     "x": 1328.0,
+     "y": 176.0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "boss_2"
+      },
+      {
+       "name": "loot",
+       "type": "string",
+       "value": "chest_industrial"
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "Chefkiste"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

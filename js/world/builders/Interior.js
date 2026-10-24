@@ -434,6 +434,108 @@ export function createLadder({ hoehe = 3, licht = false }) {
   return group;
 }
 
+export function createMachine({ footprint, farbe = '#5a6a60', seed = 1, hoehe = 2.6 }) {
+  const random = createRandom(seed);
+  const width = footprint?.width || 4;
+  const depth = footprint?.depth || 2.5;
+  const batch = createBatch();
+  const body = getMaterial('rust_metal', { color: farbe });
+  const dark = getMaterial('rust_metal', { color: 0x3a3c38 });
+  const steel = getMaterial('steel', { color: 0x8a8a7a });
+  const warning = getColorMaterial(0xc8a020);
+  const black = getColorMaterial(0x181816);
+  const gaugeFace = getColorMaterial(0xd8d4c0, { unlit: true });
+  const lampRed = getColorMaterial(0xc0301c, { unlit: true });
+  const lampGreen = getColorMaterial(0x3a9a3a, { unlit: true });
+
+  batch.box(dark, width, 0.3, depth, { y: 0.15, tile: 2 });
+  batch.box(body, width - 0.2, hoehe - 0.7, depth - 0.2, { y: 0.3 + (hoehe - 0.7) / 2, tile: 2 });
+  batch.box(steel, width - 0.1, 0.12, depth - 0.1, { y: hoehe - 0.34, tile: 2 });
+  for (let x = -width / 2 + 0.4; x < width / 2 - 0.2; x += 0.8) {
+    batch.box(warning, 0.4, 0.14, 0.03, { x, y: 0.6, z: depth / 2 - 0.09, tile: 1 });
+    batch.box(black, 0.4, 0.14, 0.03, { x: x + 0.4, y: 0.6, z: depth / 2 - 0.09, tile: 1 });
+  }
+
+  const panelX = random.range(-width / 4, width / 4);
+  batch.box(dark, 1.3, 0.9, 0.18, { x: panelX, y: 1.5, z: depth / 2 + 0.02, tile: 1 });
+  batch.cylinder(gaugeFace, 0.17, 0.17, 0.05, 12, { x: panelX - 0.35, y: 1.72, z: depth / 2 + 0.14, rx: Math.PI / 2 });
+  batch.cylinder(gaugeFace, 0.17, 0.17, 0.05, 12, { x: panelX + 0.05, y: 1.72, z: depth / 2 + 0.14, rx: Math.PI / 2 });
+  batch.box(black, 0.025, 0.12, 0.02, { x: panelX - 0.35, y: 1.74, z: depth / 2 + 0.18, tile: 1 });
+  batch.box(black, 0.025, 0.12, 0.02, { x: panelX + 0.05, y: 1.72, z: depth / 2 + 0.18, ry: 0, tile: 1 });
+  batch.box(lampRed, 0.1, 0.1, 0.05, { x: panelX + 0.4, y: 1.75, z: depth / 2 + 0.14, tile: 1 });
+  batch.box(lampGreen, 0.1, 0.1, 0.05, { x: panelX + 0.4, y: 1.5, z: depth / 2 + 0.14, tile: 1 });
+  batch.box(steel, 0.12, 0.05, 0.1, { x: panelX - 0.3, y: 1.3, z: depth / 2 + 0.14, tile: 1 });
+  batch.box(steel, 0.12, 0.05, 0.1, { x: panelX, y: 1.3, z: depth / 2 + 0.14, tile: 1 });
+
+  const arms = Math.max(1, Math.floor(width / 3));
+  for (let i = 0; i < arms; i += 1) {
+    const x = -width / 2 + ((i + 0.5) / arms) * width;
+    batch.cylinder(steel, 0.12, 0.12, 0.9, 8, { x, y: hoehe + 0.1, z: -depth / 4 });
+    batch.box(dark, 0.5, 0.3, 0.5, { x, y: hoehe + 0.7, z: -depth / 4, tile: 1 });
+  }
+  batch.cylinder(dark, 0.16, 0.16, 1.2, 8, { x: width / 2 - 0.4, y: hoehe + 0.5, z: depth / 4 });
+
+  return finish(batch, 'Maschine');
+}
+
+export function createConveyor({ footprint, seed = 1 }) {
+  const random = createRandom(seed);
+  const alongX = footprint.width >= footprint.depth;
+  const length = Math.max(footprint.width, footprint.depth);
+  const wide = Math.min(Math.max(footprint.width, footprint.depth) > 0 ? Math.min(footprint.width, footprint.depth) : 1, 1.6);
+  const batch = createBatch();
+  const frame = getMaterial('rust_metal', { color: 0x6a5a3a });
+  const belt = getColorMaterial(0x232320);
+  const roller = getMaterial('steel', { color: 0x7a7a6a });
+  const cargo = getMaterial('wood', { color: 0x8a7254 });
+  const legs = getMaterial('rust_metal', { color: 0x4a4a42 });
+
+  const place = (along, across) => (alongX ? { x: along, z: across } : { x: across, z: along });
+  const size = (a, h, c) => (alongX ? [a, h, c] : [c, h, a]);
+
+  batch.box(belt, ...size(length, 0.1, wide - 0.2), { y: 0.88, tile: 1 });
+  batch.box(frame, ...size(length, 0.22, 0.12), { ...place(0, wide / 2 - 0.06), y: 0.82, tile: 1 });
+  batch.box(frame, ...size(length, 0.22, 0.12), { ...place(0, -wide / 2 + 0.06), y: 0.82, tile: 1 });
+  for (let offset = -length / 2 + 0.3; offset <= length / 2 - 0.2; offset += 2.4) {
+    batch.box(legs, ...size(0.12, 0.8, wide), { ...place(offset, 0), y: 0.4, tile: 1 });
+  }
+  for (const end of [-1, 1]) {
+    batch.cylinder(roller, 0.14, 0.14, wide - 0.1, 8, { ...place((end * (length - 0.3)) / 2, 0), y: 0.9, ...(alongX ? { rx: Math.PI / 2 } : { rz: Math.PI / 2 }) });
+  }
+  const loads = Math.floor(length / 3.5);
+  for (let i = 0; i < loads; i += 1) {
+    if (random.next() < 0.35) continue;
+    const along = -length / 2 + ((i + 0.5) / loads) * length;
+    const h = random.range(0.3, 0.6);
+    batch.box(cargo, ...size(random.range(0.5, 0.9), h, random.range(0.5, wide - 0.4)), { ...place(along, random.range(-0.1, 0.1)), y: 0.93 + h / 2, ry: random.range(-0.15, 0.15), tile: 1 });
+  }
+
+  return finish(batch, 'Foerderband');
+}
+
+export function createFilingCabinet({ breite = 3 }) {
+  const batch = createBatch();
+  const grey = getMaterial('rust_metal', { color: 0x7a8078 });
+  const dark = getColorMaterial(0x23251f);
+  const handle = getMaterial('steel', { color: 0xa0a090 });
+  const label = getColorMaterial(0xd8d0b0);
+  const units = Math.max(1, Math.round(breite / 0.6));
+  const unit = breite / units;
+
+  for (let i = 0; i < units; i += 1) {
+    const x = -breite / 2 + (i + 0.5) * unit;
+    batch.box(grey, unit - 0.02, 1.8, 0.5, { x, y: 0.9, tile: 1 });
+    for (let d = 0; d < 4; d += 1) {
+      const y = 0.25 + d * 0.43;
+      batch.box(dark, unit - 0.1, 0.02, 0.02, { x, y: y + 0.2, z: 0.26, tile: 1 });
+      batch.box(handle, 0.2, 0.04, 0.05, { x, y: y + 0.1, z: 0.27, tile: 1 });
+      batch.box(label, 0.16, 0.06, 0.01, { x, y: y + 0.28, z: 0.26, tile: 1 });
+    }
+  }
+
+  return finish(batch, 'Aktenschrank');
+}
+
 export const INTERIOR_BUILDERS = {
   wand: createWall,
   decke: createCeiling,
@@ -457,4 +559,7 @@ export const INTERIOR_BUILDERS = {
   kanaldeckel: createManhole,
   rohr: createPipe,
   leiter: createLadder,
+  maschine: createMachine,
+  foerderband: createConveyor,
+  aktenschrank: createFilingCabinet,
 };

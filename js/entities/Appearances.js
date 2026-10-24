@@ -416,6 +416,18 @@ export const APPEARANCES = {
     scale: 1.45,
     equipment: { weapon: 'rusty_pipe', chest: 'padded_vest' },
   },
+  foreman: {
+    skin: 0xb88a6c,
+    hair: 0x3a2a1e,
+    hairStyle: 'bald',
+    top: 0x6a6a30,
+    pants: 0x3a3a34,
+    shoes: 0x1e1a16,
+    sleeves: 'long',
+    scarf: 0xc8a020,
+    scale: 1.4,
+    equipment: { head: 'hard_hat', weapon: 'sledgehammer', chest: 'padded_vest' },
+  },
   block_warden: {
     skin: 0xd1ab8c,
     hair: 0x9a9a98,
