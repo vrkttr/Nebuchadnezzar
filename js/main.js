@@ -590,7 +590,11 @@ function start(connection, initMessage) {
     const button = document.createElement('button');
     button.className = 'window-button';
     button.textContent = t('connection.lost.ok');
-    button.addEventListener('click', () => window.location.reload());
+    button.addEventListener('click', () => {
+      leavingPage = true;
+      allowLeave();
+      window.location.reload();
+    });
     box.append(title, text, button);
     overlay.appendChild(box);
     document.body.appendChild(overlay);
