@@ -1,4 +1,5 @@
 import { SUPPORTED_LANGUAGES, getLanguage, setLanguage, t } from '../i18n/I18n.js';
+import { allowLeave } from '../input/Keyboard.js';
 import { el } from '../utils/Dom.js';
 import { canQuitGame, quitGame } from '../utils/Host.js';
 import { createSettingsForm, describeResult } from './SettingsForm.js';
@@ -63,7 +64,10 @@ export function createGameMenu({ request, onMainMenu, onLogout, onPreview }) {
       entry('gamemenu.mainMenu', onMainMenu),
       entry('gamemenu.logout', onLogout),
     ];
-    if (canQuitGame()) entries.push(entry('gamemenu.quit', quitGame));
+    if (canQuitGame()) entries.push(entry('gamemenu.quit', () => {
+      allowLeave();
+      quitGame();
+    }));
     entries.push(entry('gamemenu.resume', hide));
     menuBody.replaceChildren(...entries);
     menuWindow.classList.remove('hidden');
