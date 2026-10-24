@@ -1562,5 +1562,16 @@
   "failure.mail.unknown-recipient": "That character does not exist.",
   "failure.mail.self": "You cannot write to yourself.",
   "failure.mail.recipient-full": "The recipient's mailbox is full.",
-  "failure.mail.default": "The letter could not be sent."
+  "failure.mail.default": "The letter could not be sent.",
+  "hud.menu.ticket": "Support ticket",
+  "ticket.title": "Support Ticket",
+  "ticket.hint": "Describe your issue. The support team receives your ticket as a letter.",
+  "ticket.subject": "Subject",
+  "ticket.text": "Description",
+  "ticket.send": "Send ticket",
+  "event.ticketSent": "Your ticket was sent to support.",
+  "failure.ticket.invalid": "Subject and description are required.",
+  "failure.ticket.rate-limit": "Please wait a moment before sending another ticket.",
+  "failure.ticket.unavailable": "The ticket could not be delivered right now.",
+  "failure.ticket.default": "The ticket could not be sent."
 }

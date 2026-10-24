@@ -47,6 +47,7 @@ const [
   { createSkillsWindow },
   { createAdminWindow },
   { createMailWindow },
+  { createTicketWindow },
   { createMailboxes },
   { createQuestWindow },
   { createSocialWindow },
@@ -112,6 +113,7 @@ const [
   import(v('./ui/SkillsWindow.js')),
   import(v('./ui/AdminWindow.js')),
   import(v('./ui/MailWindow.js')),
+  import(v('./ui/TicketWindow.js')),
   import(v('./entities/Mailboxes.js')),
   import(v('./ui/QuestWindow.js')),
   import(v('./ui/SocialWindow.js')),
@@ -206,6 +208,9 @@ function start(token) {
   const mailWindow = createMailWindow(gameState, {
     onSend: (payload) => connection.send(payload),
   });
+  const ticketWindow = createTicketWindow({
+    onSend: (payload) => connection.send(payload),
+  });
   const questWindow = createQuestWindow({
     confirmDialog: ui.confirmDialog,
     onAbandon: (questId) => connection.send({ type: 'quest-abandon', questId }),
@@ -249,7 +254,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'quests', 'social']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'ticket', 'quests', 'social']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -669,6 +674,8 @@ function start(token) {
         audio.playEvent(message);
         if (message.kind === 'mail-sent') mailWindow.sent();
         else if (message.kind === 'mail-failed') mailWindow.failed();
+        else if (message.kind === 'ticket-sent') ticketWindow.sent();
+        else if (message.kind === 'ticket-failed') ticketWindow.failed();
         if (message.kind === 'quest-inspect' && message.text) dialogue.show(message.text);
       } else if (message.type === 'damage') {
         audio.playDamage(message, ownPlayerId);
@@ -936,6 +943,7 @@ function start(token) {
         skillsWindow.isOpen() ||
         adminWindow.isOpen() ||
         mailWindow.isOpen() ||
+        ticketWindow.isOpen() ||
         questWindow.isOpen() ||
         socialWindow.isOpen() ||
         worldMap.isOpen()
@@ -944,6 +952,7 @@ function start(token) {
         skillsWindow.hide();
         adminWindow.hide();
         mailWindow.hide();
+        ticketWindow.hide();
         questWindow.hide();
         socialWindow.hide();
         npcWindow.hide();

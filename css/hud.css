@@ -3026,3 +3026,14 @@ html.touch-ui #confirm-dialog {
   font-size: 12px;
   padding: 4px 10px;
 }
+
+#ticket-window {
+  left: calc(50% - 230px);
+  top: 14%;
+  width: 460px;
+  max-width: calc(100vw - 16px);
+}
+
+#ticket-body {
+  padding: 10px 14px 14px;
+}

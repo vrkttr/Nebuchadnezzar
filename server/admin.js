@@ -14,6 +14,10 @@ const MAX_SPAWN_QUANTITY = 999;
 const MAX_ANNOUNCE_LENGTH = 200;
 const MAX_ADMIN_LEVEL = 100;
 
+export function adminNames() {
+  return Array.from(ADMIN_NAMES);
+}
+
 export function isAdminName(name) {
   return typeof name === 'string' && ADMIN_NAMES.has(name.toLowerCase());
 }

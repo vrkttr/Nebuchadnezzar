@@ -24,6 +24,7 @@ import { inventoryRows, loadInventory, serializeInventory } from './inventory.js
 import { inventorySize } from './bags.js';
 import { handleAdmin, isAdminName } from './admin.js';
 import { handleMail, sendStatus as sendMailStatus } from './mail.js';
+import { handleTicket } from './tickets.js';
 import { grantStarterKit } from './starterKit.js';
 import { applyEquipmentStats, equipmentRows, loadEquipment, loadEquipmentPerks, serializeEquipment, serializeEquipmentPerks } from './equipment.js';
 import { destroyInventoryItem, moveInventoryItem, unequipItem, useInventoryItem } from './itemActions.js';
@@ -722,6 +723,8 @@ wss.on('connection', async (socket, request) => {
       if (!state || typeof message.itemId !== 'string') return;
 
       buyFromVendor(state, id, message.npcId, message.itemId, Number(message.quantity), notify);
+    } else if (message.type === 'ticket-send') {
+      handleTicket(mailContext, id, players.get(id), message).catch((error) => console.error('Fehler im Ticketsystem:', error));
     } else if (typeof message.type === 'string' && message.type.startsWith('mail-')) {
       handleMail(mailContext, id, players.get(id), message).catch((error) => console.error('Fehler im Postsystem:', error));
     } else if (typeof message.type === 'string' && message.type.startsWith('admin-')) {

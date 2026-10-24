@@ -1334,5 +1334,16 @@
   "failure.mail.unknown-recipient": "Diesen Charakter gibt es nicht.",
   "failure.mail.self": "Du kannst dir nicht selbst schreiben.",
   "failure.mail.recipient-full": "Der Briefkasten des Empfängers ist voll.",
-  "failure.mail.default": "Der Brief konnte nicht verschickt werden."
+  "failure.mail.default": "Der Brief konnte nicht verschickt werden.",
+  "hud.menu.ticket": "Support-Ticket",
+  "ticket.title": "Support-Ticket",
+  "ticket.hint": "Beschreibe dein Anliegen. Das Support-Team erhält dein Ticket als Brief.",
+  "ticket.subject": "Betreff",
+  "ticket.text": "Beschreibung",
+  "ticket.send": "Ticket senden",
+  "event.ticketSent": "Dein Ticket wurde an den Support gesendet.",
+  "failure.ticket.invalid": "Betreff und Beschreibung müssen ausgefüllt sein.",
+  "failure.ticket.rate-limit": "Bitte warte kurz, bevor du ein weiteres Ticket sendest.",
+  "failure.ticket.unavailable": "Das Ticket konnte gerade nicht zugestellt werden.",
+  "failure.ticket.default": "Das Ticket konnte nicht gesendet werden."
 }

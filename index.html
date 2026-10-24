@@ -4,107 +4,108 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Sektor 7</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=102">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=102">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=103">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=103">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/ui/nebu-ui.css">
-  <link rel="stylesheet" href="css/hud.css?v=102">
+  <link rel="stylesheet" href="css/hud.css?v=103">
 
   <script type="importmap">
   {
     "imports": {
-      "./js/audio/Audio.js": "./js/audio/Audio.js?v=102",
-      "./js/audio/Footsteps.js": "./js/audio/Footsteps.js?v=102",
-      "./js/effects/Drips.js": "./js/effects/Drips.js?v=102",
-      "./js/effects/Atmosphere.js": "./js/effects/Atmosphere.js?v=102",
-      "./js/effects/Birds.js": "./js/effects/Birds.js?v=102",
-      "./js/effects/DayCycle.js": "./js/effects/DayCycle.js?v=102",
-      "./js/effects/Fx.js": "./js/effects/Fx.js?v=102",
-      "./js/effects/Graphics.js": "./js/effects/Graphics.js?v=102",
-      "./js/effects/Markers.js": "./js/effects/Markers.js?v=102",
-      "./js/effects/Particles.js": "./js/effects/Particles.js?v=102",
-      "./js/effects/Wind.js": "./js/effects/Wind.js?v=102",
-      "./js/world/builders/Puddles.js": "./js/world/builders/Puddles.js?v=102",
-      "./js/config.js": "./js/config.js?v=102",
-      "./js/core/Renderer.js": "./js/core/Renderer.js?v=102",
-      "./js/core/Scene.js": "./js/core/Scene.js?v=102",
-      "./js/core/ThirdPersonCamera.js": "./js/core/ThirdPersonCamera.js?v=102",
-      "./js/core/ViewCapture.js": "./js/core/ViewCapture.js?v=102",
-      "./js/effects/Plane.js": "./js/effects/Plane.js?v=102",
-      "./js/effects/ShotEffects.js": "./js/effects/ShotEffects.js?v=102",
-      "./js/entities/Animal.js": "./js/entities/Animal.js?v=102",
-      "./js/entities/AppearanceOptions.js": "./js/entities/AppearanceOptions.js?v=102",
-      "./js/entities/Appearances.js": "./js/entities/Appearances.js?v=102",
-      "./js/entities/Ambient.js": "./js/entities/Ambient.js?v=102",
-      "./js/entities/Train.js": "./js/entities/Train.js?v=102",
-      "./js/world/Terrain.js": "./js/world/Terrain.js?v=102",
-      "./js/entities/Characters.js": "./js/entities/Characters.js?v=102",
-      "./js/entities/Enemies.js": "./js/entities/Enemies.js?v=102",
-      "./js/entities/Humanoid.js": "./js/entities/Humanoid.js?v=102",
-      "./js/entities/GearVisuals.js": "./js/entities/GearVisuals.js?v=102",
-      "./js/entities/LootMarkers.js": "./js/entities/LootMarkers.js?v=102",
-      "./js/entities/Npcs.js": "./js/entities/Npcs.js?v=102",
-      "./js/entities/PlayerController.js": "./js/entities/PlayerController.js?v=102",
-      "./js/entities/RemotePlayers.js": "./js/entities/RemotePlayers.js?v=102",
-      "./js/entities/WorldChests.js": "./js/entities/WorldChests.js?v=102",
-      "./js/entities/QuestObjects.js": "./js/entities/QuestObjects.js?v=102",
-      "./js/hud/ChatBubbles.js": "./js/hud/ChatBubbles.js?v=102",
-      "./js/hud/DamageNumbers.js": "./js/hud/DamageNumbers.js?v=102",
-      "./js/hud/Hud.js": "./js/hud/Hud.js?v=102",
-      "./js/hud/Minimap.js": "./js/hud/Minimap.js?v=102",
-      "./js/hud/Portraits.js": "./js/hud/Portraits.js?v=102",
-      "./js/hud/WorldMap.js": "./js/hud/WorldMap.js?v=102",
-      "./js/i18n/I18n.js": "./js/i18n/I18n.js?v=102",
-      "./js/i18n/Localizer.js": "./js/i18n/Localizer.js?v=102",
-      "./js/input/Keyboard.js": "./js/input/Keyboard.js?v=102",
-      "./js/input/Touch.js": "./js/input/Touch.js?v=102",
-      "./js/network/ServerConnection.js": "./js/network/ServerConnection.js?v=102",
-      "./js/state/GameState.js": "./js/state/GameState.js?v=102",
-      "./js/ui/AbilitiesWindow.js": "./js/ui/AbilitiesWindow.js?v=102",
-      "./js/ui/SkillsWindow.js": "./js/ui/SkillsWindow.js?v=102",
-      "./js/ui/AdminWindow.js": "./js/ui/AdminWindow.js?v=102",
-      "./js/ui/MailWindow.js": "./js/ui/MailWindow.js?v=102",
-      "./js/entities/Mailboxes.js": "./js/entities/Mailboxes.js?v=102",
-      "./js/world/builders/Mailbox.js": "./js/world/builders/Mailbox.js?v=102",
-      "./js/ui/QuestWindow.js": "./js/ui/QuestWindow.js?v=102",
-      "./js/ui/SocialWindow.js": "./js/ui/SocialWindow.js?v=102",
-      "./js/ui/AbilityDrag.js": "./js/ui/AbilityDrag.js?v=102",
-      "./js/ui/CharacterWindow.js": "./js/ui/CharacterWindow.js?v=102",
-      "./js/ui/Chat.js": "./js/ui/Chat.js?v=102",
-      "./js/ui/ConfirmDialog.js": "./js/ui/ConfirmDialog.js?v=102",
-      "./js/ui/Dialogue.js": "./js/ui/Dialogue.js?v=102",
-      "./js/ui/GroupFrames.js": "./js/ui/GroupFrames.js?v=102",
-      "./js/ui/Icons.js": "./js/ui/Icons.js?v=102",
-      "./js/ui/IntroWindow.js": "./js/ui/IntroWindow.js?v=102",
-      "./js/ui/Inventory.js": "./js/ui/Inventory.js?v=102",
-      "./js/ui/ItemMenu.js": "./js/ui/ItemMenu.js?v=102",
-      "./js/ui/LoadingScreen.js": "./js/ui/LoadingScreen.js?v=102",
-      "./js/ui/LootWindow.js": "./js/ui/LootWindow.js?v=102",
-      "./js/ui/NpcWindow.js": "./js/ui/NpcWindow.js?v=102",
-      "./js/ui/Tooltip.js": "./js/ui/Tooltip.js?v=102",
-      "./js/ui/VendorWindow.js": "./js/ui/VendorWindow.js?v=102",
-      "./js/ui/WindowManager.js": "./js/ui/WindowManager.js?v=102",
-      "./js/utils/Interpolation.js": "./js/utils/Interpolation.js?v=102",
-      "./js/utils/Occlusion.js": "./js/utils/Occlusion.js?v=102",
-      "./js/world/AssetLibrary.js": "./js/world/AssetLibrary.js?v=102",
-      "./js/world/Batch.js": "./js/world/Batch.js?v=102",
-      "./js/world/Random.js": "./js/world/Random.js?v=102",
-      "./js/world/Textures.js": "./js/world/Textures.js?v=102",
-      "./js/world/ZoneBuilder.js": "./js/world/ZoneBuilder.js?v=102",
-      "./js/world/ZoneStreamer.js": "./js/world/ZoneStreamer.js?v=102",
-      "./js/world/builders/Altbau.js": "./js/world/builders/Altbau.js?v=102",
-      "./js/world/builders/CityProps.js": "./js/world/builders/CityProps.js?v=102",
-      "./js/world/builders/Garages.js": "./js/world/builders/Garages.js?v=102",
-      "./js/world/builders/Door.js": "./js/world/builders/Door.js?v=102",
-      "./js/world/builders/Hall.js": "./js/world/builders/Hall.js?v=102",
-      "./js/world/builders/Interior.js": "./js/world/builders/Interior.js?v=102",
-      "./js/world/builders/LootProps.js": "./js/world/builders/LootProps.js?v=102",
-      "./js/world/builders/Plattenbau.js": "./js/world/builders/Plattenbau.js?v=102",
-      "./js/world/builders/Sewer.js": "./js/world/builders/Sewer.js?v=102",
-      "./js/world/builders/Props.js": "./js/world/builders/Props.js?v=102",
-      "./js/world/builders/Shop.js": "./js/world/builders/Shop.js?v=102",
-      "./js/world/builders/Tower.js": "./js/world/builders/Tower.js?v=102",
-      "./js/world/builders/Vegetation.js": "./js/world/builders/Vegetation.js?v=102",
+      "./js/audio/Audio.js": "./js/audio/Audio.js?v=103",
+      "./js/audio/Footsteps.js": "./js/audio/Footsteps.js?v=103",
+      "./js/effects/Drips.js": "./js/effects/Drips.js?v=103",
+      "./js/effects/Atmosphere.js": "./js/effects/Atmosphere.js?v=103",
+      "./js/effects/Birds.js": "./js/effects/Birds.js?v=103",
+      "./js/effects/DayCycle.js": "./js/effects/DayCycle.js?v=103",
+      "./js/effects/Fx.js": "./js/effects/Fx.js?v=103",
+      "./js/effects/Graphics.js": "./js/effects/Graphics.js?v=103",
+      "./js/effects/Markers.js": "./js/effects/Markers.js?v=103",
+      "./js/effects/Particles.js": "./js/effects/Particles.js?v=103",
+      "./js/effects/Wind.js": "./js/effects/Wind.js?v=103",
+      "./js/world/builders/Puddles.js": "./js/world/builders/Puddles.js?v=103",
+      "./js/config.js": "./js/config.js?v=103",
+      "./js/core/Renderer.js": "./js/core/Renderer.js?v=103",
+      "./js/core/Scene.js": "./js/core/Scene.js?v=103",
+      "./js/core/ThirdPersonCamera.js": "./js/core/ThirdPersonCamera.js?v=103",
+      "./js/core/ViewCapture.js": "./js/core/ViewCapture.js?v=103",
+      "./js/effects/Plane.js": "./js/effects/Plane.js?v=103",
+      "./js/effects/ShotEffects.js": "./js/effects/ShotEffects.js?v=103",
+      "./js/entities/Animal.js": "./js/entities/Animal.js?v=103",
+      "./js/entities/AppearanceOptions.js": "./js/entities/AppearanceOptions.js?v=103",
+      "./js/entities/Appearances.js": "./js/entities/Appearances.js?v=103",
+      "./js/entities/Ambient.js": "./js/entities/Ambient.js?v=103",
+      "./js/entities/Train.js": "./js/entities/Train.js?v=103",
+      "./js/world/Terrain.js": "./js/world/Terrain.js?v=103",
+      "./js/entities/Characters.js": "./js/entities/Characters.js?v=103",
+      "./js/entities/Enemies.js": "./js/entities/Enemies.js?v=103",
+      "./js/entities/Humanoid.js": "./js/entities/Humanoid.js?v=103",
+      "./js/entities/GearVisuals.js": "./js/entities/GearVisuals.js?v=103",
+      "./js/entities/LootMarkers.js": "./js/entities/LootMarkers.js?v=103",
+      "./js/entities/Npcs.js": "./js/entities/Npcs.js?v=103",
+      "./js/entities/PlayerController.js": "./js/entities/PlayerController.js?v=103",
+      "./js/entities/RemotePlayers.js": "./js/entities/RemotePlayers.js?v=103",
+      "./js/entities/WorldChests.js": "./js/entities/WorldChests.js?v=103",
+      "./js/entities/QuestObjects.js": "./js/entities/QuestObjects.js?v=103",
+      "./js/hud/ChatBubbles.js": "./js/hud/ChatBubbles.js?v=103",
+      "./js/hud/DamageNumbers.js": "./js/hud/DamageNumbers.js?v=103",
+      "./js/hud/Hud.js": "./js/hud/Hud.js?v=103",
+      "./js/hud/Minimap.js": "./js/hud/Minimap.js?v=103",
+      "./js/hud/Portraits.js": "./js/hud/Portraits.js?v=103",
+      "./js/hud/WorldMap.js": "./js/hud/WorldMap.js?v=103",
+      "./js/i18n/I18n.js": "./js/i18n/I18n.js?v=103",
+      "./js/i18n/Localizer.js": "./js/i18n/Localizer.js?v=103",
+      "./js/input/Keyboard.js": "./js/input/Keyboard.js?v=103",
+      "./js/input/Touch.js": "./js/input/Touch.js?v=103",
+      "./js/network/ServerConnection.js": "./js/network/ServerConnection.js?v=103",
+      "./js/state/GameState.js": "./js/state/GameState.js?v=103",
+      "./js/ui/AbilitiesWindow.js": "./js/ui/AbilitiesWindow.js?v=103",
+      "./js/ui/SkillsWindow.js": "./js/ui/SkillsWindow.js?v=103",
+      "./js/ui/AdminWindow.js": "./js/ui/AdminWindow.js?v=103",
+      "./js/ui/MailWindow.js": "./js/ui/MailWindow.js?v=103",
+      "./js/ui/TicketWindow.js": "./js/ui/TicketWindow.js?v=103",
+      "./js/entities/Mailboxes.js": "./js/entities/Mailboxes.js?v=103",
+      "./js/world/builders/Mailbox.js": "./js/world/builders/Mailbox.js?v=103",
+      "./js/ui/QuestWindow.js": "./js/ui/QuestWindow.js?v=103",
+      "./js/ui/SocialWindow.js": "./js/ui/SocialWindow.js?v=103",
+      "./js/ui/AbilityDrag.js": "./js/ui/AbilityDrag.js?v=103",
+      "./js/ui/CharacterWindow.js": "./js/ui/CharacterWindow.js?v=103",
+      "./js/ui/Chat.js": "./js/ui/Chat.js?v=103",
+      "./js/ui/ConfirmDialog.js": "./js/ui/ConfirmDialog.js?v=103",
+      "./js/ui/Dialogue.js": "./js/ui/Dialogue.js?v=103",
+      "./js/ui/GroupFrames.js": "./js/ui/GroupFrames.js?v=103",
+      "./js/ui/Icons.js": "./js/ui/Icons.js?v=103",
+      "./js/ui/IntroWindow.js": "./js/ui/IntroWindow.js?v=103",
+      "./js/ui/Inventory.js": "./js/ui/Inventory.js?v=103",
+      "./js/ui/ItemMenu.js": "./js/ui/ItemMenu.js?v=103",
+      "./js/ui/LoadingScreen.js": "./js/ui/LoadingScreen.js?v=103",
+      "./js/ui/LootWindow.js": "./js/ui/LootWindow.js?v=103",
+      "./js/ui/NpcWindow.js": "./js/ui/NpcWindow.js?v=103",
+      "./js/ui/Tooltip.js": "./js/ui/Tooltip.js?v=103",
+      "./js/ui/VendorWindow.js": "./js/ui/VendorWindow.js?v=103",
+      "./js/ui/WindowManager.js": "./js/ui/WindowManager.js?v=103",
+      "./js/utils/Interpolation.js": "./js/utils/Interpolation.js?v=103",
+      "./js/utils/Occlusion.js": "./js/utils/Occlusion.js?v=103",
+      "./js/world/AssetLibrary.js": "./js/world/AssetLibrary.js?v=103",
+      "./js/world/Batch.js": "./js/world/Batch.js?v=103",
+      "./js/world/Random.js": "./js/world/Random.js?v=103",
+      "./js/world/Textures.js": "./js/world/Textures.js?v=103",
+      "./js/world/ZoneBuilder.js": "./js/world/ZoneBuilder.js?v=103",
+      "./js/world/ZoneStreamer.js": "./js/world/ZoneStreamer.js?v=103",
+      "./js/world/builders/Altbau.js": "./js/world/builders/Altbau.js?v=103",
+      "./js/world/builders/CityProps.js": "./js/world/builders/CityProps.js?v=103",
+      "./js/world/builders/Garages.js": "./js/world/builders/Garages.js?v=103",
+      "./js/world/builders/Door.js": "./js/world/builders/Door.js?v=103",
+      "./js/world/builders/Hall.js": "./js/world/builders/Hall.js?v=103",
+      "./js/world/builders/Interior.js": "./js/world/builders/Interior.js?v=103",
+      "./js/world/builders/LootProps.js": "./js/world/builders/LootProps.js?v=103",
+      "./js/world/builders/Plattenbau.js": "./js/world/builders/Plattenbau.js?v=103",
+      "./js/world/builders/Sewer.js": "./js/world/builders/Sewer.js?v=103",
+      "./js/world/builders/Props.js": "./js/world/builders/Props.js?v=103",
+      "./js/world/builders/Shop.js": "./js/world/builders/Shop.js?v=103",
+      "./js/world/builders/Tower.js": "./js/world/builders/Tower.js?v=103",
+      "./js/world/builders/Vegetation.js": "./js/world/builders/Vegetation.js?v=103",
       "three": "./js/vendor/three.module.js"
     }
   }
@@ -113,7 +114,7 @@
 <body>
   <div id="loading-screen" class="outdoor">
     <div id="loading-art"></div>
-    <img id="loading-title" src="assets/logo/logo.svg?v=102" alt="Sektor 7" data-i18n-alt="app.title">
+    <img id="loading-title" src="assets/logo/logo.svg?v=103" alt="Sektor 7" data-i18n-alt="app.title">
     <div id="loading-bottom">
       <div id="loading-zone"></div>
       <div id="loading-bar"><div id="loading-fill"></div><div id="loading-status" data-i18n="loading.status.connecting">Verbinde mit dem Server …</div></div>
@@ -221,6 +222,7 @@
         <button title="Charakter" data-i18n-title="hud.menu.character">C</button>
         <button id="skills-button" title="Fähigkeiten" data-i18n-title="hud.menu.skills">F</button>
         <button id="admin-button" class="hidden" title="Admin" data-i18n-title="hud.menu.admin">A</button>
+        <button id="ticket-button" title="Support" data-i18n-title="hud.menu.ticket">?</button>
         <button id="talents-button" title="Talente" data-i18n-title="hud.menu.talents">N</button>
         <button id="quests-button" title="Missionen" data-i18n-title="hud.menu.quests">L</button>
         <button id="social-button" title="Mitspieler" data-i18n-title="hud.menu.social">O</button>
@@ -298,6 +300,14 @@
       <button type="button" data-tab="compose" data-i18n="mail.tabCompose">Verfassen</button>
     </div>
     <div id="mail-body"></div>
+  </div>
+
+  <div id="ticket-window" class="window nu-taped hidden">
+    <div class="window-header">
+      <span class="window-title" data-i18n="ticket.title">Support-Ticket</span>
+      <button id="ticket-close" class="window-close" title="Schließen" data-i18n-title="common.close">×</button>
+    </div>
+    <div id="ticket-body"></div>
   </div>
 
   <div id="social-window" class="window nu-taped hidden">
@@ -386,6 +396,6 @@
   <div id="tooltip" class="hidden"></div>
 
   <script src="js/vendor/howler.min.js"></script>
-  <script type="module" src="js/main.js?v=102"></script>
+  <script type="module" src="js/main.js?v=103"></script>
 </body>
 </html>
