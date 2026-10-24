@@ -1,5 +1,6 @@
-export function createServerConnection(url, handlers = {}) {
+export function createServerConnection(url, initialHandlers = {}) {
   const socket = new WebSocket(url);
+  let handlers = initialHandlers;
 
   socket.addEventListener('open', () => {
     console.log('[ServerConnection] Verbindung zum Server hergestellt');
@@ -34,6 +35,15 @@ export function createServerConnection(url, handlers = {}) {
       if (socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify(message));
       }
+    },
+    setHandlers(next) {
+      handlers = next;
+    },
+    deliver(message) {
+      handlers.onMessage?.(message);
+    },
+    isOpen() {
+      return socket.readyState === WebSocket.OPEN;
     },
   };
 }

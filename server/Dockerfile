@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install --omit=dev
 
-COPY *.js ./
+COPY *.js schema.sql ./
 COPY zones/ ./zones/
 
 EXPOSE 8081

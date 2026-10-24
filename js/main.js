@@ -52,7 +52,7 @@ const [
   { createQuestWindow },
   { createSocialWindow },
   { createAbilityDrag },
-  { allowLeave, armAutoFullscreen },
+  { allowLeave, armAutoFullscreen, setLeaveGuard },
   { createTouchControls },
   { createHud },
   { createLoadingScreen },
@@ -64,9 +64,12 @@ const [
   { applyGraphics, graphics, VIEW_DISTANCES },
   { updateSewer, isInWater },
   { gameState },
-  { buildServerUrl, getPortalUrl },
+  { buildServerUrl },
   { initI18n, t, has, applyDom },
   { localizeMessage },
+  { createGameMenu },
+  { createMenu },
+  { clearSession },
 ] = await Promise.all([
   import('three'),
   import(v('./core/Renderer.js')),
@@ -133,12 +136,15 @@ const [
   import(v('./config.js')),
   import(v('./i18n/I18n.js')),
   import(v('./i18n/Localizer.js')),
+  import(v('./ui/GameMenu.js')),
+  import(v('./menu/MenuApp.js')),
+  import(v('./menu/Session.js')),
 ]);
 
 await initI18n();
 applyDom();
 
-function start(token) {
+function start(connection, initMessage) {
   const loadingScreen = createLoadingScreen();
   const renderer = createRenderer();
   const scene = createScene();
@@ -231,12 +237,39 @@ function start(token) {
   let ownWeapon = null;
   let zoneEmitters = [];
 
-  function openPortalMenu() {
-    allowLeave();
-    window.location.href = `${getPortalUrl()}settings.php`;
+  const menuRequests = new Map();
+
+  function menuRequest(message, action = message.type) {
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        menuRequests.delete(action);
+        resolve({ ok: false, key: 'menu.error.timeout' });
+      }, 20000);
+      menuRequests.set(action, (result) => {
+        clearTimeout(timer);
+        resolve(result);
+      });
+      connection.send(message);
+    });
   }
 
-  document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.menu"]')?.addEventListener('click', openPortalMenu);
+  function reloadToMenu() {
+    leavingPage = true;
+    allowLeave();
+    window.location.reload();
+  }
+
+  const gameMenu = createGameMenu({
+    request: menuRequest,
+    onMainMenu: reloadToMenu,
+    onLogout() {
+      clearSession();
+      connection.send({ type: 'auth-logout' });
+      setTimeout(reloadToMenu, 150);
+    },
+  });
+
+  document.querySelector('#minimap-buttons button[data-i18n-title="hud.menu.menu"]')?.addEventListener('click', () => gameMenu.toggle());
 
   const inventory = createInventory(gameState, ui, {
     onUse: (slot) => connection.send({ type: 'item-use', slot }),
@@ -254,7 +287,7 @@ function start(token) {
     onUnequip: (slot) => connection.send({ type: 'item-unequip', slot }),
   });
   const windowManager = createWindowManager();
-  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'ticket', 'quests', 'social']) {
+  for (const name of ['inventory', 'loot', 'npc', 'vendor', 'character', 'map', 'intro', 'abilities', 'skills', 'admin', 'mail', 'ticket', 'quests', 'social', 'game-menu', 'settings']) {
     windowManager.register(document.getElementById(`${name}-window`), name);
   }
 
@@ -497,7 +530,7 @@ function start(token) {
     await loadingScreen.hide();
   }
 
-  let connectionOpened = false;
+  let connectionOpened = true;
   let leavingPage = false;
   window.addEventListener('pagehide', () => {
     leavingPage = true;
@@ -526,19 +559,15 @@ function start(token) {
 
   let kicked = false;
 
-  const connection = createServerConnection(buildServerUrl(token), {
-    onOpen() {
-      connectionOpened = true;
-    },
+  connection.setHandlers({
     onClose(event) {
       if (leavingPage) return;
       if (event?.code === 4003 || kicked) {
         showConnectionLost('connection.lost.kicked');
         return;
       }
-      if (event?.code === 4001 || event?.code === 4002) {
-        allowLeave();
-        window.location.replace(getPortalUrl());
+      if (event?.code === 4002) {
+        showConnectionLost('connection.lost.replaced');
         return;
       }
       showConnectionLost(connectionOpened ? 'connection.lost.closed' : 'connection.lost.unreachable');
@@ -566,11 +595,21 @@ function start(token) {
         abilitiesWindow.render(message.abilities ?? []);
         if (message.skills) skillsWindow.render(message.skills);
         if (message.admin) adminWindow.enable();
+        if (message.settings) gameMenu.setSettings(message.settings);
         characterWindow.render(message.equipment ?? {});
         player.setEquipment(message.equipment);
         player.setAppearance(message.appearance);
       } else if (message.type === 'appearance') {
         player.setAppearance(message.appearance);
+      } else if (message.type === 'menu-result') {
+        const resolve = menuRequests.get(message.action);
+        if (resolve) {
+          menuRequests.delete(message.action);
+          resolve(message);
+        }
+      } else if (message.type === 'settings') {
+        gameMenu.setSettings(message.settings);
+        audio.applySettings({ volume: message.settings.volume / 100, ambient: message.settings.ambient / 100, muted: message.settings.muted });
       } else if (message.type === 'mail-window') {
         mailWindow.show(message);
       } else if (message.type === 'mail-status') {
@@ -944,6 +983,7 @@ function start(token) {
         adminWindow.isOpen() ||
         mailWindow.isOpen() ||
         ticketWindow.isOpen() ||
+        gameMenu.isOpen() ||
         questWindow.isOpen() ||
         socialWindow.isOpen() ||
         worldMap.isOpen()
@@ -953,6 +993,7 @@ function start(token) {
         adminWindow.hide();
         mailWindow.hide();
         ticketWindow.hide();
+        gameMenu.hide();
         questWindow.hide();
         socialWindow.hide();
         npcWindow.hide();
@@ -976,7 +1017,7 @@ function start(token) {
         return;
       }
 
-      openPortalMenu();
+      gameMenu.toggle();
       return;
     }
 
@@ -1152,13 +1193,17 @@ function start(token) {
   }
 
   animate();
+  connection.deliver(initMessage);
 }
 
-const token = new URLSearchParams(window.location.search).get('token');
+allowLeave();
 
-if (token) {
-  start(token);
-} else {
-  allowLeave();
-  window.location.replace(getPortalUrl());
-}
+const connection = createServerConnection(buildServerUrl());
+const menu = createMenu({
+  connection,
+  onEnterWorld(initMessage) {
+    menu.dispose();
+    setLeaveGuard(true);
+    start(connection, initMessage);
+  },
+});

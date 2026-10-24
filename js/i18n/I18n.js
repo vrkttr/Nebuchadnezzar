@@ -56,6 +56,15 @@ export async function initI18n() {
   return language;
 }
 
+export function setLanguage(code) {
+  if (!SUPPORTED.includes(code)) return;
+  try {
+    document.cookie = `${COOKIE_NAME}=${encodeURIComponent(code)}; path=/; max-age=31536000; SameSite=Lax`;
+  } catch {
+    return;
+  }
+}
+
 export function getLanguage() {
   return store.language;
 }

@@ -1,37 +1,22 @@
 import * as THREE from 'three';
-import { createHumanoid } from './entities/Humanoid.js';
-import { buildPlayerAppearance } from './entities/AppearanceOptions.js';
-import { createPlattenbau } from './world/builders/Plattenbau.js';
-import { createWaterTower } from './world/builders/Tower.js';
-import { createTree, createForest, createBush } from './world/builders/Vegetation.js';
-import { createCar, createPole, createContainer, createFence, createBarrel } from './world/builders/Props.js';
-import { getMaterial, getTexture } from './world/Textures.js';
-import { createRandom } from './world/Random.js';
+import { createHumanoid } from '../entities/Humanoid.js';
+import { buildPlayerAppearance } from '../entities/AppearanceOptions.js';
+import { createPlattenbau } from '../world/builders/Plattenbau.js';
+import { createWaterTower } from '../world/builders/Tower.js';
+import { createTree, createForest, createBush } from '../world/builders/Vegetation.js';
+import { createCar, createPole, createContainer, createFence, createBarrel } from '../world/builders/Props.js';
+import { getMaterial, getTexture } from '../world/Textures.js';
+import { createRandom } from '../world/Random.js';
 
-const params = new URLSearchParams(location.search);
-const STILL = params.has('still');
-const CAPTURE = params.has('capture');
 const VALLEY = -16;
 const FOG = 0xcdb593;
-const PIXEL_RATIO_LIMIT = CAPTURE ? 1 : 1.5;
-
-document.body.style.margin = '0';
-document.body.style.background = 'transparent';
-document.body.style.overflow = 'hidden';
-
-const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: STILL || CAPTURE });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, PIXEL_RATIO_LIMIT));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.domElement.style.display = 'block';
-if (!STILL && !CAPTURE) {
-  renderer.domElement.style.opacity = '0';
-  renderer.domElement.style.transition = 'opacity 0.9s ease-out';
-}
-document.body.appendChild(renderer.domElement);
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(FOG);
-scene.fog = new THREE.Fog(FOG, 55, 620);
+const PIXEL_RATIO_LIMIT = 1.5;
+const CHARACTER_POSITION = new THREE.Vector3(1.7, 0, -0.1);
+const CHARACTER_YAW = Math.PI + 0.25;
+const WIDE_VIEW = { base: new THREE.Vector3(-1.0, 2.0, 5.8), target: new THREE.Vector3(0.4, -6.8, -60) };
+const CREATOR_VIEW = { base: new THREE.Vector3(0.3, 1.35, 3.4), target: new THREE.Vector3(0.3, 1.0, -0.1) };
+const CREATOR_VIEW_NARROW = { base: new THREE.Vector3(1.7, 1.35, 3.6), target: new THREE.Vector3(1.7, 1.0, -0.1) };
+const VIEW_SMOOTHING = 3.2;
 
 function skyTexture() {
   const canvas = document.createElement('canvas');
@@ -94,6 +79,17 @@ function cloudTexture(seed) {
   texture.wrapS = THREE.RepeatWrapping;
   return texture;
 }
+
+export function createMenuScene(container) {
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, PIXEL_RATIO_LIMIT));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.domElement.className = 'menu-canvas';
+container.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(FOG);
+scene.fog = new THREE.Fog(FOG, 55, 620);
 
 const sky = new THREE.Mesh(new THREE.PlaneGeometry(2600, 1300), new THREE.MeshBasicMaterial({ map: skyTexture(), fog: false, depthWrite: false }));
 sky.position.set(0, 330, -1100);
@@ -277,8 +273,9 @@ for (const [fx, fz, fry] of [
 place(createBush({ seed: 9, size: 1.2 }), 13, 2.5, 0, 0);
 
 const humanoid = createHumanoid('player', { appearance: buildPlayerAppearance([1, 2, 1, 1, 0]) });
-humanoid.object.position.set(1.7, 0, -0.1);
-humanoid.object.rotation.y = Math.PI + 0.25;
+humanoid.object.position.copy(CHARACTER_POSITION);
+humanoid.object.rotation.y = CHARACTER_YAW;
+humanoid.object.visible = false;
 scene.add(humanoid.object);
 
 const birds = [];
@@ -314,9 +311,21 @@ const motes = new THREE.Points(
 scene.add(motes);
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 3000);
-const BASE = new THREE.Vector3(-1.0, 2.0, 5.8);
-const TARGET = new THREE.Vector3(2.6, -6.8, -60);
+const base = WIDE_VIEW.base.clone();
+const target = WIDE_VIEW.target.clone();
 const look = new THREE.Vector3();
+let mode = 'home';
+let hasCharacter = false;
+let elapsed = 0;
+let frameId = 0;
+let running = false;
+let disposed = false;
+let lastTime = 0;
+
+function activeView() {
+  if (mode !== 'creator') return WIDE_VIEW;
+  return window.innerWidth / window.innerHeight < 1.25 ? CREATOR_VIEW_NARROW : CREATOR_VIEW;
+}
 
 function resize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -327,21 +336,28 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-const clock = new THREE.Clock();
-let elapsed = 0;
-
 function frame(delta) {
   elapsed += delta;
-  const sway = STILL ? 0 : 1;
+  const view = activeView();
+  const follow = 1 - Math.exp(-VIEW_SMOOTHING * delta);
+  base.lerp(view.base, follow);
+  target.lerp(view.target, follow);
+
+  const sway = mode === 'creator' ? 0.15 : 1;
   camera.position.set(
-    BASE.x + Math.sin(elapsed * 0.11) * 0.45 * sway,
-    BASE.y + Math.sin(elapsed * 0.17) * 0.05 * sway,
-    BASE.z + Math.cos(elapsed * 0.09) * 0.25 * sway
+    base.x + Math.sin(elapsed * 0.11) * 0.45 * sway,
+    base.y + Math.sin(elapsed * 0.17) * 0.05 * sway,
+    base.z + Math.cos(elapsed * 0.09) * 0.25 * sway
   );
-  look.set(TARGET.x + Math.sin(elapsed * 0.07) * 1.2 * sway, TARGET.y, TARGET.z);
+  look.set(target.x + Math.sin(elapsed * 0.07) * 1.2 * sway, target.y, target.z);
   camera.lookAt(look);
 
-  humanoid.update(delta);
+  if (hasCharacter || mode === 'creator') {
+    const swing = mode === 'creator' ? Math.sin(elapsed * 0.55) * 0.55 : 0;
+    humanoid.object.rotation.y = CHARACTER_YAW + swing;
+    humanoid.update(delta);
+  }
+
   for (const layer of cloudLayers) layer.texture.offset.x = (layer.texture.offset.x + layer.speed * delta * 0.1) % 1;
   sunGlow.material.opacity = 0.92 + Math.sin(elapsed * 0.6) * 0.06;
 
@@ -366,25 +382,48 @@ function frame(delta) {
   renderer.render(scene, camera);
 }
 
-if (CAPTURE) {
-  window.step = (delta) => frame(delta);
-  window.captureReady = true;
-} else if (STILL) {
-  window.renderDone = false;
-  setTimeout(() => {
-    frame(0.016);
-    frame(0.016);
-    window.renderDone = true;
-  }, 2500);
-} else {
-  let shown = false;
-  const loop = () => {
-    requestAnimationFrame(loop);
-    frame(Math.min(clock.getDelta(), 0.1));
-    if (!shown) {
-      shown = true;
-      renderer.domElement.style.opacity = '1';
-    }
-  };
-  loop();
+function loop(time) {
+  if (!running) return;
+  frameId = requestAnimationFrame(loop);
+  const delta = Math.min((time - lastTime) / 1000, 0.1);
+  lastTime = time;
+  frame(delta);
+}
+
+function applyVisibility() {
+  humanoid.object.visible = hasCharacter || mode === 'creator';
+}
+
+return {
+  start() {
+    if (running || disposed) return;
+    running = true;
+    lastTime = performance.now();
+    frameId = requestAnimationFrame(loop);
+    requestAnimationFrame(() => {
+      renderer.domElement.classList.add('is-visible');
+    });
+  },
+  setCharacter(indices) {
+    hasCharacter = Array.isArray(indices);
+    if (hasCharacter) humanoid.setAppearance(buildPlayerAppearance(indices));
+    applyVisibility();
+  },
+  previewAppearance(indices) {
+    humanoid.setAppearance(buildPlayerAppearance(indices));
+  },
+  setMode(next) {
+    mode = next;
+    applyVisibility();
+  },
+  dispose() {
+    disposed = true;
+    running = false;
+    cancelAnimationFrame(frameId);
+    window.removeEventListener('resize', resize);
+    renderer.dispose();
+    renderer.forceContextLoss();
+    renderer.domElement.remove();
+  },
+};
 }

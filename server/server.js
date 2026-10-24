@@ -6,6 +6,8 @@ import { applyBarber } from './barber.js';
 import { addFriend, announcePresence, loadFriends, removeFriend, requestSocial } from './friends.js';
 import { bindHome, serializeHome, updateHearth } from './inn.js';
 import { WebSocketServer } from 'ws';
+import { createAccounts, readSettings } from './accounts.js';
+import { migrate } from './migrate.js';
 import { randomUUID } from 'node:crypto';
 import mysql from 'mysql2/promise';
 import { inspectQuestObject, serializeQuestObjects } from './questObjects.js';
@@ -58,7 +60,6 @@ import {
 } from './lootContainers.js';
 
 const PORT = process.env.PORT || 8081;
-const wss = new WebSocketServer({ port: PORT });
 
 const dbPool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -66,6 +67,10 @@ const dbPool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
 });
+
+await migrate(dbPool);
+
+const wss = new WebSocketServer({ port: PORT, maxPayload: 65536 });
 
 console.log(`Sektor 7 Game-Server läuft auf Port ${PORT}`);
 
@@ -199,21 +204,6 @@ function createInitialState(character) {
   return state;
 }
 
-async function consumeLoginToken(token) {
-  if (!token) return null;
-
-  const [tokenRows] = await dbPool.query(
-    'SELECT character_id FROM login_tokens WHERE token = ? AND expires_at > NOW()',
-    [token]
-  );
-
-  if (tokenRows.length === 0) return null;
-
-  await dbPool.query('DELETE FROM login_tokens WHERE token = ?', [token]);
-
-  return tokenRows[0].character_id;
-}
-
 function parseActionLayout(raw) {
   if (!raw) return null;
 
@@ -300,6 +290,7 @@ async function loadCharacter(characterId) {
     appearance: loadAppearance(row),
     audio: { volume: row.audio_volume / 100, ambient: row.audio_ambient / 100, music: (row.audio_music ?? 40) / 100, muted: Boolean(row.audio_muted) },
     graphics: parseGraphics(row.graphics),
+    settings: readSettings(row),
     inventory,
     equipment,
     equipmentPerks,
@@ -407,30 +398,48 @@ function persistState(state) {
   return run;
 }
 
-wss.on('connection', async (socket, request) => {
-  const url = new URL(request.url, 'http://localhost');
-  const token = url.searchParams.get('token');
+const accounts = createAccounts({ db: dbPool, enterWorld: (socket, characterId) => enterWorld(socket, characterId) });
 
-  const characterId = await consumeLoginToken(token);
-
-  if (characterId === null) {
-    socket.close(4001, 'invalid-token');
-    return;
-  }
-
-  await disconnectCharacter(characterId);
-
-  const character = await loadCharacter(characterId);
-
-  if (!character) {
-    socket.close(4001, 'invalid-token');
-    return;
-  }
-
+wss.on('connection', (socket, request) => {
   socket.isAlive = true;
   socket.on('pong', () => {
     socket.isAlive = true;
   });
+
+  accounts.attach(socket, request);
+
+  socket.on('message', (data) => {
+    let message;
+    try {
+      message = JSON.parse(data.toString());
+    } catch {
+      return;
+    }
+
+    if (!message || typeof message !== 'object') return;
+
+    if (accounts.consumes(message.type)) {
+      accounts.handle(socket, message);
+    } else if (socket.onGame) {
+      socket.onGame(message);
+    }
+  });
+
+  socket.on('close', () => {
+    socket.onClose?.();
+  });
+
+  socket.on('error', (error) => {
+    console.error('Socket-Fehler:', error);
+  });
+});
+
+async function enterWorld(socket, characterId) {
+  await disconnectCharacter(characterId);
+
+  const character = await loadCharacter(characterId);
+
+  if (!character || socket.readyState !== socket.OPEN) return false;
 
   const id = randomUUID();
   const initialState = createInitialState(character);
@@ -467,20 +476,14 @@ wss.on('connection', async (socket, request) => {
       position: { x: initialState.x, y: initialState.y, z: initialState.z, rotationY: initialState.rotationY },
       audio: character.audio,
       graphics: character.graphics,
+      settings: character.settings,
       home: serializeHome(initialState),
     })
   );
 
   sendMailStatus(mailContext, id, initialState).catch((error) => console.error('Fehler beim Laden der Post:', error));
 
-  socket.on('message', (data) => {
-    let message;
-    try {
-      message = JSON.parse(data.toString());
-    } catch {
-      return;
-    }
-
+  socket.onGame = (message) => {
     if (message.type === 'input') {
       const state = players.get(id);
       if (!state) return;
@@ -738,20 +741,18 @@ wss.on('connection', async (socket, request) => {
 
       sellToVendor(state, id, message.npcId, slot, message.itemId, notify);
     }
-  });
+  };
 
-  socket.on('close', () => {
+  socket.onClose = () => {
     const state = removePlayer(id);
     if (state) {
       persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
     }
     console.log(`Client getrennt (${id})`);
-  });
+  };
 
-  socket.on('error', (error) => {
-    console.error('Socket-Fehler:', error);
-  });
-});
+  return true;
+}
 
 const mailContext = { db: dbPool, players, notify };
 
@@ -1078,6 +1079,10 @@ setInterval(() => {
     persistState(state).catch((error) => console.error('Fehler beim Speichern der Position:', error));
   }
 }, SAVE_INTERVAL_MS);
+
+setInterval(() => {
+  accounts.cleanup().catch((error) => console.error('Fehler beim Aufräumen der Sitzungen:', error));
+}, 3600000);
 
 setInterval(() => {
   for (const client of wss.clients) {

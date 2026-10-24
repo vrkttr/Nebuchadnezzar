@@ -92,14 +92,6 @@ CREATE TABLE IF NOT EXISTS character_quests (
     FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS login_tokens (
-    token VARCHAR(64) PRIMARY KEY,
-    character_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP NOT NULL,
-    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS character_chests (
     character_id INT NOT NULL,
     zone VARCHAR(32) NOT NULL,
@@ -128,3 +120,12 @@ CREATE TABLE IF NOT EXISTS character_friends (
   FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE,
   FOREIGN KEY (friend_id) REFERENCES characters(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS sessions (
+    token_hash CHAR(64) PRIMARY KEY,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    KEY idx_sessions_user (user_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

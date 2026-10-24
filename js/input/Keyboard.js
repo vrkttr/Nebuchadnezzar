@@ -95,6 +95,10 @@ export function allowLeave() {
   leaving = true;
 }
 
+export function setLeaveGuard(enabled) {
+  leaving = !enabled;
+}
+
 export function isKeyDown(code) {
   return pressedKeys.has(code);
 }
