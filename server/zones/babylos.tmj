@@ -212522,25 +212522,6 @@
      ]
     },
     {
-     "id": 2561,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3625.6,
-     "y": 3369.6,
-     "width": 172.8,
-     "height": 172.8,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "kamera",
-       "type": "float",
-       "value": 46.0
-      }
-     ]
-    },
-    {
      "id": 2574,
      "name": "",
      "type": "",
