@@ -1,10 +1,30 @@
 services:
+  portal:
+    build:
+      context: ./portal
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    environment:
+      - DB_HOST=database
+      - DB_NAME=nebuchadnezzar
+      - DB_USER=nebuchadnezzar
+      - DB_PASSWORD=changeme
+    depends_on:
+      - database
+    restart: unless-stopped
+
   game:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8082:80"
+      - "127.0.0.1:8082:80"
+    networks:
+      default: {}
+      proxy:
+        aliases:
+          - verdigrim-web
     restart: unless-stopped
 
   game-server:
@@ -12,13 +32,19 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "8088:8081"
+      - "127.0.0.1:8088:8081"
     environment:
       - PORT=8081
+      - TRUST_PROXY=1
       - DB_HOST=database
       - DB_NAME=nebuchadnezzar
       - DB_USER=nebuchadnezzar
       - DB_PASSWORD=changeme
+    networks:
+      default: {}
+      proxy:
+        aliases:
+          - verdigrim-ws
     depends_on:
       - database
     restart: unless-stopped
@@ -32,7 +58,12 @@ services:
       - MARIADB_ROOT_PASSWORD=changeme_root
     volumes:
       - db_data:/var/lib/mysql
+      - ./portal/db:/docker-entrypoint-initdb.d
     restart: unless-stopped
+
+networks:
+  proxy:
+    external: true
 
 volumes:
   db_data:
