@@ -73,7 +73,7 @@ await migrate(dbPool);
 
 const wss = new WebSocketServer({ port: PORT, maxPayload: 65536 });
 
-console.log(`Sektor 7 Game-Server läuft auf Port ${PORT}`);
+console.log(`Verdigrim Game-Server läuft auf Port ${PORT}`);
 
 const WALK_SPEED = 2;
 const RUN_SPEED = 4;

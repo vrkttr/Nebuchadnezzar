@@ -1,4 +1,4 @@
-# Sektor 7
+# Verdigrim
 
 Browserbasiertes, serverautoritatives 3D-MMORPG (Aufbau von Grund auf).
 

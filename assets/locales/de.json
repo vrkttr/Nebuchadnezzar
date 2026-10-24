@@ -1,5 +1,5 @@
 {
-  "app.title": "Sektor 7",
+  "app.title": "Verdigrim",
   "common.close": "Schließen",
   "common.cancel": "Abbrechen",
   "loading.tipLabel": "Tipp",
@@ -1432,7 +1432,7 @@
   "settings.touchControls.off": "Immer aus",
   "settings.touchControlsHint": "Blendet Steuerstick, Sprung-, Ducken- und Ziel-Button ein. Automatisch erkennt Touch-Geräte. Die Änderung gilt beim nächsten Start des Spiels.",
   "credits.own.heading": "Eigene Inhalte",
-  "credits.own.text": "Spielwelt, 3D-Modelle, Texturen, Logo, Icons, Oberfläche, Geräusche und Menümusik sind eigene Arbeiten für Sektor 7, soweit nicht unten anders genannt.",
+  "credits.own.text": "Spielwelt, 3D-Modelle, Texturen, Logo, Icons, Oberfläche, Geräusche und Menümusik sind eigene Arbeiten für Verdigrim, soweit nicht unten anders genannt.",
   "credits.tiled.note": "Weltdefinition der Zonen",
   "settings.tab.general": "Allgemein",
   "settings.tab.sound": "Ton",
@@ -1684,5 +1684,8 @@
   "admin.pl.fail.passwordLong": "Passwort: höchstens {max} Bytes.",
   "admin.pl.fail.usernameTaken": "Dieser Accountname ist bereits vergeben.",
   "admin.pl.fail.nameTaken": "Dieser Charaktername ist bereits vergeben.",
-  "admin.pl.fail.server": "Serverfehler beim Speichern, nichts wurde geändert."
+  "admin.pl.fail.server": "Serverfehler beim Speichern, nichts wurde geändert.",
+  "questobject.kraft_wartungsplan": "Wartungsplan",
+  "questobject.kraft_funkprotokoll": "Funkprotokoll",
+  "questobject.kraft_lastschreiber": "Lastschreiber"
 }
