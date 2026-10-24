@@ -165662,117 +165662,22 @@
      ]
     },
     {
-     "id": 2556,
+     "id": 2573,
      "name": "",
-     "type": "halle",
-     "class": "halle",
-     "x": 2304.0,
-     "y": 3712.0,
+     "type": "kraftwerk",
+     "class": "kraftwerk",
+     "x": 3360.0,
+     "y": 992.0,
      "width": 0,
      "height": 0,
      "rotation": 0,
      "visible": true,
      "point": true,
      "properties": [
-      {
-       "name": "length",
-       "type": "int",
-       "value": 44
-      },
-      {
-       "name": "depth",
-       "type": "int",
-       "value": 18
-      },
-      {
-       "name": "height",
-       "type": "int",
-       "value": 13
-      },
       {
        "name": "seed",
        "type": "int",
        "value": 611
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#8e8b7a"
-      },
-      {
-       "name": "gate",
-       "type": "int",
-       "value": 9
-      },
-      {
-       "name": "door",
-       "type": "int",
-       "value": 0
-      }
-     ]
-    },
-    {
-     "id": 2558,
-     "name": "",
-     "type": "halle",
-     "class": "halle",
-     "x": 3280.0,
-     "y": 3712.0,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "length",
-       "type": "int",
-       "value": 18
-      },
-      {
-       "name": "depth",
-       "type": "int",
-       "value": 14
-      },
-      {
-       "name": "height",
-       "type": "int",
-       "value": 22
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 612
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#7e7a6a"
-      }
-     ]
-    },
-    {
-     "id": 2560,
-     "name": "",
-     "type": "schornstein",
-     "class": "schornstein",
-     "x": 3712.0,
-     "y": 3456.0,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 613
-      },
-      {
-       "name": "height",
-       "type": "int",
-       "value": 46
       }
      ]
     }
@@ -175518,20 +175423,6 @@
      "properties": []
     },
     {
-     "id": 777,
-     "name": "",
-     "type": "zelt",
-     "class": "zelt",
-     "x": 2562.909,
-     "y": 2410.148,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": []
-    },
-    {
      "id": 779,
      "name": "",
      "type": "fass",
@@ -175557,31 +175448,6 @@
      ]
     },
     {
-     "id": 781,
-     "name": "",
-     "type": "kiste",
-     "class": "kiste",
-     "x": 2238.264,
-     "y": 2372.111,
-     "width": 0,
-     "height": 0,
-     "rotation": 15,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3258
-      },
-      {
-       "name": "stack",
-       "type": "int",
-       "value": 2
-      }
-     ]
-    },
-    {
      "id": 783,
      "name": "",
      "type": "barrikade",
@@ -175598,31 +175464,6 @@
        "name": "seed",
        "type": "int",
        "value": 3259
-      },
-      {
-       "name": "width",
-       "type": "float",
-       "value": 3.4
-      }
-     ]
-    },
-    {
-     "id": 785,
-     "name": "",
-     "type": "barrikade",
-     "class": "barrikade",
-     "x": 2148.664,
-     "y": 2288.911,
-     "width": 0,
-     "height": 0,
-     "rotation": 90,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3260
       },
       {
        "name": "width",
@@ -178673,31 +178514,6 @@
      ]
     },
     {
-     "id": 1191,
-     "name": "",
-     "type": "barrikade",
-     "class": "barrikade",
-     "x": 4979.789,
-     "y": 2374.576,
-     "width": 0,
-     "height": 0,
-     "rotation": 115,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3368
-      },
-      {
-       "name": "width",
-       "type": "float",
-       "value": 3.4
-      }
-     ]
-    },
-    {
      "id": 1195,
      "name": "",
      "type": "kiste",
@@ -178719,41 +178535,6 @@
        "name": "stack",
        "type": "int",
        "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1198,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 3252.667,
-     "y": 772.305,
-     "width": 0,
-     "height": 0,
-     "rotation": 148,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3373
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#a9b890"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "tarped",
-       "type": "bool",
-       "value": true
       }
      ]
     },
@@ -178804,26 +178585,6 @@
        "name": "stack",
        "type": "int",
        "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1204,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 3393.94,
-     "y": 2033.47,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": false
       }
      ]
     },
@@ -178879,46 +178640,6 @@
        "name": "stack",
        "type": "int",
        "value": 1
-      }
-     ]
-    },
-    {
-     "id": 1217,
-     "name": "",
-     "type": "mast",
-     "class": "mast",
-     "x": 4508.682,
-     "y": 1559.221,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7.5
-      }
-     ]
-    },
-    {
-     "id": 1224,
-     "name": "",
-     "type": "mast",
-     "class": "mast",
-     "x": 5176.609,
-     "y": 2207.747,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7.5
       }
      ]
     },
@@ -178988,31 +178709,6 @@
        "name": "stack",
        "type": "int",
        "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1234,
-     "name": "",
-     "type": "zaun",
-     "class": "zaun",
-     "x": 2024.388,
-     "y": 2127.801,
-     "width": 0,
-     "height": 0,
-     "rotation": 149,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "length",
-       "type": "int",
-       "value": 6
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3391
       }
      ]
     },
@@ -179404,36 +179100,6 @@
      ]
     },
     {
-     "id": 1301,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 2717.29,
-     "y": 2089.328,
-     "width": 0,
-     "height": 0,
-     "rotation": 151,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3428
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#c9c9c0"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 1305,
      "name": "",
      "type": "container",
@@ -179549,26 +179215,6 @@
      ]
     },
     {
-     "id": 1324,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 2943.096,
-     "y": 908.685,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": false
-      }
-     ]
-    },
-    {
      "id": 1327,
      "name": "",
      "type": "container",
@@ -179622,31 +179268,6 @@
      "properties": []
     },
     {
-     "id": 1344,
-     "name": "",
-     "type": "kiste",
-     "class": "kiste",
-     "x": 3793.28,
-     "y": 1559.417,
-     "width": 0,
-     "height": 0,
-     "rotation": 25,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3446
-      },
-      {
-       "name": "stack",
-       "type": "int",
-       "value": 1
-      }
-     ]
-    },
-    {
      "id": 1349,
      "name": "",
      "type": "zelt",
@@ -179677,31 +179298,6 @@
        "name": "seed",
        "type": "int",
        "value": 3449
-      }
-     ]
-    },
-    {
-     "id": 1357,
-     "name": "",
-     "type": "hochbeet",
-     "class": "hochbeet",
-     "x": 2842.839,
-     "y": 967.621,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3453
-      },
-      {
-       "name": "length",
-       "type": "float",
-       "value": 2.4
       }
      ]
     },
@@ -179772,26 +179368,6 @@
        "name": "lit",
        "type": "bool",
        "value": false
-      }
-     ]
-    },
-    {
-     "id": 1369,
-     "name": "",
-     "type": "fass",
-     "class": "fass",
-     "x": 3018.58,
-     "y": 2025.922,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3459
       }
      ]
     },
@@ -180150,26 +179726,6 @@
        "name": "wrecked",
        "type": "bool",
        "value": true
-      }
-     ]
-    },
-    {
-     "id": 1418,
-     "name": "",
-     "type": "mast",
-     "class": "mast",
-     "x": 1884.948,
-     "y": 1673.337,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7.5
       }
      ]
     },
@@ -180543,36 +180099,6 @@
      ]
     },
     {
-     "id": 1482,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 3132.025,
-     "y": 1361.197,
-     "width": 0,
-     "height": 0,
-     "rotation": 24,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3516
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#a9b890"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 1487,
      "name": "",
      "type": "fass",
@@ -180609,36 +180135,6 @@
        "name": "height",
        "type": "float",
        "value": 7.5
-      }
-     ]
-    },
-    {
-     "id": 1492,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 1528.612,
-     "y": 1055.182,
-     "width": 0,
-     "height": 0,
-     "rotation": 122,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3522
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#a9b890"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
       }
      ]
     },
@@ -180853,51 +180349,6 @@
      ]
     },
     {
-     "id": 1532,
-     "name": "",
-     "type": "container",
-     "class": "container",
-     "x": 3001.623,
-     "y": 663.316,
-     "width": 0,
-     "height": 0,
-     "rotation": 110,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#b86a4a"
-      },
-      {
-       "name": "stacked",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
-     "id": 1540,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 1789.362,
-     "y": 2167.693,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 1544,
      "name": "",
      "type": "fass",
@@ -181093,51 +180544,6 @@
      ]
     },
     {
-     "id": 1577,
-     "name": "",
-     "type": "fass",
-     "class": "fass",
-     "x": 4868.211,
-     "y": 2256.046,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3562
-      }
-     ]
-    },
-    {
-     "id": 1579,
-     "name": "",
-     "type": "kiste",
-     "class": "kiste",
-     "x": 4420.529,
-     "y": 2346.412,
-     "width": 0,
-     "height": 0,
-     "rotation": 19,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3563
-      },
-      {
-       "name": "stack",
-       "type": "int",
-       "value": 2
-      }
-     ]
-    },
-    {
      "id": 1581,
      "name": "",
      "type": "bank",
@@ -181247,46 +180653,6 @@
      ]
     },
     {
-     "id": 1602,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 4601.621,
-     "y": 2106.042,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
-     "id": 1604,
-     "name": "",
-     "type": "fass",
-     "class": "fass",
-     "x": 1536.716,
-     "y": 2015.012,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3574
-      }
-     ]
-    },
-    {
      "id": 1606,
      "name": "",
      "type": "auto",
@@ -181342,45 +180708,6 @@
      ]
     },
     {
-     "id": 1613,
-     "name": "",
-     "type": "bank",
-     "class": "bank",
-     "x": 2693.384,
-     "y": 1924.981,
-     "width": 0,
-     "height": 0,
-     "rotation": 139,
-     "visible": true,
-     "point": true,
-     "properties": []
-    },
-    {
-     "id": 1621,
-     "name": "",
-     "type": "zaun",
-     "class": "zaun",
-     "x": 2089.772,
-     "y": 796.372,
-     "width": 0,
-     "height": 0,
-     "rotation": 2,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "length",
-       "type": "int",
-       "value": 6
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3583
-      }
-     ]
-    },
-    {
      "id": 1623,
      "name": "",
      "type": "container",
@@ -181420,31 +180747,6 @@
      "properties": [
       {
        "name": "open",
-       "type": "bool",
-       "value": false
-      }
-     ]
-    },
-    {
-     "id": 1632,
-     "name": "",
-     "type": "container",
-     "class": "container",
-     "x": 2080.113,
-     "y": 1093.85,
-     "width": 0,
-     "height": 0,
-     "rotation": 91,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#b86a4a"
-      },
-      {
-       "name": "stacked",
        "type": "bool",
        "value": false
       }
@@ -181586,61 +180888,6 @@
      ]
     },
     {
-     "id": 1656,
-     "name": "",
-     "type": "kiste",
-     "class": "kiste",
-     "x": 1629.671,
-     "y": 823.607,
-     "width": 0,
-     "height": 0,
-     "rotation": -20,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3599
-      },
-      {
-       "name": "stack",
-       "type": "int",
-       "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1658,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 2846.331,
-     "y": 1724.857,
-     "width": 0,
-     "height": 0,
-     "rotation": 143,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3600
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#d9a58a"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 1662,
      "name": "",
      "type": "fass",
@@ -181677,31 +180924,6 @@
        "name": "seed",
        "type": "int",
        "value": 3602
-      },
-      {
-       "name": "stack",
-       "type": "int",
-       "value": 1
-      }
-     ]
-    },
-    {
-     "id": 1672,
-     "name": "",
-     "type": "kiste",
-     "class": "kiste",
-     "x": 3462.721,
-     "y": 861.479,
-     "width": 0,
-     "height": 0,
-     "rotation": -12,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3606
       },
       {
        "name": "stack",
@@ -182096,66 +181318,6 @@
      ]
     },
     {
-     "id": 1727,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 2630.688,
-     "y": 1303.344,
-     "width": 0,
-     "height": 0,
-     "rotation": 168,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3635
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#b0b8c4"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
-     "id": 1729,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 4120.563,
-     "y": 1523.244,
-     "width": 0,
-     "height": 0,
-     "rotation": 36,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3636
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#b0b8c4"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 1731,
      "name": "",
      "type": "zelt",
@@ -182261,26 +181423,6 @@
        "name": "length",
        "type": "float",
        "value": 2.4
-      }
-     ]
-    },
-    {
-     "id": 1742,
-     "name": "",
-     "type": "fass",
-     "class": "fass",
-     "x": 3522.699,
-     "y": 2086.409,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3641
       }
      ]
     },
@@ -182415,56 +181557,6 @@
      ]
     },
     {
-     "id": 1754,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 3335.995,
-     "y": 2118.103,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
-     "id": 1756,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 2842.269,
-     "y": 892.164,
-     "width": 0,
-     "height": 0,
-     "rotation": 93,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3647
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#b0b8c4"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 1758,
      "name": "",
      "type": "auto",
@@ -182536,26 +181628,6 @@
        "name": "lit",
        "type": "bool",
        "value": true
-      }
-     ]
-    },
-    {
-     "id": 1765,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 3189.413,
-     "y": 1682.333,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": false
       }
      ]
     },
@@ -182693,26 +181765,6 @@
      ]
     },
     {
-     "id": 1791,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 3128.102,
-     "y": 647.692,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": false
-      }
-     ]
-    },
-    {
      "id": 1797,
      "name": "",
      "type": "kiste",
@@ -182734,36 +181786,6 @@
        "name": "stack",
        "type": "int",
        "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1799,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 4357.366,
-     "y": 2222.6,
-     "width": 0,
-     "height": 0,
-     "rotation": 145,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3666
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#b0b8c4"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
       }
      ]
     },
@@ -182908,26 +181930,6 @@
      ]
     },
     {
-     "id": 1820,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 3287.863,
-     "y": 1492.129,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 1822,
      "name": "",
      "type": "kiste",
@@ -183044,51 +182046,6 @@
        "name": "seed",
        "type": "int",
        "value": 3685
-      }
-     ]
-    },
-    {
-     "id": 1842,
-     "name": "",
-     "type": "laterne",
-     "class": "laterne",
-     "x": 4833.822,
-     "y": 2393.433,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "lit",
-       "type": "bool",
-       "value": false
-      }
-     ]
-    },
-    {
-     "id": 1844,
-     "name": "",
-     "type": "hochbeet",
-     "class": "hochbeet",
-     "x": 3035.739,
-     "y": 1919.421,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3693
-      },
-      {
-       "name": "length",
-       "type": "float",
-       "value": 2.4
       }
      ]
     },
@@ -183273,26 +182230,6 @@
      ]
     },
     {
-     "id": 1882,
-     "name": "",
-     "type": "fass",
-     "class": "fass",
-     "x": 2724.382,
-     "y": 1590.037,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3714
-      }
-     ]
-    },
-    {
      "id": 1887,
      "name": "",
      "type": "fass",
@@ -183309,31 +182246,6 @@
        "name": "seed",
        "type": "int",
        "value": 3716
-      }
-     ]
-    },
-    {
-     "id": 1890,
-     "name": "",
-     "type": "container",
-     "class": "container",
-     "x": 2768.652,
-     "y": 1074.618,
-     "width": 0,
-     "height": 0,
-     "rotation": 60,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#6a7a8a"
-      },
-      {
-       "name": "stacked",
-       "type": "bool",
-       "value": true
       }
      ]
     },
@@ -183413,26 +182325,6 @@
      ]
     },
     {
-     "id": 1912,
-     "name": "",
-     "type": "fass",
-     "class": "fass",
-     "x": 2729.094,
-     "y": 2275.913,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3730
-      }
-     ]
-    },
-    {
      "id": 1920,
      "name": "",
      "type": "laterne",
@@ -183474,26 +182366,6 @@
        "name": "width",
        "type": "float",
        "value": 3.4
-      }
-     ]
-    },
-    {
-     "id": 1930,
-     "name": "",
-     "type": "muelltonne",
-     "class": "muelltonne",
-     "x": 4161.621,
-     "y": 2239.296,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "open",
-       "type": "bool",
-       "value": false
       }
      ]
     },
@@ -183568,31 +182440,6 @@
      ]
     },
     {
-     "id": 1948,
-     "name": "",
-     "type": "hochbeet",
-     "class": "hochbeet",
-     "x": 1452.234,
-     "y": 719.62,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3750
-      },
-      {
-       "name": "length",
-       "type": "float",
-       "value": 2.4
-      }
-     ]
-    },
-    {
      "id": 1949,
      "name": "",
      "type": "kiste",
@@ -183634,26 +182481,6 @@
        "name": "lit",
        "type": "bool",
        "value": false
-      }
-     ]
-    },
-    {
-     "id": 1955,
-     "name": "",
-     "type": "fass",
-     "class": "fass",
-     "x": 4465.353,
-     "y": 1355.964,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3753
       }
      ]
     },
@@ -183701,20 +182528,6 @@
        "value": 2.4
       }
      ]
-    },
-    {
-     "id": 1975,
-     "name": "",
-     "type": "zelt",
-     "class": "zelt",
-     "x": 4855.302,
-     "y": 2072.904,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": []
     },
     {
      "id": 1977,
@@ -183971,36 +182784,6 @@
        "name": "seed",
        "type": "int",
        "value": 3783
-      }
-     ]
-    },
-    {
-     "id": 2026,
-     "name": "",
-     "type": "auto",
-     "class": "auto",
-     "x": 5062.873,
-     "y": 2135.647,
-     "width": 0,
-     "height": 0,
-     "rotation": 103,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3785
-      },
-      {
-       "name": "tint",
-       "type": "string",
-       "value": "#a9b890"
-      },
-      {
-       "name": "wrecked",
-       "type": "bool",
-       "value": true
       }
      ]
     },
@@ -188779,56 +187562,6 @@
      ]
     },
     {
-     "id": 1197,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3910.78,
-     "y": 1417.742,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3372
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
-      }
-     ]
-    },
-    {
-     "id": 1206,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 4714.61,
-     "y": 2224.83,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3376
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
-      }
-     ]
-    },
-    {
      "id": 1207,
      "name": "",
      "type": "baum",
@@ -189044,31 +187777,6 @@
      ]
     },
     {
-     "id": 1227,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 4646.55,
-     "y": 1569.348,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3387
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
-      }
-     ]
-    },
-    {
      "id": 1238,
      "name": "",
      "type": "busch",
@@ -189090,36 +187798,6 @@
        "name": "size",
        "type": "float",
        "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1241,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 3175.094,
-     "y": 2131.886,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 6
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3395
       }
      ]
     },
@@ -189225,61 +187903,6 @@
        "name": "seed",
        "type": "int",
        "value": 3399
-      }
-     ]
-    },
-    {
-     "id": 1249,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 1727.016,
-     "y": 1266.01,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7.1
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3400
-      }
-     ]
-    },
-    {
-     "id": 1253,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 4237.974,
-     "y": 1958.954,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3402
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
       }
      ]
     },
@@ -189544,36 +188167,6 @@
      ]
     },
     {
-     "id": 1284,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 3336.039,
-     "y": 2283.005,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7.7
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3419
-      }
-     ]
-    },
-    {
      "id": 1286,
      "name": "",
      "type": "busch",
@@ -189595,31 +188188,6 @@
        "name": "size",
        "type": "float",
        "value": 1.2
-      }
-     ]
-    },
-    {
-     "id": 1289,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 4962.475,
-     "y": 1323.102,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3422
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
       }
      ]
     },
@@ -189739,31 +188307,6 @@
      ]
     },
     {
-     "id": 1308,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2766.158,
-     "y": 1390.001,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3431
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
-      }
-     ]
-    },
-    {
      "id": 1311,
      "name": "",
      "type": "baum",
@@ -189790,31 +188333,6 @@
        "name": "seed",
        "type": "int",
        "value": 3433
-      }
-     ]
-    },
-    {
-     "id": 1313,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2094.735,
-     "y": 1729.464,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3434
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
       }
      ]
     },
@@ -190015,31 +188533,6 @@
        "name": "seed",
        "type": "int",
        "value": 3442
-      }
-     ]
-    },
-    {
-     "id": 1337,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 1705.88,
-     "y": 1555.882,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3443
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
       }
      ]
     },
@@ -190315,61 +188808,6 @@
        "name": "seed",
        "type": "int",
        "value": 3462
-      }
-     ]
-    },
-    {
-     "id": 1381,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 2596.435,
-     "y": 884.428,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "conifer"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3463
-      }
-     ]
-    },
-    {
-     "id": 1385,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2634.966,
-     "y": 1733.343,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3465
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
       }
      ]
     },
@@ -190684,31 +189122,6 @@
      ]
     },
     {
-     "id": 1434,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 5164.775,
-     "y": 1680.128,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3491
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
-      }
-     ]
-    },
-    {
      "id": 1435,
      "name": "",
      "type": "baum",
@@ -190789,31 +189202,6 @@
      ]
     },
     {
-     "id": 1445,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2218.283,
-     "y": 998.946,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3497
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
      "id": 1448,
      "name": "",
      "type": "baum",
@@ -190840,31 +189228,6 @@
        "name": "seed",
        "type": "int",
        "value": 3499
-      }
-     ]
-    },
-    {
-     "id": 1452,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2396.196,
-     "y": 1695.438,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3500
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
       }
      ]
     },
@@ -191115,36 +189478,6 @@
        "name": "size",
        "type": "float",
        "value": 1.2
-      }
-     ]
-    },
-    {
-     "id": 1478,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 3356.855,
-     "y": 1547.476,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 8.5
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3515
       }
      ]
     },
@@ -191440,56 +189773,6 @@
        "name": "seed",
        "type": "int",
        "value": 3532
-      }
-     ]
-    },
-    {
-     "id": 1516,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2690.779,
-     "y": 749.672,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3534
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1529,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3347.252,
-     "y": 1344.617,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3537
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
       }
      ]
     },
@@ -191824,31 +190107,6 @@
      ]
     },
     {
-     "id": 1566,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2288.842,
-     "y": 1363.803,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3555
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.6
-      }
-     ]
-    },
-    {
      "id": 1567,
      "name": "",
      "type": "busch",
@@ -192054,36 +190312,6 @@
      ]
     },
     {
-     "id": 1591,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 3844.986,
-     "y": 2028.13,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 8
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3569
-      }
-     ]
-    },
-    {
      "id": 1593,
      "name": "",
      "type": "busch",
@@ -192189,36 +190417,6 @@
      ]
     },
     {
-     "id": 1611,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 4400.32,
-     "y": 1322.117,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 5.9
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3578
-      }
-     ]
-    },
-    {
      "id": 1614,
      "name": "",
      "type": "baum",
@@ -192245,36 +190443,6 @@
        "name": "seed",
        "type": "int",
        "value": 3579
-      }
-     ]
-    },
-    {
-     "id": 1616,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 2243.02,
-     "y": 1846.031,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 6.6
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3580
       }
      ]
     },
@@ -192384,36 +190552,6 @@
      ]
     },
     {
-     "id": 1630,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 1870.606,
-     "y": 2359.275,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "conifer"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 5.9
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3587
-      }
-     ]
-    },
-    {
      "id": 1634,
      "name": "",
      "type": "busch",
@@ -192435,31 +190573,6 @@
        "name": "size",
        "type": "float",
        "value": 1.2
-      }
-     ]
-    },
-    {
-     "id": 1641,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 1727.342,
-     "y": 1116.408,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3591
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
       }
      ]
     },
@@ -192590,36 +190703,6 @@
        "name": "seed",
        "type": "int",
        "value": 3598
-      }
-     ]
-    },
-    {
-     "id": 1666,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 4740.108,
-     "y": 2452.956,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "conifer"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 6.4
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3603
       }
      ]
     },
@@ -193239,36 +191322,6 @@
      ]
     },
     {
-     "id": 1783,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 5063.653,
-     "y": 1475.614,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7.8
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3659
-      }
-     ]
-    },
-    {
      "id": 1788,
      "name": "",
      "type": "busch",
@@ -193315,36 +191368,6 @@
        "name": "size",
        "type": "float",
        "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1794,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 4212.506,
-     "y": 1792.674,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "conifer"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 7.5
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3663
       }
      ]
     },
@@ -193404,56 +191427,6 @@
      ]
     },
     {
-     "id": 1811,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3625.591,
-     "y": 2006.342,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3672
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
-     "id": 1812,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 4688.213,
-     "y": 1832.574,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3673
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
-      }
-     ]
-    },
-    {
      "id": 1813,
      "name": "",
      "type": "busch",
@@ -193475,31 +191448,6 @@
        "name": "size",
        "type": "float",
        "value": 1.6
-      }
-     ]
-    },
-    {
-     "id": 1818,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 4716.232,
-     "y": 2001.16,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3676
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
       }
      ]
     },
@@ -193550,31 +191498,6 @@
        "name": "size",
        "type": "float",
        "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1825,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 1445.03,
-     "y": 2302.449,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3680
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
       }
      ]
     },
@@ -193679,31 +191602,6 @@
      ]
     },
     {
-     "id": 1837,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2729.839,
-     "y": 1922.996,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3689
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
      "id": 1838,
      "name": "",
      "type": "busch",
@@ -193780,31 +191678,6 @@
        "name": "seed",
        "type": "int",
        "value": 3692
-      }
-     ]
-    },
-    {
-     "id": 1845,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 5150.151,
-     "y": 2003.294,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3694
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
       }
      ]
     },
@@ -194019,31 +191892,6 @@
      ]
     },
     {
-     "id": 1867,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 1469.306,
-     "y": 1791.01,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3707
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
      "id": 1868,
      "name": "",
      "type": "baum",
@@ -194204,31 +192052,6 @@
      ]
     },
     {
-     "id": 1896,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3749.331,
-     "y": 2259.539,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3720
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
-      }
-     ]
-    },
-    {
      "id": 1897,
      "name": "",
      "type": "baum",
@@ -194344,56 +192167,6 @@
      ]
     },
     {
-     "id": 1904,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2869.506,
-     "y": 1894.742,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3725
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
-      }
-     ]
-    },
-    {
-     "id": 1905,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2149.935,
-     "y": 1988.442,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3726
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
-      }
-     ]
-    },
-    {
      "id": 1906,
      "name": "",
      "type": "baum",
@@ -194484,31 +192257,6 @@
      ]
     },
     {
-     "id": 1916,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3455.999,
-     "y": 1847.662,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3732
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
      "id": 1917,
      "name": "",
      "type": "baum",
@@ -194589,31 +192337,6 @@
      ]
     },
     {
-     "id": 1924,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2318.98,
-     "y": 898.372,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3737
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
      "id": 1925,
      "name": "",
      "type": "busch",
@@ -194660,56 +192383,6 @@
        "name": "size",
        "type": "float",
        "value": 1.6
-      }
-     ]
-    },
-    {
-     "id": 1929,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 2461.032,
-     "y": 1392.287,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3741
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
-     "id": 1934,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3282.218,
-     "y": 1825.953,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3742
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
       }
      ]
     },
@@ -194815,31 +192488,6 @@
        "name": "seed",
        "type": "int",
        "value": 3746
-      }
-     ]
-    },
-    {
-     "id": 1944,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3576.198,
-     "y": 2389.406,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3747
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
       }
      ]
     },
@@ -195239,31 +192887,6 @@
      ]
     },
     {
-     "id": 1990,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3372,
-     "y": 971.962,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3770
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
      "id": 1991,
      "name": "",
      "type": "busch",
@@ -195404,31 +193027,6 @@
      ]
     },
     {
-     "id": 2008,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3811.067,
-     "y": 2436.234,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3777
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 1.2
-      }
-     ]
-    },
-    {
      "id": 2011,
      "name": "",
      "type": "busch",
@@ -195450,36 +193048,6 @@
        "name": "size",
        "type": "float",
        "value": 1.6
-      }
-     ]
-    },
-    {
-     "id": 2020,
-     "name": "",
-     "type": "baum",
-     "class": "baum",
-     "x": 3053.317,
-     "y": 887.865,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "kind",
-       "type": "string",
-       "value": "broadleaf"
-      },
-      {
-       "name": "height",
-       "type": "float",
-       "value": 6.8
-      },
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3782
       }
      ]
     },
@@ -195595,31 +193163,6 @@
        "name": "seed",
        "type": "int",
        "value": 3788
-      }
-     ]
-    },
-    {
-     "id": 2039,
-     "name": "",
-     "type": "busch",
-     "class": "busch",
-     "x": 3834.596,
-     "y": 934.721,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3789
-      },
-      {
-       "name": "size",
-       "type": "float",
-       "value": 2
       }
      ]
     },
@@ -195859,35 +193402,6 @@
        "name": "seed",
        "type": "int",
        "value": 3800
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
-     "id": 2059,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 1638.149,
-     "y": 1807.762,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3801
       },
       {
        "name": "count",
@@ -196207,35 +193721,6 @@
        "name": "seed",
        "type": "int",
        "value": 3812
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
-     "id": 2071,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 2947.589,
-     "y": 2231.725,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3813
       },
       {
        "name": "count",
@@ -197265,35 +194750,6 @@
      ]
     },
     {
-     "id": 2107,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 4755.231,
-     "y": 1560.174,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3849
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
      "id": 2108,
      "name": "",
      "type": "grasbueschel",
@@ -197758,35 +195214,6 @@
      ]
     },
     {
-     "id": 2124,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3430.323,
-     "y": 1354.955,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3866
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
      "id": 2125,
      "name": "",
      "type": "grasbueschel",
@@ -198179,35 +195606,6 @@
        "name": "seed",
        "type": "int",
        "value": 3880
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
-     "id": 2139,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 1850.26,
-     "y": 1235.274,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3881
       },
       {
        "name": "count",
@@ -198802,35 +196200,6 @@
      ]
     },
     {
-     "id": 2160,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3674.669,
-     "y": 1618.017,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3902
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
      "id": 2161,
      "name": "",
      "type": "grasbueschel",
@@ -199252,35 +196621,6 @@
        "name": "seed",
        "type": "int",
        "value": 3917
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
-     "id": 2176,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3493.035,
-     "y": 1111.294,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3918
       },
       {
        "name": "count",
@@ -199788,35 +197128,6 @@
      ]
     },
     {
-     "id": 2194,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3450.751,
-     "y": 1135.644,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3936
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
      "id": 2195,
      "name": "",
      "type": "grasbueschel",
@@ -199948,64 +197259,6 @@
        "name": "seed",
        "type": "int",
        "value": 3941
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
-     "id": 2200,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3387.777,
-     "y": 1391.878,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3942
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
-     "id": 2201,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3487.526,
-     "y": 516.583,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3943
       },
       {
        "name": "count",
@@ -201035,35 +198288,6 @@
      ]
     },
     {
-     "id": 2237,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3441.842,
-     "y": 1375.116,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3979
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
      "id": 2238,
      "name": "",
      "type": "grasbueschel",
@@ -201238,35 +198462,6 @@
      ]
     },
     {
-     "id": 2244,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 3405.06,
-     "y": 1196.571,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3986
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
      "id": 2245,
      "name": "",
      "type": "grasbueschel",
@@ -201412,35 +198607,6 @@
      ]
     },
     {
-     "id": 2250,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 4735.937,
-     "y": 1516.894,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3992
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
      "id": 2251,
      "name": "",
      "type": "grasbueschel",
@@ -201456,35 +198622,6 @@
        "name": "seed",
        "type": "int",
        "value": 3993
-      },
-      {
-       "name": "count",
-       "type": "int",
-       "value": 12
-      },
-      {
-       "name": "scale",
-       "type": "float",
-       "value": 0.6
-      }
-     ]
-    },
-    {
-     "id": 2252,
-     "name": "",
-     "type": "grasbueschel",
-     "class": "grasbueschel",
-     "x": 4746.116,
-     "y": 1529.898,
-     "width": 320,
-     "height": 320,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "seed",
-       "type": "int",
-       "value": 3994
       },
       {
        "name": "count",
@@ -204377,6 +201514,357 @@
        "name": "unterholz",
        "type": "int",
        "value": 12
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2564,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 1920,
+     "y": 3200,
+     "width": 640,
+     "height": 640,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 4025
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2565,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 1920.0,
+     "y": 3840.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5030
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2566,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 1920.0,
+     "y": 4160.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 5031
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2567,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 2240.0,
+     "y": 3840.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6030
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2568,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 2240.0,
+     "y": 4160.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 6031
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2569,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 2560.0,
+     "y": 3840.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7030
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2570,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 2560.0,
+     "y": 4160.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 7031
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2571,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 2880.0,
+     "y": 3840.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8030
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "minHeight",
+       "type": "int",
+       "value": 7
+      },
+      {
+       "name": "maxHeight",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 2572,
+     "name": "",
+     "type": "wald",
+     "class": "wald",
+     "x": 2880.0,
+     "y": 4160.0,
+     "width": 320.0,
+     "height": 320.0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "seed",
+       "type": "int",
+       "value": 8031
+      },
+      {
+       "name": "dichte",
+       "type": "int",
+       "value": 9
+      },
+      {
+       "name": "unterholz",
+       "type": "int",
+       "value": 7
       },
       {
        "name": "minHeight",
@@ -209202,19 +206690,6 @@
      "properties": []
     },
     {
-     "id": 778,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2508.509,
-     "y": 2365.348,
-     "width": 108.8,
-     "height": 89.6,
-     "rotation": 0,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 780,
      "name": "",
      "type": "",
@@ -209229,19 +206704,6 @@
      "properties": []
     },
     {
-     "id": 782,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2226.95,
-     "y": 2352.515,
-     "width": 32,
-     "height": 32,
-     "rotation": 15,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 784,
      "name": "",
      "type": "",
@@ -209251,19 +206713,6 @@
      "width": 108.8,
      "height": 38.4,
      "rotation": 0,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 786,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2167.864,
-     "y": 2234.511,
-     "width": 108.8,
-     "height": 38.4,
-     "rotation": 90,
      "visible": true,
      "properties": []
     },
@@ -211159,19 +208608,6 @@
      "properties": []
     },
     {
-     "id": 1192,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 5020.18,
-     "y": 2333.387,
-     "width": 108.8,
-     "height": 38.4,
-     "rotation": 115,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1196,
      "name": "",
      "type": "",
@@ -211181,19 +208617,6 @@
      "width": 32,
      "height": 32,
      "rotation": 27,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1199,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3328.48,
-     "y": 760.779,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 148,
      "visible": true,
      "properties": []
     },
@@ -211220,20 +208643,6 @@
      "width": 32,
      "height": 32,
      "rotation": -13,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1205,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3389.14,
-     "y": 2028.67,
-     "width": 9.6,
-     "height": 9.6,
-     "rotation": 0,
-     "ellipse": true,
      "visible": true,
      "properties": []
     },
@@ -211278,20 +208687,6 @@
      "properties": []
     },
     {
-     "id": 1218,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4499.082,
-     "y": 1549.621,
-     "width": 19.2,
-     "height": 19.2,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1221,
      "name": "",
      "type": "",
@@ -211314,20 +208709,6 @@
      "y": 11083.46,
      "width": 25.6,
      "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1225,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 5167.009,
-     "y": 2198.147,
-     "width": 19.2,
-     "height": 19.2,
      "rotation": 0,
      "ellipse": true,
      "visible": true,
@@ -211360,19 +208741,6 @@
      "properties": []
     },
     {
-     "id": 1235,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2109.972,
-     "y": 2083.843,
-     "width": 192,
-     "height": 12.8,
-     "rotation": 149,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1240,
      "name": "",
      "type": "",
@@ -211386,40 +208754,12 @@
      "properties": []
     },
     {
-     "id": 1242,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3162.294,
-     "y": 2119.086,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1248,
      "name": "",
      "type": "",
      "class": "",
      "x": 8512.055,
      "y": 2513.209,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1250,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1714.216,
-     "y": 1253.21,
      "width": 25.6,
      "height": 25.6,
      "rotation": 0,
@@ -211578,20 +208918,6 @@
      ]
     },
     {
-     "id": 1285,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3323.239,
-     "y": 2270.205,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1288,
      "name": "",
      "type": "",
@@ -211669,19 +208995,6 @@
      "width": 140.8,
      "height": 60.8,
      "rotation": 81,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1302,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2793.601,
-     "y": 2081.786,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 151,
      "visible": true,
      "properties": []
     },
@@ -211821,20 +209134,6 @@
      ]
     },
     {
-     "id": 1325,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2938.296,
-     "y": 903.885,
-     "width": 9.6,
-     "height": 9.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1328,
      "name": "",
      "type": "",
@@ -211937,19 +209236,6 @@
      "properties": []
     },
     {
-     "id": 1345,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3785.541,
-     "y": 1538.154,
-     "width": 32,
-     "height": 32,
-     "rotation": 25,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1350,
      "name": "",
      "type": "",
@@ -212046,20 +209332,6 @@
      "properties": []
     },
     {
-     "id": 1370,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3004.18,
-     "y": 2011.522,
-     "width": 28.8,
-     "height": 28.8,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1376,
      "name": "",
      "type": "",
@@ -212094,20 +209366,6 @@
      "class": "",
      "x": 9023.771,
      "y": 1689.448,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1382,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2583.635,
-     "y": 871.628,
      "width": 25.6,
      "height": 25.6,
      "rotation": 0,
@@ -212296,20 +209554,6 @@
      "width": 140.8,
      "height": 60.8,
      "rotation": 25,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1419,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1875.348,
-     "y": 1663.737,
-     "width": 19.2,
-     "height": 19.2,
-     "rotation": 0,
-     "ellipse": true,
      "visible": true,
      "properties": []
     },
@@ -212586,33 +209830,6 @@
      "properties": []
     },
     {
-     "id": 1479,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3344.055,
-     "y": 1534.676,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1483,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3080.076,
-     "y": 1304.791,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 24,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1488,
      "name": "",
      "type": "",
@@ -212637,19 +209854,6 @@
      "height": 19.2,
      "rotation": 0,
      "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1493,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1591.699,
-     "y": 1011.589,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 122,
      "visible": true,
      "properties": []
     },
@@ -212830,25 +210034,6 @@
      "properties": []
     },
     {
-     "id": 1533,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3073.139,
-     "y": 583.779,
-     "width": 198.4,
-     "height": 80,
-     "rotation": 110,
-     "visible": true,
-     "properties": [
-      {
-       "name": "kamera",
-       "type": "float",
-       "value": 5.2
-      }
-     ]
-    },
-    {
      "id": 1535,
      "name": "",
      "type": "",
@@ -212885,20 +210070,6 @@
      "y": 12112.79,
      "width": 25.6,
      "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1541,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1784.562,
-     "y": 2162.893,
-     "width": 9.6,
-     "height": 9.6,
      "rotation": 0,
      "ellipse": true,
      "visible": true,
@@ -213071,33 +210242,6 @@
      "properties": []
     },
     {
-     "id": 1578,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4853.811,
-     "y": 2241.646,
-     "width": 28.8,
-     "height": 28.8,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1580,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4410.61,
-     "y": 2326.074,
-     "width": 32,
-     "height": 32,
-     "rotation": 19,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1586,
      "name": "",
      "type": "",
@@ -213129,20 +210273,6 @@
        "value": 2.7
       }
      ]
-    },
-    {
-     "id": 1592,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3832.186,
-     "y": 2015.33,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
     },
     {
      "id": 1596,
@@ -213191,34 +210321,6 @@
      "properties": []
     },
     {
-     "id": 1603,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4596.821,
-     "y": 2101.242,
-     "width": 9.6,
-     "height": 9.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1605,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1522.316,
-     "y": 2000.612,
-     "width": 28.8,
-     "height": 28.8,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1607,
      "name": "",
      "type": "",
@@ -213246,40 +210348,12 @@
      "properties": []
     },
     {
-     "id": 1612,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4387.52,
-     "y": 1309.317,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1615,
      "name": "",
      "type": "",
      "class": "",
      "x": 3087.261,
      "y": 9247.029,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1617,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2230.22,
-     "y": 1833.231,
      "width": 25.6,
      "height": 25.6,
      "rotation": 0,
@@ -213298,19 +210372,6 @@
      "height": 25.6,
      "rotation": 0,
      "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1622,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1994.054,
-     "y": 786.625,
-     "width": 192,
-     "height": 12.8,
-     "rotation": 2,
      "visible": true,
      "properties": []
     },
@@ -213346,39 +210407,6 @@
      "ellipse": true,
      "visible": true,
      "properties": []
-    },
-    {
-     "id": 1631,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1857.806,
-     "y": 2346.475,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1633,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2121.839,
-     "y": 995.364,
-     "width": 198.4,
-     "height": 80,
-     "rotation": 91,
-     "visible": true,
-     "properties": [
-      {
-       "name": "kamera",
-       "type": "float",
-       "value": 2.7
-      }
-     ]
     },
     {
      "id": 1636,
@@ -213490,32 +210518,6 @@
      "properties": []
     },
     {
-     "id": 1657,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1609.163,
-     "y": 814.044,
-     "width": 32,
-     "height": 32,
-     "rotation": -20,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1659,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2920.85,
-     "y": 1706.768,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 143,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1663,
      "name": "",
      "type": "",
@@ -213543,20 +210545,6 @@
      "properties": []
     },
     {
-     "id": 1667,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4727.308,
-     "y": 2440.156,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1671,
      "name": "",
      "type": "",
@@ -213567,19 +210555,6 @@
      "height": 25.6,
      "rotation": 0,
      "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1673,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3443.744,
-     "y": 849.155,
-     "width": 32,
-     "height": 32,
-     "rotation": -12,
      "visible": true,
      "properties": []
     },
@@ -213855,32 +210830,6 @@
      "properties": []
     },
     {
-     "id": 1728,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2705.87,
-     "y": 1318.442,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 168,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1730,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4081.477,
-     "y": 1457.27,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 36,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1732,
      "name": "",
      "type": "",
@@ -213925,20 +210874,6 @@
        "value": 5.2
       }
      ]
-    },
-    {
-     "id": 1743,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3508.299,
-     "y": 2072.009,
-     "width": 28.8,
-     "height": 28.8,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
     },
     {
      "id": 1745,
@@ -214006,33 +210941,6 @@
      "properties": []
     },
     {
-     "id": 1755,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3331.195,
-     "y": 2113.303,
-     "width": 9.6,
-     "height": 9.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1757,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2876.312,
-     "y": 823.451,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 93,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1759,
      "name": "",
      "type": "",
@@ -214071,20 +210979,6 @@
      "class": "",
      "x": 10181.33,
      "y": 1217.279,
-     "width": 9.6,
-     "height": 9.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1766,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3184.613,
-     "y": 1677.533,
      "width": 9.6,
      "height": 9.6,
      "rotation": 0,
@@ -214166,20 +211060,6 @@
      ]
     },
     {
-     "id": 1784,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 5050.853,
-     "y": 1462.814,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1787,
      "name": "",
      "type": "",
@@ -214207,34 +211087,6 @@
      "properties": []
     },
     {
-     "id": 1792,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3123.302,
-     "y": 642.892,
-     "width": 9.6,
-     "height": 9.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1795,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4199.706,
-     "y": 1779.874,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1798,
      "name": "",
      "type": "",
@@ -214244,19 +211096,6 @@
      "width": 32,
      "height": 32,
      "rotation": 18,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1800,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4432.471,
-     "y": 2207.123,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 145,
      "visible": true,
      "properties": []
     },
@@ -214329,20 +211168,6 @@
      "properties": []
     },
     {
-     "id": 1821,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3283.063,
-     "y": 1487.329,
-     "width": 9.6,
-     "height": 9.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1823,
      "name": "",
      "type": "",
@@ -214404,20 +211229,6 @@
      "y": 6220.26,
      "width": 25.6,
      "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1843,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4829.022,
-     "y": 2388.633,
-     "width": 9.6,
-     "height": 9.6,
      "rotation": 0,
      "ellipse": true,
      "visible": true,
@@ -214589,20 +211400,6 @@
      "properties": []
     },
     {
-     "id": 1883,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2709.982,
-     "y": 1575.637,
-     "width": 28.8,
-     "height": 28.8,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1888,
      "name": "",
      "type": "",
@@ -214615,25 +211412,6 @@
      "ellipse": true,
      "visible": true,
      "properties": []
-    },
-    {
-     "id": 1891,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2753.693,
-     "y": 968.709,
-     "width": 198.4,
-     "height": 80,
-     "rotation": 60,
-     "visible": true,
-     "properties": [
-      {
-       "name": "kamera",
-       "type": "float",
-       "value": 5.2
-      }
-     ]
     },
     {
      "id": 1893,
@@ -214745,20 +211523,6 @@
      "properties": []
     },
     {
-     "id": 1913,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2714.694,
-     "y": 2261.513,
-     "width": 28.8,
-     "height": 28.8,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1915,
      "name": "",
      "type": "",
@@ -214810,20 +211574,6 @@
      "width": 108.8,
      "height": 38.4,
      "rotation": 89,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1931,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4150.421,
-     "y": 2228.096,
-     "width": 22.4,
-     "height": 22.4,
-     "rotation": 0,
-     "ellipse": true,
      "visible": true,
      "properties": []
     },
@@ -214949,20 +211699,6 @@
      "properties": []
     },
     {
-     "id": 1956,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4450.953,
-     "y": 1341.564,
-     "width": 28.8,
-     "height": 28.8,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 1960,
      "name": "",
      "type": "",
@@ -215057,19 +211793,6 @@
      "height": 25.6,
      "rotation": 0,
      "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 1976,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 4800.902,
-     "y": 2028.104,
-     "width": 108.8,
-     "height": 89.6,
-     "rotation": 0,
      "visible": true,
      "properties": []
     },
@@ -215289,20 +212012,6 @@
      "properties": []
     },
     {
-     "id": 2021,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 3040.517,
-     "y": 875.065,
-     "width": 25.6,
-     "height": 25.6,
-     "rotation": 0,
-     "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
      "id": 2023,
      "name": "",
      "type": "",
@@ -215327,19 +212036,6 @@
      "height": 25.6,
      "rotation": 0,
      "ellipse": true,
-     "visible": true,
-     "properties": []
-    },
-    {
-     "id": 2027,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 5108.33,
-     "y": 2073.89,
-     "width": 140.8,
-     "height": 60.8,
-     "rotation": 103,
      "visible": true,
      "properties": []
     },
@@ -215826,44 +212522,6 @@
      ]
     },
     {
-     "id": 2557,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 1600.0,
-     "y": 3424.0,
-     "width": 1408,
-     "height": 576,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "kamera",
-       "type": "float",
-       "value": 13.0
-      }
-     ]
-    },
-    {
-     "id": 2559,
-     "name": "",
-     "type": "",
-     "class": "",
-     "x": 2992.0,
-     "y": 3488.0,
-     "width": 576,
-     "height": 448,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "kamera",
-       "type": "float",
-       "value": 22.0
-      }
-     ]
-    },
-    {
      "id": 2561,
      "name": "",
      "type": "",
@@ -215879,6 +212537,101 @@
        "name": "kamera",
        "type": "float",
        "value": 46.0
+      }
+     ]
+    },
+    {
+     "id": 2574,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 2656.0,
+     "y": 704.0,
+     "width": 1408,
+     "height": 576,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 14.0
+      }
+     ]
+    },
+    {
+     "id": 2575,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4064.0,
+     "y": 704.0,
+     "width": 704,
+     "height": 576,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 34.0
+      }
+     ]
+    },
+    {
+     "id": 2576,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4873.6,
+     "y": 809.6,
+     "width": 172.8,
+     "height": 172.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 62.0
+      }
+     ]
+    },
+    {
+     "id": 2577,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 1616.0,
+     "y": 752.0,
+     "width": 736,
+     "height": 736,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 46.0
+      }
+     ]
+    },
+    {
+     "id": 2578,
+     "name": "",
+     "type": "",
+     "class": "",
+     "x": 4112.0,
+     "y": 1936.0,
+     "width": 608,
+     "height": 288,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "kamera",
+       "type": "float",
+       "value": 4.0
       }
      ]
     }
@@ -216235,56 +212988,6 @@
        "name": "level",
        "type": "int",
        "value": 13
-      }
-     ]
-    },
-    {
-     "id": 788,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 2426.825,
-     "y": 2125.946,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "deserter"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 12
-      }
-     ]
-    },
-    {
-     "id": 789,
-     "name": "",
-     "type": "gegner",
-     "class": "gegner",
-     "x": 2243.028,
-     "y": 2244.47,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "marauder"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 12
       }
      ]
     },
@@ -221392,31 +218095,6 @@
     {
      "type": "gegner",
      "class": "gegner",
-     "x": 3164.48,
-     "y": 1762.24,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "point": true,
-     "properties": [
-      {
-       "name": "type",
-       "type": "string",
-       "value": "lumberjack"
-      },
-      {
-       "name": "level",
-       "type": "int",
-       "value": 15
-      }
-     ],
-     "name": "",
-     "id": 2455,
-     "visible": true
-    },
-    {
-     "type": "gegner",
-     "class": "gegner",
      "x": 9567.04,
      "y": 7144.32,
      "width": 0,
@@ -222363,12 +219041,12 @@
      ]
     },
     {
-     "id": 2562,
+     "id": 2579,
      "name": "",
      "type": "teleporter",
      "class": "teleporter",
-     "x": 2256.0,
-     "y": 4000.0,
+     "x": 3312.0,
+     "y": 1280.0,
      "width": 96.0,
      "height": 70.4,
      "rotation": 0,
@@ -222402,12 +219080,12 @@
      ]
     },
     {
-     "id": 2563,
+     "id": 2580,
      "name": "",
      "type": "spawn",
      "class": "spawn",
-     "x": 2304.0,
-     "y": 4112.0,
+     "x": 3360.0,
+     "y": 1392.0,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -222441,7 +219119,7 @@
   }
  ],
  "nextlayerid": 9,
- "nextobjectid": 2564,
+ "nextobjectid": 2581,
  "orientation": "orthogonal",
  "renderorder": "right-down",
  "tiledversion": "1.10.2",

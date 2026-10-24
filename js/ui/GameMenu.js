@@ -2,18 +2,26 @@ import { SUPPORTED_LANGUAGES, getLanguage, setLanguage, t } from '../i18n/I18n.j
 import { el } from '../utils/Dom.js';
 import { createSettingsForm, describeResult } from './SettingsForm.js';
 
-export function createGameMenu({ request, onMainMenu, onLogout }) {
+export function createGameMenu({ request, onMainMenu, onLogout, onPreview }) {
   const menuWindow = document.getElementById('game-menu-window');
   const menuBody = document.getElementById('game-menu-body');
   const settingsWindow = document.getElementById('settings-window');
   const settingsBody = document.getElementById('settings-body');
   let settings = null;
+  let previewing = false;
 
   function isOpen() {
     return !menuWindow.classList.contains('hidden') || !settingsWindow.classList.contains('hidden');
   }
 
+  function revertPreview() {
+    if (!previewing || !settings) return;
+    previewing = false;
+    onPreview?.(settings);
+  }
+
   function hide() {
+    revertPreview();
     menuWindow.classList.add('hidden');
     settingsWindow.classList.add('hidden');
   }
@@ -32,6 +40,10 @@ export function createGameMenu({ request, onMainMenu, onLogout }) {
       language: getLanguage(),
       languages: SUPPORTED_LANGUAGES,
       onSave: async (values) => describeResult(await request({ type: 'settings-save', settings: values })),
+      onChange: (values) => {
+        previewing = true;
+        onPreview?.(values);
+      },
       onLanguage: (code) => {
         setLanguage(code);
         onMainMenu();
@@ -43,6 +55,7 @@ export function createGameMenu({ request, onMainMenu, onLogout }) {
   }
 
   function showMenu() {
+    revertPreview();
     settingsWindow.classList.add('hidden');
     menuBody.replaceChildren(
       entry('gamemenu.settings', showSettings),
@@ -67,6 +80,7 @@ export function createGameMenu({ request, onMainMenu, onLogout }) {
     toggle,
     setSettings(next) {
       settings = next;
+      previewing = false;
     },
   };
 }

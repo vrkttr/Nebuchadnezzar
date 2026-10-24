@@ -22,7 +22,7 @@ export function describeResult(result) {
   return { ok: Boolean(result.ok), text: result.ok ? '' : t(result.key ?? 'menu.error.server', result.params ?? undefined) };
 }
 
-export function createSettingsForm({ settings, language, languages, onSave, onLanguage, onMusic, onPasswordChange }) {
+export function createSettingsForm({ settings, language, languages, onSave, onLanguage, onMusic, onChange, onPasswordChange }) {
   let activeTab = 'general';
   let saveButton = null;
 
@@ -37,6 +37,7 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
     input.addEventListener('input', () => {
       output.textContent = `${input.value} %`;
       if (name === 'music') onMusic?.(Number(input.value) / 100);
+      onChange?.(collect());
     });
     sliders[name] = input;
     return [
@@ -74,7 +75,10 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
 
   for (const key of ALL_KEYS) {
     const input = el('input', { type: 'checkbox', class: 'menu-toggle', checked: settings.graphics[key] !== false });
-    input.addEventListener('change', detectPreset);
+    input.addEventListener('change', () => {
+      detectPreset();
+      onChange?.(collect());
+    });
     toggles[key] = input;
   }
 
@@ -87,7 +91,11 @@ export function createSettingsForm({ settings, language, languages, onSave, onLa
     const list = PRESETS[preset.value];
     if (!list) return;
     for (const key of ALL_KEYS) toggles[key].checked = list.includes(key);
+    onChange?.(collect());
   });
+
+  viewDistance.addEventListener('change', () => onChange?.(collect()));
+  muted.addEventListener('change', () => onChange?.(collect()));
 
   const languageSelect = el(
     'select',

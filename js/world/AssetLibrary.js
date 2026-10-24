@@ -3,7 +3,7 @@ import { createAltbau } from './builders/Altbau.js';
 import { createLaden } from './builders/Shop.js';
 import { createPlattenbau } from './builders/Plattenbau.js';
 import { createWaterTower } from './builders/Tower.js';
-import { createChimney } from './builders/Chimney.js';
+import { createPowerPlant } from './builders/Powerplant.js';
 import { createGarages } from './builders/Garages.js';
 import { createTree, createForest, createBush, createGrassTufts } from './builders/Vegetation.js';
 import {
@@ -40,7 +40,7 @@ export function createAssetLibrary() {
 
   register('plattenbau', (params) => createPlattenbau(params).object);
   register('wasserturm', createWaterTower);
-  register('schornstein', createChimney);
+  register('kraftwerk', createPowerPlant);
   register('garagen', createGarages);
   register('baum', createTree);
   register('wald', createForest);

@@ -278,6 +278,10 @@ function start(connection, initMessage) {
   const gameMenu = createGameMenu({
     request: menuRequest,
     onMainMenu: reloadToMenu,
+    onPreview(values) {
+      applyGraphics(values.graphics);
+      audio.applySettings({ volume: values.volume / 100, ambient: values.ambient / 100, muted: values.muted });
+    },
     onLogout() {
       clearSession();
       connection.send({ type: 'auth-logout' });
@@ -639,6 +643,7 @@ function start(connection, initMessage) {
         }
       } else if (message.type === 'settings') {
         gameMenu.setSettings(message.settings);
+        applyGraphics(message.settings.graphics);
         setAutoFullscreen(message.settings.autoFullscreen === true);
         audio.applySettings({ volume: message.settings.volume / 100, ambient: message.settings.ambient / 100, muted: message.settings.muted });
       } else if (message.type === 'mail-window') {
