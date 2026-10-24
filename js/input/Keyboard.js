@@ -6,7 +6,7 @@ const BLOCKED_FUNCTION_KEYS = new Set(['F1', 'F3', 'F6', 'F7']);
 const LOCKED_KEYS = ['KeyW', 'KeyT', 'KeyN', 'Tab', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9'];
 
 let leaving = false;
-let armedFullscreen = false;
+let autoFullscreen = null;
 
 function isTextField(target) {
   return target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT');
@@ -30,18 +30,32 @@ export function enterFullscreen() {
     .catch(() => {});
 }
 
-export function armAutoFullscreen() {
-  if (armedFullscreen) return;
-  armedFullscreen = true;
+function onAutoFullscreenGesture(event) {
+  if (event.code === 'Escape' || event.code === 'F11') return;
+  disarmAutoFullscreen();
+  enterFullscreen();
+}
 
-  const trigger = (event) => {
-    if (event.code === 'Escape' || event.code === 'F11') return;
-    enterFullscreen();
-  };
+function disarmAutoFullscreen() {
+  window.removeEventListener('mousedown', onAutoFullscreenGesture, true);
+  window.removeEventListener('keydown', onAutoFullscreenGesture, true);
+  window.removeEventListener('touchend', onAutoFullscreenGesture, true);
+}
 
-  window.addEventListener('mousedown', trigger, true);
-  window.addEventListener('keydown', trigger, true);
-  window.addEventListener('touchend', trigger, true);
+export function setAutoFullscreen(enabled) {
+  const value = enabled === true;
+  if (value === autoFullscreen) return;
+  autoFullscreen = value;
+
+  if (!value) {
+    disarmAutoFullscreen();
+    return;
+  }
+
+  if (document.fullscreenElement) return;
+  window.addEventListener('mousedown', onAutoFullscreenGesture, true);
+  window.addEventListener('keydown', onAutoFullscreenGesture, true);
+  window.addEventListener('touchend', onAutoFullscreenGesture, true);
 }
 
 function shouldBlock(event) {

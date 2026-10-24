@@ -1,6 +1,6 @@
 import { SUPPORTED_LANGUAGES, getLanguage, setLanguage, t } from '../i18n/I18n.js';
 import { GAME_VERSION } from '../config.js';
-import { enterFullscreen } from '../input/Keyboard.js';
+import { enterFullscreen, setAutoFullscreen } from '../input/Keyboard.js';
 import { createSettingsForm, describeResult } from '../ui/SettingsForm.js';
 import { clear, el } from '../utils/Dom.js';
 import { classFields, createCharacterForm } from './CharacterForm.js';
@@ -9,6 +9,7 @@ import { createMenuScene } from './MenuScene.js';
 import { clearSession, readSession, writeSession } from './Session.js';
 
 const MUSIC_VOLUME_KEY = 'menuMusicVolume';
+const AUTO_FULLSCREEN_KEY = 'menuAutoFullscreen';
 const REQUEST_TIMEOUT_MS = 20000;
 const LOADING_FADE_MS = 450;
 const PUBLIC_SCREENS = ['login', 'register', 'credits'];
@@ -372,7 +373,13 @@ export function createMenu({ connection, onEnterWorld }) {
     render();
   }
 
+  function applyFullscreen(enabled) {
+    writeStored(AUTO_FULLSCREEN_KEY, enabled ? '1' : '0');
+    setAutoFullscreen(enabled);
+  }
+
   function applyAccount() {
+    applyFullscreen(account.settings.autoFullscreen === true);
     scene.setCharacter(account.character?.appearance ?? null);
     music.setVolume(account.settings.music / 100);
     writeStored(MUSIC_VOLUME_KEY, String(account.settings.music / 100));
@@ -432,6 +439,7 @@ export function createMenu({ connection, onEnterWorld }) {
         if (account) account.settings = message.settings;
         music.setVolume(message.settings.music / 100);
         writeStored(MUSIC_VOLUME_KEY, String(message.settings.music / 100));
+        applyFullscreen(message.settings.autoFullscreen === true);
       } else if (message.type === 'menu-result') {
         const resolve = requests.get(message.action);
         if (resolve) {
@@ -448,6 +456,8 @@ export function createMenu({ connection, onEnterWorld }) {
       showConnectionLost(event?.code === 4002 ? 'connection.lost.replaced' : opened ? 'connection.lost.closed' : 'connection.lost.unreachable');
     },
   });
+
+  if (readStored(AUTO_FULLSCREEN_KEY) === '1') setAutoFullscreen(true);
 
   title.textContent = t('login.title');
   render();

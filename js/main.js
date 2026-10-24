@@ -52,7 +52,7 @@ const [
   { createQuestWindow },
   { createSocialWindow },
   { createAbilityDrag },
-  { allowLeave, armAutoFullscreen, setLeaveGuard },
+  { allowLeave, setAutoFullscreen, setLeaveGuard },
   { createTouchControls },
   { createHud },
   { createLoadingScreen },
@@ -588,7 +588,7 @@ function start(connection, initMessage) {
         ownPlayerId = message.id;
         gameState.player.classId = message.classId ?? null;
         if (message.home) gameState.home = { zoneId: message.home.zoneId, readyAt: message.home.readyAt };
-        if (message.autoFullscreen) armAutoFullscreen();
+        setAutoFullscreen(message.autoFullscreen === true);
         touchControls.setMode(message.touchControls);
         audio.applySettings(message.audio);
         applyGraphics(message.graphics);
@@ -619,6 +619,7 @@ function start(connection, initMessage) {
         }
       } else if (message.type === 'settings') {
         gameMenu.setSettings(message.settings);
+        setAutoFullscreen(message.settings.autoFullscreen === true);
         audio.applySettings({ volume: message.settings.volume / 100, ambient: message.settings.ambient / 100, muted: message.settings.muted });
       } else if (message.type === 'mail-window') {
         mailWindow.show(message);

@@ -33,7 +33,7 @@ const LOOT_TABLES = {
 
   scavenger: [
     { itemId: 'bandage', chance: 0.12, min: 1, max: 2 },
-    { itemId: 'duct_tape', chance: 0.15, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.22, min: 1, max: 2 },
     { itemId: 'battery', chance: 0.08, min: 1, max: 1 },
     { itemId: 'work_pants', chance: 0.06, min: 1, max: 1 },
     { itemId: 'hard_hat', chance: 0.05, min: 1, max: 1 },
@@ -50,7 +50,7 @@ const LOOT_TABLES = {
   ],
   rat: [
     { itemId: 'rat_tail', chance: 0.6, min: 1, max: 2 },
-    { itemId: 'duct_tape', chance: 0.08, min: 1, max: 1 },
+    { itemId: 'duct_tape', chance: 0.14, min: 1, max: 1 },
     { itemId: 'battery', chance: 0.06, min: 1, max: 1 },
     { itemId: 'rag_bundle', chance: 0.4, min: 1, max: 3 },
     { itemId: 'scrap_metal', chance: 0.4, min: 1, max: 3 },
@@ -86,7 +86,7 @@ const LOOT_TABLES = {
     { itemId: 'military_pants', chance: 0.05, min: 1, max: 1 },
     { itemId: 'bandage', chance: 0.3, min: 1, max: 3 },
     { itemId: 'battery', chance: 0.2, min: 1, max: 2 },
-    { itemId: 'duct_tape', chance: 0.2, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.28, min: 1, max: 2 },
     { itemId: 'motorcycle_helmet', chance: 0.08, min: 1, max: 1 },
     { itemId: 'scrap_metal', chance: 0.7, min: 2, max: 5 },
     { itemId: 'canned_food', chance: 0.4, min: 1, max: 3 },
@@ -165,7 +165,7 @@ const LOOT_TABLES = {
     { itemId: 'scrap_metal', chance: 0.5, min: 1, max: 3 },
     { itemId: 'rag_bundle', chance: 0.6, min: 2, max: 4 },
     { itemId: 'battery', chance: 0.15, min: 1, max: 1 },
-    { itemId: 'duct_tape', chance: 0.2, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.28, min: 1, max: 2 },
     { itemId: 'medkit', chance: 0.1, min: 1, max: 1 },
     { itemId: 'gas_mask', chance: 0.05, min: 1, max: 1 },
     { itemId: 'ammo_9mm', chance: 0.3, min: 4, max: 10 },
@@ -177,7 +177,7 @@ const LOOT_TABLES = {
     { itemId: 'battery', chance: 0.04, min: 1, max: 1 },
   ],
   spider: [
-    { itemId: 'duct_tape', chance: 0.2, min: 1, max: 2 },
+    { itemId: 'duct_tape', chance: 0.28, min: 1, max: 2 },
     { itemId: 'rag_bundle', chance: 0.3, min: 1, max: 2 },
     { itemId: 'battery', chance: 0.1, min: 1, max: 1 },
     { itemId: 'bandage', chance: 0.15, min: 1, max: 2 },
