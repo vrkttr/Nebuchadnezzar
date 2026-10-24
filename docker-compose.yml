@@ -1,19 +1,4 @@
 services:
-  portal:
-    build:
-      context: ./portal
-      dockerfile: Dockerfile
-    ports:
-      - "8081:80"
-    environment:
-      - DB_HOST=database
-      - DB_NAME=nebuchadnezzar
-      - DB_USER=nebuchadnezzar
-      - DB_PASSWORD=changeme
-    depends_on:
-      - database
-    restart: unless-stopped
-
   game:
     build:
       context: .
@@ -39,7 +24,7 @@ services:
       - DB_HOST=database
       - DB_NAME=nebuchadnezzar
       - DB_USER=nebuchadnezzar
-      - DB_PASSWORD=changeme
+      - DB_PASSWORD=${DB_PASSWORD:-changeme}
     networks:
       default: {}
       proxy:
@@ -54,11 +39,10 @@ services:
     environment:
       - MARIADB_DATABASE=nebuchadnezzar
       - MARIADB_USER=nebuchadnezzar
-      - MARIADB_PASSWORD=changeme
-      - MARIADB_ROOT_PASSWORD=changeme_root
+      - MARIADB_PASSWORD=${DB_PASSWORD:-changeme}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-changeme_root}
     volumes:
       - db_data:/var/lib/mysql
-      - ./portal/db:/docker-entrypoint-initdb.d
     restart: unless-stopped
 
 networks:
