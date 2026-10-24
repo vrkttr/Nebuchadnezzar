@@ -667,6 +667,8 @@ function start(token) {
       } else if (message.type === 'event') {
         hud.addEvent(message);
         audio.playEvent(message);
+        if (message.kind === 'mail-sent') mailWindow.sent();
+        else if (message.kind === 'mail-failed') mailWindow.failed();
         if (message.kind === 'quest-inspect' && message.text) dialogue.show(message.text);
       } else if (message.type === 'damage') {
         audio.playDamage(message, ownPlayerId);
@@ -905,6 +907,9 @@ function start(token) {
   }
 
   window.addEventListener('keydown', (event) => {
+    const typing = event.target instanceof HTMLElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName);
+    if (typing && event.code !== 'Escape') return;
+
     if (event.code === 'Escape') {
       if (ui.confirmDialog.isOpen()) {
         ui.confirmDialog.close();

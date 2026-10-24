@@ -11,6 +11,8 @@ export function createMailWindow(state, handlers = {}) {
   let data = { mails: [], cost: 0, limits: { subject: 60, body: 500 } };
   let tab = 'inbox';
   let selectedId = null;
+  let pending = false;
+  let pendingTimer = null;
   const draft = { to: '', subject: '', body: '' };
 
   function isOpen() {
@@ -125,11 +127,19 @@ export function createMailWindow(state, handlers = {}) {
 
     const footer = el('div', 'mail-actions');
     footer.appendChild(el('span', 'mail-cost', t('mail.cost', { gold: data.cost })));
-    footer.appendChild(
-      actionButton(t('mail.send'), () => {
-        send({ type: 'mail-send', to: draft.to, subject: draft.subject, body: draft.body });
-      })
-    );
+    const sendButton = actionButton(t('mail.send'), () => {
+      if (pending) return;
+      pending = true;
+      sendButton.disabled = true;
+      clearTimeout(pendingTimer);
+      pendingTimer = setTimeout(() => {
+        pending = false;
+        sendButton.disabled = false;
+      }, 5000);
+      send({ type: 'mail-send', to: draft.to, subject: draft.subject, body: draft.body });
+    });
+    sendButton.disabled = pending;
+    footer.appendChild(sendButton);
 
     form.append(to, subject, text, counter, footer);
     return form;
@@ -148,7 +158,15 @@ export function createMailWindow(state, handlers = {}) {
     render();
   }
 
+  function failed() {
+    pending = false;
+    clearTimeout(pendingTimer);
+    if (isOpen() && tab === 'compose') render();
+  }
+
   function sent() {
+    pending = false;
+    clearTimeout(pendingTimer);
     draft.to = '';
     draft.subject = '';
     draft.body = '';
@@ -173,5 +191,5 @@ export function createMailWindow(state, handlers = {}) {
   });
   closeButton.addEventListener('click', hide);
 
-  return { isOpen, hide, show, sent, setUnread, setMailbox, currentMailboxId: () => mailboxId };
+  return { isOpen, hide, show, sent, failed, setUnread, setMailbox, currentMailboxId: () => mailboxId };
 }

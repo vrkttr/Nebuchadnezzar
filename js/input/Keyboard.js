@@ -9,7 +9,7 @@ let leaving = false;
 let armedFullscreen = false;
 
 function isTextField(target) {
-  return target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA');
+  return target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT');
 }
 
 function toggleFullscreen() {
@@ -69,6 +69,7 @@ window.addEventListener(
 );
 
 window.addEventListener('keydown', (event) => {
+  if (isTextField(event.target) && event.code !== 'Escape') return;
   pressedKeys.add(event.code);
 });
 
